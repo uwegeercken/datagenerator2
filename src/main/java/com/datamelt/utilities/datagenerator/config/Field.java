@@ -31,6 +31,20 @@ public class Field
         return values;
     }
 
+    public boolean containsFieldValue(String name)
+    {
+        if(name != null && !name.equals(""))
+        {
+            for (FieldValue value : values)
+            {
+                if (value.getName().contains(name))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     public void setValues(List<FieldValue> values)
     {
         this.values = values;
