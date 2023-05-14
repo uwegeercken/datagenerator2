@@ -13,6 +13,7 @@ public class YamlFileProcessor
 
     public static void isValidConfiguration(MainConfiguration configuration) throws InvalidConfigurationException
     {
+        checkFieldWeights(configuration);
         checkTotalFieldWeight(configuration);
     }
 
@@ -22,18 +23,24 @@ public class YamlFileProcessor
         {
             if(field.getSumOfWeights()>100)
             {
-                throw new InvalidConfigurationException("sum of weights for field [" + field.getName() + "] cannot be larger than 100");
+                throw new InvalidConfigurationException("field [" + field.getName() + "] - sum of weights cannot be larger than 100");
             }
         }
     }
 
-    private static void checkFieldWeights(MainConfiguration configuration)
+    private static void checkFieldWeights(MainConfiguration configuration) throws InvalidConfigurationException
     {
         for (Field field : configuration.getFields())
         {
-            if(field.getValuesFile()!=null && field.getValues()!=null)
+            if(field.getValues()!=null)
             {
-
+               for(FieldValue value : field.getValues())
+               {
+                   if(value.getWeight() < -1)
+                   {
+                       throw new InvalidConfigurationException("field [" + field.getName() + "], value [" + value.getName() + "] - value of weight cannot be smaller than -1");
+                   }
+               }
             }
         }
     }

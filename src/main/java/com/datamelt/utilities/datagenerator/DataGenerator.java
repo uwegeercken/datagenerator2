@@ -27,7 +27,7 @@ public class DataGenerator
         }
         catch(Exception ex)
         {
-            logger.error("exception processing configuration file: [{}], error: [{}]", args[0], ex.getMessage());
+            logger.error("exception processing configuration file: [{}], error: {}", args[0], ex.getMessage());
         }
 
         System.out.println();
@@ -40,14 +40,8 @@ public class DataGenerator
         MainConfiguration configuration = mapper.readValue(new File(configurationFilename), MainConfiguration.class);
 
         CategoryFileLoader.loadCategoryFiles(configuration);
-        try
-        {
-            YamlFileProcessor.isValidConfiguration(configuration);
-        }
-        catch (InvalidConfigurationException ex)
-        {
-            logger.error("error processing configuration: {}", ex.getMessage());
-        }
+
+        YamlFileProcessor.isValidConfiguration(configuration);
         YamlFileProcessor.distributeWeight(configuration.getFields().get(0));
     }
 
