@@ -22,4 +22,9 @@ public class FieldValue
     {
         return weight;
     }
+
+    public void setWeight(int weight)
+    {
+        this.weight = weight;
+    }
 }

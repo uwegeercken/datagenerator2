@@ -31,6 +31,11 @@ public class Field
         return values;
     }
 
+    public int getNumberOfFieldValues()
+    {
+        return values.size();
+    }
+
     public boolean containsFieldValue(String name)
     {
         if(name != null && !name.equals(""))
@@ -45,6 +50,34 @@ public class Field
         }
         return false;
     }
+
+    public int getSumOfWeights()
+    {
+        int sumOfWeights = 0;
+        for(FieldValue value : values)
+        {
+            if(value.getWeight() != FieldValue.DEFAULT_WEIGHT)
+            {
+                sumOfWeights = sumOfWeights + value.getWeight();
+            }
+        }
+        return sumOfWeights;
+    }
+
+    public int getNumberOfDefaultWeights()
+    {
+        int numberOfDefaultWeights = 0;
+        for(FieldValue value : values)
+        {
+            if(value.getWeight() == FieldValue.DEFAULT_WEIGHT)
+            {
+                numberOfDefaultWeights++;
+            }
+        }
+        return numberOfDefaultWeights;
+    }
+
+
     public void setValues(List<FieldValue> values)
     {
         this.values = values;

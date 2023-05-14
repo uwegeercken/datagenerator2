@@ -11,6 +11,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 
+import static com.datamelt.utilities.datagenerator.utilities.Constants.CATEGORY_FILE_VALUE_WEIGHT_SEPARATOR;
+
 public class CategoryFileLoader
 {
     private static Logger logger = LoggerFactory.getLogger(CategoryFileLoader.class);
@@ -33,13 +35,19 @@ public class CategoryFileLoader
             String value;
             while ((value = reader.readLine()) != null)
             {
-
-
                 if (value != null && value.trim().length() > 0 && !value.trim().startsWith("#"))
                 {
-                    if (!field.containsFieldValue(value.trim()))
+                    String[] valueParts = value.split(CATEGORY_FILE_VALUE_WEIGHT_SEPARATOR);
+                    if (!field.containsFieldValue(valueParts[0].trim()))
                     {
-                        field.getValues().add(composeFieldValue(value));
+                        if(valueParts.length==1)
+                        {
+                            field.getValues().add(new FieldValue(valueParts[0], FieldValue.DEFAULT_WEIGHT));
+                        }
+                        else
+                        {
+                            field.getValues().add(new FieldValue(valueParts[0], Integer.parseInt(valueParts[0])));
+                        }
                     }
                 }
             }
@@ -47,19 +55,6 @@ public class CategoryFileLoader
         catch(Exception ex)
         {
             logger.error("error processing category file [{}], error [{}]", field.getValuesFile(), ex .getMessage());
-        }
-    }
-
-    private static FieldValue composeFieldValue(String value)
-    {
-        String[] valueParts = value.split("#");
-        if(valueParts.length==1)
-        {
-            return new FieldValue(value, FieldValue.DEFAULT_WEIGHT);
-        }
-        else
-        {
-            return new FieldValue(valueParts[0], Integer.parseInt(valueParts[1]));
         }
     }
 }

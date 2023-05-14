@@ -1,10 +1,9 @@
 package com.datamelt.utilities.datagenerator;
 
-import com.datamelt.utilities.datagenerator.config.Field;
-import com.datamelt.utilities.datagenerator.config.FieldValue;
+import com.datamelt.utilities.datagenerator.config.InvalidConfigurationException;
 import com.datamelt.utilities.datagenerator.config.MainConfiguration;
 import com.datamelt.utilities.datagenerator.utilities.CategoryFileLoader;
-import com.datamelt.utilities.datagenerator.utilities.YamlValidator;
+import com.datamelt.utilities.datagenerator.utilities.YamlFileProcessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import org.slf4j.Logger;
@@ -41,8 +40,15 @@ public class DataGenerator
         MainConfiguration configuration = mapper.readValue(new File(configurationFilename), MainConfiguration.class);
 
         CategoryFileLoader.loadCategoryFiles(configuration);
-        YamlValidator.isValidConfiguration(configuration);
-
+        try
+        {
+            YamlFileProcessor.isValidConfiguration(configuration);
+        }
+        catch (InvalidConfigurationException ex)
+        {
+            logger.error("error processing configuration: {}", ex.getMessage());
+        }
+        YamlFileProcessor.distributeWeight(configuration.getFields().get(0));
     }
 
 
