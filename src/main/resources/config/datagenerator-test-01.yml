@@ -1,0 +1,12 @@
+--- # MainConfiguration - datagenerator2.yml
+name: Test
+fields:
+  - name: gender
+    values:
+      - name: m
+        weight: 50
+      - name: f
+        weight: 25
+      - name: d
+    valuesFile: /home/uwe/development/datagenerator2/categories/gender.category
+    valueFileDataType: string
