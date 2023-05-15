@@ -42,9 +42,9 @@ public class DataGenerator
         CategoryFileLoader.loadCategoryFiles(configuration);
 
         YamlFileProcessor.isValidConfiguration(configuration);
-        YamlFileProcessor.distributeWeight(configuration.getFields().get(0));
+        YamlFileProcessor.distributeWeightValues(configuration.getFields().get(0));
+        YamlFileProcessor.removeZeroWeightValues(configuration);
     }
-
 
     public MainConfiguration getConfiguration()
     {

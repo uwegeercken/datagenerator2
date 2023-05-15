@@ -22,7 +22,15 @@ public class CategoryFileLoader
         {
             if(field.getValuesFile()!=null)
             {
-                loadCategoryFile( field);
+                if(field.getSumOfWeights()<100)
+                {
+                    logger.debug("field [{}] - processing values from the category file [{}]", field.getName(), field.getValuesFile());
+                    loadCategoryFile(field);
+                }
+                else
+                {
+                    logger.warn("field [{}] - total sum of weight values in the configuration is 100. the configured category file [{}] is ignored.", field.getName(), field.getValuesFile());
+                }
             }
         }
     }
@@ -33,6 +41,7 @@ public class CategoryFileLoader
         try(BufferedReader reader = new BufferedReader(new FileReader(file.getPath()));)
         {
             String value;
+            int counter = 0;
             while ((value = reader.readLine()) != null)
             {
                 if (value != null && value.trim().length() > 0 && !value.trim().startsWith("#"))
@@ -48,13 +57,19 @@ public class CategoryFileLoader
                         {
                             field.getValues().add(new FieldValue(valueParts[0], Integer.parseInt(valueParts[0])));
                         }
+                        counter++;
+                    }
+                    else
+                    {
+                        logger.debug("field [{}] - value [{}] already defined in config. the value from the category file is ignored.", field.getName(), valueParts[0]);
                     }
                 }
             }
+            logger.debug("field [{}] - number of values added from category file: [{}]", field.getName(), counter);
         }
         catch(Exception ex)
         {
-            logger.error("error processing category file [{}], error [{}]", field.getValuesFile(), ex .getMessage());
+            logger.error("field [{}] - error processing category file [{}], error [{}]", field.getName(), field.getValuesFile(), ex .getMessage());
         }
     }
 }
