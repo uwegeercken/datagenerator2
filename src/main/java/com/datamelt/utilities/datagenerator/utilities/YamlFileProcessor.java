@@ -81,7 +81,7 @@ public class YamlFileProcessor
                 int remainder = (100 - sumOfWeights) % numberOfDefaultWeights;
 
                 logger.info("field [{}] - total elements [{}]. elements without weight definition: [{}]", field.getName(), numberOfValues, numberOfDefaultWeights);
-                logger.info("field [{}] - distributing weight: [{}] * [{}] and [{}] * [{}]", field.getName(), remainder, averageWeightValue + 1, numberOfDefaultWeights - remainder, averageWeightValue);
+                logger.info("field [{}] - distributing weight over [{}] elements: [{}] * [{}] and [{}] * [{}]", field.getName(), numberOfDefaultWeights, remainder, averageWeightValue + 1, numberOfDefaultWeights - remainder, averageWeightValue);
                 int counter = 0;
                 for (FieldValue value : field.getValues())
                 {

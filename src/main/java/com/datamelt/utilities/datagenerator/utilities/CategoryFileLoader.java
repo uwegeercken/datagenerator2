@@ -61,7 +61,7 @@ public class CategoryFileLoader
                     }
                     else
                     {
-                        logger.debug("field [{}] - value [{}] already defined in config. the value from the category file is ignored.", field.getName(), valueParts[0]);
+                        logger.debug("field [{}] - value [{}] already defined in config. value and weight from the category file is ignored.", field.getName(), valueParts[0]);
                     }
                 }
             }
