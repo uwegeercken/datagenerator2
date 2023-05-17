@@ -39,7 +39,8 @@ public class DataGenerator
                 {
                     generator.generateRandomValues(generator.configuration.getFields());
                 }
-                generator.dataStore.getDistinctValues(generator.configuration.getFields().get(0),generator.numberOfRowsToGenerate);
+                generator.dataStore.getValueCounts(generator.configuration.getFields().get(0));
+                generator.dataStore.getValueCounts(generator.configuration.getFields().get(1));
 
 
 

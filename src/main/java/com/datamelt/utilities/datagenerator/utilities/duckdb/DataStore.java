@@ -13,6 +13,7 @@ public class DataStore
     private static Logger logger = LoggerFactory.getLogger(DataStore.class);
     private static final String TABLENAME = "generateddata";
 
+    private long numberOfRecordsInserted=0;
     private Connection connection;
     private PreparedStatement preparedStatement;
     public DataStore()
@@ -39,6 +40,7 @@ public class DataStore
             preparedStatement.setString(1, row.getFields().get(0).getValue().toString());
             preparedStatement.setString(2, row.getFields().get(1).getValue().toString());
             preparedStatement.execute();
+            numberOfRecordsInserted++;
         }
         catch(Exception ex)
         {
@@ -46,7 +48,7 @@ public class DataStore
         }
     }
 
-    public void getDistinctValues(Field field, long totalRows)
+    public void getValueCounts(Field field)
     {
         try
         {
@@ -54,7 +56,7 @@ public class DataStore
             try (ResultSet rs = stmt.executeQuery("select " + field.getName() + ", count(1) as total from " + TABLENAME +" group by " + field.getName()))
             {
                 while (rs.next()) {
-                    System.out.println("value: " + rs.getString(1) + ", total: " + rs.getInt("total")*1.0d/totalRows*100);
+                    System.out.println("value: " + rs.getString(1) + ", total: " + rs.getDouble("total") / numberOfRecordsInserted * 100);
                 }
             }
         }
