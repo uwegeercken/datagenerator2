@@ -69,7 +69,7 @@ public class CategoryFileLoader
         }
         catch(Exception ex)
         {
-            logger.error("field [{}] - error processing category file [{}], error [{}]", field.getName(), field.getValuesFile(), ex .getMessage());
+            logger.error("field [{}] - error processing category file [{}], error {}", field.getName(), field.getValuesFile(), ex .getMessage());
         }
     }
 }

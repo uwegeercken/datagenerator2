@@ -13,7 +13,7 @@ public class YamlFileProcessor
 {
     private static Logger logger = LoggerFactory.getLogger(YamlFileProcessor.class);
 
-    public static void isValidConfiguration(MainConfiguration configuration) throws InvalidConfigurationException
+    public static void validateConfiguration(MainConfiguration configuration) throws InvalidConfigurationException
     {
         checkFieldWeights(configuration);
         checkTotalFieldWeight(configuration);
@@ -40,7 +40,11 @@ public class YamlFileProcessor
                {
                    if(value.getWeight() < -1)
                    {
-                       throw new InvalidConfigurationException("field [" + field.getName() + "], value [" + value.getName() + "] - value of weight cannot be smaller than -1");
+                       throw new InvalidConfigurationException("field [" + field.getName() + "], value [" + value.getValue() + "] - value of weight cannot be smaller than -1");
+                   }
+                   if(value.getWeight() > 100)
+                   {
+                       throw new InvalidConfigurationException("field [" + field.getName() + "], value [" + value.getValue() + "] - value of weight cannot be greater than 100");
                    }
                }
             }
@@ -59,7 +63,7 @@ public class YamlFileProcessor
                     FieldValue value = iterator.next();
                     if(value.getWeight()==0)
                     {
-                        logger.debug("field [{}] - removing value [{}] because weight is set to zero", field.getName(), value.getName());
+                        logger.debug("field [{}] - removing value [{}] because weight is set to zero", field.getName(), value.getValue());
                         iterator.remove();
                     }
                 }
@@ -67,40 +71,35 @@ public class YamlFileProcessor
         }
     }
 
-    public static void distributeWeightValues(Field field) throws InvalidConfigurationException
+    public static void distributeWeightValues(MainConfiguration configuration) throws InvalidConfigurationException
     {
-        int numberOfValues = field.getNumberOfFieldValues();
-        int numberOfDefaultWeights = field.getNumberOfDefaultWeights();
-        int sumOfWeights = field.getSumOfWeights();
-
-        if(sumOfWeights<100 && numberOfDefaultWeights>0)
+        for (Field field : configuration.getFields())
         {
-            int averageWeightValue = (100 - sumOfWeights) / numberOfDefaultWeights;
-            if(averageWeightValue>0)
-            {
-                int remainder = (100 - sumOfWeights) % numberOfDefaultWeights;
+            int numberOfValues = field.getNumberOfFieldValues();
+            int numberOfDefaultWeights = field.getNumberOfDefaultWeights();
+            int sumOfWeights = field.getSumOfWeights();
 
-                logger.info("field [{}] - total elements [{}]. elements without weight definition: [{}]", field.getName(), numberOfValues, numberOfDefaultWeights);
-                logger.info("field [{}] - distributing weight over [{}] elements: [{}] * [{}] and [{}] * [{}]", field.getName(), numberOfDefaultWeights, remainder, averageWeightValue + 1, numberOfDefaultWeights - remainder, averageWeightValue);
-                int counter = 0;
-                for (FieldValue value : field.getValues())
-                {
-                    if (value.getWeight() == FieldValue.DEFAULT_WEIGHT)
-                    {
-                        counter++;
-                        if (remainder != 0 && counter <= remainder)
-                        {
-                            value.setWeight(averageWeightValue + 1);
-                        } else
-                        {
-                            value.setWeight(averageWeightValue);
+            if (sumOfWeights < 100 && numberOfDefaultWeights > 0) {
+                int averageWeightValue = (100 - sumOfWeights) / numberOfDefaultWeights;
+                if (averageWeightValue > 0) {
+                    int remainder = (100 - sumOfWeights) % numberOfDefaultWeights;
+
+                    logger.debug("field [{}] - total elements [{}]. elements without weight definition: [{}]", field.getName(), numberOfValues, numberOfDefaultWeights);
+                    logger.debug("field [{}] - distributing weight over [{}] elements: [{}] * [{}] and [{}] * [{}]", field.getName(), numberOfDefaultWeights, remainder, averageWeightValue + 1, numberOfDefaultWeights - remainder, averageWeightValue);
+                    int counter = 0;
+                    for (FieldValue value : field.getValues()) {
+                        if (value.getWeight() == FieldValue.DEFAULT_WEIGHT) {
+                            counter++;
+                            if (remainder != 0 && counter <= remainder) {
+                                value.setWeight(averageWeightValue + 1);
+                            } else {
+                                value.setWeight(averageWeightValue);
+                            }
                         }
                     }
+                } else {
+                    throw new InvalidConfigurationException("field [" + field.getName() + "] - cannot distribute at least 1 percent of weight to the values which have no weight defined");
                 }
-            }
-            else
-            {
-                throw new InvalidConfigurationException("field [" + field.getName() + "] - cannot distribute at least 1 percent of weight to the values which have no weight defined");
             }
         }
     }

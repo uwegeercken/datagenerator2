@@ -42,7 +42,7 @@ public class Field
         {
             for (FieldValue value : values)
             {
-                if (value.getName().contains(name))
+                if (value.getValue().contains(name))
                 {
                     return true;
                 }
@@ -51,6 +51,23 @@ public class Field
         return false;
     }
 
+    public String getValuesAndWeights()
+    {
+        StringBuffer buffer = new StringBuffer();
+        int counter = 0;
+        int sum = 0;
+        for(FieldValue value : values)
+        {
+            counter++;
+            sum = sum + value.getWeight();
+            buffer.append( value.toString() + "(" + sum + ")");
+            if(counter< values.size())
+            {
+                buffer.append( " - ");
+            }
+        }
+        return buffer.toString();
+    }
     public int getSumOfWeights()
     {
         int sumOfWeights = 0;
