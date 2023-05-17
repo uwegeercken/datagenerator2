@@ -1,14 +1,14 @@
 package com.datamelt.utilities.datagenerator.config;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 
 public class FieldValue
 {
     public static final int DEFAULT_WEIGHT = -1;
     private String value;
     @JsonInclude(JsonInclude.Include.NON_ABSENT)
-    private int weight = DEFAULT_WEIGHT;
+    private int weight = -1;
 
     public FieldValue()
     {
@@ -31,6 +31,7 @@ public class FieldValue
 
     public void setWeight(int weight)
     {
+
         this.weight = weight;
     }
     @Override
