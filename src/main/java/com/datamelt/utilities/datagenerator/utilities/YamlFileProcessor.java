@@ -75,32 +75,48 @@ public class YamlFileProcessor
     {
         for (Field field : configuration.getFields())
         {
-            int numberOfValues = field.getNumberOfFieldValues();
-            int numberOfDefaultWeights = field.getNumberOfDefaultWeights();
-            int sumOfWeights = field.getSumOfWeights();
+            field.calculateNumberOfDefaultWeights();
+            if (field.getNumberOfDefaultWeights()>0)
+            {
+                int numberOfValues = field.getNumberOfFieldValues();
 
-            if (sumOfWeights < 100 && numberOfDefaultWeights > 0) {
-                int averageWeightValue = (100 - sumOfWeights) / numberOfDefaultWeights;
-                if (averageWeightValue > 0) {
-                    int remainder = (100 - sumOfWeights) % numberOfDefaultWeights;
+                int sumOfWeights = field.getSumOfWeights();
 
-                    logger.debug("field [{}] - total elements [{}]. elements without weight definition: [{}]", field.getName(), numberOfValues, numberOfDefaultWeights);
-                    logger.debug("field [{}] - distributing weight over [{}] elements: [{}] * [{}] and [{}] * [{}]", field.getName(), numberOfDefaultWeights, remainder, averageWeightValue + 1, numberOfDefaultWeights - remainder, averageWeightValue);
-                    int counter = 0;
-                    for (FieldValue value : field.getValues()) {
-                        if (value.getWeight() == FieldValue.DEFAULT_WEIGHT) {
-                            counter++;
-                            if (remainder != 0 && counter <= remainder) {
-                                value.setWeight(averageWeightValue + 1);
-                            } else {
-                                value.setWeight(averageWeightValue);
+                if (sumOfWeights < 100)
+                {
+                    int averageWeightValue = (100 - sumOfWeights) / field.getNumberOfDefaultWeights();
+                    if (averageWeightValue > 0)
+                    {
+                        int remainder = (100 - sumOfWeights) % field.getNumberOfDefaultWeights();
+
+                        logger.debug("field [{}] - total elements [{}]. elements without weight definition: [{}]", field.getName(), numberOfValues, field.getNumberOfDefaultWeights());
+                        logger.debug("field [{}] - distributing weight over [{}] elements: [{}] * [{}] and [{}] * [{}]", field.getName(), field.getNumberOfDefaultWeights(), remainder, averageWeightValue + 1, field.getNumberOfDefaultWeights() - remainder, averageWeightValue);
+                        int counter = 0;
+                        for (FieldValue value : field.getValues())
+                        {
+                            if (value.getWeight() == FieldValue.DEFAULT_WEIGHT)
+                            {
+                                counter++;
+                                if (remainder != 0 && counter <= remainder)
+                                {
+                                    value.setWeight(averageWeightValue + 1);
+                                } else
+                                {
+                                    value.setWeight(averageWeightValue);
+                                }
                             }
                         }
+                    } else
+                    {
+                        throw new InvalidConfigurationException("field [" + field.getName() + "] - cannot distribute at least 1 percent of weight to the values which have no weight defined");
                     }
-                } else {
-                    throw new InvalidConfigurationException("field [" + field.getName() + "] - cannot distribute at least 1 percent of weight to the values which have no weight defined");
                 }
             }
+            else
+            {
+                logger.debug("field [{}] - no values with weight defined in config or category file", field.getName());
+            }
         }
+
     }
 }

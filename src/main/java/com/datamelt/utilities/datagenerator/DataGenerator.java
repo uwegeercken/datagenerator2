@@ -1,12 +1,11 @@
 package com.datamelt.utilities.datagenerator;
 
 import com.datamelt.utilities.datagenerator.config.Field;
-import com.datamelt.utilities.datagenerator.config.FieldValue;
-import com.datamelt.utilities.datagenerator.config.InvalidConfigurationException;
 import com.datamelt.utilities.datagenerator.config.MainConfiguration;
 import com.datamelt.utilities.datagenerator.utilities.CategoryFileLoader;
 import com.datamelt.utilities.datagenerator.utilities.Row;
 import com.datamelt.utilities.datagenerator.utilities.YamlFileProcessor;
+import com.datamelt.utilities.datagenerator.utilities.duckdb.DataStore;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import org.slf4j.Logger;
@@ -22,25 +21,27 @@ public class DataGenerator
     private MainConfiguration configuration;
     private long numberOfRowsToGenerate=0;
 
+    private DataStore dataStore;
+
     public DataGenerator(long numberOfRowsToGenerate)
     {
         this.numberOfRowsToGenerate = numberOfRowsToGenerate;
     }
-    public static void main(String[] args)
+    public static void main(String[] args) throws Exception
     {
         if(args!=null && args.length>1)
         {
             DataGenerator generator = new DataGenerator(Long.parseLong(args[1]));
-            try {
+            generator.dataStore = new DataStore();
+
                 generator.loadConfiguration(args[0]);
                 for(long i=0;i< generator.numberOfRowsToGenerate;i++)
                 {
                     generator.generateRandomValues(generator.configuration.getFields());
                 }
+                generator.dataStore.getDistinctValues(generator.configuration.getFields().get(0),generator.numberOfRowsToGenerate);
 
-            } catch (Exception ex) {
-                logger.error("exception processing configuration file: [{}], error: {}", args[0], ex.getMessage());
-            }
+
 
             System.out.println();
         }
@@ -68,28 +69,40 @@ public class DataGenerator
         return configuration;
     }
 
-    private void generateRandomValues(List<Field> fields)
+    private void generateRandomValues(List<Field> fields) throws Exception
     {
         Row row = new Row();
         for(Field field : fields)
         {
             Random random = new Random();
-            long randomPercentValue = random.nextLong(1,101);
-            long sum = 0;
-            int counter = 0;
 
-            while(sum < randomPercentValue)
+            if(field.getNumberOfDefaultWeights()!=field.getValues().size())
             {
-                sum = sum + field.getValues().get(counter).getWeight();
-                counter++;
+
+                int randomPercentValue = random.nextInt(1, 100);
+                long sum = 0;
+                int counter = 0;
+
+                while (sum <= randomPercentValue)
+                {
+                    sum = sum + field.getValues().get(counter).getWeight();
+                    counter++;
+                }
+
+                row.addField(field.getName(),field.getValues().get(counter-1).getValue());
+
+                logger.debug("field [{}] - values and weights {}", field.getName(), field.getValuesAndWeights());
+                logger.debug("field [{}] - randomPercentValue [{}], sum [{}], selected value [{}] ", field.getName(), randomPercentValue, sum, field.getValues().get(counter - 1).getValue());
+            }
+            else
+            {
+                int randomValue = random.nextInt(1, field.getValues().size()+1);
+                row.addField(field.getName(),field.getValues().get(randomValue-1).getValue());
             }
 
-            logger.debug("field [{}] - values and weights {}", field.getName(), field.getValuesAndWeights());
-            logger.debug("field [{}] - randomPercentValue [{}], sum [{}], selected value [{}] ", field.getName(), randomPercentValue, sum, field.getValues().get(counter-1).getValue());
-
-            row.addField(field.getName(),field.getValues().get(counter-1).getValue());
 
         }
         logger.debug("row: {}", row.toString());
+        dataStore.insert(row);
     }
 }

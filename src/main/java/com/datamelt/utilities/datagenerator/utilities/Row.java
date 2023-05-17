@@ -34,6 +34,12 @@ public class Row {
         }
         return buffer.toString();
     }
+
+    public List<RowField> getFields()
+    {
+        return fields;
+    }
+
     @Override
     public String toString()
     {
@@ -50,4 +56,5 @@ public class Row {
         }
         return buffer.toString();
     }
+
 }

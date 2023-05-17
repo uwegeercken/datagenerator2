@@ -12,6 +12,8 @@ public class Field
     String valueFileDataType;
     List<FieldValue> values = new ArrayList<>();
 
+    int numberOfDefaultWeights=0;
+
     public Field(@JsonProperty("name") String name)
     {
         this.name = name;
@@ -81,7 +83,7 @@ public class Field
         return sumOfWeights;
     }
 
-    public int getNumberOfDefaultWeights()
+    public void calculateNumberOfDefaultWeights()
     {
         int numberOfDefaultWeights = 0;
         for(FieldValue value : values)
@@ -91,9 +93,8 @@ public class Field
                 numberOfDefaultWeights++;
             }
         }
-        return numberOfDefaultWeights;
+        this.numberOfDefaultWeights = numberOfDefaultWeights;
     }
-
 
     public void setValues(List<FieldValue> values)
     {
@@ -108,5 +109,10 @@ public class Field
     public String getValueFileDataType()
     {
         return valueFileDataType;
+    }
+
+    public int getNumberOfDefaultWeights()
+    {
+        return numberOfDefaultWeights;
     }
 }

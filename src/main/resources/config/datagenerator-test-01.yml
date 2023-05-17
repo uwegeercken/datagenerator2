@@ -3,10 +3,10 @@ name: Test
 fields:
   - name: gender
     values:
-      - name: m
+      - value: m
         weight: 50
-      - name: f
+      - value: f
         weight: 25
-      - name: d
+      - value: d
     valuesFile: /home/uwe/development/datagenerator2/categories/gender.category
     valueFileDataType: string
