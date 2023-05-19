@@ -1,5 +1,6 @@
 package com.datamelt.utilities.datagenerator.config;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
@@ -9,6 +10,8 @@ public class Field
 {
     String name;
     String valuesFile;
+    @JsonInclude(JsonInclude.Include.NON_ABSENT)
+    String dataType = "string";
     String valueFileDataType;
     List<FieldValue> values = new ArrayList<>();
 
@@ -114,5 +117,10 @@ public class Field
     public int getNumberOfDefaultWeights()
     {
         return numberOfDefaultWeights;
+    }
+
+    public String getDataType()
+    {
+        return dataType;
     }
 }

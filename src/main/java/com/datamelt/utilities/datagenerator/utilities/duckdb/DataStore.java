@@ -1,12 +1,14 @@
 package com.datamelt.utilities.datagenerator.utilities.duckdb;
 
-import com.datamelt.utilities.datagenerator.DataGenerator;
 import com.datamelt.utilities.datagenerator.config.Field;
 import com.datamelt.utilities.datagenerator.utilities.Row;
+import com.datamelt.utilities.datagenerator.utilities.RowField;
+import org.duckdb.DuckDBConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
+import java.util.List;
 
 public class DataStore
 {
@@ -14,37 +16,80 @@ public class DataStore
     private static final String TABLENAME = "generateddata";
 
     private long numberOfRecordsInserted=0;
-    private Connection connection;
+    private DuckDBConnection connection;
     private PreparedStatement preparedStatement;
-    public DataStore()
+    public DataStore(List<Field> fields)
     {
         try
         {
-            connection = DriverManager.getConnection("jdbc:duckdb:/home/uwe/development/datagenerator2/generateddata.duckdb");
+            connection = (DuckDBConnection) DriverManager.getConnection("jdbc:duckdb:/home/uwe/development/datagenerator2/generateddata.duckdb");
             Statement stmt = connection.createStatement();
-            stmt.execute("CREATE TABLE IF NOT EXISTS " + TABLENAME + " (gender VARCHAR, season varchar)");
+            stmt.execute("CREATE TABLE IF NOT EXISTS " + TABLENAME + " (" + getDataTypesAndNames(fields) + ")");
+            String placeholders = "?,".repeat(fields.size()-1) + "?";
             preparedStatement = connection.prepareStatement("INSERT INTO " + TABLENAME + " VALUES (?, ?);");
 
         }
         catch(Exception ex)
         {
-            logger.error("error connecting to database");
+            logger.error("error connecting to database error {}", ex.getMessage()
         }
     }
 
+    private String getDataTypesAndNames(List<Field> fields)
+    {
+        StringBuffer buffer = new StringBuffer();
+        int counter = 0;
+        for(Field field : fields)
+        {
+            counter++;
+            buffer.append(field.getName());
+            buffer.append(" ");
+            buffer.append(getDuckDbType(DataTypeJava.valueOf(field.getDataType().toUpperCase())));
+            if(counter< fields.size())
+            {
+                buffer.append(", ");
+            }
+        }
+        return buffer.toString();
+    }
 
     public void insert(Row row)
     {
         try
         {
-            preparedStatement.setString(1, row.getFields().get(0).getValue().toString());
-            preparedStatement.setString(2, row.getFields().get(1).getValue().toString());
+            int counter = 0;
+            for(RowField field : row.getFields())
+            {
+                counter++;
+                preparedStatement.setObject(counter, field.getValue());
+            }
             preparedStatement.execute();
             numberOfRecordsInserted++;
         }
         catch(Exception ex)
         {
-            logger.error("error executing insert statement");
+            logger.error("error executing insert statement. error {}", ex.getMessage());
+        }
+    }
+
+    public String getDuckDbType(DataTypeJava javaType)
+    {
+        switch(javaType)
+        {
+            case STRING:
+                return DataTypeDuckDb.VARCHAR.toString();
+            case  LONG:
+                return DataTypeDuckDb.BIGINT.toString();
+            case BOOLEAN:
+                return DataTypeDuckDb.BOOLEAN.toString();
+            case DATE:
+                return DataTypeDuckDb.DATE.toString();
+            case DOUBLE:
+                return DataTypeDuckDb.DOUBLE.toString();
+            case INTEGER:
+                return DataTypeDuckDb.INTEGER.toString();
+            default:
+                return DataTypeDuckDb.VARCHAR.toString();
         }
     }
 

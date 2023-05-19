@@ -32,9 +32,12 @@ public class DataGenerator
         if(args!=null && args.length>1)
         {
             DataGenerator generator = new DataGenerator(Long.parseLong(args[1]));
-            generator.dataStore = new DataStore();
+            generator.loadConfiguration(args[0]);
 
-                generator.loadConfiguration(args[0]);
+
+            generator.dataStore = new DataStore(generator.configuration.getFields());
+
+
                 for(long i=0;i< generator.numberOfRowsToGenerate;i++)
                 {
                     generator.generateRandomValues(generator.configuration.getFields());
