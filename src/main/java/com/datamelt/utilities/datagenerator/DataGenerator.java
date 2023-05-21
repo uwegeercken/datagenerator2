@@ -2,10 +2,9 @@ package com.datamelt.utilities.datagenerator;
 
 import com.datamelt.utilities.datagenerator.config.Field;
 import com.datamelt.utilities.datagenerator.config.MainConfiguration;
-import com.datamelt.utilities.datagenerator.utilities.CategoryFileLoader;
-import com.datamelt.utilities.datagenerator.utilities.Row;
-import com.datamelt.utilities.datagenerator.utilities.YamlFileProcessor;
+import com.datamelt.utilities.datagenerator.utilities.*;
 import com.datamelt.utilities.datagenerator.utilities.duckdb.DataStore;
+import com.datamelt.utilities.datagenerator.utilities.duckdb.DataTypeJava;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import org.slf4j.Logger;
@@ -40,8 +39,10 @@ public class DataGenerator
 
                 for(long i=0;i< generator.numberOfRowsToGenerate;i++)
                 {
-                    generator.generateRandomValues(generator.configuration.getFields());
+                    Row row = generator.generateRandomValues(generator.configuration.getFields());
+                    generator.dataStore.insert(row);
                 }
+                generator.dataStore.flush();
                 generator.dataStore.getValueCounts(generator.configuration.getFields().get(0));
                 generator.dataStore.getValueCounts(generator.configuration.getFields().get(1));
 
@@ -73,7 +74,7 @@ public class DataGenerator
         return configuration;
     }
 
-    private void generateRandomValues(List<Field> fields) throws Exception
+    private Row generateRandomValues(List<Field> fields) throws Exception
     {
         Row row = new Row();
         for(Field field : fields)
@@ -82,7 +83,6 @@ public class DataGenerator
 
             if(field.getNumberOfDefaultWeights()!=field.getValues().size())
             {
-
                 int randomPercentValue = random.nextInt(1, 100);
                 long sum = 0;
                 int counter = 0;
@@ -107,6 +107,20 @@ public class DataGenerator
 
         }
         logger.debug("row: {}", row.toString());
-        dataStore.insert(row);
+        return row;
     }
+
+    private void addField(Row row, Field field, String randomValue)
+    {
+        DataTypeJava dataType = DataTypeJava.valueOf(field.getDataType().toUpperCase());
+
+        switch(dataType)
+        {
+            case INTEGER:
+                row.addField(new RowField<Integer>(field.getName(), Integer.parseInt(randomValue)));
+            default:
+                row.addField(new RowField<String>(field.getName(), randomValue));
+        }
+    }
+
 }

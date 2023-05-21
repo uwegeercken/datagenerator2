@@ -3,6 +3,7 @@ package com.datamelt.utilities.datagenerator.utilities.duckdb;
 import com.datamelt.utilities.datagenerator.config.Field;
 import com.datamelt.utilities.datagenerator.utilities.Row;
 import com.datamelt.utilities.datagenerator.utilities.RowField;
+import org.duckdb.DuckDBAppender;
 import org.duckdb.DuckDBConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +18,8 @@ public class DataStore
 
     private long numberOfRecordsInserted=0;
     private DuckDBConnection connection;
-    private PreparedStatement preparedStatement;
+    private DataStoreAppender appender;
+    //private PreparedStatement preparedStatement;
     public DataStore(List<Field> fields)
     {
         try
@@ -26,12 +28,14 @@ public class DataStore
             Statement stmt = connection.createStatement();
             stmt.execute("CREATE TABLE IF NOT EXISTS " + TABLENAME + " (" + getDataTypesAndNames(fields) + ")");
             String placeholders = "?,".repeat(fields.size()-1) + "?";
-            preparedStatement = connection.prepareStatement("INSERT INTO " + TABLENAME + " VALUES (?, ?);");
+            appender = new DataStoreAppender(connection.createAppender("main", TABLENAME));
+
+            //preparedStatement = connection.prepareStatement("INSERT INTO " + TABLENAME + " VALUES (" + placeholders + ");");
 
         }
         catch(Exception ex)
         {
-            logger.error("error connecting to database error {}", ex.getMessage()
+            logger.error("error connecting to database error {}", ex.getMessage());
         }
     }
 
@@ -55,29 +59,18 @@ public class DataStore
 
     public void insert(Row row)
     {
-        try
-        {
-            int counter = 0;
-            for(RowField field : row.getFields())
-            {
-                counter++;
-                preparedStatement.setObject(counter, field.getValue());
-            }
-            preparedStatement.execute();
-            numberOfRecordsInserted++;
-        }
-        catch(Exception ex)
-        {
-            logger.error("error executing insert statement. error {}", ex.getMessage());
-        }
+        appender.append(row);
+    }
+
+    public void flush() throws Exception
+    {
+        appender.flush();
     }
 
     public String getDuckDbType(DataTypeJava javaType)
     {
         switch(javaType)
         {
-            case STRING:
-                return DataTypeDuckDb.VARCHAR.toString();
             case  LONG:
                 return DataTypeDuckDb.BIGINT.toString();
             case BOOLEAN:

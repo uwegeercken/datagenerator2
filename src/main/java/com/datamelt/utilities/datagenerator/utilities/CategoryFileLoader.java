@@ -4,6 +4,7 @@ import com.datamelt.utilities.datagenerator.DataGenerator;
 import com.datamelt.utilities.datagenerator.config.Field;
 import com.datamelt.utilities.datagenerator.config.FieldValue;
 import com.datamelt.utilities.datagenerator.config.MainConfiguration;
+import com.datamelt.utilities.datagenerator.utilities.duckdb.DataTypeJava;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,6 +38,7 @@ public class CategoryFileLoader
 
     private static void loadCategoryFile(Field field)
     {
+        DataTypeJava dataType = DataTypeJava.valueOf(field.getDataType().toUpperCase());
         File file = new File(field.getValuesFile());
         try(BufferedReader reader = new BufferedReader(new FileReader(file.getPath()));)
         {
@@ -47,16 +49,19 @@ public class CategoryFileLoader
                 if (value != null && value.trim().length() > 0 && !value.trim().startsWith("#"))
                 {
                     String[] valueParts = value.split(CATEGORY_FILE_VALUE_WEIGHT_SEPARATOR);
-                    if (!field.containsFieldValue(valueParts[0].trim()))
+                    FieldValue fieldValue;
+                    if(valueParts.length==1)
                     {
-                        if(valueParts.length==1)
-                        {
-                            field.getValues().add(new FieldValue(valueParts[0], FieldValue.DEFAULT_WEIGHT));
-                        }
-                        else
-                        {
-                            field.getValues().add(new FieldValue(valueParts[0], Integer.parseInt(valueParts[0])));
-                        }
+                        fieldValue = getFieldValue(valueParts[0], dataType, FieldValue.DEFAULT_WEIGHT);
+                    }
+                    else
+                    {
+                        fieldValue = getFieldValue(valueParts[0], dataType, Integer.parseInt(valueParts[1]));
+                    }
+
+                    if (!field.containsFieldValue(fieldValue))
+                    {
+                        field.getValues().add(fieldValue);
                         counter++;
                     }
                     else
@@ -70,6 +75,17 @@ public class CategoryFileLoader
         catch(Exception ex)
         {
             logger.error("field [{}] - error processing category file [{}], error {}", field.getName(), field.getValuesFile(), ex .getMessage());
+        }
+    }
+
+    private static FieldValue getFieldValue(String value, DataTypeJava dataType, int weight)
+    {
+        switch(dataType)
+        {
+            case INTEGER:
+                return new FieldValue(Integer.parseInt(value), weight);
+            default:
+                return new FieldValue(value, weight);
         }
     }
 }

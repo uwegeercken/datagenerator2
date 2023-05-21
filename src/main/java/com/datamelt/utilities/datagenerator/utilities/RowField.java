@@ -1,10 +1,10 @@
 package com.datamelt.utilities.datagenerator.utilities;
 
-public class RowField {
+public class RowField<T> {
     private String name;
-    private Object value;
+    private T value;
 
-    public RowField(String name, Object value)
+    public RowField(String name, T value)
     {
         this.name = name;
         this.value = value;
@@ -14,7 +14,7 @@ public class RowField {
         return name;
     }
 
-    public Object getValue() {
+    public T getValue() {
         return value;
     }
 }

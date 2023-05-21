@@ -41,17 +41,11 @@ public class Field
         return values.size();
     }
 
-    public boolean containsFieldValue(String name)
+    public boolean containsFieldValue(FieldValue fieldValue)
     {
-        if(name != null && !name.equals(""))
+        if(fieldValue != null)
         {
-            for (FieldValue value : values)
-            {
-                if (value.getValue().contains(name))
-                {
-                    return true;
-                }
-            }
+            return values.contains(fieldValue);
         }
         return false;
     }
