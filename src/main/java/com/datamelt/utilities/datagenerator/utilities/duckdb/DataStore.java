@@ -2,8 +2,9 @@ package com.datamelt.utilities.datagenerator.utilities.duckdb;
 
 import com.datamelt.utilities.datagenerator.config.Field;
 import com.datamelt.utilities.datagenerator.config.MainConfiguration;
-import com.datamelt.utilities.datagenerator.utilities.DataTypeJava;
+import com.datamelt.utilities.datagenerator.utilities.type.DataTypeJava;
 import com.datamelt.utilities.datagenerator.utilities.Row;
+import com.datamelt.utilities.datagenerator.utilities.type.DataTypeDuckDb;
 import org.duckdb.DuckDBConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +49,7 @@ public class DataStore
             if(DataTypeJava.valueOf(field.getDataType().toUpperCase()) == DataTypeJava.STRING)
             {
                 Statement stmt = connection.createStatement();
-                stmt.execute("create type " + field.getName() + " AS ENUM (" + field.getValuesAsString() + ");");
+                stmt.execute("create type " + field.getName() + " AS ENUM (" + field.getValuesAsString() + ")");
             }
         }
     }
@@ -60,7 +61,7 @@ public class DataStore
             if(DataTypeJava.valueOf(field.getDataType().toUpperCase()) == DataTypeJava.STRING)
             {
                 Statement stmt = connection.createStatement();
-                stmt.execute("drop type " + field.getName());
+                stmt.execute("drop type if exists " + field.getName());
             }
         }
     }
@@ -74,7 +75,7 @@ public class DataStore
     private void dropTable() throws Exception
     {
         Statement stmt = connection.createStatement();
-        stmt.execute("drop table " + configuration.getTableName());
+        stmt.execute("drop table if exists " + configuration.getTableName());
     }
 
     private void createAppender() throws Exception
@@ -118,7 +119,7 @@ public class DataStore
         appender.flush();
     }
 
-    public String getDuckDbType(DataTypeJava javaType)
+    private String getDuckDbType(DataTypeJava javaType)
     {
         switch(javaType)
         {

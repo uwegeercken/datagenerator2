@@ -1,4 +1,4 @@
-package com.datamelt.utilities.datagenerator.utilities;
+package com.datamelt.utilities.datagenerator.utilities.type;
 
 public enum DataTypeJava
 {

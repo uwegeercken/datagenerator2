@@ -44,14 +44,9 @@ public class DataGenerator
                 Row row = generator.generateRandomValues(generator.configuration);
                 generator.dataStore.insert(row);
             }
-
             generator.dataStore.flush();
+
             logger.debug("total rows generated: [{}],", counter);
-
-            //generator.dataStore.getValueCounts(generator.configuration.getFields().get(0));
-            //generator.dataStore.getValueCounts(generator.configuration.getFields().get(1));
-
-
             long end = System.currentTimeMillis();
             logger.info("total processing time: [{}] seconds", (end-start)/1000);
         }
@@ -68,7 +63,6 @@ public class DataGenerator
         configuration = mapper.readValue(new File(configurationFilename), MainConfiguration.class);
 
         CategoryFileLoader.loadCategoryFiles(configuration);
-
         YamlFileProcessor.validateConfiguration(configuration);
         YamlFileProcessor.distributeWeightValues(configuration);
         YamlFileProcessor.removeZeroWeightValues(configuration);

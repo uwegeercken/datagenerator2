@@ -3,6 +3,7 @@ package com.datamelt.utilities.datagenerator.utilities;
 import com.datamelt.utilities.datagenerator.config.Field;
 import com.datamelt.utilities.datagenerator.config.FieldValue;
 import com.datamelt.utilities.datagenerator.config.MainConfiguration;
+import com.datamelt.utilities.datagenerator.utilities.type.DataTypeJava;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
