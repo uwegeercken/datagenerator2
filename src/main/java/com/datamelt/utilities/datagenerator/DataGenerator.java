@@ -2,6 +2,7 @@ package com.datamelt.utilities.datagenerator;
 
 import com.datamelt.utilities.datagenerator.config.Field;
 import com.datamelt.utilities.datagenerator.config.MainConfiguration;
+import com.datamelt.utilities.datagenerator.config.YamlFileProcessor;
 import com.datamelt.utilities.datagenerator.utilities.*;
 import com.datamelt.utilities.datagenerator.utilities.duckdb.DataStore;
 import com.fasterxml.jackson.databind.ObjectMapper;

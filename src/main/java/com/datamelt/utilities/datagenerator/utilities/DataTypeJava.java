@@ -1,4 +1,4 @@
-package com.datamelt.utilities.datagenerator.utilities.duckdb;
+package com.datamelt.utilities.datagenerator.utilities;
 
 public enum DataTypeJava
 {

@@ -1,9 +1,5 @@
-package com.datamelt.utilities.datagenerator.utilities;
+package com.datamelt.utilities.datagenerator.config;
 
-import com.datamelt.utilities.datagenerator.config.Field;
-import com.datamelt.utilities.datagenerator.config.FieldValue;
-import com.datamelt.utilities.datagenerator.config.InvalidConfigurationException;
-import com.datamelt.utilities.datagenerator.config.MainConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

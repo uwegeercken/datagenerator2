@@ -1,18 +1,14 @@
 package com.datamelt.utilities.datagenerator.utilities.duckdb;
 
 import com.datamelt.utilities.datagenerator.config.Field;
-import com.datamelt.utilities.datagenerator.config.FieldValue;
 import com.datamelt.utilities.datagenerator.config.MainConfiguration;
+import com.datamelt.utilities.datagenerator.utilities.DataTypeJava;
 import com.datamelt.utilities.datagenerator.utilities.Row;
-import com.datamelt.utilities.datagenerator.utilities.RowField;
-import org.duckdb.DuckDBAppender;
 import org.duckdb.DuckDBConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
-import java.util.Arrays;
-import java.util.List;
 
 public class DataStore
 {
