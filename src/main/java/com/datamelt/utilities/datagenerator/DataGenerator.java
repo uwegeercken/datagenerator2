@@ -30,25 +30,35 @@ public class DataGenerator
     {
         if(args!=null && args.length>1)
         {
+            long start = System.currentTimeMillis();
             DataGenerator generator = new DataGenerator(Long.parseLong(args[1]));
             generator.loadConfiguration(args[0]);
 
 
             generator.dataStore = new DataStore(generator.configuration.getFields());
 
-
-                for(long i=0;i< generator.numberOfRowsToGenerate;i++)
+            logger.debug("generating rows: [{}],", generator.numberOfRowsToGenerate);
+            long counter = 0;
+            for(long i=0;i < generator.numberOfRowsToGenerate;i++)
+            {
+                counter++;
+                if(counter % 25000 == 0)
                 {
-                    Row row = generator.generateRandomValues(generator.configuration.getFields());
-                    generator.dataStore.insert(row);
+                    logger.debug("rows generated: [{}],", counter);
                 }
-                generator.dataStore.flush();
-                generator.dataStore.getValueCounts(generator.configuration.getFields().get(0));
-                generator.dataStore.getValueCounts(generator.configuration.getFields().get(1));
+                Row row = generator.generateRandomValues(generator.configuration.getFields());
+                generator.dataStore.insert(row);
+            }
+
+            generator.dataStore.flush();
+            logger.debug("total rows generated: [{}],", counter);
+
+            //generator.dataStore.getValueCounts(generator.configuration.getFields().get(0));
+            //generator.dataStore.getValueCounts(generator.configuration.getFields().get(1));
 
 
-
-            System.out.println();
+            long end = System.currentTimeMillis();
+            logger.info("total processing time: [{}] seconds", (end-start)/1000);
         }
         else
         {
@@ -95,8 +105,8 @@ public class DataGenerator
 
                 row.addField(field.getName(),field.getValues().get(counter-1).getValue());
 
-                logger.debug("field [{}] - values and weights {}", field.getName(), field.getValuesAndWeights());
-                logger.debug("field [{}] - randomPercentValue [{}], sum [{}], selected value [{}] ", field.getName(), randomPercentValue, sum, field.getValues().get(counter - 1).getValue());
+                logger.trace("field [{}] - values and weights {}", field.getName(), field.getValuesAndWeights());
+                logger.trace("field [{}] - randomPercentValue [{}], sum [{}], selected value [{}] ", field.getName(), randomPercentValue, sum, field.getValues().get(counter - 1).getValue());
             }
             else
             {
@@ -106,7 +116,7 @@ public class DataGenerator
 
 
         }
-        logger.debug("row: {}", row.toString());
+        logger.trace("row: {}", row.toString());
         return row;
     }
 

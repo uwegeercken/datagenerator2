@@ -67,6 +67,23 @@ public class Field
         }
         return buffer.toString();
     }
+
+    public String getValuesAsString()
+    {
+        StringBuffer buffer = new StringBuffer();
+        int counter = 0;
+        int sum = 0;
+        for(FieldValue value : values)
+        {
+            counter++;
+            buffer.append("'" + value.getValue().toString() + "'");
+            if(counter< values.size())
+            {
+                buffer.append( ",");
+            }
+        }
+        return buffer.toString();
+    }
     public int getSumOfWeights()
     {
         int sumOfWeights = 0;
