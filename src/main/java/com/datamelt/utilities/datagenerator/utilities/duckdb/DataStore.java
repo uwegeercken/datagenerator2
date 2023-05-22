@@ -2,6 +2,7 @@ package com.datamelt.utilities.datagenerator.utilities.duckdb;
 
 import com.datamelt.utilities.datagenerator.config.Field;
 import com.datamelt.utilities.datagenerator.config.FieldValue;
+import com.datamelt.utilities.datagenerator.config.MainConfiguration;
 import com.datamelt.utilities.datagenerator.utilities.Row;
 import com.datamelt.utilities.datagenerator.utilities.RowField;
 import org.duckdb.DuckDBAppender;
@@ -16,35 +17,80 @@ import java.util.List;
 public class DataStore
 {
     private static Logger logger = LoggerFactory.getLogger(DataStore.class);
-    private static final String TABLENAME = "generateddata";
-
-    private long numberOfRecordsInserted=0;
+    private static final String SCHEMANAME = "main";
+    private long numberOfRecordsInserted = 0;
     private DuckDBConnection connection;
     private DataStoreAppender appender;
-    //private PreparedStatement preparedStatement;
-    public DataStore(List<Field> fields) throws Exception
+    private MainConfiguration configuration;
+
+    public DataStore(MainConfiguration configuration) throws Exception
     {
-        connection = (DuckDBConnection) DriverManager.getConnection("jdbc:duckdb:/home/uwe/development/datagenerator2/generateddata.duckdb");
-        createTable(fields);
-        String placeholders = "?,".repeat(fields.size()-1) + "?";
-        appender = new DataStoreAppender(connection.createAppender("main", TABLENAME));
+        this.configuration = configuration;
+        connection = (DuckDBConnection) DriverManager.getConnection("jdbc:duckdb:" + configuration.getDatabaseName());
 
-        //preparedStatement = connection.prepareStatement("INSERT INTO " + TABLENAME + " VALUES (" + placeholders + ");");
-
+        cleanupDatabase();
+        createDatabaseStructure();
+        createAppender();
     }
 
-    private void createTable(List<Field> fields) throws Exception
+    private void cleanupDatabase() throws Exception
+    {
+        dropTable();
+        dropEnums();
+    }
+
+    private void createDatabaseStructure() throws Exception
+    {
+        createEnums();
+        createTable();
+    }
+
+    private void createEnums() throws Exception
+    {
+        for(Field field : configuration.getFields())
+        {
+            if(DataTypeJava.valueOf(field.getDataType().toUpperCase()) == DataTypeJava.STRING)
+            {
+                Statement stmt = connection.createStatement();
+                stmt.execute("create type " + field.getName() + " AS ENUM (" + field.getValuesAsString() + ");");
+            }
+        }
+    }
+
+    private void dropEnums() throws Exception
+    {
+        for(Field field : configuration.getFields())
+        {
+            if(DataTypeJava.valueOf(field.getDataType().toUpperCase()) == DataTypeJava.STRING)
+            {
+                Statement stmt = connection.createStatement();
+                stmt.execute("drop type " + field.getName());
+            }
+        }
+    }
+
+    private void createTable() throws Exception
     {
         Statement stmt = connection.createStatement();
-        stmt.execute("drop table " + TABLENAME);
-        stmt.execute("create table " + TABLENAME + " (" + getDataTypesAndNames(fields) + ")");
+        stmt.execute("create table " + configuration.getTableName() + " (" + getDataTypesAndNames() + ")");
     }
 
-    private String getDataTypesAndNames(List<Field> fields) throws Exception
+    private void dropTable() throws Exception
+    {
+        Statement stmt = connection.createStatement();
+        stmt.execute("drop table " + configuration.getTableName());
+    }
+
+    private void createAppender() throws Exception
+    {
+        this.appender = new DataStoreAppender(connection.createAppender(SCHEMANAME, configuration.getTableName()));
+    }
+
+    private String getDataTypesAndNames() throws Exception
     {
         StringBuffer buffer = new StringBuffer();
         int counter = 0;
-        for(Field field : fields)
+        for(Field field : configuration.getFields())
         {
             counter++;
             buffer.append(field.getName());
@@ -52,27 +98,18 @@ public class DataStore
 
             if(DataTypeJava.valueOf(field.getDataType().toUpperCase()) == DataTypeJava.STRING)
             {
-                createEnum(field);
                 buffer.append(field.getName());
             }
             else
             {
                 buffer.append(getDuckDbType(DataTypeJava.valueOf(field.getDataType().toUpperCase())));
             }
-            if(counter< fields.size())
+            if(counter < configuration.getFields().size())
             {
                 buffer.append(", ");
             }
         }
         return buffer.toString();
-    }
-
-    private void createEnum(Field field) throws Exception
-    {
-        Statement stmt = connection.createStatement();
-        String test = field.getValuesAsString();
-        stmt.execute("drop type " + field.getName());
-        stmt.execute("create type " + field.getName() + " AS ENUM (" + field.getValuesAsString() + ");");
     }
 
     public void insert(Row row)
@@ -109,7 +146,7 @@ public class DataStore
         try
         {
             Statement stmt = connection.createStatement();
-            try (ResultSet rs = stmt.executeQuery("select " + field.getName() + ", count(1) as total from " + TABLENAME +" group by " + field.getName()))
+            try (ResultSet rs = stmt.executeQuery("select " + field.getName() + ", count(1) as total from " + configuration.getTableName() +" group by " + field.getName()))
             {
                 while (rs.next()) {
                     System.out.println("value: " + rs.getString(1) + ", total: " + rs.getDouble("total") / numberOfRecordsInserted * 100);
@@ -121,6 +158,4 @@ public class DataStore
             logger.error("error executing insert statement");
         }
     }
-
-
 }

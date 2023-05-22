@@ -4,22 +4,18 @@ import com.datamelt.utilities.datagenerator.config.Field;
 import com.datamelt.utilities.datagenerator.config.MainConfiguration;
 import com.datamelt.utilities.datagenerator.utilities.*;
 import com.datamelt.utilities.datagenerator.utilities.duckdb.DataStore;
-import com.datamelt.utilities.datagenerator.utilities.duckdb.DataTypeJava;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.File;
-import java.util.List;
 import java.util.Random;
 
 public class DataGenerator
 {
     private static Logger logger = LoggerFactory.getLogger(DataGenerator.class);
-
     private MainConfiguration configuration;
     private long numberOfRowsToGenerate=0;
-
     private DataStore dataStore;
 
     public DataGenerator(long numberOfRowsToGenerate)
@@ -33,9 +29,7 @@ public class DataGenerator
             long start = System.currentTimeMillis();
             DataGenerator generator = new DataGenerator(Long.parseLong(args[1]));
             generator.loadConfiguration(args[0]);
-
-
-            generator.dataStore = new DataStore(generator.configuration.getFields());
+            generator.dataStore = new DataStore(generator.configuration);
 
             logger.debug("generating rows: [{}],", generator.numberOfRowsToGenerate);
             long counter = 0;
@@ -46,7 +40,7 @@ public class DataGenerator
                 {
                     logger.debug("rows generated: [{}],", counter);
                 }
-                Row row = generator.generateRandomValues(generator.configuration.getFields());
+                Row row = generator.generateRandomValues(generator.configuration);
                 generator.dataStore.insert(row);
             }
 
@@ -79,24 +73,17 @@ public class DataGenerator
         YamlFileProcessor.removeZeroWeightValues(configuration);
     }
 
-    public MainConfiguration getConfiguration()
-    {
-        return configuration;
-    }
-
-    private Row generateRandomValues(List<Field> fields) throws Exception
+    private Row generateRandomValues(MainConfiguration configuration) throws Exception
     {
         Row row = new Row();
-        for(Field field : fields)
+        for(Field field : configuration.getFields())
         {
             Random random = new Random();
-
             if(field.getNumberOfDefaultWeights()!=field.getValues().size())
             {
                 int randomPercentValue = random.nextInt(1, 100);
                 long sum = 0;
                 int counter = 0;
-
                 while (sum <= randomPercentValue)
                 {
                     sum = sum + field.getValues().get(counter).getWeight();
@@ -104,7 +91,6 @@ public class DataGenerator
                 }
 
                 row.addField(field.getName(),field.getValues().get(counter-1).getValue());
-
                 logger.trace("field [{}] - values and weights {}", field.getName(), field.getValuesAndWeights());
                 logger.trace("field [{}] - randomPercentValue [{}], sum [{}], selected value [{}] ", field.getName(), randomPercentValue, sum, field.getValues().get(counter - 1).getValue());
             }
@@ -113,24 +99,7 @@ public class DataGenerator
                 int randomValue = random.nextInt(1, field.getValues().size()+1);
                 row.addField(field.getName(),field.getValues().get(randomValue-1).getValue());
             }
-
-
         }
-        logger.trace("row: {}", row.toString());
         return row;
     }
-
-    private void addField(Row row, Field field, String randomValue)
-    {
-        DataTypeJava dataType = DataTypeJava.valueOf(field.getDataType().toUpperCase());
-
-        switch(dataType)
-        {
-            case INTEGER:
-                row.addField(new RowField<Integer>(field.getName(), Integer.parseInt(randomValue)));
-            default:
-                row.addField(new RowField<String>(field.getName(), randomValue));
-        }
-    }
-
 }
