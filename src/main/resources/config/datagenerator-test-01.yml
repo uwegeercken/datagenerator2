@@ -1,12 +1,31 @@
 --- # MainConfiguration - datagenerator2.yml
 name: Test
+databaseName: /home/uwe/development/datagenerator2/generateddata.duckdb
+tableName: generateddata
 fields:
   - name: gender
     values:
       - value: m
-        weight: 50
+        weight: 40
       - value: f
-        weight: 25
+        weight: 40
       - value: d
+        weight: 20
     valuesFile: /home/uwe/development/datagenerator2/categories/gender.category
-    valueFileDataType: string
+  - name: weekday
+    values:
+      - value: Saturday
+        weight: 5
+      - value: Sunday
+        weight: 5
+    valuesFile: /home/uwe/development/datagenerator2/categories/weekday.category
+  - name: season
+    valuesFile: /home/uwe/development/datagenerator2/categories/season.category
+    values:
+      - value: Summer
+        weight: 70
+  - name: city
+    valuesFile: /home/uwe/development/datagenerator2/categories/city.category
+  - name: number
+    dataType: integer
+    valuesFile: /home/uwe/development/datagenerator2/categories/number.category
