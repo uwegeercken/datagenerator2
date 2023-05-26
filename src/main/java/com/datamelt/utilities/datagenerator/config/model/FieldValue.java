@@ -1,7 +1,6 @@
-package com.datamelt.utilities.datagenerator.config;
+package com.datamelt.utilities.datagenerator.config.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.*;
 
 public class FieldValue<T>
 {

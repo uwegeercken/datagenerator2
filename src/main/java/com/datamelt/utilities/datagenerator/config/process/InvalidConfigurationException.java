@@ -1,4 +1,4 @@
-package com.datamelt.utilities.datagenerator.config;
+package com.datamelt.utilities.datagenerator.config.process;
 
 public class InvalidConfigurationException extends Exception
 {

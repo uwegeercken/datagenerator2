@@ -1,8 +1,9 @@
 package com.datamelt.utilities.datagenerator.utilities;
 
-import com.datamelt.utilities.datagenerator.config.Field;
-import com.datamelt.utilities.datagenerator.config.FieldValue;
-import com.datamelt.utilities.datagenerator.config.MainConfiguration;
+import com.datamelt.utilities.datagenerator.config.model.Field;
+import com.datamelt.utilities.datagenerator.config.model.FieldValue;
+import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
+import com.datamelt.utilities.datagenerator.config.model.MainConfiguration;
 import com.datamelt.utilities.datagenerator.utilities.type.DataTypeJava;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +17,7 @@ import static com.datamelt.utilities.datagenerator.utilities.Constants.CATEGORY_
 public class CategoryFileLoader
 {
     private static Logger logger = LoggerFactory.getLogger(CategoryFileLoader.class);
-    public static void loadCategoryFiles(MainConfiguration configuration)
+    public static void loadCategoryFiles(MainConfiguration configuration) throws Exception
     {
         for(Field field : configuration.getFields())
         {
@@ -35,8 +36,7 @@ public class CategoryFileLoader
         }
     }
 
-    private static void loadCategoryFile(Field field)
-    {
+    private static void loadCategoryFile(Field field) throws InvalidConfigurationException {
         DataTypeJava dataType = DataTypeJava.valueOf(field.getDataType().toUpperCase());
         File file = new File(field.getValuesFile());
         try(BufferedReader reader = new BufferedReader(new FileReader(file.getPath()));)
@@ -73,8 +73,7 @@ public class CategoryFileLoader
         }
         catch(Exception ex)
         {
-            logger.error("field [{}] - error processing category file [{}], error {}", field.getName(), field.getValuesFile(), ex .getMessage());
-        }
+            throw new InvalidConfigurationException("field [" + field.getName() + "] - error processing category file: " +  ex.getMessage());        }
     }
 
     private static FieldValue getFieldValue(String value, DataTypeJava dataType, int weight)

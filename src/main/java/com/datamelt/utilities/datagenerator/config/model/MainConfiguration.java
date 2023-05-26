@@ -1,16 +1,17 @@
-package com.datamelt.utilities.datagenerator.config;
+package com.datamelt.utilities.datagenerator.config.model;
 
+import com.datamelt.utilities.datagenerator.config.model.Field;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.List;
-import java.util.Map;
 
 public class MainConfiguration
 {
     private String name;
     @JsonInclude(JsonInclude.Include.NON_ABSENT)
     private String tableName = "generateddata";
-    private String databaseName;
+    @JsonInclude(JsonInclude.Include.NON_ABSENT)
+    private String databaseName = "datagenerator2.duckdb";
     private List<Field> fields;
 
     public String getName()

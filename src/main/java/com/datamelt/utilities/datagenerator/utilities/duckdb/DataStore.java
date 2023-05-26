@@ -1,7 +1,7 @@
 package com.datamelt.utilities.datagenerator.utilities.duckdb;
 
-import com.datamelt.utilities.datagenerator.config.Field;
-import com.datamelt.utilities.datagenerator.config.MainConfiguration;
+import com.datamelt.utilities.datagenerator.config.model.Field;
+import com.datamelt.utilities.datagenerator.config.model.MainConfiguration;
 import com.datamelt.utilities.datagenerator.utilities.type.DataTypeJava;
 import com.datamelt.utilities.datagenerator.utilities.Row;
 import com.datamelt.utilities.datagenerator.utilities.type.DataTypeDuckDb;
@@ -123,7 +123,7 @@ public class DataStore
     {
         switch(javaType)
         {
-            case  LONG:
+            case LONG:
                 return DataTypeDuckDb.BIGINT.toString();
             case BOOLEAN:
                 return DataTypeDuckDb.BOOLEAN.toString();
