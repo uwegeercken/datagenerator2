@@ -1,20 +1,24 @@
 # datagenerator2
-The datagenerator tool allows to generate random data.
+
+The datagenerator tool is currently (May '23) under development. Additional features and capybilities will be added over time.
+
+The datagenerator tool allows to generate random data. The aim is to have a tool that generates data in a way which is flexible enough to satisfy the needs of developers or analysts or anybody else who needs some sort
+of test data - possibly with dependencies between individual fields and variying/definable distribution of field values. 
 
 The tool requires a yaml file which contains various configuration attributes,
 plus a numeric value which defines how many rows of data to generate.
 
 ## Features
 - select random values from word lists
-- generate random strings (to be implemented)
-- generate data according to a given regular expression (to be implemented)
-- export generated rows of data in CSV, Json or Parquet format (to be implemented)
+- generate random strings, numbers or dates (to be implemented)
+- generate random data according to a given regular expression (to be implemented)
+- export rows of generated data in CSV, Json or Parquet format (to be implemented)
 ### Word lists
 Word lists allow to define values for certain categories such as "weekdays", "seasons", "car types",
 "first names", etc. the generator will randomly pick a value from the configured word lists. Word lists are simple text files where each row contains one value.
 
 Using word lists offers a few advantages:
-- word lists can be stored in a directory hierarchy where e.g. different directories defined the same word lists but in different languages
+- word lists can be stored in a directory hierarchy where e.g. different directories defined the same word lists but in different languages or the structure deinfes word lists for different environments (test/production)
 - word lists can be created from a data extract from a database
 - word lists can be constructed from a script processing a data file or consuming a Rest API
 - word lists can be changed or enahnced using a simple text editor
@@ -45,7 +49,10 @@ generate random data are processed sequentially and build a row of data. The too
 The data is then generated and stored in a local duckdb instance. The data types specified in the yaml configuration are used to defined the data types of the duckdb table which is created.
 
 ## Yaml configuration
-The yaml configuration file contains a list of fields/attributes to generate.
+The yaml configuration file contains a list of fields/attributes to generate. Besides this definition it contains other configurable settings of the datagenerator tool
+
+- the name of the duckdb which is ued
+- the name of the duckdb table to create
 
 
 
