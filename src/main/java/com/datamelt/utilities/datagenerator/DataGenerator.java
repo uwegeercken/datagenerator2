@@ -42,7 +42,7 @@ public class DataGenerator
                 generator.processConfiguration();
                 generator.dataStore = new DataStore(generator.configuration);
                 generator.generateRows(generator.configuration.getFields(), arguments.getNumberOfRowsToGenerate());
-                generator.exportToFile(generator.configuration.getTableName(), arguments.getOutputFilename());
+                generator.exportToCsvFile(generator.configuration.getTableName(), arguments.getOutputFilename(), arguments.getCsvDelimiter(), arguments.isCsvIncludeHeader());
             }
             catch (Exception ex)
             {
@@ -91,9 +91,9 @@ public class DataGenerator
         logger.info("total data generation time: [{}] seconds", (end - start) / 1000);
     }
 
-    private void exportToFile(String tablename, String outputFilename) throws Exception
+    private void exportToCsvFile(String tablename, String outputFilename, String delimiter, boolean includeHeader) throws Exception
     {
         logger.debug("output generated data to csv: [{}],", arguments.getOutputFilename());
-        dataStore.exportToCsv(tablename, outputFilename);
+        dataStore.exportToCsv(tablename, outputFilename, delimiter, includeHeader);
     }
 }

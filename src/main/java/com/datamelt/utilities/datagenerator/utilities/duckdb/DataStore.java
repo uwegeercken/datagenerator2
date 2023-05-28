@@ -119,10 +119,17 @@ public class DataStore
         appender.flush();
     }
 
-    public void exportToCsv(String tablename, String outputFilename) throws Exception
+    public void exportToCsv(String tablename, String outputFilename, String delimiter, boolean includeHeader) throws Exception
     {
         Statement stmt = connection.createStatement();
-        stmt.execute("COPY " + tablename + " TO '" + outputFilename + "' (HEADER, DELIMITER ',')");
+        StringBuffer options = new StringBuffer();
+        options.append("(");
+        if (includeHeader == true) {
+            options.append("HEADER, ");
+        }
+        options.append("DELIMITER '" + delimiter + "'");
+        options.append(")");
+        stmt.execute("COPY " + tablename + " TO '" + outputFilename + "' " + options.toString());
     }
 
     private String getDuckDbType(DataTypeJava javaType)

@@ -6,8 +6,8 @@ public class ProgramArguments
     private String outputFilename;
     private String configurationFilename;
 
-    private String csvDelimiter;
-    private boolean csvIncludeHeader;
+    private String csvDelimiter = ",";
+    private boolean csvIncludeHeader=true;
     public ProgramArguments(String[] args)
     {
         parseArguments(args);
@@ -40,12 +40,28 @@ public class ProgramArguments
         }
     }
 
-    public String getConfigurationFilename() {
-        return configurationFilename;
+    public void setConfigurationFilename(String configurationFilename) {
+        this.configurationFilename = configurationFilename;
     }
 
-    public void setConfigFilename(String configFilename) {
-        this.configurationFilename = configFilename;
+    public String getCsvDelimiter() {
+        return csvDelimiter;
+    }
+
+    public void setCsvDelimiter(String csvDelimiter) {
+        this.csvDelimiter = csvDelimiter;
+    }
+
+    public boolean isCsvIncludeHeader() {
+        return csvIncludeHeader;
+    }
+
+    public void setCsvIncludeHeader(boolean csvIncludeHeader) {
+        this.csvIncludeHeader = csvIncludeHeader;
+    }
+
+    public String getConfigurationFilename() {
+        return configurationFilename;
     }
 
     public long getNumberOfRowsToGenerate() {
