@@ -18,7 +18,6 @@ Using word lists offers a few advantages:
 - word lists can be created from a data extract from a database
 - word lists can be constructed from a script processing a data file or consuming a Rest API
 - word lists can be changed or enahnced using a simple text editor
-- 
 
 In the yaml configuration additional values for a given word list (also value which are already defined in the word list) may be defined including a weight for individual values.
 This allows to specify a higher priority/weight for defined values. The weight of a value is always specified on the base of 100 percent. 
