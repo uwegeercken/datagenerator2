@@ -1,8 +1,8 @@
 # datagenerator2
 The datagenerator tool allows to generate random data.
 
-The tool requires a yaml file  to generate.which contains various configuration attributes
-plus a numeric value which defines how many rows of data
+The tool requires a yaml file which contains various configuration attributes,
+plus a numeric value which defines how many rows of data to generate.
 
 ## Features
 - select random values from word lists
