@@ -43,8 +43,7 @@ First, the given yaml configuration file is analyzed for its correctness. The fi
 generate random data are processed sequentially and build a row of data. The tool generates the desired number of rows.
 
 
-The data is then generated and 
-stored in a local duckdb instance.
+The data is then generated and stored in a local duckdb instance. The data types specified in the yaml configuration are used to defined the data types of the duckdb table which is created.
 
 ## Yaml configuration
 The yaml configuration file contains a list of fields/attributes to generate.
