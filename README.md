@@ -19,9 +19,16 @@ This allows to specify a higher priority/weight for defined values. The weight o
 E.g. one may define the days of the week in a word list and in the configuration "saturday" with a weight of 10 percent and 
 "sunday" with a weight of 10 percent. The other days "monday" to "friday" will then be assigned a weight of 16 percent so that the overall sum is 100 %.
 
-The datagenerator will then produce random data (pick random values from the word list) according to the weights assigned.
+The datagenerator will then produce random data (pick random values from the word list) according to the weights assigned. In the example above "saturday" and "sunday" will occur
+less often in the generated number of rows then the other days, because they have a lower weight.
+
+## Processing steps
+First, the given yaml configuration file is analyzed for its correctness. The fields/attributes for which to
+generate random data are processed sequentially and build a row of data. The tool generates the desired number of rows.
 
 
+The data is then generated and 
+stored in a local duckdb instance.
 
 
 last update: uwe geercken - uwe.geercken@web.de - 2023-05-28
