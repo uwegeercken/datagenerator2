@@ -21,7 +21,7 @@ Using word lists offers a few advantages:
 - word lists can be stored in a directory hierarchy where e.g. different directories defined the same word lists but in different languages or the structure deinfes word lists for different environments (test/production)
 - word lists can be created from a data extract from a database
 - word lists can be constructed from a script processing a data file or consuming a Rest API
-- word lists can be changed or enahnced using a simple text editor
+- word lists can be changed or enhanced using a simple text editor
 
 In the yaml configuration additional values for a given word list (also value which are already defined in the word list) may be defined including a weight for individual values.
 This allows to specify a higher priority/weight for defined values. The weight of a value is always specified on the base of 100 percent. 
@@ -34,17 +34,16 @@ If a value for a given word list appears both in the word list file and the yaml
 The datagenerator will then produce random data (pick random values from the word list) according to the weights assigned. In the example above "saturday" and "sunday" will occur
 less often in the generated number of rows then the other days, because they have a lower weight.
 
-A word list is optional. All values to be used for randomly generating data can also be defined solely in the yaml configuration file. Anyways, the sum of the weight definition can
-must be 100 percent (and can not exceed 100 percent).
+A word list is optional. All values to be used for randomly generating data can also be defined solely in the yaml configuration file. Anyways, the sum of the weight definition
+must be 100 percent (and can not exceed 100 percent). Individual values can not be negative percentage values.
 
 **NOTE**: If values and their weight are specified in a word lists but for some values no weight is defined, the datagenerator will calculate the weight for those fields that have no weight definition
 and equally distribute the weight value. But, depending on the number of values without a weight definition , it might not be possible to exactly evenly distribute the value. In this case some values
-from the word list might get a slightly higher weight value.
- 
+from the word list might get a slightly higher weight value. If weight definitions are assigned in a way that the remaining percentage for the other values is less than 1 percent an error occurs. 
+
 ## Processing steps
 First, the given yaml configuration file is analyzed for its correctness. The fields/attributes for which to
 generate random data are processed sequentially and build a row of data. The tool generates the desired number of rows.
-
 
 The data is then generated and stored in a local duckdb instance. The data types specified in the yaml configuration are used to defined the data types of the duckdb table which is created.
 
