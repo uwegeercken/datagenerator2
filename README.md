@@ -31,6 +31,9 @@ If a value for a given word list appears both in the word list file and the yaml
 The datagenerator will then produce random data (pick random values from the word list) according to the weights assigned. In the example above "saturday" and "sunday" will occur
 less often in the generated number of rows then the other days, because they have a lower weight.
 
+A word list is optional. All values to be used for randomly generating data can also be defined solely in the yaml configuration file. Anyways, the sum of the weight definition can
+must be 100 percent (and can not exceed 100 percent).
+
 **NOTE**: If values and their weight are specified in a word lists but for some values no weight is defined, the datagenerator will calculate the weight for those fields that have no weight definition
 and equally distribute the weight value. But, depending on the number of values without a weight definition , it might not be possible to exactly evenly distribute the value. In this case some values
 from the word list might get a slightly higher weight value.
