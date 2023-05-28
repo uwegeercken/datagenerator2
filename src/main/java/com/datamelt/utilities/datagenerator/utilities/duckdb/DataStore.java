@@ -119,6 +119,12 @@ public class DataStore
         appender.flush();
     }
 
+    public void exportToCsv(String tablename, String outputFilename) throws Exception
+    {
+        Statement stmt = connection.createStatement();
+        stmt.execute("COPY " + tablename + " TO '" + outputFilename + "' (HEADER, DELIMITER ',')");
+    }
+
     private String getDuckDbType(DataTypeJava javaType)
     {
         switch(javaType)

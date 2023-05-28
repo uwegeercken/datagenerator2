@@ -12,7 +12,6 @@ import java.util.Random;
 public class CategoryGenerator implements RandomValueGenerator
 {
     private static Logger logger = LoggerFactory.getLogger(CategoryGenerator.class);
-
     @Override
     public RowField generateRandomValue(Field field) throws Exception
     {
@@ -33,10 +32,8 @@ public class CategoryGenerator implements RandomValueGenerator
                 {
                     System.out.println();
                 }
-
                 counter++;
             }
-
             rowField = new RowField(field.getName(), field.getValues().get(counter-1).getValue());
             logger.trace("field [{}] - values and weights {}", field.getName(), field.getValuesAndWeights());
             logger.trace("field [{}] - randomPercentValue [{}], sum [{}], selected value [{}] ", field.getName(), randomPercentValue, sum, field.getValues().get(counter - 1).getValue());
