@@ -1,6 +1,6 @@
---- # ProgrammConfiguration - programmconfiguration-test-01.yml
+--- # ProgramConfiguration - programconfiguration-test-01.yml
 outputFilename: /home/uwe/development/datagenerator2/csv_export.csv
-number OfRowsToGenerate: 2500
+numberOfRowsToGenerate: 2500
 csvExport:
   delimiter: "'"
   includeHeader: true

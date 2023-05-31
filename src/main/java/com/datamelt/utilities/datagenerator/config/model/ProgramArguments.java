@@ -29,11 +29,11 @@ public class ProgramArguments
             {
                 outputFilename = args[i].substring(args[i].indexOf("=")+1);
             }
-            else if(args[i].startsWith("-c="))
+            else if(args[i].startsWith("-dc="))
             {
                 dataConfigurationFilename = args[i].substring(args[i].indexOf("=")+1);
             }
-            else if(args[i].startsWith("-p="))
+            else if(args[i].startsWith("-pc="))
             {
                 programConfigurationFilename = args[i].substring(args[i].indexOf("=")+1);
             }

@@ -52,13 +52,16 @@ generate random data are processed sequentially and build a row of data. The too
 The data is then generated and stored in a local duckdb instance. The data types specified in the yaml configuration are used to defined the data types of the duckdb table which is created.
 
 ## Yaml configuration for the datagenerator tool
-The yaml configuration file contains a list of fields/attributes to generate. Besides this definition it contains other configurable settings of the datagenerator tool
+The configuration file contains various attributes to steer the behavior of the datagenerator tool
 
-- the name of the duckdb which is used
-- the name of the duckdb table to create
+- the name of the output file for the generated data
+- the number of rows to generate
+- details for the export to a csv file - delimiter and header information
 
 ## Yaml configuration for the definition of fields to generate
-
+The configuration file contains a list of fields/attributes to generate. Besides this definition it contains other configurable settings of the datagenerator tool.
+- the name of the duckdb which is used
+- the name of the duckdb table to create
 
 
 
