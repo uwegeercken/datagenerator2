@@ -1,9 +1,9 @@
-package com.datamelt.utilities.datagenerator.utilities;
+package com.datamelt.utilities.datagenerator.config;
 
 import com.datamelt.utilities.datagenerator.config.model.Field;
 import com.datamelt.utilities.datagenerator.config.model.FieldValue;
 import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
-import com.datamelt.utilities.datagenerator.config.model.MainConfiguration;
+import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
 import com.datamelt.utilities.datagenerator.utilities.type.DataTypeJava;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +17,7 @@ import static com.datamelt.utilities.datagenerator.utilities.Constants.CATEGORY_
 public class CategoryFileLoader
 {
     private static Logger logger = LoggerFactory.getLogger(CategoryFileLoader.class);
-    public static void loadCategoryFiles(MainConfiguration configuration) throws Exception
+    public static void loadCategoryFiles(DataConfiguration configuration) throws Exception
     {
         for(Field field : configuration.getFields())
         {

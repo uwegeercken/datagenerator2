@@ -1,13 +1,15 @@
 package com.datamelt.utilities.datagenerator.config.model;
 
+import java.util.Map;
+
 public class ProgramArguments
 {
-    private long numberOfRowsToGenerate;
+    private String numberOfRowsToGenerate;
     private String outputFilename;
-    private String configurationFilename;
-
-    private String csvDelimiter = ",";
-    private boolean csvIncludeHeader=true;
+    private String dataConfigurationFilename;
+    private String programConfigurationFilename;
+    private String csvDelimiter;
+    private String csvIncludeHeader;
     public ProgramArguments(String[] args)
     {
         parseArguments(args);
@@ -19,7 +21,7 @@ public class ProgramArguments
         {
             if(args[i].startsWith("-n="))
             {
-                numberOfRowsToGenerate = Long.parseLong(args[i].substring(args[i].indexOf("=")+1));
+                numberOfRowsToGenerate = args[i].substring(args[i].indexOf("=")+1);
             }
             else if(args[i].startsWith("-o="))
             {
@@ -27,7 +29,11 @@ public class ProgramArguments
             }
             else if(args[i].startsWith("-c="))
             {
-                configurationFilename = args[i].substring(args[i].indexOf("=")+1);
+                dataConfigurationFilename = args[i].substring(args[i].indexOf("=")+1);
+            }
+            else if(args[i].startsWith("-p="))
+            {
+                programConfigurationFilename = args[i].substring(args[i].indexOf("=")+1);
             }
             else if(args[i].startsWith("-cd="))
             {
@@ -35,13 +41,13 @@ public class ProgramArguments
             }
             else if(args[i].startsWith("-ch="))
             {
-                csvIncludeHeader = Boolean.parseBoolean(args[i].substring(args[i].indexOf("=")+1));
+                csvIncludeHeader = args[i].substring(args[i].indexOf("=")+1);
             }
         }
     }
 
-    public void setConfigurationFilename(String configurationFilename) {
-        this.configurationFilename = configurationFilename;
+    public void setDataConfigurationFilename(String dataConfigurationFilename) {
+        this.dataConfigurationFilename = dataConfigurationFilename;
     }
 
     public String getCsvDelimiter() {
@@ -52,31 +58,25 @@ public class ProgramArguments
         this.csvDelimiter = csvDelimiter;
     }
 
-    public boolean isCsvIncludeHeader() {
-        return csvIncludeHeader;
+   public String getDataConfigurationFilename() {
+        return dataConfigurationFilename;
     }
 
-    public void setCsvIncludeHeader(boolean csvIncludeHeader) {
-        this.csvIncludeHeader = csvIncludeHeader;
-    }
+    public String getProgramConfigurationFilename() { return programConfigurationFilename; }
 
-    public String getConfigurationFilename() {
-        return configurationFilename;
-    }
-
-    public long getNumberOfRowsToGenerate() {
-        return numberOfRowsToGenerate;
-    }
-
-    public void setNumberOfRowsToGenerate(long numberOfRowsToGenerate) {
-        this.numberOfRowsToGenerate = numberOfRowsToGenerate;
-    }
-
-    public String getOutputFilename() {
+       public String getOutputFilename() {
         return outputFilename;
     }
 
     public void setOutputFilename(String outputFilename) {
         this.outputFilename = outputFilename;
+    }
+
+    public String getNumberOfRowsToGenerate() {
+        return numberOfRowsToGenerate;
+    }
+
+    public String getCsvIncludeHeader() {
+        return csvIncludeHeader;
     }
 }

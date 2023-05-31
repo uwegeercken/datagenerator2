@@ -1,88 +1,96 @@
 package com.datamelt.utilities.datagenerator;
 
-import com.datamelt.utilities.datagenerator.config.model.Field;
-import com.datamelt.utilities.datagenerator.config.model.MainConfiguration;
+import com.datamelt.utilities.datagenerator.config.CategoryFileLoader;
+import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.ProgramArguments;
+import com.datamelt.utilities.datagenerator.config.model.ProgramConfiguration;
 import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
 import com.datamelt.utilities.datagenerator.config.process.YamlFieldProcessor;
+import com.datamelt.utilities.datagenerator.export.CsvFileExporter;
+import com.datamelt.utilities.datagenerator.generate.Row;
 import com.datamelt.utilities.datagenerator.generate.RowBuilder;
-import com.datamelt.utilities.datagenerator.utilities.*;
 import com.datamelt.utilities.datagenerator.utilities.duckdb.DataStore;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.File;
-import java.util.List;
 
 public class DataGenerator
 {
     private static Logger logger = LoggerFactory.getLogger(DataGenerator.class);
-    private MainConfiguration configuration;
-    private long numberOfRowsToGenerate=0;
-    private String configurationFilename;
+    private DataConfiguration dataConfiguration;
+    private ProgramConfiguration programConfiguration;
     private DataStore dataStore;
+
     private static ProgramArguments arguments;
 
-    public DataGenerator(String configurationFilename, long numberOfRowsToGenerate)
+    public DataGenerator(ProgramArguments arguments) throws Exception
     {
-        this.numberOfRowsToGenerate = numberOfRowsToGenerate;
-        this.configurationFilename = configurationFilename;
-
+        programConfiguration = loadProgramConfiguration(arguments.getProgramConfigurationFilename());
+        programConfiguration.mergeArguments(arguments);
+        dataConfiguration = loadDataConfiguration(arguments.getDataConfigurationFilename());
+        processConfiguration();
+        setupDataStore();
     }
     public static void main(String[] args) throws Exception
     {
         arguments = new ProgramArguments(args);
-        if(args!=null && args.length>1)
+        try
         {
-            try
-            {
-                DataGenerator generator = new DataGenerator(arguments.getConfigurationFilename(), arguments.getNumberOfRowsToGenerate());
-                generator.loadConfiguration();
-                generator.processConfiguration();
-                generator.dataStore = new DataStore(generator.configuration);
-                generator.generateRows(generator.configuration.getFields(), arguments.getNumberOfRowsToGenerate());
-                generator.exportToCsvFile(generator.configuration.getTableName(), arguments.getOutputFilename(), arguments.getCsvDelimiter(), arguments.isCsvIncludeHeader());
-            }
-            catch (Exception ex)
-            {
-                logger.error("unable to generate data: {}", ex.getMessage());
+            DataGenerator generator = new DataGenerator(arguments);
+            generator.generateRows();
+            if(generator.programConfiguration.getOutputFilename() != null) {
+                generator.exportToFile(generator.dataConfiguration.getTableName(), generator.programConfiguration.getOutputFilename());
             }
         }
-        else
+        catch (Exception ex)
         {
-            logger.error("the path and name of the configuration yaml file needs to be specified");
+            logger.error("unable to generate data: {}", ex.getMessage());
         }
     }
 
-    private void loadConfiguration() throws Exception
+    private DataConfiguration loadDataConfiguration(String dataConfigurationFilename) throws Exception
     {
-        logger.debug("processing configuration file: [{}],", configurationFilename);
+        logger.debug("processing datagenerator configuration file: [{}],", dataConfigurationFilename);
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-        configuration = mapper.readValue(new File(configurationFilename), MainConfiguration.class);
-        CategoryFileLoader.loadCategoryFiles(configuration);
+        DataConfiguration dataConfiguration = mapper.readValue(new File(dataConfigurationFilename), DataConfiguration.class);
+        CategoryFileLoader.loadCategoryFiles(dataConfiguration);
+        return dataConfiguration;
+    }
+
+    private ProgramConfiguration loadProgramConfiguration(String programConfigurationFilename) throws Exception
+    {
+        logger.debug("processing program configuration file: [{}],", programConfigurationFilename);
+        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+        return mapper.readValue(new File(programConfigurationFilename), ProgramConfiguration.class);
     }
 
     private void processConfiguration() throws InvalidConfigurationException
     {
-        YamlFieldProcessor allFieldsProcessor = new YamlFieldProcessor(configuration);
+        YamlFieldProcessor allFieldsProcessor = new YamlFieldProcessor(dataConfiguration);
         allFieldsProcessor.processAllFields();
     }
 
-    private void generateRows(List<Field> fields, long numberOfRowsToGenerate) throws Exception
+    private void setupDataStore() throws Exception
     {
-        logger.debug("generating rows: [{}],", numberOfRowsToGenerate);
+        dataStore = new DataStore(dataConfiguration, new CsvFileExporter(",",true));
+    }
+
+    private void generateRows() throws Exception
+    {
+        logger.debug("generating rows: [{}],", programConfiguration.getNumberOfRowsToGenerate());
         Row row;
         long counter = 0;
         long start = System.currentTimeMillis();
-        for(long i=0;i < numberOfRowsToGenerate;i++)
+        for(long i=0;i < programConfiguration.getNumberOfRowsToGenerate();i++)
         {
             counter++;
             if(counter % 25000 == 0)
             {
                 logger.debug("rows generated: [{}],", counter);
             }
-            row = RowBuilder.generate(fields);
+            row = RowBuilder.generate(dataConfiguration.getFields());
             dataStore.insert(row);
         }
         dataStore.flush();
@@ -91,9 +99,9 @@ public class DataGenerator
         logger.info("total data generation time: [{}] seconds", (end - start) / 1000);
     }
 
-    private void exportToCsvFile(String tablename, String outputFilename, String delimiter, boolean includeHeader) throws Exception
+    private void exportToFile(String tablename, String outputFilename) throws Exception
     {
-        logger.debug("output generated data to csv: [{}],", arguments.getOutputFilename());
-        dataStore.exportToCsv(tablename, outputFilename, delimiter, includeHeader);
+        logger.debug("output of generated data to: [{}],", outputFilename);
+        dataStore.exportToFile(tablename, outputFilename);
     }
 }

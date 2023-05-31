@@ -1,11 +1,10 @@
 package com.datamelt.utilities.datagenerator.config.model;
 
-import com.datamelt.utilities.datagenerator.config.model.Field;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.List;
 
-public class MainConfiguration
+public class DataConfiguration
 {
     private String name;
     @JsonInclude(JsonInclude.Include.NON_ABSENT)

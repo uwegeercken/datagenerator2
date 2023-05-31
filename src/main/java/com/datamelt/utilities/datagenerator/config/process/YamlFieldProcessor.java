@@ -1,13 +1,13 @@
 package com.datamelt.utilities.datagenerator.config.process;
 
 import com.datamelt.utilities.datagenerator.config.model.Field;
-import com.datamelt.utilities.datagenerator.config.model.MainConfiguration;
+import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
 
 public class YamlFieldProcessor
 {
-    private MainConfiguration configuration;
+    private DataConfiguration configuration;
 
-    public YamlFieldProcessor(MainConfiguration configuration)
+    public YamlFieldProcessor(DataConfiguration configuration)
     {
         this.configuration = configuration;
     }

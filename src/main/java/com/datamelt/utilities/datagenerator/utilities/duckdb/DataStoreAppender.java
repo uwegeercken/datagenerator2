@@ -1,7 +1,7 @@
 package com.datamelt.utilities.datagenerator.utilities.duckdb;
 
-import com.datamelt.utilities.datagenerator.utilities.Row;
-import com.datamelt.utilities.datagenerator.utilities.RowField;
+import com.datamelt.utilities.datagenerator.generate.Row;
+import com.datamelt.utilities.datagenerator.generate.RowField;
 import org.duckdb.DuckDBAppender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

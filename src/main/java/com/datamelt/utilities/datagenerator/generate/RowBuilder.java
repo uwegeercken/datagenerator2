@@ -1,7 +1,6 @@
 package com.datamelt.utilities.datagenerator.generate;
 
 import com.datamelt.utilities.datagenerator.config.model.Field;
-import com.datamelt.utilities.datagenerator.utilities.Row;
 
 import java.util.List;
 

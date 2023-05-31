@@ -1,9 +1,10 @@
 package com.datamelt.utilities.datagenerator.utilities.duckdb;
 
 import com.datamelt.utilities.datagenerator.config.model.Field;
-import com.datamelt.utilities.datagenerator.config.model.MainConfiguration;
+import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
+import com.datamelt.utilities.datagenerator.export.FileExporter;
 import com.datamelt.utilities.datagenerator.utilities.type.DataTypeJava;
-import com.datamelt.utilities.datagenerator.utilities.Row;
+import com.datamelt.utilities.datagenerator.generate.Row;
 import com.datamelt.utilities.datagenerator.utilities.type.DataTypeDuckDb;
 import org.duckdb.DuckDBConnection;
 import org.slf4j.Logger;
@@ -18,11 +19,13 @@ public class DataStore
     private long numberOfRecordsInserted = 0;
     private DuckDBConnection connection;
     private DataStoreAppender appender;
-    private MainConfiguration configuration;
+    private DataConfiguration configuration;
+    private FileExporter fileExporter;
 
-    public DataStore(MainConfiguration configuration) throws Exception
+    public DataStore(DataConfiguration configuration, FileExporter fileExporter) throws Exception
     {
         this.configuration = configuration;
+        this.fileExporter = fileExporter;
         connection = (DuckDBConnection) DriverManager.getConnection("jdbc:duckdb:" + configuration.getDatabaseName());
 
         cleanupDatabase();
@@ -119,17 +122,9 @@ public class DataStore
         appender.flush();
     }
 
-    public void exportToCsv(String tablename, String outputFilename, String delimiter, boolean includeHeader) throws Exception
+    public void exportToFile(String tablename, String outputFilename) throws Exception
     {
-        Statement stmt = connection.createStatement();
-        StringBuffer options = new StringBuffer();
-        options.append("(");
-        if (includeHeader == true) {
-            options.append("HEADER, ");
-        }
-        options.append("DELIMITER '" + delimiter + "'");
-        options.append(")");
-        stmt.execute("COPY " + tablename + " TO '" + outputFilename + "' " + options.toString());
+        fileExporter.export(connection, tablename, outputFilename);
     }
 
     private String getDuckDbType(DataTypeJava javaType)

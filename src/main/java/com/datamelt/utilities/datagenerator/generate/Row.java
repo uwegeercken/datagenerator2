@@ -1,9 +1,7 @@
-package com.datamelt.utilities.datagenerator.utilities;
+package com.datamelt.utilities.datagenerator.generate;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Row {
     private static final String DELIMITER = ",";
