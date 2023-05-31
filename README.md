@@ -63,6 +63,10 @@ The configuration file contains a list of fields/attributes to generate. Besides
 - the name of the duckdb which is used
 - the name of the duckdb table to create
 
+## Running the datagenerator tool
+To run the tool:
+
+    java -cp . com.datamelt.utilities.datagenerator.DataGenerator -pc=<program configuration file> -dc=<data configuration file>
 
 
 
