@@ -1,4 +1,4 @@
---- # MainConfiguration - datagenerator2.yml
+--- # DataConfiguration - datagenerator-test-01.yml
 name: Test
 databaseName: /home/uwe/development/datagenerator2/generateddata.duckdb
 tableName: generateddata

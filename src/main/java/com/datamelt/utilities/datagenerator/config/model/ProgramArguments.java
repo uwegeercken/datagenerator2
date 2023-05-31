@@ -1,5 +1,7 @@
 package com.datamelt.utilities.datagenerator.config.model;
 
+import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
+
 import java.util.Map;
 
 public class ProgramArguments
@@ -10,12 +12,12 @@ public class ProgramArguments
     private String programConfigurationFilename;
     private String csvDelimiter;
     private String csvIncludeHeader;
-    public ProgramArguments(String[] args)
+    public ProgramArguments(String[] args) throws Exception
     {
         parseArguments(args);
     }
 
-    private void parseArguments(String[] args)
+    private void parseArguments(String[] args) throws InvalidConfigurationException
     {
         for(int i=0;i<args.length;i++)
         {
@@ -44,8 +46,21 @@ public class ProgramArguments
                 csvIncludeHeader = args[i].substring(args[i].indexOf("=")+1);
             }
         }
+
+        validate();
     }
 
+    private void validate() throws InvalidConfigurationException
+    {
+        if(programConfigurationFilename == null)
+        {
+            throw new InvalidConfigurationException("invalid configuration. program requires a program configuration yaml file to run");
+        }
+        if(dataConfigurationFilename == null)
+        {
+            throw new InvalidConfigurationException("invalid configuration. program requires a data configuration yaml file to run");
+        }
+    }
     public void setDataConfigurationFilename(String dataConfigurationFilename) {
         this.dataConfigurationFilename = dataConfigurationFilename;
     }

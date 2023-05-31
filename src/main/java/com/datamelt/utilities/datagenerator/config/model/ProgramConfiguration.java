@@ -31,10 +31,9 @@ public class ProgramConfiguration
 
     private void validateConfiguration() throws InvalidConfigurationException
     {
-        // TODO implement checks
         if(numberOfRowsToGenerate < 0)
         {
-            throw new InvalidConfigurationException("number of records to generate can not be smaller than zero");
+            throw new InvalidConfigurationException("invalid configuration. number of records to generate can not be smaller than zero");
         }
     }
 

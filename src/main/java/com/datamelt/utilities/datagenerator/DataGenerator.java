@@ -35,9 +35,9 @@ public class DataGenerator
     }
     public static void main(String[] args) throws Exception
     {
-        arguments = new ProgramArguments(args);
         try
         {
+            arguments = new ProgramArguments(args);
             DataGenerator generator = new DataGenerator(arguments);
             generator.generateRows();
             if(generator.programConfiguration.getOutputFilename() != null) {

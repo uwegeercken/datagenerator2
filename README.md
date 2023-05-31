@@ -5,23 +5,27 @@ The datagenerator tool is currently (May '23) under development. Additional feat
 The datagenerator tool allows to generate random data. The aim is to have a tool that generates data in a way which is flexible enough to satisfy the needs of developers or analysts or anybody else who needs some sort
 of test data - possibly with dependencies between individual fields and variying/definable distribution of field values. 
 
-The tool requires a yaml file which contains various configuration attributes,
-plus a numeric value which defines how many rows of data to generate.
+The tool requires one yaml file which contains configuration details for the tool itself, including attributes for the
+export of the generated data to files. A second yaml file defines how the data is generated in terms of fields, field weight and
+other attributes.
+Some of the configuration attributes may also be passed as arguments when running the datagenerator tool. In this case these
+will override the same attributes from the configuration files.
 
 ## Features
 - select random values from word lists
 - generate random strings, numbers or dates (to be implemented)
 - generate random data according to a given regular expression (to be implemented)
 - export rows of generated data in CSV, Json or Parquet format (to be implemented)
+
 ### Word lists
 Word lists allow to define values for certain categories such as "weekdays", "seasons", "car types",
 "first names", etc. the generator will randomly pick a value from the configured word lists. Word lists are simple text files where each row contains one value.
 
 Using word lists offers a few advantages:
 - word lists can be stored in a directory hierarchy where e.g. different directories defined the same word lists but in different languages or the structure deinfes word lists for different environments (test/production)
-- word lists can be created from a data extract from a database
+- word lists can be created from a data extract from a database, such as a select distinct on a certain column
 - word lists can be constructed from a script processing a data file or consuming a Rest API
-- word lists can be changed or enhanced using a simple text editor
+- word lists can be constructed or changed easily using a simple text editor
 
 In the yaml configuration additional values for a given word list (also value which are already defined in the word list) may be defined including a weight for individual values.
 This allows to specify a higher priority/weight for defined values. The weight of a value is always specified on the base of 100 percent. 
@@ -47,15 +51,17 @@ generate random data are processed sequentially and build a row of data. The too
 
 The data is then generated and stored in a local duckdb instance. The data types specified in the yaml configuration are used to defined the data types of the duckdb table which is created.
 
-## Yaml configuration
+## Yaml configuration for the datagenerator tool
 The yaml configuration file contains a list of fields/attributes to generate. Besides this definition it contains other configurable settings of the datagenerator tool
 
-- the name of the duckdb which is ued
+- the name of the duckdb which is used
 - the name of the duckdb table to create
 
+## Yaml configuration for the definition of fields to generate
 
 
 
 
 
-last update: uwe geercken - uwe.geercken@web.de - 2023-05-28
+
+last update: uwe geercken - uwe.geercken@web.de - 2023-05-31
