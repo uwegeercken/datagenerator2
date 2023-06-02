@@ -18,7 +18,7 @@ public class RowBuilder
 
             } else if (field.getType().equals("random"))
             {
-                generator = new RandomGenerator();
+                generator = new RandomGenerator("abcdefghijklmnopqrstuvw");
 
             } else if (field.getType().equals("regex"))
             {

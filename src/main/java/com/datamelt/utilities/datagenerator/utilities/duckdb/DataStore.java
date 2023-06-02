@@ -26,9 +26,13 @@ public class DataStore
     {
         this.configuration = configuration;
         this.fileExporter = fileExporter;
+        logger.debug("connecting to database [{}]", configuration.getDatabaseName());
         connection = (DuckDBConnection) DriverManager.getConnection("jdbc:duckdb:" + configuration.getDatabaseName());
 
+        logger.trace("executing database cleanup [{}]", configuration.getDatabaseName());
         cleanupDatabase();
+
+        logger.trace("creating database structure [{}]", configuration.getDatabaseName());
         createDatabaseStructure();
         createAppender();
     }
@@ -49,10 +53,12 @@ public class DataStore
     {
         for(Field field : configuration.getFields())
         {
-            if(DataTypeJava.valueOf(field.getDataType().toUpperCase()) == DataTypeJava.STRING)
+            Statement stmt = connection.createStatement();
+            if(field.getType().equals("category"))
             {
-                Statement stmt = connection.createStatement();
-                stmt.execute("create type " + field.getName() + " AS ENUM (" + field.getValuesAsString() + ")");
+                String sqlCreateTpye = "create type " + field.getName() + " AS ENUM (" + field.getValuesAsString() + ")";
+                logger.trace("creating type [{}]", sqlCreateTpye);
+                stmt.execute(sqlCreateTpye);
             }
         }
     }
@@ -61,10 +67,12 @@ public class DataStore
     {
         for(Field field : configuration.getFields())
         {
-            if(DataTypeJava.valueOf(field.getDataType().toUpperCase()) == DataTypeJava.STRING)
+            if(field.getType().equals("category"))
             {
                 Statement stmt = connection.createStatement();
-                stmt.execute("drop type if exists " + field.getName());
+                String sqlDropType = "drop type if exists " + field.getName();
+                logger.trace("dropping type [{}]", sqlDropType);
+                stmt.execute(sqlDropType);
             }
         }
     }
@@ -72,13 +80,17 @@ public class DataStore
     private void createTable() throws Exception
     {
         Statement stmt = connection.createStatement();
-        stmt.execute("create table " + configuration.getTableName() + " (" + getDataTypesAndNames() + ")");
+        String sqlCreateTable = "create table " + configuration.getTableName() + " (" + getDataTypesAndNames() + ")";
+        logger.trace("creating table [{}]", sqlCreateTable);
+        stmt.execute(sqlCreateTable);
     }
 
     private void dropTable() throws Exception
     {
         Statement stmt = connection.createStatement();
-        stmt.execute("drop table if exists " + configuration.getTableName());
+        String sqlDropTable = "drop table if exists " + configuration.getTableName();
+        logger.trace("dropping table [{}]", sqlDropTable);
+        stmt.execute(sqlDropTable);
     }
 
     private void createAppender() throws Exception
@@ -96,7 +108,7 @@ public class DataStore
             buffer.append(field.getName());
             buffer.append(" ");
 
-            if(DataTypeJava.valueOf(field.getDataType().toUpperCase()) == DataTypeJava.STRING)
+            if(field.getType().equals("category"))
             {
                 buffer.append(field.getName());
             }
@@ -104,10 +116,11 @@ public class DataStore
             {
                 buffer.append(getDuckDbType(DataTypeJava.valueOf(field.getDataType().toUpperCase())));
             }
-            if(counter < configuration.getFields().size())
+            if (counter < configuration.getFields().size())
             {
                 buffer.append(", ");
             }
+
         }
         return buffer.toString();
     }

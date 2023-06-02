@@ -11,6 +11,8 @@ public class DataConfiguration
     private String tableName = "generateddata";
     @JsonInclude(JsonInclude.Include.NON_ABSENT)
     private String databaseName = "datagenerator2.duckdb";
+
+    private String randomCharacters;
     private List<Field> fields;
 
     public String getName()
@@ -32,4 +34,6 @@ public class DataConfiguration
     {
         return databaseName;
     }
+
+    public String getRandomCharacters() { return randomCharacters; }
 }

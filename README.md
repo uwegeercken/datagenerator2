@@ -20,6 +20,7 @@ will override the same attributes from the configuration files.
 ### Word lists
 Word lists allow to define values for certain categories such as "weekdays", "seasons", "car types",
 "first names", etc. the generator will randomly pick a value from the configured word lists. Word lists are simple text files where each row contains one value.
+As such all values of the word lists are treated as strings (even if you have a word list containing numbers).
 
 Using word lists offers a few advantages:
 - word lists can be stored in a directory hierarchy where e.g. different directories defined the same word lists but in different languages or the structure deinfes word lists for different environments (test/production)

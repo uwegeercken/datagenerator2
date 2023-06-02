@@ -11,6 +11,7 @@ public class DataStoreAppender
     private static Logger logger = LoggerFactory.getLogger(DataStoreAppender.class);
     private DuckDBAppender appender;
     private long counter = 0;
+    private long errorCounter = 0;
 
     public DataStoreAppender(DuckDBAppender appender)
     {
@@ -27,12 +28,12 @@ public class DataStoreAppender
                 appendField(field);
             }
             appender.endRow();
-            //appender.flush();
             counter++;
         }
         catch(Exception ex)
         {
-            logger.error("error appending row. error {}", ex.getMessage());
+            errorCounter++;
+            logger.error("error appending row [{}]. error {}", row.toString(), ex.getMessage());
         }
     }
 
@@ -57,7 +58,19 @@ public class DataStoreAppender
     {
         if(field.getValue() instanceof Integer)
         {
-            appendInt( (Integer) field.getValue());
+            appendInt((Integer) field.getValue());
+        }
+        else if(field.getValue() instanceof Long)
+        {
+            appendLong((Long) field.getValue());
+        }
+        else if(field.getValue() instanceof Float)
+        {
+            appendFloat((Float) field.getValue());
+        }
+        else if(field.getValue() instanceof Double)
+        {
+            appendDouble((Double) field.getValue());
         }
         else if(field.getValue() instanceof String)
         {

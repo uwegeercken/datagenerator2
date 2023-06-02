@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Field
 {
@@ -15,6 +17,9 @@ public class Field
     String type = "category";
     @JsonInclude(JsonInclude.Include.NON_ABSENT)
     String dataType = "string";
+
+    Map<String, Object> options = new HashMap<>();
+
     List<FieldValue> values = new ArrayList<>();
 
     int numberOfDefaultWeights=0;
@@ -134,5 +139,10 @@ public class Field
 
     public String getType() {
         return type;
+    }
+
+    public Map<String, Object> getOptions()
+    {
+        return options;
     }
 }

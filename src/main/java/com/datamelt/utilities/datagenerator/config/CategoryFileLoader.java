@@ -37,7 +37,6 @@ public class CategoryFileLoader
     }
 
     private static void loadCategoryFile(Field field) throws InvalidConfigurationException {
-        DataTypeJava dataType = DataTypeJava.valueOf(field.getDataType().toUpperCase());
         File file = new File(field.getValuesFile());
         try(BufferedReader reader = new BufferedReader(new FileReader(file.getPath()));)
         {
@@ -51,13 +50,12 @@ public class CategoryFileLoader
                     FieldValue fieldValue;
                     if(valueParts.length==1)
                     {
-                        fieldValue = getFieldValue(valueParts[0], dataType, FieldValue.DEFAULT_WEIGHT);
+                        fieldValue = new FieldValue(valueParts[0], FieldValue.DEFAULT_WEIGHT);
                     }
                     else
                     {
-                        fieldValue = getFieldValue(valueParts[0], dataType, Integer.parseInt(valueParts[1]));
+                        fieldValue = new FieldValue(valueParts[0], Integer.parseInt(valueParts[1]));
                     }
-
                     if (!field.containsFieldValue(fieldValue))
                     {
                         field.getValues().add(fieldValue);
@@ -73,7 +71,8 @@ public class CategoryFileLoader
         }
         catch(Exception ex)
         {
-            throw new InvalidConfigurationException("field [" + field.getName() + "] - error processing category file: " +  ex.getMessage());        }
+            throw new InvalidConfigurationException("field [" + field.getName() + "] - error processing category file: " +  ex.getMessage());
+        }
     }
 
     private static FieldValue getFieldValue(String value, DataTypeJava dataType, int weight)
