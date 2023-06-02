@@ -19,6 +19,10 @@ import java.io.File;
 
 public class DataGenerator
 {
+    private static final String applicationName = "datagenerator2";
+    private static final String version = "0.0.5";
+    private static final String versionDate = "2023-06-02";
+    private static final String contactEmail = "uwe.geercken@web.de";
     private static Logger logger = LoggerFactory.getLogger(DataGenerator.class);
     private DataConfiguration dataConfiguration;
     private ProgramConfiguration programConfiguration;
@@ -36,6 +40,8 @@ public class DataGenerator
     }
     public static void main(String[] args) throws Exception
     {
+        logger.info( "running " + applicationName +  " application - version: " + version + " (" + versionDate + ")");
+        logger.info( "email contact for any inquiries: " + contactEmail);
         DataGenerator generator = null;
         try
         {
@@ -91,7 +97,7 @@ public class DataGenerator
 
     private void generateRows() throws Exception
     {
-        logger.debug("generating rows: [{}],", programConfiguration.getNumberOfRowsToGenerate());
+        logger.debug("generating rows: [{}]", programConfiguration.getNumberOfRowsToGenerate());
         Row row;
         long counter = 0;
         long start = System.currentTimeMillis();
@@ -102,14 +108,14 @@ public class DataGenerator
                     && programConfiguration.getNumberOfRowsToGenerate() > programConfiguration.getGeneratedRowsLogInterval()
                     && counter % programConfiguration.getGeneratedRowsLogInterval() == 0)
             {
-                logger.debug("rows generated: [{}],", counter);
+                logger.debug("rows generated: [{}]", counter);
             }
             row = RowBuilder.generate(dataConfiguration);
             dataStore.insert(row);
         }
         dataStore.flush();
         long end = System.currentTimeMillis();
-        logger.debug("total rows generated: [{}],", counter);
+        logger.debug("total rows generated: [{}]", counter);
         logger.info("total data generation time: [{}] seconds", (end - start) / 1000);
     }
 

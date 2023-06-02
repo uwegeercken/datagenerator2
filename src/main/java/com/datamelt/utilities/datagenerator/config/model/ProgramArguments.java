@@ -25,31 +25,31 @@ public class ProgramArguments
         {
             if(args[i].startsWith("-n="))
             {
-                numberOfRowsToGenerate = args[i].substring(args[i].indexOf("=")+1);
+                numberOfRowsToGenerate = args[i].substring(args[i].indexOf("=")+1).trim();
             }
             else if(args[i].startsWith("-l="))
             {
-                generatedRowsLogInterval = args[i].substring(args[i].indexOf("=")+1);
+                generatedRowsLogInterval = args[i].substring(args[i].indexOf("=")+1).trim();
             }
             else if(args[i].startsWith("-o="))
             {
-                outputFilename = args[i].substring(args[i].indexOf("=")+1);
+                outputFilename = args[i].substring(args[i].indexOf("=")+1).trim();
             }
             else if(args[i].startsWith("-dc="))
             {
-                dataConfigurationFilename = args[i].substring(args[i].indexOf("=")+1);
+                dataConfigurationFilename = args[i].substring(args[i].indexOf("=")+1).trim();
             }
             else if(args[i].startsWith("-pc="))
             {
-                programConfigurationFilename = args[i].substring(args[i].indexOf("=")+1);
+                programConfigurationFilename = args[i].substring(args[i].indexOf("=")+1).trim();
             }
             else if(args[i].startsWith("-cd="))
             {
-                csvDelimiter = args[i].substring(args[i].indexOf("=")+1);
+                csvDelimiter = args[i].substring(args[i].indexOf("=")+1).trim();
             }
             else if(args[i].startsWith("-ch="))
             {
-                csvIncludeHeader = args[i].substring(args[i].indexOf("=")+1);
+                csvIncludeHeader = args[i].substring(args[i].indexOf("=")+1).trim();
             }
         }
 
