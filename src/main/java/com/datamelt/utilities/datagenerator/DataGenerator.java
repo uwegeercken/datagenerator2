@@ -36,18 +36,27 @@ public class DataGenerator
     }
     public static void main(String[] args) throws Exception
     {
+        DataGenerator generator = null;
         try
         {
             arguments = new ProgramArguments(args);
-            DataGenerator generator = new DataGenerator(arguments);
+            generator = new DataGenerator(arguments);
             generator.generateRows();
+        }
+        catch (Exception ex)
+        {
+            logger.error("unable to generate data: {}", ex.getMessage());
+        }
+
+        try
+        {
             if(generator.programConfiguration.getOutputFilename() != null) {
                 generator.exportToFile(generator.dataConfiguration.getTableName(), generator.programConfiguration.getOutputFilename());
             }
         }
         catch (Exception ex)
         {
-            logger.error("unable to generate data: {}", ex.getMessage());
+            logger.error("unable to export data: {}", ex.getMessage());
         }
     }
 
@@ -89,7 +98,9 @@ public class DataGenerator
         for(long i=0;i < programConfiguration.getNumberOfRowsToGenerate();i++)
         {
             counter++;
-            if(programConfiguration.getGeneratedRowsLogInterval() > 0 && counter % programConfiguration.getGeneratedRowsLogInterval() == 0)
+            if(programConfiguration.getGeneratedRowsLogInterval() > 0
+                    && programConfiguration.getNumberOfRowsToGenerate() > programConfiguration.getGeneratedRowsLogInterval()
+                    && counter % programConfiguration.getGeneratedRowsLogInterval() == 0)
             {
                 logger.debug("rows generated: [{}],", counter);
             }
