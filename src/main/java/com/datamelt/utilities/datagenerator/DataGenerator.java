@@ -89,7 +89,7 @@ public class DataGenerator
         for(long i=0;i < programConfiguration.getNumberOfRowsToGenerate();i++)
         {
             counter++;
-            if(counter % 25000 == 0)
+            if(programConfiguration.getGeneratedRowsLogInterval() > 0 && counter % programConfiguration.getGeneratedRowsLogInterval() == 0)
             {
                 logger.debug("rows generated: [{}],", counter);
             }

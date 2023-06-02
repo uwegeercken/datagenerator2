@@ -9,6 +9,7 @@ public class ProgramConfiguration
 {
     private String outputFilename;
     private long numberOfRowsToGenerate;
+    private long generatedRowsLogInterval;
     private CsvExportConfiguration csvExport;
 
     public void mergeArguments(ProgramArguments arguments) throws InvalidConfigurationException
@@ -25,6 +26,10 @@ public class ProgramConfiguration
         if(arguments.getCsvIncludeHeader()!=null) {
             csvExport.setIncludeHeader(Boolean.parseBoolean(arguments.getCsvIncludeHeader()));
         }
+        if(arguments.getGeneratedRowsLogInterval()!=null)
+        {
+            generatedRowsLogInterval = Long.parseLong(arguments.getGeneratedRowsLogInterval());
+        }
 
         validateConfiguration();
     }
@@ -34,6 +39,10 @@ public class ProgramConfiguration
         if(numberOfRowsToGenerate < 0)
         {
             throw new InvalidConfigurationException("invalid configuration. number of records to generate can not be smaller than zero");
+        }
+        if(generatedRowsLogInterval < 0)
+        {
+            throw new InvalidConfigurationException("invalid configuration. generated rows log interval can not be smaller than zero");
         }
     }
 
@@ -47,5 +56,9 @@ public class ProgramConfiguration
 
     public long getNumberOfRowsToGenerate() {
         return numberOfRowsToGenerate;
+    }
+
+    public long getGeneratedRowsLogInterval() {
+        return generatedRowsLogInterval;
     }
 }

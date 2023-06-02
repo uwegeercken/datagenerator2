@@ -12,6 +12,8 @@ public class ProgramArguments
     private String programConfigurationFilename;
     private String csvDelimiter;
     private String csvIncludeHeader;
+
+    private String generatedRowsLogInterval;
     public ProgramArguments(String[] args) throws Exception
     {
         parseArguments(args);
@@ -24,6 +26,10 @@ public class ProgramArguments
             if(args[i].startsWith("-n="))
             {
                 numberOfRowsToGenerate = args[i].substring(args[i].indexOf("=")+1);
+            }
+            else if(args[i].startsWith("-l="))
+            {
+                generatedRowsLogInterval = args[i].substring(args[i].indexOf("=")+1);
             }
             else if(args[i].startsWith("-o="))
             {
@@ -93,5 +99,9 @@ public class ProgramArguments
 
     public String getCsvIncludeHeader() {
         return csvIncludeHeader;
+    }
+
+    public String getGeneratedRowsLogInterval() {
+        return generatedRowsLogInterval;
     }
 }
