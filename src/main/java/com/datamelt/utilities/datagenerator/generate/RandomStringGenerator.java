@@ -18,6 +18,10 @@ public class RandomStringGenerator implements RandomValueGenerator
     }
     @Override
     public RowField generateRandomValue(Field field) throws Exception {
+        if(field.getOptions().containsKey("randomCharacters"))
+        {
+            randomCharacters = (String) field.getOptions().get("randomCharacters");
+        }
         int minLength = (Integer) field.getOptions().get("minLength");
         int maxLength = (Integer) field.getOptions().get("maxLength");
         Random random = new Random();

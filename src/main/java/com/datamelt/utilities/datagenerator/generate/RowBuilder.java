@@ -1,26 +1,29 @@
 package com.datamelt.utilities.datagenerator.generate;
 
+import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.Field;
+import com.datamelt.utilities.datagenerator.config.model.FieldType;
+import com.datamelt.utilities.datagenerator.config.model.ProgramConfiguration;
 
 import java.util.List;
 
 public class RowBuilder
 {
-    public static Row generate(List<Field> fields) throws Exception
+    public static Row generate(DataConfiguration dataConfiguration) throws Exception
     {
         RandomValueGenerator generator = null;
         Row row = new Row();
-        for (Field field : fields)
+        for (Field field : dataConfiguration.getFields())
         {
-            if (field.getType().equals("category"))
+            if (field.getType() == FieldType.CATEGORY)
             {
                 generator = new CategoryGenerator();
 
-            } else if (field.getType().equals("randomstring"))
+            } else if (field.getType() == FieldType.RANDOMSTRING)
             {
-                generator = new RandomStringGenerator("abcdefghijklmnopqrstuvw");
+                generator = new RandomStringGenerator(dataConfiguration.getRandomCharacters());
 
-            } else if (field.getType().equals("regex"))
+            } else if (field.getType() == FieldType.REGULAREXPRESSION)
             {
                 generator = new RegularExpressionGenerator();
 

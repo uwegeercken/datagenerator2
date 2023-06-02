@@ -14,9 +14,10 @@ public class Field
     String valuesFile;
 
     @JsonInclude(JsonInclude.Include.NON_ABSENT)
-    String type = "category";
+    FieldType type = FieldType.CATEGORY;
+
     @JsonInclude(JsonInclude.Include.NON_ABSENT)
-    String dataType = "string";
+    FieldDataType dataType = FieldDataType.STRING;
 
     Map<String, Object> options = new HashMap<>();
 
@@ -132,12 +133,12 @@ public class Field
         return numberOfDefaultWeights;
     }
 
-    public String getDataType()
+    public FieldDataType getDataType()
     {
         return dataType;
     }
 
-    public String getType() {
+    public FieldType getType() {
         return type;
     }
 

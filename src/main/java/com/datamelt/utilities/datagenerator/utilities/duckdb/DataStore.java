@@ -2,8 +2,9 @@ package com.datamelt.utilities.datagenerator.utilities.duckdb;
 
 import com.datamelt.utilities.datagenerator.config.model.Field;
 import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
+import com.datamelt.utilities.datagenerator.config.model.FieldDataType;
+import com.datamelt.utilities.datagenerator.config.model.FieldType;
 import com.datamelt.utilities.datagenerator.export.FileExporter;
-import com.datamelt.utilities.datagenerator.utilities.type.DataTypeJava;
 import com.datamelt.utilities.datagenerator.generate.Row;
 import com.datamelt.utilities.datagenerator.utilities.type.DataTypeDuckDb;
 import org.duckdb.DuckDBConnection;
@@ -108,13 +109,13 @@ public class DataStore
             buffer.append(field.getName());
             buffer.append(" ");
 
-            if(field.getType().equals("category"))
+            if(field.getType() == FieldType.CATEGORY)
             {
                 buffer.append(field.getName());
             }
             else
             {
-                buffer.append(getDuckDbType(DataTypeJava.valueOf(field.getDataType().toUpperCase())));
+                buffer.append(getDuckDbType(field.getDataType()));
             }
             if (counter < configuration.getFields().size())
             {
@@ -140,17 +141,17 @@ public class DataStore
         fileExporter.export(connection, tablename, outputFilename);
     }
 
-    private String getDuckDbType(DataTypeJava javaType)
+    private String getDuckDbType(FieldDataType dataType)
     {
-        switch(javaType)
+        switch(dataType)
         {
             case LONG:
                 return DataTypeDuckDb.BIGINT.toString();
             case BOOLEAN:
                 return DataTypeDuckDb.BOOLEAN.toString();
-            case DATE:
-                return DataTypeDuckDb.DATE.toString();
             case DOUBLE:
+                return DataTypeDuckDb.DOUBLE.toString();
+            case FLOAT:
                 return DataTypeDuckDb.DOUBLE.toString();
             case INTEGER:
                 return DataTypeDuckDb.INTEGER.toString();

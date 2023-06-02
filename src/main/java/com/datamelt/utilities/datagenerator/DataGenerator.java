@@ -10,6 +10,7 @@ import com.datamelt.utilities.datagenerator.export.CsvFileExporter;
 import com.datamelt.utilities.datagenerator.generate.Row;
 import com.datamelt.utilities.datagenerator.generate.RowBuilder;
 import com.datamelt.utilities.datagenerator.utilities.duckdb.DataStore;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import org.slf4j.Logger;
@@ -54,6 +55,7 @@ public class DataGenerator
     {
         logger.debug("processing datagenerator configuration file: [{}],", dataConfigurationFilename);
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+        mapper.enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS);
         DataConfiguration dataConfiguration = mapper.readValue(new File(dataConfigurationFilename), DataConfiguration.class);
         CategoryFileLoader.loadCategoryFiles(dataConfiguration);
         return dataConfiguration;
@@ -63,6 +65,7 @@ public class DataGenerator
     {
         logger.debug("processing program configuration file: [{}],", programConfigurationFilename);
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+        mapper.enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS);
         return mapper.readValue(new File(programConfigurationFilename), ProgramConfiguration.class);
     }
 
@@ -90,7 +93,7 @@ public class DataGenerator
             {
                 logger.debug("rows generated: [{}],", counter);
             }
-            row = RowBuilder.generate(dataConfiguration.getFields());
+            row = RowBuilder.generate(dataConfiguration);
             dataStore.insert(row);
         }
         dataStore.flush();

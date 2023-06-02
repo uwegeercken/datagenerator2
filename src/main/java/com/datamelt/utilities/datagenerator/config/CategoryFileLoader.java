@@ -4,7 +4,6 @@ import com.datamelt.utilities.datagenerator.config.model.Field;
 import com.datamelt.utilities.datagenerator.config.model.FieldValue;
 import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
 import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
-import com.datamelt.utilities.datagenerator.utilities.type.DataTypeJava;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,17 +71,6 @@ public class CategoryFileLoader
         catch(Exception ex)
         {
             throw new InvalidConfigurationException("field [" + field.getName() + "] - error processing category file: " +  ex.getMessage());
-        }
-    }
-
-    private static FieldValue getFieldValue(String value, DataTypeJava dataType, int weight)
-    {
-        switch(dataType)
-        {
-            case INTEGER:
-                return new FieldValue(Integer.parseInt(value), weight);
-            default:
-                return new FieldValue(value, weight);
         }
     }
 }

@@ -2,6 +2,7 @@ package com.datamelt.utilities.datagenerator.config.process;
 
 import com.datamelt.utilities.datagenerator.config.model.Field;
 import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
+import com.datamelt.utilities.datagenerator.config.model.FieldType;
 
 public class YamlFieldProcessor
 {
@@ -17,17 +18,17 @@ public class YamlFieldProcessor
         for (Field field : configuration.getFields())
         {
             FieldProcessor processor = null;
-            if (field.getType().equals("category"))
+            if (field.getType() == FieldType.CATEGORY)
             {
                 processor = new CategoryProcessor();
 
             }
-            else if (field.getType().equals("randomstring"))
+            else if (field.getType() == FieldType.RANDOMSTRING)
             {
                processor = new RandomStringProcessor();
 
             }
-            else if (field.getType().equals("regex"))
+            else if (field.getType() == FieldType.REGULAREXPRESSION)
             {
                processor = new RegularExpressionProcessor();
 
