@@ -16,9 +16,9 @@ public class RowBuilder
             {
                 generator = new CategoryGenerator();
 
-            } else if (field.getType().equals("random"))
+            } else if (field.getType().equals("randomstring"))
             {
-                generator = new RandomGenerator("abcdefghijklmnopqrstuvw");
+                generator = new RandomStringGenerator("abcdefghijklmnopqrstuvw");
 
             } else if (field.getType().equals("regex"))
             {

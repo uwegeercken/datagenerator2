@@ -6,13 +6,13 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Random;
 
-public class RandomGenerator implements RandomValueGenerator
+public class RandomStringGenerator implements RandomValueGenerator
 {
-    private static Logger logger = LoggerFactory.getLogger(RandomGenerator.class);
+    private static Logger logger = LoggerFactory.getLogger(RandomStringGenerator.class);
 
     String randomCharacters;
 
-    public RandomGenerator(String randomCharacters)
+    public RandomStringGenerator(String randomCharacters)
     {
         this.randomCharacters = randomCharacters;
     }
