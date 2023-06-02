@@ -19,17 +19,17 @@ public class YamlFieldProcessor
             FieldProcessor processor = null;
             if (field.getType().equals("category"))
             {
-                processor = new CategoryFieldProcessor();
+                processor = new CategoryProcessor();
 
             }
-            else if (field.getType().equals("random"))
+            else if (field.getType().equals("randomstring"))
             {
-               processor = new RandomFieldProcessor();
+               processor = new RandomStringProcessor();
 
             }
             else if (field.getType().equals("regex"))
             {
-               processor = new RegularExpressionFieldProcessor();
+               processor = new RegularExpressionProcessor();
 
             }
 

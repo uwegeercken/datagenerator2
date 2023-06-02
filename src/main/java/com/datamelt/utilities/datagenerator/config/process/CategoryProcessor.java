@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Iterator;
 
-public class CategoryFieldProcessor implements FieldProcessor
+public class CategoryProcessor implements FieldProcessor
 {
-    private static Logger logger = LoggerFactory.getLogger(CategoryFieldProcessor.class);
+    private static Logger logger = LoggerFactory.getLogger(CategoryProcessor.class);
 
     @Override
     public void validateConfiguration(Field field) throws InvalidConfigurationException
