@@ -9,7 +9,7 @@ public class RandomStringProcessor implements FieldProcessor
 {
     private static Logger logger = LoggerFactory.getLogger(RandomStringProcessor.class);
 
-    private DataConfiguration configuration;
+    private final DataConfiguration configuration;
     public RandomStringProcessor(DataConfiguration configuration)
     {
         this.configuration = configuration;
