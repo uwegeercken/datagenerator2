@@ -1,5 +1,7 @@
 package com.datamelt.utilities.datagenerator.generate;
 
+import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
+
 public class RowField<T> {
     private String name;
     private T value;
@@ -11,9 +13,9 @@ public class RowField<T> {
         this.name = name;
     }
 
-    public void generateValue()
+    public void generateValue() throws Exception
     {
-        //this.value = generator.generateRandomValue(field);
+        this.value = generator.generateRandomValue();
     }
 
     public String getName() {

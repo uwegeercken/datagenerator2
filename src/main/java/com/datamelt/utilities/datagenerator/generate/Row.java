@@ -7,11 +7,6 @@ public class Row {
     private static final String DELIMITER = ",";
     private List<RowField<?>> fields = new ArrayList<>();
 
-    public <T> void addField(String name, T value)
-    {
-        //fields.add(new RowField<T>(name, value));
-    }
-
     public void addField(RowField<?> field)
     {
         fields.add(field);

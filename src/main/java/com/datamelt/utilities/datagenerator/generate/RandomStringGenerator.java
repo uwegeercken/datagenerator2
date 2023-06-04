@@ -18,7 +18,7 @@ public class RandomStringGenerator implements RandomValueGenerator
     }
 
     @Override
-    public void generateRandomValue(FieldConfiguration fieldConfiguration) throws Exception {
+    public String generateRandomValue() throws Exception {
         int minLength = (Integer) fieldConfiguration.getOptions().get("minLength");
         int maxLength = (Integer) fieldConfiguration.getOptions().get("maxLength");
         String randomCharacters = (String) fieldConfiguration.getOptions().get("randomCharacters");
@@ -30,6 +30,6 @@ public class RandomStringGenerator implements RandomValueGenerator
             int position = random.nextInt(randomCharacters.toString().length());
             randomString.append(randomCharacters.substring(position, position+1));
         }
-        //return new RowField<String>(RandomStringGenerator, field.getName());
+        return randomString.toString();
     }
 }

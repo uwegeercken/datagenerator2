@@ -4,5 +4,5 @@ import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 
 public interface RandomValueGenerator
 {
-    void generateRandomValue(FieldConfiguration fieldConfiguration) throws Exception;
+    <T> T generateRandomValue() throws Exception;
 }

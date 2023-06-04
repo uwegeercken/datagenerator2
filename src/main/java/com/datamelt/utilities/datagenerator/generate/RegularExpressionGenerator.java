@@ -12,7 +12,8 @@ public class RegularExpressionGenerator implements RandomValueGenerator
         this.fieldConfiguration = fieldConfiguration;
     }
     @Override
-    public void generateRandomValue(FieldConfiguration fieldConfiguration) throws Exception {
-
+    public String generateRandomValue() throws Exception
+    {
+        return null;
     }
 }
