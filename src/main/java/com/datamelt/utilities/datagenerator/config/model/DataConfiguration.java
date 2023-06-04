@@ -12,7 +12,7 @@ public class DataConfiguration
     @JsonInclude(JsonInclude.Include.NON_ABSENT)
     private String databaseName = "datagenerator2.duckdb";
 
-    private List<FieldConfiguration> fieldConfigurations;
+    private List<FieldConfiguration> fields;
 
     public String getName()
     {
@@ -21,7 +21,7 @@ public class DataConfiguration
 
     public List<FieldConfiguration> getFields()
     {
-        return fieldConfigurations;
+        return fields;
     }
 
     public String getTableName()
