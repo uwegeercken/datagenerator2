@@ -1,11 +1,18 @@
 package com.datamelt.utilities.datagenerator.generate;
 
-import com.datamelt.utilities.datagenerator.config.model.Field;
+import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 
 public class RegularExpressionGenerator implements RandomValueGenerator
 {
+
+    private FieldConfiguration fieldConfiguration;
+
+    public RegularExpressionGenerator(FieldConfiguration fieldConfiguration)
+    {
+        this.fieldConfiguration = fieldConfiguration;
+    }
     @Override
-    public RowField generateRandomValue(Field field) throws Exception {
-        return null;
+    public void generateRandomValue(FieldConfiguration fieldConfiguration) throws Exception {
+
     }
 }

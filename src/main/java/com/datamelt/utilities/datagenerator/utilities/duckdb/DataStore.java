@@ -1,6 +1,6 @@
 package com.datamelt.utilities.datagenerator.utilities.duckdb;
 
-import com.datamelt.utilities.datagenerator.config.model.Field;
+import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldDataType;
 import com.datamelt.utilities.datagenerator.config.model.FieldType;
@@ -52,12 +52,12 @@ public class DataStore
 
     private void createEnums() throws Exception
     {
-        for(Field field : configuration.getFields())
+        for(FieldConfiguration fieldConfiguration : configuration.getFields())
         {
             Statement stmt = connection.createStatement();
-            if(field.getType().equals("category"))
+            if(fieldConfiguration.getType().equals("category"))
             {
-                String sqlCreateTpye = "create type " + field.getName() + " AS ENUM (" + field.getValuesAsString() + ")";
+                String sqlCreateTpye = "create type " + fieldConfiguration.getName() + " AS ENUM (" + fieldConfiguration.getValuesAsString() + ")";
                 logger.trace("creating type [{}]", sqlCreateTpye);
                 stmt.execute(sqlCreateTpye);
             }
@@ -66,12 +66,12 @@ public class DataStore
 
     private void dropEnums() throws Exception
     {
-        for(Field field : configuration.getFields())
+        for(FieldConfiguration fieldConfiguration : configuration.getFields())
         {
-            if(field.getType().equals("category"))
+            if(fieldConfiguration.getType().equals("category"))
             {
                 Statement stmt = connection.createStatement();
-                String sqlDropType = "drop type if exists " + field.getName();
+                String sqlDropType = "drop type if exists " + fieldConfiguration.getName();
                 logger.trace("dropping type [{}]", sqlDropType);
                 stmt.execute(sqlDropType);
             }
@@ -103,19 +103,19 @@ public class DataStore
     {
         StringBuffer buffer = new StringBuffer();
         int counter = 0;
-        for(Field field : configuration.getFields())
+        for(FieldConfiguration fieldConfiguration : configuration.getFields())
         {
             counter++;
-            buffer.append(field.getName());
+            buffer.append(fieldConfiguration.getName());
             buffer.append(" ");
 
-            if(field.getType() == FieldType.CATEGORY)
+            if(fieldConfiguration.getType() == FieldType.CATEGORY)
             {
-                buffer.append(field.getName());
+                buffer.append(fieldConfiguration.getName());
             }
             else
             {
-                buffer.append(getDuckDbType(field.getDataType()));
+                buffer.append(getDuckDbType(fieldConfiguration.getDataType()));
             }
             if (counter < configuration.getFields().size())
             {
@@ -160,12 +160,12 @@ public class DataStore
         }
     }
 
-    public void getValueCounts(Field field)
+    public void getValueCounts(FieldConfiguration fieldConfiguration)
     {
         try
         {
             Statement stmt = connection.createStatement();
-            try (ResultSet rs = stmt.executeQuery("select " + field.getName() + ", count(1) as total from " + configuration.getTableName() +" group by " + field.getName()))
+            try (ResultSet rs = stmt.executeQuery("select " + fieldConfiguration.getName() + ", count(1) as total from " + configuration.getTableName() +" group by " + fieldConfiguration.getName()))
             {
                 while (rs.next()) {
                     System.out.println("value: " + rs.getString(1) + ", total: " + rs.getDouble("total") / numberOfRecordsInserted * 100);

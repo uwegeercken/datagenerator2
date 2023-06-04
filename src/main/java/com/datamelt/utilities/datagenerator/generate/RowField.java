@@ -3,11 +3,17 @@ package com.datamelt.utilities.datagenerator.generate;
 public class RowField<T> {
     private String name;
     private T value;
+    private RandomValueGenerator generator;
 
-    public RowField(String name, T value)
+    public RowField(RandomValueGenerator generator, String name)
     {
+        this.generator = generator;
         this.name = name;
-        this.value = value;
+    }
+
+    public void generateValue()
+    {
+        //this.value = generator.generateRandomValue(field);
     }
 
     public String getName() {
@@ -16,5 +22,10 @@ public class RowField<T> {
 
     public T getValue() {
         return value;
+    }
+
+    public void setValue(T value)
+    {
+        this.value = value;
     }
 }

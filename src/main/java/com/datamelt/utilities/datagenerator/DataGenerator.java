@@ -1,11 +1,12 @@
 package com.datamelt.utilities.datagenerator;
 
 import com.datamelt.utilities.datagenerator.config.CategoryFileLoader;
+import com.datamelt.utilities.datagenerator.config.model.Argument;
 import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.ProgramArguments;
 import com.datamelt.utilities.datagenerator.config.model.ProgramConfiguration;
 import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
-import com.datamelt.utilities.datagenerator.config.process.YamlFieldProcessor;
+import com.datamelt.utilities.datagenerator.config.process.DataFieldsProcessor;
 import com.datamelt.utilities.datagenerator.export.CsvFileExporter;
 import com.datamelt.utilities.datagenerator.generate.Row;
 import com.datamelt.utilities.datagenerator.generate.RowBuilder;
@@ -16,6 +17,8 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.File;
+
+import static java.lang.System.exit;
 
 public class DataGenerator
 {
@@ -40,9 +43,13 @@ public class DataGenerator
     }
     public static void main(String[] args) throws Exception
     {
-        logger.info( "running " + applicationName +  " application - version: " + version + " (" + versionDate + ")");
-        logger.info( "email contact for any inquiries: " + contactEmail);
+        logger.info(applicationName +  " application - version: " + version + " (" + versionDate + ")");
         DataGenerator generator = null;
+        if(args.length == 0 || args[0].equals("-h") || args[0].equals("--help"))
+        {
+            help();
+            exit(0);
+        }
         try
         {
             arguments = new ProgramArguments(args);
@@ -66,6 +73,15 @@ public class DataGenerator
         }
     }
 
+    private static void help()
+    {
+        logger.debug("program arguments:");
+        for(Argument argument : Argument.values())
+        {
+            logger.info("argument: {} -> {}", argument.getAbbreviation(), argument.getExplanation());
+        }
+    }
+
     private DataConfiguration loadDataConfiguration(String dataConfigurationFilename) throws Exception
     {
         logger.debug("processing datagenerator configuration file: [{}],", dataConfigurationFilename);
@@ -86,7 +102,7 @@ public class DataGenerator
 
     private void processConfiguration() throws InvalidConfigurationException
     {
-        YamlFieldProcessor allFieldsProcessor = new YamlFieldProcessor(dataConfiguration);
+        DataFieldsProcessor allFieldsProcessor = new DataFieldsProcessor(dataConfiguration);
         allFieldsProcessor.processAllFields();
     }
 
@@ -101,6 +117,7 @@ public class DataGenerator
         Row row;
         long counter = 0;
         long start = System.currentTimeMillis();
+        RowBuilder rowBuilder = new RowBuilder(dataConfiguration);
         for(long i=0;i < programConfiguration.getNumberOfRowsToGenerate();i++)
         {
             counter++;
@@ -110,7 +127,7 @@ public class DataGenerator
             {
                 logger.debug("rows generated: [{}]", counter);
             }
-            row = RowBuilder.generate(dataConfiguration);
+            row = rowBuilder.generate(dataConfiguration);
             dataStore.insert(row);
         }
         dataStore.flush();

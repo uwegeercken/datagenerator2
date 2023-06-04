@@ -23,33 +23,37 @@ public class ProgramArguments
     {
         for(int i=0;i<args.length;i++)
         {
-            if(args[i].startsWith("-n="))
+            if(args[i].startsWith(Argument.NUMBEROFROWSTOGENERATE.getAbbreviation()))
             {
                 numberOfRowsToGenerate = args[i].substring(args[i].indexOf("=")+1).trim();
             }
-            else if(args[i].startsWith("-l="))
+            else if(args[i].startsWith(Argument.GENERATEDROWSLOGINTERVAL.getAbbreviation()))
             {
                 generatedRowsLogInterval = args[i].substring(args[i].indexOf("=")+1).trim();
             }
-            else if(args[i].startsWith("-o="))
+            else if(args[i].startsWith(Argument.OUTPUTFILENAME.getAbbreviation()))
             {
                 outputFilename = args[i].substring(args[i].indexOf("=")+1).trim();
             }
-            else if(args[i].startsWith("-dc="))
+            else if(args[i].startsWith(Argument.DATACONFIGURATIONFILENAME.getAbbreviation()))
             {
                 dataConfigurationFilename = args[i].substring(args[i].indexOf("=")+1).trim();
             }
-            else if(args[i].startsWith("-pc="))
+            else if(args[i].startsWith(Argument.PROGRAMCONFIGURATIONFILENAME.getAbbreviation()))
             {
                 programConfigurationFilename = args[i].substring(args[i].indexOf("=")+1).trim();
             }
-            else if(args[i].startsWith("-cd="))
+            else if(args[i].startsWith(Argument.CSVDELIMITER.getAbbreviation()))
             {
                 csvDelimiter = args[i].substring(args[i].indexOf("=")+1).trim();
             }
-            else if(args[i].startsWith("-ch="))
+            else if(args[i].startsWith(Argument.CSVINCLUDEHEADER.getAbbreviation()))
             {
                 csvIncludeHeader = args[i].substring(args[i].indexOf("=")+1).trim();
+            }
+            else
+            {
+                throw new InvalidConfigurationException("invalid configuration. the argument " + args[i] + " is unknown");
             }
         }
 
@@ -67,19 +71,11 @@ public class ProgramArguments
             throw new InvalidConfigurationException("invalid configuration. program requires a data configuration yaml file to run");
         }
     }
-    public void setDataConfigurationFilename(String dataConfigurationFilename) {
-        this.dataConfigurationFilename = dataConfigurationFilename;
-    }
-
     public String getCsvDelimiter() {
         return csvDelimiter;
     }
 
-    public void setCsvDelimiter(String csvDelimiter) {
-        this.csvDelimiter = csvDelimiter;
-    }
-
-   public String getDataConfigurationFilename() {
+    public String getDataConfigurationFilename() {
         return dataConfigurationFilename;
     }
 
@@ -87,10 +83,6 @@ public class ProgramArguments
 
        public String getOutputFilename() {
         return outputFilename;
-    }
-
-    public void setOutputFilename(String outputFilename) {
-        this.outputFilename = outputFilename;
     }
 
     public String getNumberOfRowsToGenerate() {

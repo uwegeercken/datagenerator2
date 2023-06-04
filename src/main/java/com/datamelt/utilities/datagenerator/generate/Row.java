@@ -5,14 +5,14 @@ import java.util.List;
 
 public class Row {
     private static final String DELIMITER = ",";
-    private List<RowField> fields = new ArrayList<>();
+    private List<RowField<?>> fields = new ArrayList<>();
 
     public <T> void addField(String name, T value)
     {
-        fields.add(new RowField(name, value));
+        //fields.add(new RowField<T>(name, value));
     }
 
-    public void addField(RowField field)
+    public void addField(RowField<?> field)
     {
         fields.add(field);
     }
@@ -21,7 +21,7 @@ public class Row {
     {
         StringBuffer buffer = new StringBuffer();
         int counter = 0;
-        for(RowField field : fields)
+        for(RowField<?> field : fields)
         {
             counter++;
             buffer.append(field.getName());
@@ -33,7 +33,7 @@ public class Row {
         return buffer.toString();
     }
 
-    public List<RowField> getFields()
+    public List<RowField<?>> getFields()
     {
         return fields;
     }
@@ -43,7 +43,7 @@ public class Row {
     {
         StringBuffer buffer = new StringBuffer();
         int counter = 0;
-        for(RowField field : fields)
+        for(RowField<?> field : fields)
         {
             counter++;
             buffer.append(field.getValue());

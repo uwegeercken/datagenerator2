@@ -1,6 +1,6 @@
 package com.datamelt.utilities.datagenerator.generate;
 
-import com.datamelt.utilities.datagenerator.config.model.Field;
+import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,12 +9,18 @@ import java.util.Random;
 public class CategoryGenerator implements RandomValueGenerator
 {
     private static Logger logger = LoggerFactory.getLogger(CategoryGenerator.class);
-    @Override
-    public RowField generateRandomValue(Field field) throws Exception
+    private FieldConfiguration fieldConfiguration;
+
+    public CategoryGenerator(FieldConfiguration fieldConfiguration)
     {
-        RowField rowField = null;
+        this.fieldConfiguration = fieldConfiguration;
+    }
+    @Override
+    public void generateRandomValue(FieldConfiguration fieldConfiguration) throws Exception
+    {
+        RowField<String> rowField = null;
         Random random = new Random();
-        if(field.getNumberOfDefaultWeights()!=field.getValues().size())
+        if(fieldConfiguration.getNumberOfDefaultWeights()!= fieldConfiguration.getValues().size())
         {
             int randomPercentValue = random.nextInt(1, 100);
             long sum = 0;
@@ -23,7 +29,7 @@ public class CategoryGenerator implements RandomValueGenerator
             {
                 try
                 {
-                    sum = sum + field.getValues().get(counter).getWeight();
+                    sum = sum + fieldConfiguration.getValues().get(counter).getWeight();
                 }
                 catch (Exception ex)
                 {
@@ -31,15 +37,15 @@ public class CategoryGenerator implements RandomValueGenerator
                 }
                 counter++;
             }
-            rowField = new RowField(field.getName(), field.getValues().get(counter-1).getValue());
-            logger.trace("field [{}] - values and weights {}", field.getName(), field.getValuesAndWeights());
-            logger.trace("field [{}] - randomPercentValue [{}], sum [{}], selected value [{}] ", field.getName(), randomPercentValue, sum, field.getValues().get(counter - 1).getValue());
+            //return field.getValues().get(counter-1).getValue();
+            logger.trace("field [{}] - values and weights {}", fieldConfiguration.getName(), fieldConfiguration.getValuesAndWeights());
+            logger.trace("field [{}] - randomPercentValue [{}], sum [{}], selected value [{}] ", fieldConfiguration.getName(), randomPercentValue, sum, fieldConfiguration.getValues().get(counter - 1).getValue());
         }
         else
         {
-            int randomValue = random.nextInt(1, field.getValues().size()+1);
-            rowField = new RowField(field.getName(),field.getValues().get(randomValue-1).getValue());
+            int randomValue = random.nextInt(1, fieldConfiguration.getValues().size()+1);
+            //return field.getValues().get(randomValue-1).getValue();
         }
-        return rowField;
+        //return rowField;
     }
 }

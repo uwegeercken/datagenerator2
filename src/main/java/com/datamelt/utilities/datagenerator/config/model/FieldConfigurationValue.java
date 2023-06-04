@@ -2,29 +2,29 @@ package com.datamelt.utilities.datagenerator.config.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-public class FieldValue<T>
+public class FieldConfigurationValue
 {
     public static final int DEFAULT_WEIGHT = -1;
-    private T value;
+    private String value;
     @JsonInclude(JsonInclude.Include.NON_ABSENT)
     private int weight = -1;
 
-    public FieldValue()
+    public FieldConfigurationValue()
     {
 
     }
-    public FieldValue(T value, int weight)
+    public FieldConfigurationValue(String value, int weight)
     {
         this.value = value;
         this.weight = weight;
     }
 
-    public FieldValue(T value)
+    public FieldConfigurationValue(String value)
     {
         this.value = value;
     }
 
-    public  T getValue()
+    public String getValue()
     {
         return value;
     }
@@ -48,14 +48,7 @@ public class FieldValue<T>
     @Override
     public boolean equals(Object object)
     {
-        FieldValue compareFieldValue = (FieldValue)object;
-        if(this.getValue() instanceof String)
-        {
-            return this.value.equals(compareFieldValue.getValue());
-        }
-        else
-        {
-            return this.value == compareFieldValue.getValue();
-        }
+        FieldConfigurationValue compareFieldConfigurationValue = (FieldConfigurationValue)object;
+        return this.value.equals(compareFieldConfigurationValue.getValue());
     }
 }

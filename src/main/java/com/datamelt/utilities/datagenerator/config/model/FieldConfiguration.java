@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Field
+public class FieldConfiguration
 {
     String name;
     String valuesFile;
@@ -21,11 +21,11 @@ public class Field
 
     Map<String, Object> options = new HashMap<>();
 
-    List<FieldValue> values = new ArrayList<>();
+    List<FieldConfigurationValue> values = new ArrayList<>();
 
-    int numberOfDefaultWeights=0;
+    int numberOfDefaultWeights = 0;
 
-    public Field(@JsonProperty("name") String name)
+    public FieldConfiguration(@JsonProperty("name") String name)
     {
         this.name = name;
     }
@@ -39,7 +39,7 @@ public class Field
         this.name = name;
     }
 
-    public List<FieldValue> getValues()
+    public List<FieldConfigurationValue> getValues()
     {
         return values;
     }
@@ -49,11 +49,11 @@ public class Field
         return values.size();
     }
 
-    public boolean containsFieldValue(FieldValue fieldValue)
+    public boolean containsFieldValue(FieldConfigurationValue fieldConfigurationValue)
     {
-        if(fieldValue != null)
+        if(fieldConfigurationValue != null)
         {
-            return values.contains(fieldValue);
+            return values.contains(fieldConfigurationValue);
         }
         return false;
     }
@@ -63,7 +63,7 @@ public class Field
         StringBuffer buffer = new StringBuffer();
         int counter = 0;
         int sum = 0;
-        for(FieldValue value : values)
+        for(FieldConfigurationValue value : values)
         {
             counter++;
             sum = sum + value.getWeight();
@@ -81,7 +81,7 @@ public class Field
         StringBuffer buffer = new StringBuffer();
         int counter = 0;
         int sum = 0;
-        for(FieldValue value : values)
+        for(FieldConfigurationValue value : values)
         {
             counter++;
             buffer.append("'" + value.getValue().toString() + "'");
@@ -95,9 +95,9 @@ public class Field
     public int getSumOfWeights()
     {
         int sumOfWeights = 0;
-        for(FieldValue value : values)
+        for(FieldConfigurationValue value : values)
         {
-            if(value.getWeight() != FieldValue.DEFAULT_WEIGHT)
+            if(value.getWeight() != FieldConfigurationValue.DEFAULT_WEIGHT)
             {
                 sumOfWeights = sumOfWeights + value.getWeight();
             }
@@ -108,9 +108,9 @@ public class Field
     public void calculateNumberOfDefaultWeights()
     {
         int numberOfDefaultWeights = 0;
-        for(FieldValue value : values)
+        for(FieldConfigurationValue value : values)
         {
-            if(value.getWeight() == FieldValue.DEFAULT_WEIGHT)
+            if(value.getWeight() == FieldConfigurationValue.DEFAULT_WEIGHT)
             {
                 numberOfDefaultWeights++;
             }
@@ -118,7 +118,7 @@ public class Field
         this.numberOfDefaultWeights = numberOfDefaultWeights;
     }
 
-    public void setValues(List<FieldValue> values)
+    public void setValues(List<FieldConfigurationValue> values)
     {
         this.values = values;
     }

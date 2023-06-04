@@ -1,8 +1,8 @@
 package com.datamelt.utilities.datagenerator.generate;
 
-import com.datamelt.utilities.datagenerator.config.model.Field;
+import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 
 public interface RandomValueGenerator
 {
-    RowField generateRandomValue(Field field) throws Exception;
+    void generateRandomValue(FieldConfiguration fieldConfiguration) throws Exception;
 }
