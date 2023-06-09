@@ -2,17 +2,17 @@ package com.datamelt.utilities.datagenerator.config.process;
 
 import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
+import com.datamelt.utilities.datagenerator.config.model.options.RandomStringOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class RandomStringProcessor implements FieldProcessor
+public class RandomStringProcessor extends FieldProcessor
 {
     private static Logger logger = LoggerFactory.getLogger(RandomStringProcessor.class);
 
-    private final DataConfiguration configuration;
     public RandomStringProcessor(DataConfiguration configuration)
     {
-        this.configuration = configuration;
+        super(configuration);
     }
 
     @Override
@@ -23,7 +23,7 @@ public class RandomStringProcessor implements FieldProcessor
     }
 
     @Override
-    public void validateOptions(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
+    public void setDefaultOptions(FieldConfiguration fieldConfiguration)
     {
         for(RandomStringOptions defaultOption : RandomStringOptions.values())
         {

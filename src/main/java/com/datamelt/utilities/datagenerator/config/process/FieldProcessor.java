@@ -1,10 +1,18 @@
 package com.datamelt.utilities.datagenerator.config.process;
 
+import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 
-public interface FieldProcessor
+public abstract class FieldProcessor
 {
-    void validateConfiguration(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException;
-    void validateOptions(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException;
-    void processConfiguration(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException;
+    private DataConfiguration configuration;
+
+    public FieldProcessor(DataConfiguration configuration)
+    {
+        this.configuration = configuration;
+    }
+
+    protected abstract void validateConfiguration(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException;
+    protected abstract void setDefaultOptions(FieldConfiguration fieldConfiguration);
+    protected abstract void processConfiguration(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException;
 }

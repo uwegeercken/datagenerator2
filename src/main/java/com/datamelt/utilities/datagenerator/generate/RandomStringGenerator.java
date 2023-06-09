@@ -1,7 +1,7 @@
 package com.datamelt.utilities.datagenerator.generate;
 
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
-import com.datamelt.utilities.datagenerator.config.process.RandomStringOptions;
+import com.datamelt.utilities.datagenerator.config.model.options.RandomStringOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

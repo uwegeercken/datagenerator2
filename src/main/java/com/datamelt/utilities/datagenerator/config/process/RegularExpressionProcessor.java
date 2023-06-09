@@ -3,12 +3,11 @@ package com.datamelt.utilities.datagenerator.config.process;
 import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 
-public class RegularExpressionProcessor implements FieldProcessor
+public class RegularExpressionProcessor extends FieldProcessor
 {
-    private DataConfiguration configuration;
     public RegularExpressionProcessor(DataConfiguration configuration)
     {
-        this.configuration = configuration;
+        super(configuration);
     }
 
     @Override
@@ -17,7 +16,7 @@ public class RegularExpressionProcessor implements FieldProcessor
     }
 
     @Override
-    public void validateOptions(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
+    public void setDefaultOptions(FieldConfiguration fieldConfiguration)
     {
 
     }

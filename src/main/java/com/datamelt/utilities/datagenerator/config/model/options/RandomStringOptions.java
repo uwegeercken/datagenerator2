@@ -1,4 +1,4 @@
-package com.datamelt.utilities.datagenerator.config.process;
+package com.datamelt.utilities.datagenerator.config.model.options;
 
 public enum RandomStringOptions
 {

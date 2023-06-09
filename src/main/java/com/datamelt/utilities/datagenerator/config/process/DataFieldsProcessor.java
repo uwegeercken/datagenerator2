@@ -34,8 +34,8 @@ public class DataFieldsProcessor
 
             }
 
+            processor.setDefaultOptions(fieldConfiguration);
             processor.validateConfiguration(fieldConfiguration);
-            processor.validateOptions(fieldConfiguration);
             processor.processConfiguration(fieldConfiguration);
         }
     }

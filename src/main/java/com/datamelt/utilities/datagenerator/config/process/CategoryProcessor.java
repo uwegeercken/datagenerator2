@@ -3,19 +3,22 @@ package com.datamelt.utilities.datagenerator.config.process;
 import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfigurationValue;
+import com.datamelt.utilities.datagenerator.config.model.options.CategoryOptions;
+import com.datamelt.utilities.datagenerator.config.model.options.Transformation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Map;
 
-public class CategoryProcessor implements FieldProcessor
+public class CategoryProcessor extends FieldProcessor
 {
     private static Logger logger = LoggerFactory.getLogger(CategoryProcessor.class);
 
-    private DataConfiguration configuration;
     public CategoryProcessor(DataConfiguration configuration)
     {
-        this.configuration = configuration;
+        super(configuration);
     }
 
     @Override
@@ -24,12 +27,19 @@ public class CategoryProcessor implements FieldProcessor
         checkTotalNumberOfFieldValues(fieldConfiguration);
         checkFieldWeights(fieldConfiguration);
         checkTotalFieldWeight(fieldConfiguration);
+        checkOptionsTransform(fieldConfiguration);
     }
 
     @Override
-    public void validateOptions(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
+    public void setDefaultOptions(FieldConfiguration fieldConfiguration)
     {
-
+        for(CategoryOptions defaultOption : CategoryOptions.values())
+        {
+            if(!fieldConfiguration.getOptions().containsKey(defaultOption.getKey()))
+            {
+                fieldConfiguration.getOptions().put(defaultOption.getKey(), defaultOption.getDefaultValue());
+            }
+        }
     }
 
     @Override
@@ -70,6 +80,26 @@ public class CategoryProcessor implements FieldProcessor
                    throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], value [" + value.getValue() + "] - value of weight cannot be greater than 100");
                }
            }
+        }
+    }
+
+    private void checkOptionsTransform(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
+    {
+        if(fieldConfiguration.getOptions()!=null)
+        {
+            for(Map.Entry<String, Object> entry : fieldConfiguration.getOptions().entrySet())
+            {
+                if(entry.getKey().equals(CategoryOptions.TRANSFORM.getKey()))
+                {
+                    String value = (String) entry.getValue();
+                    if(!Arrays.stream(Transformation.values()).anyMatch(v -> v.name().toLowerCase().equals(value.toLowerCase())))
+                    {
+
+                    //if(!entry.getValue().equals(OutputFormat.UNCHANGED.name().toLowerCase()) && !entry.getValue().equals(OutputFormat.LOWERCASE.name().toLowerCase()) && !entry.getValue().equals(OutputFormat.UPPERCASE.name().toLowerCase()))
+                        throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], option [" + entry.getKey() + "] - must be one out of " + Arrays.toString(Transformation.values()).toLowerCase());
+                    }
+                }
+            }
         }
     }
 

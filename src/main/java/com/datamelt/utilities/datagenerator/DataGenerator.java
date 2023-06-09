@@ -55,22 +55,16 @@ public class DataGenerator
             arguments = new ProgramArguments(args);
             generator = new DataGenerator(arguments);
             generator.generateRows();
-        }
-        catch (Exception ex)
-        {
-            logger.error("unable to generate data: {}", ex.getMessage());
-        }
 
-        try
-        {
             if(generator.programConfiguration.getOutputFilename() != null) {
                 generator.exportToFile(generator.dataConfiguration.getTableName(), generator.programConfiguration.getOutputFilename());
             }
         }
         catch (Exception ex)
         {
-            logger.error("unable to export data: {}", ex.getMessage());
+            logger.error("unable to generate data: {}", ex.getMessage());
         }
+
     }
 
     private static void help()
