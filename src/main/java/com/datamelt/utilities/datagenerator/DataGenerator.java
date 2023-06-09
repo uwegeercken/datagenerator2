@@ -23,8 +23,8 @@ import static java.lang.System.exit;
 public class DataGenerator
 {
     private static final String applicationName = "datagenerator2";
-    private static final String version = "0.0.5";
-    private static final String versionDate = "2023-06-02";
+    private static final String version = "0.0.6";
+    private static final String versionDate = "2023-06-09";
     private static final String contactEmail = "uwe.geercken@web.de";
     private static Logger logger = LoggerFactory.getLogger(DataGenerator.class);
     private DataConfiguration dataConfiguration;
@@ -69,7 +69,7 @@ public class DataGenerator
 
     private static void help()
     {
-        logger.debug("program arguments:");
+        logger.info("program arguments:");
         for(Argument argument : Argument.values())
         {
             logger.info("argument: {} -> {}", argument.getAbbreviation(), argument.getExplanation());
@@ -107,7 +107,7 @@ public class DataGenerator
 
     private void generateRows() throws Exception
     {
-        logger.debug("generating rows: [{}]", programConfiguration.getNumberOfRowsToGenerate());
+        logger.info("generating rows: [{}]", programConfiguration.getNumberOfRowsToGenerate());
         Row row;
         long counter = 0;
         long start = System.currentTimeMillis();
@@ -126,13 +126,13 @@ public class DataGenerator
         }
         dataStore.flush();
         long end = System.currentTimeMillis();
-        logger.debug("total rows generated: [{}]", counter);
+        logger.info("total rows generated: [{}]", counter);
         logger.info("total data generation time: [{}] seconds", (end - start) / 1000);
     }
 
     private void exportToFile(String tablename, String outputFilename) throws Exception
     {
-        logger.debug("output of generated data to: [{}],", outputFilename);
+        logger.info("output of generated data to: [{}],", outputFilename);
         dataStore.exportToFile(tablename, outputFilename);
     }
 }

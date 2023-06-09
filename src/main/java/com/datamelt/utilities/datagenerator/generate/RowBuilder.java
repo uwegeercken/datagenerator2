@@ -34,7 +34,6 @@ public class RowBuilder
         for (RowField<?> rowField : rowFields)
         {
             rowField.generateValue();
-
             row.addField(rowField);
         }
         return row;
