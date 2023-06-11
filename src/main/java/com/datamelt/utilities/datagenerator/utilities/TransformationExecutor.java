@@ -18,10 +18,13 @@ public class TransformationExecutor
     public static <T> T executeAll(String[] transform, T value ) throws Exception
     {
         T transformedValue = value;
-        for(String name : transform)
+        for(String enumName : transform)
         {
-            Class clazz = Transformations.valueOf(name.toUpperCase()).getClazz();
-            transformedValue =  (T) execute(transformedValue, name, clazz);
+            if(!enumName.trim().equals(Transformations.UNCHANGED.getName()))
+            {
+                Class clazz = Transformations.valueOf(enumName.trim().toUpperCase()).getClazz();
+                transformedValue = (T) execute(transformedValue, enumName.trim(), clazz);
+            }
 
         }
         return transformedValue;
@@ -29,16 +32,9 @@ public class TransformationExecutor
 
     public static <T> T execute(T value, String name, Class clazz) throws Exception
     {
-        if(!name.equals(Transformations.UNCHANGED.getName()))
-        {
-            Class<DataTransformer> dataTransformer = DataTransformer.class;
-            Method method = dataTransformer.getMethod(name, clazz);
-            return (T) method.invoke(null, value);
-        }
-        else
-        {
-            return value;
-        }
+        Class<DataTransformer> dataTransformer = DataTransformer.class;
+        Method method = dataTransformer.getMethod(name, clazz);
+        return (T) method.invoke(null, value);
     }
 
 

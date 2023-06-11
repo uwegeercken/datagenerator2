@@ -5,6 +5,7 @@ import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.options.CategoryOptions;
 import com.datamelt.utilities.datagenerator.config.model.options.RandomStringOptions;
 import com.datamelt.utilities.datagenerator.config.model.options.Transformations;
+import com.datamelt.utilities.datagenerator.utilities.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,10 +36,13 @@ public class RandomStringProcessor extends FieldProcessor
             {
                 if(entry.getKey().equals(CategoryOptions.TRANSFORM.getKey()))
                 {
-                    String value = (String) entry.getValue();
-                    if(!Arrays.stream(Transformations.values()).anyMatch(v -> v.name().toLowerCase().equals(value.toLowerCase())))
+                    String[] transformations = ((String) entry.getValue()).split(Constants.OPTION_TRANSFORM_DIVIDER);
+                    for(String transformation : transformations)
                     {
-                        throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], option [" + entry.getKey() + "] - must be one out of " + Transformations.getValues(String.class));
+                        if(!RandomStringOptions.getAvailableTransformations().contains(transformation.trim()) && !transformation.equals(Transformations.UNCHANGED.getName()))
+                        {
+                            throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], option [" + entry.getKey() + "], value [" + transformation.trim() + "] is invalid - must be in list " + RandomStringOptions.getAvailableTransformations());
+                        }
                     }
                 }
             }

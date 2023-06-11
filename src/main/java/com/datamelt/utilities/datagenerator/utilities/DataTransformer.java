@@ -20,8 +20,8 @@ public class DataTransformer
         return Base64.getEncoder().encodeToString(value.getBytes(StandardCharsets.UTF_8));
     }
 
-    public static int subtract100(Integer value)
+    public static int negate(Integer value)
     {
-        return value -100;
+        return -value;
     }
 }

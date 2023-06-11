@@ -9,7 +9,7 @@ public enum Transformations
     UNCHANGED ("unchanged", String.class),
     LOWERCASE ("lowercase", String.class),
     UPPERCASE("uppercase", String.class),
-    SUBTRACT100("subtract100", Integer.class),
+    NEGATE("negate", Integer.class),
     BASE64ENCODE("base64encode", String.class);
 
     private String name;

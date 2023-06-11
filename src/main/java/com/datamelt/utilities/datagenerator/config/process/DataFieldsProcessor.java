@@ -35,7 +35,7 @@ public class DataFieldsProcessor
             }
             else if (fieldConfiguration.getType() == FieldType.REGULAREXPRESSION)
             {
-               processor = new RegularExpressionProcessor(configuration);
+               //processor = new RegularExpressionProcessor(configuration);
 
             }
 

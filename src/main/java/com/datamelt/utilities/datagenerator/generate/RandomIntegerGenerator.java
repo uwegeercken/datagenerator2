@@ -31,10 +31,11 @@ public class RandomIntegerGenerator implements RandomValueGenerator
     }
 
     @Override
-    public String generateRandomValue() throws Exception {
+    public <T> T  generateRandomValue() throws Exception {
 
         Random random = new Random();
-        return new String("" + random.nextInt(minValue,maxValue));
+        Integer value = random.nextInt(minValue,maxValue);
+        return (T) value ;
     }
 
     @Override
