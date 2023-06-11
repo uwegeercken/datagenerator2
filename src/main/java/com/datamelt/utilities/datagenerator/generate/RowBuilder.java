@@ -17,10 +17,16 @@ public class RowBuilder
             if (fieldConfiguration.getType() == FieldType.CATEGORY)
             {
                 rowFields.add(new RowField<String>(new CategoryGenerator(fieldConfiguration), fieldConfiguration.getName()));
-            } else if (fieldConfiguration.getType() == FieldType.RANDOMSTRING)
+            }
+            else if (fieldConfiguration.getType() == FieldType.RANDOMSTRING)
             {
                 rowFields.add(new RowField<String>(new RandomStringGenerator(fieldConfiguration), fieldConfiguration.getName()));
-            } else if (fieldConfiguration.getType() == FieldType.REGULAREXPRESSION)
+            }
+            else if (fieldConfiguration.getType() == FieldType.RANDOMINTEGER)
+            {
+                rowFields.add(new RowField<Integer>(new RandomIntegerGenerator(fieldConfiguration), fieldConfiguration.getName()));
+            }
+            else if (fieldConfiguration.getType() == FieldType.REGULAREXPRESSION)
             {
                 rowFields.add(new RowField<String>(new RegularExpressionGenerator(fieldConfiguration), fieldConfiguration.getName()));
             }

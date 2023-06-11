@@ -1,7 +1,10 @@
 package com.datamelt.utilities.datagenerator.generate;
 
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
+import com.datamelt.utilities.datagenerator.config.model.options.CategoryOptions;
 import com.datamelt.utilities.datagenerator.config.model.options.RandomStringOptions;
+import com.datamelt.utilities.datagenerator.utilities.Constants;
+import com.datamelt.utilities.datagenerator.utilities.TransformationExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,9 +16,10 @@ public class RandomStringGenerator implements RandomValueGenerator
 
     private FieldConfiguration fieldConfiguration;
 
-    int minLength;
-    int maxLength;
+    private int minLength;
+    private int maxLength;
     String randomCharacters;
+    private String[] transform;
 
     public RandomStringGenerator(FieldConfiguration fieldConfiguration)
     {
@@ -24,10 +28,11 @@ public class RandomStringGenerator implements RandomValueGenerator
         minLength = (Integer) fieldConfiguration.getOptions().get(RandomStringOptions.MIN_LENGTH.getKey());
         maxLength = (Integer) fieldConfiguration.getOptions().get(RandomStringOptions.MAX_LENGTH.getKey());
         randomCharacters = (String) fieldConfiguration.getOptions().get(RandomStringOptions.RANDOM_CHARACTERS.getKey());
+        transform = ((String) fieldConfiguration.getOptions().get(CategoryOptions.TRANSFORM.getKey())).split(Constants.OPTION_TRANSFORM_DIVIDER);
     }
 
     @Override
-    public String generateRandomValue() throws Exception {
+    public <T> T generateRandomValue() throws Exception {
 
         Random random = new Random();
         int randomLength = random.nextInt(minLength,maxLength);
@@ -37,6 +42,12 @@ public class RandomStringGenerator implements RandomValueGenerator
             int position = random.nextInt(randomCharacters.length());
             randomString.append(randomCharacters.substring(position, position+1));
         }
-        return randomString.toString();
+        return (T) randomString.toString();
+    }
+
+    @Override
+    public <T> T transformRandomValue(T value) throws Exception
+    {
+        return (T) TransformationExecutor.executeAll(transform, value);
     }
 }

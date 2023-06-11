@@ -4,5 +4,6 @@ public enum FieldType
 {
     CATEGORY,
     RANDOMSTRING,
+    RANDOMINTEGER,
     REGULAREXPRESSION;
 }

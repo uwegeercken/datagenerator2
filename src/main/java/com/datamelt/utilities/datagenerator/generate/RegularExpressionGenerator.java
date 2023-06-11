@@ -16,4 +16,10 @@ public class RegularExpressionGenerator implements RandomValueGenerator
     {
         return null;
     }
+
+    @Override
+    public <T> T transformRandomValue(T value) throws Exception
+    {
+        return null;
+    }
 }

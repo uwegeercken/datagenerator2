@@ -4,7 +4,7 @@ import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfigurationValue;
 import com.datamelt.utilities.datagenerator.config.model.options.CategoryOptions;
-import com.datamelt.utilities.datagenerator.config.model.options.Transformation;
+import com.datamelt.utilities.datagenerator.config.model.options.Transformations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -92,11 +92,9 @@ public class CategoryProcessor extends FieldProcessor
                 if(entry.getKey().equals(CategoryOptions.TRANSFORM.getKey()))
                 {
                     String value = (String) entry.getValue();
-                    if(!Arrays.stream(Transformation.values()).anyMatch(v -> v.name().toLowerCase().equals(value.toLowerCase())))
+                    if(!Arrays.stream(Transformations.values()).anyMatch(v -> v.name().toLowerCase().equals(value.toLowerCase())))
                     {
-
-                    //if(!entry.getValue().equals(OutputFormat.UNCHANGED.name().toLowerCase()) && !entry.getValue().equals(OutputFormat.LOWERCASE.name().toLowerCase()) && !entry.getValue().equals(OutputFormat.UPPERCASE.name().toLowerCase()))
-                        throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], option [" + entry.getKey() + "] - must be one out of " + Arrays.toString(Transformation.values()).toLowerCase());
+                        throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], option [" + entry.getKey() + "] - must be one out of " + Transformations.getValues(String.class));
                     }
                 }
             }

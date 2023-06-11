@@ -28,6 +28,11 @@ public class DataFieldsProcessor
                processor = new RandomStringProcessor(configuration);
 
             }
+            else if (fieldConfiguration.getType() == FieldType.RANDOMINTEGER)
+            {
+                processor = new RandomIntegerProcessor(configuration);
+
+            }
             else if (fieldConfiguration.getType() == FieldType.REGULAREXPRESSION)
             {
                processor = new RegularExpressionProcessor(configuration);

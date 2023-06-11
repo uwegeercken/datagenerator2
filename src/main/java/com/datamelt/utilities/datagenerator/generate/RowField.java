@@ -15,7 +15,12 @@ public class RowField<T> {
 
     public void generateValue() throws Exception
     {
-        this.value = generator.generateRandomValue();
+        this.value = transformValue(generator.generateRandomValue());
+    }
+
+    public <T> T transformValue(T value) throws Exception
+    {
+        return generator.transformRandomValue(value);
     }
 
     public String getName() {

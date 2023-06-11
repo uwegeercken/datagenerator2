@@ -1,16 +1,15 @@
 package com.datamelt.utilities.datagenerator.config.model.options;
 
-public enum RandomStringOptions
+public enum RandomIntegerOptions
 {
     TRANSFORM("transform", Transformations.UNCHANGED.name().toLowerCase()),
-    MIN_LENGTH("minLength",0),
-    MAX_LENGTH("maxLength", 40),
-    RANDOM_CHARACTERS("randomCharacters", "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_");
+    MIN_VALUE("minValue",1),
+    MAX_VALUE("maxValue", 1000000);
 
     private String key;
     private Object defaultValue;
 
-    RandomStringOptions(String key, Object defaultValue)
+    RandomIntegerOptions(String key, Object defaultValue)
     {
         this.key = key;
         this.defaultValue = defaultValue;

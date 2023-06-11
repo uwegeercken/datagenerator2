@@ -3,6 +3,7 @@ package com.datamelt.utilities.datagenerator.generate;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.options.CategoryOptions;
 import com.datamelt.utilities.datagenerator.utilities.Constants;
+import com.datamelt.utilities.datagenerator.utilities.TransformationExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,5 +72,12 @@ public class CategoryGenerator implements RandomValueGenerator
             }
         }
         return transformedValue;
+    }
+
+
+    @Override
+    public <T> T transformRandomValue(T value) throws Exception
+    {
+        return (T) TransformationExecutor.executeAll(transform, value);
     }
 }

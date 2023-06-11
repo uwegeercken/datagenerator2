@@ -2,7 +2,7 @@ package com.datamelt.utilities.datagenerator.config.model.options;
 
 public enum CategoryOptions
 {
-    TRANSFORM("transform", Transformation.UNCHANGED.name());
+    TRANSFORM("transform", Transformations.UNCHANGED.name().toLowerCase());
 
     private String key;
     private Object defaultValue;
