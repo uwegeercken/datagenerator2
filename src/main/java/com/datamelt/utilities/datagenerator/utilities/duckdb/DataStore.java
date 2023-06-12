@@ -41,12 +41,12 @@ public class DataStore
     private void cleanupDatabase() throws Exception
     {
         dropTable();
-        dropEnums();
+        //dropEnums();
     }
 
     private void createDatabaseStructure() throws Exception
     {
-        createEnums();
+        //createEnums();
         createTable();
     }
 
@@ -108,15 +108,7 @@ public class DataStore
             counter++;
             buffer.append(fieldConfiguration.getName());
             buffer.append(" ");
-
-            if(fieldConfiguration.getType() == FieldType.CATEGORY)
-            {
-                buffer.append(fieldConfiguration.getName());
-            }
-            else
-            {
-                buffer.append(getDuckDbType(fieldConfiguration.getDataType()));
-            }
+            buffer.append(getDuckDbType(fieldConfiguration.getDataType()));
             if (counter < configuration.getFields().size())
             {
                 buffer.append(", ");

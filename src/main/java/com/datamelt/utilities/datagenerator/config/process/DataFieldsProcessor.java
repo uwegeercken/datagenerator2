@@ -30,7 +30,12 @@ public class DataFieldsProcessor
             }
             else if (fieldConfiguration.getType() == FieldType.RANDOMINTEGER)
             {
-                processor = new RandomIntegerProcessor(configuration);
+                processor = new RandomLongProcessor(configuration);
+
+            }
+            else if (fieldConfiguration.getType() == FieldType.RANDOMLONG)
+            {
+                processor = new RandomLongProcessor(configuration);
 
             }
             else if (fieldConfiguration.getType() == FieldType.REGULAREXPRESSION)

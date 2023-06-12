@@ -24,7 +24,12 @@ public class RowBuilder
             }
             else if (fieldConfiguration.getType() == FieldType.RANDOMINTEGER)
             {
-                rowFields.add(new RowField<Integer>(new RandomIntegerGenerator(fieldConfiguration), fieldConfiguration.getName()));
+                // TODO: integer generator !!
+                rowFields.add(new RowField<Integer>(new RandomLongGenerator(fieldConfiguration), fieldConfiguration.getName()));
+            }
+            else if (fieldConfiguration.getType() == FieldType.RANDOMLONG)
+            {
+                rowFields.add(new RowField<Long>(new RandomLongGenerator(fieldConfiguration), fieldConfiguration.getName()));
             }
             else if (fieldConfiguration.getType() == FieldType.REGULAREXPRESSION)
             {

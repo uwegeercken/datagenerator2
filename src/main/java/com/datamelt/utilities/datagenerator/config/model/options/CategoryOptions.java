@@ -10,7 +10,7 @@ public enum CategoryOptions
     private String key;
     private Object defaultValue;
 
-    private static final List<String> availableTransformations = Arrays.asList();
+    private static final List<String> availableTransformations = Arrays.asList(Transformations.BASE64ENCODE.getName(), Transformations.UPPERCASE.getName(), Transformations.LOWERCASE.getName());
 
     CategoryOptions(String key, Object defaultValue)
     {

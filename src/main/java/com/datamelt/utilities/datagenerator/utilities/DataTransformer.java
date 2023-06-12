@@ -20,7 +20,7 @@ public class DataTransformer
         return Base64.getEncoder().encodeToString(value.getBytes(StandardCharsets.UTF_8));
     }
 
-    public static int negate(Integer value)
+    public static long negate(Long value)
     {
         return -value;
     }
