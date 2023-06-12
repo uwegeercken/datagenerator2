@@ -9,7 +9,9 @@ public enum RandomLongOptions
     MIN_VALUE("minValue",1L),
     MAX_VALUE("maxValue", 1000000L);
 
-    private static final List<String> availableTransformations = Arrays.asList(new String[]{Transformations.NEGATE.getName()});
+    private static final List<String> availableTransformations = Arrays.asList(
+            Transformations.NEGATE.getName()
+    );
 
     private String key;
     private Object defaultValue;

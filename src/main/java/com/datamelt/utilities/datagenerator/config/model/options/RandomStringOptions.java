@@ -10,7 +10,12 @@ public enum RandomStringOptions
     MAX_LENGTH("maxLength", 40),
     RANDOM_CHARACTERS("randomCharacters", "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_");
 
-    private static final List<String> availableTransformations = Arrays.asList(new String[]{Transformations.LOWERCASE.getName(), Transformations.UPPERCASE.getName(), Transformations.BASE64ENCODE.getName()});
+    private static final List<String> availableTransformations = Arrays.asList(
+            Transformations.LOWERCASE.getName(),
+            Transformations.UPPERCASE.getName(),
+            Transformations.BASE64ENCODE.getName(),
+            Transformations.REVERSE.getName()
+    );
 
     private String key;
     private Object defaultValue;

@@ -10,6 +10,7 @@ public enum Transformations
     LOWERCASE ("lowercase", String.class),
     UPPERCASE("uppercase", String.class),
     NEGATE("negate", Long.class),
+    REVERSE("reverse", String.class),
     BASE64ENCODE("base64encode", String.class);
 
     private String name;
