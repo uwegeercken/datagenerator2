@@ -47,8 +47,7 @@ and equally distribute the weight value. But, depending on the number of values 
 from the word list might get a slightly higher weight value. If weight definitions are assigned in a way that the remaining percentage for the other values is less than 1 percent an error occurs. 
 
 ## Processing steps
-First, the given yaml configuration file is analyzed for its correctness. The fields/attributes for which to
-generate random data are processed sequentially and build a row of data. The tool generates the desired number of rows.
+First, the given yaml configuration file is analyzed for its correctness. After that the value for each field is generated and then transformed (if any transformation options are specified) .The fields are processed sequentially and build a row of data. The tool generates the desired number of rows.
 
 The data is then generated and stored in a local duckdb instance. The data types specified in the yaml configuration are used to defined the data types of the duckdb table which is created.
 
@@ -57,6 +56,7 @@ The configuration file contains various attributes to steer the behavior of the 
 
 - the name of the output file for the generated data
 - the number of rows to generate
+- after how many generated rows a log message shall be output
 - details for the export to a csv file - delimiter and header information
 
 ## Yaml configuration for the definition of fields to generate
@@ -72,4 +72,4 @@ To run the tool:
 
 
 
-last update: uwe geercken - uwe.geercken@web.de - 2023-05-31
+last update: uwe geercken - uwe.geercken@web.de - 2023-06-12
