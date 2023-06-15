@@ -1,14 +1,11 @@
 package com.datamelt.utilities.datagenerator.generate;
 
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
-import com.datamelt.utilities.datagenerator.config.model.options.CategoryOptions;
 import com.datamelt.utilities.datagenerator.config.model.options.RandomLongOptions;
-import com.datamelt.utilities.datagenerator.utilities.Constants;
 import com.datamelt.utilities.datagenerator.utilities.TransformationExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
 import java.util.Random;
 
 public class RandomLongGenerator implements RandomValueGenerator

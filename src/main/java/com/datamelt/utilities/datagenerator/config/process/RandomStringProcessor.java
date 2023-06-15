@@ -42,13 +42,9 @@ public class RandomStringProcessor extends FieldProcessor
         {
             for(TransformationConfiguration configuredTransformation : fieldConfiguration.getTransformations())
             {
-                try
+                if(!availableTransformations.contains(configuredTransformation.getName()))
                 {
-                    Transformations.valueOf(configuredTransformation.getName());
-                }
-                catch(IllegalArgumentException ex)
-                {
-                    throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], transformation [" + configuredTransformation.getName() + "] is invalid - must be in list: " + Arrays.toString(availableTransformations.toArray()));
+                    throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], transformation [" + configuredTransformation.getName() + "] is not allowed - must be in list: " + Arrays.toString(availableTransformations.toArray()));
                 }
             }
         }

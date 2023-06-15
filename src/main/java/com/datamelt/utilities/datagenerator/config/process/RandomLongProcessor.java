@@ -3,16 +3,13 @@ package com.datamelt.utilities.datagenerator.config.process;
 import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.TransformationConfiguration;
-import com.datamelt.utilities.datagenerator.config.model.options.CategoryOptions;
 import com.datamelt.utilities.datagenerator.config.model.options.RandomLongOptions;
 import com.datamelt.utilities.datagenerator.config.model.options.Transformations;
-import com.datamelt.utilities.datagenerator.utilities.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 public class RandomLongProcessor extends FieldProcessor
 {
@@ -57,13 +54,9 @@ public class RandomLongProcessor extends FieldProcessor
         {
             for(TransformationConfiguration configuredTransformation : fieldConfiguration.getTransformations())
             {
-                try
+                if(!availableTransformations.contains(configuredTransformation.getName()))
                 {
-                    Transformations.valueOf(configuredTransformation.getName());
-                }
-                catch(IllegalArgumentException ex)
-                {
-                    throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], transformation [" + configuredTransformation.getName() + "] is invalid - must be in list: " + Arrays.toString(availableTransformations.toArray()));
+                    throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], transformation [" + configuredTransformation.getName() + "] is not allowed - must be in list: " + Arrays.toString(availableTransformations.toArray()));
                 }
             }
         }

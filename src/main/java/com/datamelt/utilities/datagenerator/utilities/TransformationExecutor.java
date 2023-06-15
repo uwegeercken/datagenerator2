@@ -16,12 +16,8 @@ public class TransformationExecutor
         T transformedValue = value;
         for(TransformationConfiguration transformation : transformationConfigurations)
         {
-            if(!transformation.getName().trim().equals(Transformations.UNCHANGED.getName()))
-            {
-                Class clazz = Transformations.valueOf(transformation.getName().trim().toUpperCase()).getClazz();
-                transformedValue = (T) execute(transformedValue, transformation.getName().trim(), clazz, transformation.getParameters());
-            }
-
+            Class clazz = Transformations.valueOf(transformation.getName().trim().toUpperCase()).getClazz();
+            transformedValue = (T) execute(transformedValue, transformation.getName().trim(), clazz, transformation.getParameters());
         }
         return transformedValue;
     }
