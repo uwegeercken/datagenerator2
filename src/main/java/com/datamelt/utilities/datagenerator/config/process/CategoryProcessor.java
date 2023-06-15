@@ -3,19 +3,27 @@ package com.datamelt.utilities.datagenerator.config.process;
 import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfigurationValue;
+import com.datamelt.utilities.datagenerator.config.model.TransformationConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.options.CategoryOptions;
 import com.datamelt.utilities.datagenerator.config.model.options.Transformations;
-import com.datamelt.utilities.datagenerator.utilities.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.Map;
+import java.util.List;
 
 public class CategoryProcessor extends FieldProcessor
 {
     private static Logger logger = LoggerFactory.getLogger(CategoryProcessor.class);
+    private static List<String> availableTransformations = Arrays.asList(
+            Transformations.LOWERCASE.getName(),
+            Transformations.UPPERCASE.getName(),
+            Transformations.BASE64ENCODE.getName(),
+            Transformations.PREPEND.getName(),
+            Transformations.APPEND.getName(),
+            Transformations.REVERSE.getName()
+    );
 
     public CategoryProcessor(DataConfiguration configuration)
     {
@@ -28,7 +36,7 @@ public class CategoryProcessor extends FieldProcessor
         checkTotalNumberOfFieldValues(fieldConfiguration);
         checkFieldWeights(fieldConfiguration);
         checkTotalFieldWeight(fieldConfiguration);
-        checkOptionsTransform(fieldConfiguration);
+        checkTransformations(fieldConfiguration);
     }
 
     @Override
@@ -84,22 +92,19 @@ public class CategoryProcessor extends FieldProcessor
         }
     }
 
-    private void checkOptionsTransform(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
+    private void checkTransformations(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
     {
-        if(fieldConfiguration.getOptions()!=null)
+        if(fieldConfiguration.getTransformations()!=null)
         {
-            for(Map.Entry<String, Object> entry : fieldConfiguration.getOptions().entrySet())
+            for(TransformationConfiguration configuredTransformation : fieldConfiguration.getTransformations())
             {
-                if(entry.getKey().equals(CategoryOptions.TRANSFORM.getKey()))
+                try
                 {
-                    String[] transformations = ((String) entry.getValue()).split(Constants.OPTION_TRANSFORM_DIVIDER);
-                    for(String transformation : transformations)
-                    {
-                        if(!CategoryOptions.getAvailableTransformations().contains(transformation.trim()) && !transformation.equals(Transformations.UNCHANGED.getName()))
-                        {
-                            throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], option [" + entry.getKey() + "], value [" + transformation.trim() + "] is invalid - must be in list " + CategoryOptions.getAvailableTransformations());
-                        }
-                    }
+                    Transformations.valueOf(configuredTransformation.getName());
+                }
+                catch(IllegalArgumentException ex)
+                {
+                    throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], transformation [" + configuredTransformation.getName() + "] is invalid - must be in list: " + Arrays.toString(availableTransformations.toArray()));
                 }
             }
         }

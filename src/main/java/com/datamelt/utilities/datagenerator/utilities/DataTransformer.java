@@ -35,6 +35,11 @@ public class DataTransformer
         return prefix + value;
     }
 
+    public static String append(String value, String suffix)
+    {
+        return value + suffix;
+    }
+
     public static long negate(long value)
     {
         return -value;

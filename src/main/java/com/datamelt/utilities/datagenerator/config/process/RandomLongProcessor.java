@@ -2,6 +2,7 @@ package com.datamelt.utilities.datagenerator.config.process;
 
 import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
+import com.datamelt.utilities.datagenerator.config.model.TransformationConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.options.CategoryOptions;
 import com.datamelt.utilities.datagenerator.config.model.options.RandomLongOptions;
 import com.datamelt.utilities.datagenerator.config.model.options.Transformations;
@@ -9,11 +10,17 @@ import com.datamelt.utilities.datagenerator.utilities.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 public class RandomLongProcessor extends FieldProcessor
 {
     private static Logger logger = LoggerFactory.getLogger(RandomLongProcessor.class);
+
+    private static List<String> availableTransformations = Arrays.asList(
+            Transformations.NEGATE.getName()
+    );
 
     public RandomLongProcessor(DataConfiguration configuration)
     {
@@ -23,31 +30,11 @@ public class RandomLongProcessor extends FieldProcessor
     @Override
     public void validateConfiguration(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
     {
-        checkOptionsTransform(fieldConfiguration);
+        checkTransformations(fieldConfiguration);
 
     }
 
-    private void checkOptionsTransform(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
-    {
-        if(fieldConfiguration.getOptions()!=null)
-        {
-            for(Map.Entry<String, Object> entry : fieldConfiguration.getOptions().entrySet())
-            {
-                if(entry.getKey().equals(CategoryOptions.TRANSFORM.getKey()))
-                {
-                    String[] transformations = ((String) entry.getValue()).split(Constants.OPTION_TRANSFORM_DIVIDER);
-                    for(String transformation : transformations)
-                    {
-                        if(!RandomLongOptions.getAvailableTransformations().contains(transformation.trim()) && !transformation.equals(Transformations.UNCHANGED.getName()))
-                        {
-                            throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], option [" + entry.getKey() + "], value [" + transformation.trim() + "] is invalid - must be in list " + RandomLongOptions.getAvailableTransformations());
-                        }
-                    }
-                }
-            }
-        }
-    }
-    @Override
+        @Override
     public void setDefaultOptions(FieldConfiguration fieldConfiguration)
     {
         for(RandomLongOptions defaultOption : RandomLongOptions.values())
@@ -62,5 +49,23 @@ public class RandomLongProcessor extends FieldProcessor
     @Override
     public void processConfiguration(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException {
 
+    }
+
+    private void checkTransformations(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
+    {
+        if(fieldConfiguration.getTransformations()!=null)
+        {
+            for(TransformationConfiguration configuredTransformation : fieldConfiguration.getTransformations())
+            {
+                try
+                {
+                    Transformations.valueOf(configuredTransformation.getName());
+                }
+                catch(IllegalArgumentException ex)
+                {
+                    throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], transformation [" + configuredTransformation.getName() + "] is invalid - must be in list: " + Arrays.toString(availableTransformations.toArray()));
+                }
+            }
+        }
     }
 }

@@ -6,12 +6,12 @@ import java.util.List;
 
 public enum Transformations
 {
-    UNCHANGED ("unchanged", String.class),
     LOWERCASE ("lowercase", String.class),
     UPPERCASE("uppercase", String.class),
     NEGATE("negate", Long.class),
     REVERSE("reverse", String.class),
     PREPEND("prepend", String.class),
+    APPEND("append", String.class),
     BASE64ENCODE("base64encode", String.class);
 
     private String name;
@@ -38,7 +38,7 @@ public enum Transformations
         List<String> possibleValues = new ArrayList<>();
         for (Transformations transformation : values())
         {
-            if (transformation.clazz == clazz && transformation != Transformations.UNCHANGED)
+            if (transformation.clazz == clazz)
             {
                 possibleValues.add(transformation.name);
             }
