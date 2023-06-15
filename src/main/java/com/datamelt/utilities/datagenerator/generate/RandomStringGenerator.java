@@ -17,16 +17,16 @@ public class RandomStringGenerator implements RandomValueGenerator
 
     private FieldConfiguration fieldConfiguration;
 
-    private int minLength;
-    private int maxLength;
+    private long minLength;
+    private long maxLength;
     String randomCharacters;
 
     public RandomStringGenerator(FieldConfiguration fieldConfiguration)
     {
         this.fieldConfiguration = fieldConfiguration;
 
-        minLength = (Integer) fieldConfiguration.getOptions().get(RandomStringOptions.MIN_LENGTH.getKey());
-        maxLength = (Integer) fieldConfiguration.getOptions().get(RandomStringOptions.MAX_LENGTH.getKey());
+        minLength = (Long) fieldConfiguration.getOptions().get(RandomStringOptions.MIN_LENGTH.getKey());
+        maxLength = (Long) fieldConfiguration.getOptions().get(RandomStringOptions.MAX_LENGTH.getKey());
         randomCharacters = (String) fieldConfiguration.getOptions().get(RandomStringOptions.RANDOM_CHARACTERS.getKey());
     }
 
@@ -34,9 +34,9 @@ public class RandomStringGenerator implements RandomValueGenerator
     public <T> T generateRandomValue() throws Exception {
 
         Random random = new Random();
-        int randomLength = random.nextInt(minLength,maxLength);
+        long randomLength = random.nextLong(minLength,maxLength);
         StringBuffer randomString = new StringBuffer();
-        for(int i=0;i<randomLength;i++)
+        for(long i=0;i<randomLength;i++)
         {
             int position = random.nextInt(randomCharacters.length());
             randomString.append(randomCharacters.substring(position, position+1));

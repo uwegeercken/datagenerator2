@@ -35,7 +35,7 @@ public class DataTransformer
         return prefix + value;
     }
 
-    public static long negate(Long value)
+    public static long negate(long value)
     {
         return -value;
     }
