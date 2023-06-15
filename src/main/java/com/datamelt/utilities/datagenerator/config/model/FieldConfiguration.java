@@ -21,6 +21,8 @@ public class FieldConfiguration
 
     Map<String, Object> options = new HashMap<>();
 
+    List<TransformationConfiguration> transformations = new ArrayList<>();
+
     List<FieldConfigurationValue> values = new ArrayList<>();
 
     int numberOfDefaultWeights = 0;
@@ -145,5 +147,10 @@ public class FieldConfiguration
     public Map<String, Object> getOptions()
     {
         return options;
+    }
+
+    public List<TransformationConfiguration> getTransformations()
+    {
+        return transformations;
     }
 }

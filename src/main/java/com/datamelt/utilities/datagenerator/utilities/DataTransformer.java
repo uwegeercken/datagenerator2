@@ -30,6 +30,11 @@ public class DataTransformer
         return buffer.toString();
     }
 
+    public static String prepend(String value, String prefix)
+    {
+        return prefix + value;
+    }
+
     public static long negate(Long value)
     {
         return -value;

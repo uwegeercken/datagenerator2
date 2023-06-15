@@ -5,7 +5,6 @@ import java.util.List;
 
 public enum RandomLongOptions
 {
-    TRANSFORM("transform", Transformations.UNCHANGED.name().toLowerCase()),
     MIN_VALUE("minValue",1L),
     MAX_VALUE("maxValue", 1000000L);
 

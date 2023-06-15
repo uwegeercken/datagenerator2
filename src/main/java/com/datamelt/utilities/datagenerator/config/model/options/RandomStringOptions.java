@@ -5,7 +5,6 @@ import java.util.List;
 
 public enum RandomStringOptions
 {
-    TRANSFORM("transform", Transformations.UNCHANGED.name().toLowerCase()),
     MIN_LENGTH("minLength",0),
     MAX_LENGTH("maxLength", 40),
     RANDOM_CHARACTERS("randomCharacters", "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_");

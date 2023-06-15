@@ -8,6 +8,7 @@ import com.datamelt.utilities.datagenerator.utilities.TransformationExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Random;
 
 public class RandomLongGenerator implements RandomValueGenerator
@@ -18,7 +19,6 @@ public class RandomLongGenerator implements RandomValueGenerator
 
     private long minValue;
     private long maxValue;
-    private String[] transform;
 
     public RandomLongGenerator(FieldConfiguration fieldConfiguration)
     {
@@ -40,7 +40,6 @@ public class RandomLongGenerator implements RandomValueGenerator
         {
             maxValue = (Long) fieldConfiguration.getOptions().get(RandomLongOptions.MAX_VALUE.getKey());
         }
-        transform = ((String) fieldConfiguration.getOptions().get(CategoryOptions.TRANSFORM.getKey())).split(Constants.OPTION_TRANSFORM_DIVIDER);
     }
 
     @Override
@@ -54,6 +53,6 @@ public class RandomLongGenerator implements RandomValueGenerator
     @Override
     public <T> T transformRandomValue(T value) throws Exception
     {
-        return (T) TransformationExecutor.executeAll(transform, value);
+        return (T) TransformationExecutor.executeAll(value, fieldConfiguration.getTransformations());
     }
 }

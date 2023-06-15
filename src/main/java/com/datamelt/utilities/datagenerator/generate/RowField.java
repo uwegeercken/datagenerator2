@@ -18,7 +18,7 @@ public class RowField<T> {
         this.value = transformValue(generator.generateRandomValue());
     }
 
-    public <T> T transformValue(T value) throws Exception
+    private <T> T transformValue(T value) throws Exception
     {
         return generator.transformRandomValue(value);
     }

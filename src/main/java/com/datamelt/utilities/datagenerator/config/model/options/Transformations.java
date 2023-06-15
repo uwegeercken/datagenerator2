@@ -11,6 +11,7 @@ public enum Transformations
     UPPERCASE("uppercase", String.class),
     NEGATE("negate", Long.class),
     REVERSE("reverse", String.class),
+    PREPEND("prepend", String.class),
     BASE64ENCODE("base64encode", String.class);
 
     private String name;
