@@ -23,11 +23,11 @@ import static java.lang.System.exit;
 
 public class DataGenerator
 {
+    private static Logger logger = LoggerFactory.getLogger(DataGenerator.class);
     private static final String applicationName = "datagenerator2";
     private static final String version = "0.0.6";
     private static final String versionDate = "2023-06-09";
     private static final String contactEmail = "uwe.geercken@web.de";
-    private static Logger logger = LoggerFactory.getLogger(DataGenerator.class);
     private DataConfiguration dataConfiguration;
     private ProgramConfiguration programConfiguration;
     private DataStore dataStore;
