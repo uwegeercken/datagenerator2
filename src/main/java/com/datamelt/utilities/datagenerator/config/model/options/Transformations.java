@@ -13,7 +13,6 @@ public enum Transformations
     PREPEND("prepend", String.class),
     APPEND("append", String.class),
     ENCRYPT("encrypt", String.class),
-    DECRYPT("decrypt", String.class),
     BASE64ENCODE("base64encode", String.class);
 
     private String name;
