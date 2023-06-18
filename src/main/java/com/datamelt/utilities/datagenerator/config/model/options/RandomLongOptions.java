@@ -5,7 +5,7 @@ import java.util.List;
 
 public enum RandomLongOptions
 {
-    MIN_VALUE("minValue",1L),
+    MIN_VALUE("minValue",0L),
     MAX_VALUE("maxValue", 1000000L);
 
     private static final List<String> availableTransformations = Arrays.asList(
