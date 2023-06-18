@@ -26,14 +26,14 @@ For each field specified in the yaml configuration file one of the generators ha
 ### Random Strings
 This type of generator generates purely random text. The options in the yaml configuration file allow to specify the range of characters to be used for constructing the random text. Additional options allow to specify the minimum and maximum length.
 
-#### Available options
+#### Available options:
 | Option           | Description                                     | Data Type      | Default                                                          |
 |------------------|-------------------------------------------------|----------------|------------------------------------------------------------------|
 | minLength        | minimum length of the value                     | long           | 0                                                                |
 | maxLength        | maximum length of the value                     | long           | 40                                                               |
 | randomCharacters | characters to be used when generating the value | String         | abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_ |
 
-#### Available transformations
+#### Available transformations:
 | Transformation | Description                            | Parameters |
 |----------------|----------------------------------------|------------|
 | uppercase      | convert the value to uppercase         | none       |
@@ -44,13 +44,13 @@ This type of generator generates purely random text. The options in the yaml con
 ### Random Numbers
 This generator allows to generate numbers. The options for this type of generator allow to specify a lowerbound and upperbound for the generated value.
 
-#### Available options
+#### Available options:
 | Option           | Description                                     | Data Type      | Default                                                        |
 |------------------|-------------------------------------------------|----------------|----------------------------------------------------------------|
 | minValue         | minimum value                                   | long           | 0                                                              |
 | maxValue         | maximum value                                   | long           | 1000000                                                        |
 
-#### Available transformations
+#### Available transformations:
 | Transformation | Description                                                    | Parameters |
 |----------------|----------------------------------------------------------------|------------|
 | negate         | convert the value to the negative value of the generated value | none       |
@@ -84,21 +84,21 @@ must be 100 percent (and can not exceed 100 percent). Individual values can not 
 and equally distribute the weight value. But, depending on the number of values without a weight definition , it might not be possible to exactly evenly distribute the value. In this case some values
 from the word list might get a slightly higher weight value. If weight definitions are assigned in a way that the remaining percentage for the other values is less than 1 percent an error occurs. 
 
-#### Available options
+#### Available options:
 | Option           | Description                             | Data Type      | Default                                                       |
 |------------------|-----------------------------------------|----------------|---------------------------------------------------------------|
 |          |                                    |            | 0                                                             |
 
-#### Available transformations
-| Transformation | Description                             | Parameters                |
-|----------------|-----------------------------------------|---------------------------|
-| uppercase      | convert the value to uppercase          | none                      |
-| lowercase      | convert the value to lowercase          | none                      |
-| reverse        | reverse the characters of the value     | none                      |            
-| prepend        | add a prefix to the value               | prefix to add (String)    | 
-| append         | add a suffix to the value               | suffix to add (String)    |
-| base64encode   | encode the value to base64 format       | none                      | 
-| encrypt        | encrypt the value                       | none                      |
+#### Available transformations:
+| Transformation | Description                                            | Parameters                |
+|----------------|--------------------------------------------------------|---------------------------|
+| uppercase      | convert the value to uppercase                         | none                      |
+| lowercase      | convert the value to lowercase                         | none                      |
+| reverse        | reverse the characters of the value                    | none                      |            
+| prepend        | add a prefix to the value                              | prefix to add (String)    | 
+| append         | add a suffix to the value                              | suffix to add (String)    |
+| base64encode   | encode the value to base64 format                      | none                      | 
+| encrypt        | encrypt the value using AES/CBC/PKCS5Padding algorithm | none                      |
 
 
 ## Processing steps
