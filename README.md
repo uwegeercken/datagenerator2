@@ -102,10 +102,12 @@ from the word list might get a slightly higher weight value. If weight definitio
 
 
 ## Processing steps
-First, the given yaml configuration file and the datagenerator yaml file are analyzed for its correctness. Basically the specified options and transformations are checked for correctness. After that the value
-for each field is generated and then transformed (if any transformation options are specified). The fields are processed sequentially and build a row of data. The tool generates the desired number of rows.
+First, the given yaml configuration file and the datagenerator yaml file are analyzed for its correctness. Basically the specified options and transformations are checked for correctness.
 
-The data is then generated and stored in a local duckdb instance. The data types specified in the yaml configuration are used to defined the data types of the duckdb table which is created.
+Any table definitions and data is removed from the DuckDb, if a file with the specified name is found.
+
+After that the value for each field is generated and then transformed (if any transformation options are specified). The fields are processed sequentially and build a row of data.
+The tool generates the desired number of rows and stores it in a local DuckDb instance. The data types specified in the yaml configuration are used to defined the data types of the duckdb table which is created.
 
 Finally the data is exported to the desired output format.
 
