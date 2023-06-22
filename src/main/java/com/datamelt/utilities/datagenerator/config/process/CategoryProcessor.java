@@ -36,6 +36,7 @@ public class CategoryProcessor extends FieldProcessor
         checkTotalNumberOfFieldValues(fieldConfiguration);
         checkFieldWeights(fieldConfiguration);
         checkTotalFieldWeight(fieldConfiguration);
+        checkFieldWeightsDistribution(fieldConfiguration);
         checkTransformations(fieldConfiguration);
     }
 
@@ -86,6 +87,18 @@ public class CategoryProcessor extends FieldProcessor
         }
     }
 
+    private void checkFieldWeightsDistribution(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
+    {
+        if(fieldConfiguration.getValues() != null && fieldConfiguration.getNumberOfDefaultWeights() > 0)
+        {
+            double calculatedWeightDistribution = (100 - fieldConfiguration.getSumOfWeights()) / fieldConfiguration.getNumberOfDefaultWeights();
+            if(calculatedWeightDistribution < 1)
+            {
+                throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "] value for fields without weight definition can not be distributed to at least 1 percent");
+            }
+        }
+    }
+
     private void checkTransformations(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
     {
         if(fieldConfiguration.getTransformations()!=null)
@@ -119,7 +132,6 @@ public class CategoryProcessor extends FieldProcessor
 
     private void distributeWeightValues(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
     {
-        fieldConfiguration.calculateNumberOfDefaultWeights();
         if (fieldConfiguration.getNumberOfDefaultWeights()>0)
         {
             int numberOfValues = fieldConfiguration.getNumberOfFieldValues();
@@ -158,12 +170,5 @@ public class CategoryProcessor extends FieldProcessor
         {
             throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "] - the total sum of weight values must be 100");
         }
-        else
-        {
-            logger.debug("field [{}] - no values with weight defined in config or category file", fieldConfiguration.getName());
-        }
-
     }
-
-
 }

@@ -107,7 +107,7 @@ public class FieldConfiguration
         return sumOfWeights;
     }
 
-    public void calculateNumberOfDefaultWeights()
+    public int getNumberOfDefaultWeights()
     {
         int numberOfDefaultWeights = 0;
         for(FieldConfigurationValue value : values)
@@ -117,7 +117,7 @@ public class FieldConfiguration
                 numberOfDefaultWeights++;
             }
         }
-        this.numberOfDefaultWeights = numberOfDefaultWeights;
+        return numberOfDefaultWeights;
     }
 
     public void setValues(List<FieldConfigurationValue> values)
@@ -128,11 +128,6 @@ public class FieldConfiguration
     public String getValuesFile()
     {
         return valuesFile;
-    }
-
-    public int getNumberOfDefaultWeights()
-    {
-        return numberOfDefaultWeights;
     }
 
     public FieldDataType getDataType()

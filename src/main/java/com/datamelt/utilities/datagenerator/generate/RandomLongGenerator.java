@@ -43,7 +43,7 @@ public class RandomLongGenerator implements RandomValueGenerator
     public <T> T  generateRandomValue() throws Exception {
 
         Random random = new Random();
-        Long value = random.nextLong(minValue,maxValue);
+        Long value = random.nextLong(minValue, maxValue);
         return (T) value ;
     }
 

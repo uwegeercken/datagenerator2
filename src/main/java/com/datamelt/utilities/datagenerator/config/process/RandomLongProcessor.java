@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class RandomLongProcessor extends FieldProcessor
 {
@@ -27,11 +28,24 @@ public class RandomLongProcessor extends FieldProcessor
     @Override
     public void validateConfiguration(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
     {
+        checkOptions(fieldConfiguration);
         checkTransformations(fieldConfiguration);
 
     }
 
-        @Override
+    private void checkOptions(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
+    {
+        if((Long)fieldConfiguration.getOptions().get(RandomLongOptions.MIN_VALUE.getKey())<0)
+        {
+            throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], option [" + RandomLongOptions.MIN_VALUE.getKey() + "] - the value can not be smaller zero");
+        }
+        if((Long)fieldConfiguration.getOptions().get(RandomLongOptions.MAX_VALUE.getKey()) < (Long)fieldConfiguration.getOptions().get(RandomLongOptions.MIN_VALUE.getKey()))
+        {
+            throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], option [" + RandomLongOptions.MAX_VALUE.getKey() + "] - the value can not be smaller than the option [" + RandomLongOptions.MIN_VALUE.getKey() + "]");
+        }
+    }
+
+    @Override
     public void setDefaultOptions(FieldConfiguration fieldConfiguration)
     {
         for(RandomLongOptions defaultOption : RandomLongOptions.values())

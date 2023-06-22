@@ -3,6 +3,7 @@ package com.datamelt.utilities.datagenerator.config.process;
 import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.TransformationConfiguration;
+import com.datamelt.utilities.datagenerator.config.model.options.RandomLongOptions;
 import com.datamelt.utilities.datagenerator.config.model.options.RandomStringOptions;
 import com.datamelt.utilities.datagenerator.config.model.options.Transformations;
 import org.slf4j.Logger;
@@ -32,6 +33,7 @@ public class RandomStringProcessor extends FieldProcessor
     @Override
     public void validateConfiguration(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
     {
+        checkOptions(fieldConfiguration);
         checkTransformations(fieldConfiguration);
 
     }
@@ -47,6 +49,18 @@ public class RandomStringProcessor extends FieldProcessor
                     throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], transformation [" + configuredTransformation.getName() + "] is not allowed - must be in list: " + Arrays.toString(availableTransformations.toArray()));
                 }
             }
+        }
+    }
+
+    private void checkOptions(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
+    {
+        if((Long)fieldConfiguration.getOptions().get(RandomStringOptions.MIN_LENGTH.getKey()) < 0)
+        {
+            throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], option [" + RandomStringOptions.MIN_LENGTH.getKey() + "] - the value can not be smaller zero");
+        }
+        if((Long)fieldConfiguration.getOptions().get(RandomStringOptions.MAX_LENGTH.getKey()) < (Long)fieldConfiguration.getOptions().get(RandomStringOptions.MIN_LENGTH.getKey()))
+        {
+            throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], option [" + RandomStringOptions.MAX_LENGTH.getKey() + "] - the value can not be smaller than the option [" + RandomStringOptions.MIN_LENGTH.getKey() + "]");
         }
     }
 

@@ -11,10 +11,6 @@ import com.datamelt.utilities.datagenerator.export.CsvFileExporter;
 import com.datamelt.utilities.datagenerator.generate.Row;
 import com.datamelt.utilities.datagenerator.generate.RowBuilder;
 import com.datamelt.utilities.datagenerator.utilities.duckdb.DataStore;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.File;
@@ -80,9 +76,9 @@ public class DataGenerator
 
     private DataConfiguration loadDataConfiguration(String dataConfigurationFilename) throws Exception
     {
-        logger.debug("processing datagenerator configuration file: [{}],", dataConfigurationFilename);
+        logger.debug("processing data configuration file: [{}],", dataConfigurationFilename);
         InputStream stream = new FileInputStream(new File(dataConfigurationFilename));
-        DataConfiguration dataConfiguration = ConfigurationLoader.load(stream.readAllBytes(),DataConfiguration.class);
+        DataConfiguration dataConfiguration = ConfigurationLoader.load(stream.readAllBytes(), DataConfiguration.class);
         stream.close();
         CategoryFileLoader.loadCategoryFiles(dataConfiguration);
         return dataConfiguration;
