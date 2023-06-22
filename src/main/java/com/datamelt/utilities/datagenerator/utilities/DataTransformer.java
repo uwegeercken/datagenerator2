@@ -69,4 +69,12 @@ public class DataTransformer
         byte[] cipherText = cipherEncrypt.doFinal(value.getBytes());
         return Base64.getEncoder().encodeToString(cipherText);
     }
+
+    public static String decrypt(String value) throws BadPaddingException, IllegalBlockSizeException
+    {
+        //byte[] plainText = cipherDecrypt.doFinal(Base64.getDecoder().decode(value));
+        //return new String(plainText);
+        // TODO: implement later
+        return null;
+    }
 }
