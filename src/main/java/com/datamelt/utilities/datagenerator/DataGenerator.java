@@ -18,6 +18,8 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 
 import static java.lang.System.exit;
 
@@ -79,10 +81,9 @@ public class DataGenerator
     private DataConfiguration loadDataConfiguration(String dataConfigurationFilename) throws Exception
     {
         logger.debug("processing datagenerator configuration file: [{}],", dataConfigurationFilename);
-        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-        mapper.enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS);
-        mapper.enable(DeserializationFeature.USE_LONG_FOR_INTS);
-        DataConfiguration dataConfiguration = mapper.readValue(new File(dataConfigurationFilename), DataConfiguration.class);
+        InputStream stream = new FileInputStream(new File(dataConfigurationFilename));
+        DataConfiguration dataConfiguration = ConfigurationLoader.load(stream.readAllBytes(),DataConfiguration.class);
+        stream.close();
         CategoryFileLoader.loadCategoryFiles(dataConfiguration);
         return dataConfiguration;
     }
@@ -90,10 +91,10 @@ public class DataGenerator
     private ProgramConfiguration loadProgramConfiguration(String programConfigurationFilename) throws Exception
     {
         logger.debug("processing program configuration file: [{}],", programConfigurationFilename);
-        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-        mapper.enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS);
-        mapper.enable(DeserializationFeature.USE_LONG_FOR_INTS);
-        return mapper.readValue(new File(programConfigurationFilename), ProgramConfiguration.class);
+        InputStream stream = new FileInputStream(new File(programConfigurationFilename));
+        ProgramConfiguration programConfiguration = ConfigurationLoader.load(stream.readAllBytes(), ProgramConfiguration.class);
+        stream.close();
+        return programConfiguration;
     }
 
     private void processConfiguration() throws InvalidConfigurationException
