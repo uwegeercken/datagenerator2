@@ -45,10 +45,10 @@ This type of generator generates purely random text. The options in the yaml con
 This generator allows to generate numbers. The options for this type of generator allow to specify a lowerbound and upperbound for the generated value.
 
 #### Available options:
-| Option           | Description                                     | Data Type      | Default                                                        |
-|------------------|-------------------------------------------------|----------------|----------------------------------------------------------------|
-| minValue         | minimum value                                   | long           | 0                                                              |
-| maxValue         | maximum value                                   | long           | 1000000                                                        |
+| Option     | Description    | Data Type    | Default   |
+|------------|----------------|--------------|-----------|
+| minValue   | minimum value  | long         | 0         |
+| maxValue   | maximum value  | long         | 1000000   |
 
 #### Available transformations:
 | Transformation | Description                                                    | Parameters |
