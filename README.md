@@ -27,11 +27,11 @@ For each field specified in the yaml configuration file one of the generators ha
 This type of generator generates purely random text. The options in the yaml configuration file allow to specify the range of characters to be used for constructing the random text. Additional options allow to specify the minimum and maximum length.
 
 #### Available options:
-| Option           | Description                                     | Data Type      | Default                                                          |
-|------------------|-------------------------------------------------|----------------|------------------------------------------------------------------|
-| minLength        | minimum length of the value                     | long           | 0                                                                |
-| maxLength        | maximum length of the value                     | long           | 40                                                               |
-| randomCharacters | characters to be used when generating the value | String         | abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_ |
+| Option           | Description                                     | Data Type   | Default                      |
+|------------------|-------------------------------------------------|-------------|------------------------------|
+| minLength        | minimum length of the value                     | long        | 0                            |
+| maxLength        | maximum length of the value                     | long        | 40                           |
+| randomCharacters | characters to be used when generating the value | String      | [a-z] + [A-Z] + [0-9] + [-_] |
 
 #### Available transformations:
 | Transformation | Description                            | Parameters |
