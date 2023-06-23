@@ -6,5 +6,6 @@ public enum FieldType
     RANDOMSTRING,
     RANDOMINTEGER,
     RANDOMLONG,
+    RANDOMDOUBLE,
     REGULAREXPRESSION;
 }

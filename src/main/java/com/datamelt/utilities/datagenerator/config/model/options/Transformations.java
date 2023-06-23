@@ -9,6 +9,7 @@ public enum Transformations
     LOWERCASE ("lowercase", String.class),
     UPPERCASE("uppercase", String.class),
     NEGATE("negate", Long.class),
+    ROUND("round", Double.class),
     REVERSE("reverse", String.class),
     PREPEND("prepend", String.class),
     APPEND("append", String.class),

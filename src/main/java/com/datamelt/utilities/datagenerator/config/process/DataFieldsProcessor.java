@@ -21,22 +21,22 @@ public class DataFieldsProcessor
             if (fieldConfiguration.getType() == FieldType.CATEGORY)
             {
                 processor = new CategoryProcessor(configuration);
-
             }
             else if (fieldConfiguration.getType() == FieldType.RANDOMSTRING)
             {
                processor = new RandomStringProcessor(configuration);
-
             }
             else if (fieldConfiguration.getType() == FieldType.RANDOMINTEGER)
             {
                 processor = new RandomLongProcessor(configuration);
-
             }
             else if (fieldConfiguration.getType() == FieldType.RANDOMLONG)
             {
                 processor = new RandomLongProcessor(configuration);
-
+            }
+            else if (fieldConfiguration.getType() == FieldType.RANDOMDOUBLE)
+            {
+                processor = new RandomDoubleProcessor(configuration);
             }
             else if (fieldConfiguration.getType() == FieldType.REGULAREXPRESSION)
             {

@@ -50,10 +50,19 @@ This generator allows to generate numbers. The options for this type of generato
 | minValue   | minimum value  | long         | 0         |
 | maxValue   | maximum value  | long         | 1000000   |
 
+### Random Floating Point Numbers
+This generator allows to generate floating point numbers. The options for this type of generator allow to specify a lowerbound and upperbound for the generated value.
+
+#### Available options:
+| Option     | Description    | Data Type    | Default   |
+|------------|----------------|--------------|-----------|
+| minValue   | minimum value  | long         | 0         |
+| maxValue   | maximum value  | long         | 1000000   |
+
 #### Available transformations:
-| Transformation | Description                                                    | Parameters |
-|----------------|----------------------------------------------------------------|------------|
-| negate         | convert the value to the negative value of the generated value | none       |
+| Transformation | Description                                 | Parameters               |
+|----------------|---------------------------------------------|--------------------------|
+| round          | round the value using rounding mode HALF_UP | number of decimal places |
 
 ### Word lists
 Word lists allow to define values for certain categories such as "weekdays", "seasons", "car types",
@@ -133,8 +142,8 @@ You can get help about the available program arguments by running
 
     java -cp . com.datamelt.utilities.datagenerator.DataGenerator --help
 
-The program arguments allow you to override some the the values specified in the yaml files.
+The program arguments allow you to override some the values specified in the yaml files.
 
 
 
-last update: uwe geercken - uwe.geercken@web.de - 2023-06-18
+last update: uwe geercken - uwe.geercken@web.de - 2023-06-23

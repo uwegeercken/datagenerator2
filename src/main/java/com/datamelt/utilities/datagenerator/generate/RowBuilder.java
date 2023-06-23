@@ -31,6 +31,10 @@ public class RowBuilder
             {
                 rowFields.add(new RowField<Long>(new RandomLongGenerator(fieldConfiguration), fieldConfiguration.getName()));
             }
+            else if (fieldConfiguration.getType() == FieldType.RANDOMDOUBLE)
+            {
+                rowFields.add(new RowField<Double>(new RandomDoubleGenerator(fieldConfiguration), fieldConfiguration.getName()));
+            }
             else if (fieldConfiguration.getType() == FieldType.REGULAREXPRESSION)
             {
                 rowFields.add(new RowField<String>(new RegularExpressionGenerator(fieldConfiguration), fieldConfiguration.getName()));

@@ -108,7 +108,7 @@ public class DataStore
             counter++;
             buffer.append(fieldConfiguration.getName());
             buffer.append(" ");
-            buffer.append(getDuckDbType(fieldConfiguration.getDataType()));
+            buffer.append(getDuckDbType(fieldConfiguration.getType()));
             if (counter < configuration.getFields().size())
             {
                 buffer.append(", ");
@@ -133,20 +133,22 @@ public class DataStore
         fileExporter.export(connection, tablename, outputFilename);
     }
 
-    private String getDuckDbType(FieldDataType dataType)
+    private String getDuckDbType(FieldType type)
     {
-        switch(dataType)
+        switch(type)
         {
-            case LONG:
-                return DataTypeDuckDb.BIGINT.toString();
-            case BOOLEAN:
-                return DataTypeDuckDb.BOOLEAN.toString();
-            case DOUBLE:
+            case CATEGORY:
+                return DataTypeDuckDb.VARCHAR.toString();
+            case RANDOMDOUBLE:
                 return DataTypeDuckDb.DOUBLE.toString();
-            case FLOAT:
-                return DataTypeDuckDb.DOUBLE.toString();
-            case INTEGER:
+            case RANDOMINTEGER:
                 return DataTypeDuckDb.INTEGER.toString();
+            case RANDOMLONG:
+                return DataTypeDuckDb.INTEGER.toString();
+            case RANDOMSTRING:
+                return DataTypeDuckDb.VARCHAR.toString();
+            case REGULAREXPRESSION:
+                return DataTypeDuckDb.VARCHAR.toString();
             default:
                 return DataTypeDuckDb.VARCHAR.toString();
         }

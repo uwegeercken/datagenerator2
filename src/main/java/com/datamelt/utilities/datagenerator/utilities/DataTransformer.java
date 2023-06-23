@@ -3,6 +3,9 @@ package com.datamelt.utilities.datagenerator.utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.crypto.*;
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
@@ -59,9 +62,16 @@ public class DataTransformer
         return value + suffix;
     }
 
-    public static long negate(long value)
+    public static long negate(Long value)
     {
         return -value;
+    }
+
+    public static double round(Double value, Long decimalPlaces)
+    {
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(decimalPlaces.intValue(), RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 
     public static String encrypt(String value) throws BadPaddingException, IllegalBlockSizeException
