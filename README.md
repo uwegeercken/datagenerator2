@@ -85,9 +85,9 @@ and equally distribute the weight value. But, depending on the number of values 
 from the word list might get a slightly higher weight value. If weight definitions are assigned in a way that the remaining percentage for the other values is less than 1 percent an error occurs. 
 
 #### Available options:
-| Option           | Description                             | Data Type      | Default                                                       |
-|------------------|-----------------------------------------|----------------|---------------------------------------------------------------|
-|          |                                    |            | 0                                                             |
+| Option | Description | Data Type   | Default       |
+|--------|-------------|-------------|---------------|
+|        |             |             |               |
 
 #### Available transformations:
 | Transformation | Description                                            | Parameters                |
