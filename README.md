@@ -60,9 +60,9 @@ This generator allows to generate floating point numbers. The options for this t
 | maxValue   | maximum value  | long         | 1000000   |
 
 #### Available transformations:
-| Transformation | Description                                 | Parameters               |
-|----------------|---------------------------------------------|--------------------------|
-| round          | round the value using rounding mode HALF_UP | number of decimal places |
+| Transformation | Description                                 | Parameters                         |
+|----------------|---------------------------------------------|------------------------------------|
+| round          | round the value using rounding mode HALF_UP | number of decimal places (integer) |
 
 ### Word lists
 Word lists allow to define values for certain categories such as "weekdays", "seasons", "car types",
