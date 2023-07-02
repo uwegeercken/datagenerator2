@@ -23,7 +23,6 @@ public class TransformationExecutor
         Object[] parameterValues = null;
         try
         {
-            parameterValues = getMethodParameterValues(value, transformationMethod.getParameters());
             return (T) transformationMethod.getMethod().invoke(null, getMethodParameterValues(value, transformationMethod.getParameters()));
         }
         catch(Exception ex)
@@ -39,7 +38,8 @@ public class TransformationExecutor
         int counter=1;
         for(Object parameter : parameters)
         {
-            values[counter] = parameters.get(counter-1);
+            values[counter] = parameter;
+            counter++;
         }
         return values;
     }
