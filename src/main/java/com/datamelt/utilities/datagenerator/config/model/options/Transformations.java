@@ -1,28 +1,30 @@
 package com.datamelt.utilities.datagenerator.config.model.options;
 
+import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public enum Transformations
 {
-    LOWERCASE ("lowercase", String.class),
-    UPPERCASE("uppercase", String.class),
-    NEGATE("negate", Long.class),
-    ROUND("round", Double.class),
-    REVERSE("reverse", String.class),
-    PREPEND("prepend", String.class),
-    APPEND("append", String.class),
-    ENCRYPT("encrypt", String.class),
-    BASE64ENCODE("base64encode", String.class);
+    LOWERCASE ("lowercase", new Class[]{String.class}),
+    UPPERCASE("uppercase", new Class[]{String.class}),
+    NEGATE("negate", new Class[]{Long.class, Double.class}),
+    ROUND("round", new Class[]{Double.class}),
+    REVERSE("reverse", new Class[]{String.class}),
+    PREPEND("prepend", new Class[]{String.class}),
+    APPEND("append", new Class[]{String.class}),
+    ENCRYPT("encrypt", new Class[]{String.class}),
+    BASE64ENCODE("base64encode", new Class[]{String.class});
 
     private String name;
-    private Class clazz;
+    private Class[] classes;
 
-    Transformations(String name, Class clazz)
+    Transformations(String name, Class[] classes)
     {
         this.name = name;
-        this.clazz = clazz;
+        this.classes = classes;
     }
 
     public String getName()
@@ -30,21 +32,25 @@ public enum Transformations
         return name;
     }
 
-    public Class getClazz()
+    public Class[] getClasses()
     {
-        return clazz;
+        return classes;
     }
 
-    public static List<String> getValues(Class clazz)
+    public Class getClass(Class clazz) throws InvalidConfigurationException
     {
-        List<String> possibleValues = new ArrayList<>();
-        for (Transformations transformation : values())
+        for(Class c : classes)
         {
-            if (transformation.clazz == clazz)
+            if(c.getName().equals(clazz.getName()))
             {
-                possibleValues.add(transformation.name);
+                return c;
             }
         }
-        return possibleValues;
+        throw new InvalidConfigurationException("the transformation [" + name + "] does not allow type [" + clazz.getName() + "] - possible types: " + Arrays.toString(classes));
+    }
+
+    public boolean possibleClass(Class clazz)
+    {
+        return Arrays.asList(this.classes).contains(clazz);
     }
 }

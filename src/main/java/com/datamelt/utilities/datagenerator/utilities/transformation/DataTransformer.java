@@ -1,10 +1,10 @@
-package com.datamelt.utilities.datagenerator.utilities;
+package com.datamelt.utilities.datagenerator.utilities.transformation;
 
+import com.datamelt.utilities.datagenerator.utilities.encrypt.EncryptionHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.crypto.*;
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -63,6 +63,11 @@ public class DataTransformer
     }
 
     public static long negate(Long value)
+    {
+        return -value;
+    }
+
+    public static double negate(Double value)
     {
         return -value;
     }

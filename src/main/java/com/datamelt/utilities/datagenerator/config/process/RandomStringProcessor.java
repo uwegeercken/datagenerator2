@@ -31,7 +31,7 @@ public class RandomStringProcessor extends FieldProcessor
     }
 
     @Override
-    public void validateConfiguration(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
+    protected void validateConfiguration(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
     {
         checkOptions(fieldConfiguration);
         checkTransformations(fieldConfiguration);
@@ -65,7 +65,7 @@ public class RandomStringProcessor extends FieldProcessor
     }
 
     @Override
-    public void setDefaultOptions(FieldConfiguration fieldConfiguration)
+    protected void setDefaultOptions(FieldConfiguration fieldConfiguration)
     {
         for(RandomStringOptions defaultOption : RandomStringOptions.values())
         {
@@ -77,7 +77,7 @@ public class RandomStringProcessor extends FieldProcessor
     }
 
     @Override
-    public void processConfiguration(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException {
+    protected void processConfiguration(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException {
 
     }
 }

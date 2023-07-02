@@ -6,7 +6,6 @@ import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 public abstract class FieldProcessor
 {
     private DataConfiguration configuration;
-
     public FieldProcessor(DataConfiguration configuration)
     {
         this.configuration = configuration;

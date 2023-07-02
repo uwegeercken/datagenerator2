@@ -1,4 +1,4 @@
-package com.datamelt.utilities.datagenerator.utilities;
+package com.datamelt.utilities.datagenerator.utilities.encrypt;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +13,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
-import java.util.Random;
 
 public class DecryptionHelper
 {

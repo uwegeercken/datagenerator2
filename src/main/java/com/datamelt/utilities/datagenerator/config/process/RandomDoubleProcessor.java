@@ -26,7 +26,7 @@ public class RandomDoubleProcessor extends FieldProcessor
     }
 
     @Override
-    public void validateConfiguration(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
+    protected void validateConfiguration(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
     {
         checkOptions(fieldConfiguration);
         checkTransformations(fieldConfiguration);
@@ -35,10 +35,6 @@ public class RandomDoubleProcessor extends FieldProcessor
 
     private void checkOptions(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
     {
-        if((Long)fieldConfiguration.getOptions().get(RandomLongOptions.MIN_VALUE.getKey())<0)
-        {
-            throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], option [" + RandomLongOptions.MIN_VALUE.getKey() + "] - the value can not be smaller zero");
-        }
         if((Long)fieldConfiguration.getOptions().get(RandomLongOptions.MAX_VALUE.getKey()) < (Long)fieldConfiguration.getOptions().get(RandomLongOptions.MIN_VALUE.getKey()))
         {
             throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], option [" + RandomLongOptions.MAX_VALUE.getKey() + "] - the value can not be smaller than the option [" + RandomLongOptions.MIN_VALUE.getKey() + "]");
@@ -46,7 +42,7 @@ public class RandomDoubleProcessor extends FieldProcessor
     }
 
     @Override
-    public void setDefaultOptions(FieldConfiguration fieldConfiguration)
+    protected void setDefaultOptions(FieldConfiguration fieldConfiguration)
     {
         for(RandomLongOptions defaultOption : RandomLongOptions.values())
         {
@@ -58,7 +54,7 @@ public class RandomDoubleProcessor extends FieldProcessor
     }
 
     @Override
-    public void processConfiguration(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException {
+    protected void processConfiguration(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException {
 
     }
 

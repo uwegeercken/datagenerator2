@@ -31,7 +31,7 @@ public class CategoryProcessor extends FieldProcessor
     }
 
     @Override
-    public void validateConfiguration(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
+    protected void validateConfiguration(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
     {
         checkTotalNumberOfFieldValues(fieldConfiguration);
         checkFieldWeights(fieldConfiguration);
@@ -41,13 +41,13 @@ public class CategoryProcessor extends FieldProcessor
     }
 
     @Override
-    public void setDefaultOptions(FieldConfiguration fieldConfiguration)
+    protected void setDefaultOptions(FieldConfiguration fieldConfiguration)
     {
         // TODO: define method when there are options available
     }
 
     @Override
-    public void processConfiguration(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
+    protected void processConfiguration(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
     {
         distributeWeightValues(fieldConfiguration);
         removeZeroWeightValues(fieldConfiguration);
