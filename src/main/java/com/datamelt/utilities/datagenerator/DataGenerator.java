@@ -55,8 +55,8 @@ public class DataGenerator
             generator = new DataGenerator(arguments);
             generator.generateRows();
 
-            if(generator.programConfiguration.getOutputFilename() != null) {
-                generator.exportToFile(generator.dataConfiguration.getTableName(), generator.programConfiguration.getOutputFilename());
+            if(generator.programConfiguration.getExportFilename() != null) {
+                generator.exportToFile(generator.dataConfiguration.getTableName(), generator.programConfiguration.getExportFilename());
             }
         }
         catch (Exception ex)

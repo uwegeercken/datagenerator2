@@ -7,7 +7,8 @@ import java.util.Map;
 public class ProgramArguments
 {
     private String numberOfRowsToGenerate;
-    private String outputFilename;
+    private String exportFilename;
+    private String exportType;
     private String dataConfigurationFilename;
     private String programConfigurationFilename;
     private String csvDelimiter;
@@ -31,9 +32,13 @@ public class ProgramArguments
             {
                 generatedRowsLogInterval = args[i].substring(args[i].indexOf("=")+1).trim();
             }
-            else if(args[i].startsWith(Argument.OUTPUTFILENAME.getAbbreviation()))
+            else if(args[i].startsWith(Argument.EXPORTFILENAME.getAbbreviation()))
             {
-                outputFilename = args[i].substring(args[i].indexOf("=")+1).trim();
+                exportFilename = args[i].substring(args[i].indexOf("=")+1).trim();
+            }
+            else if(args[i].startsWith(Argument.EXPORTTYPE.getAbbreviation()))
+            {
+                exportType = args[i].substring(args[i].indexOf("=")+1).trim();
             }
             else if(args[i].startsWith(Argument.DATACONFIGURATIONFILENAME.getAbbreviation()))
             {
@@ -81,8 +86,13 @@ public class ProgramArguments
 
     public String getProgramConfigurationFilename() { return programConfigurationFilename; }
 
-       public String getOutputFilename() {
-        return outputFilename;
+       public String getExportFilename() {
+        return exportFilename;
+    }
+
+    public String getExportType()
+    {
+        return exportType;
     }
 
     public String getNumberOfRowsToGenerate() {

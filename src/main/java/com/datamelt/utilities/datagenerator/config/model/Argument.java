@@ -4,7 +4,8 @@ public enum Argument
 {
     NUMBEROFROWSTOGENERATE("-n","number of rows to generate"),
     GENERATEDROWSLOGINTERVAL("-l", "interval for log messages during data generation"),
-    OUTPUTFILENAME("-o", "path and filename of the output file"),
+    EXPORTFILENAME("-x", "path and filename of the output file"),
+    EXPORTTYPE("-xt", "type of the export to generate"),
     DATACONFIGURATIONFILENAME("-dc", "path and filename of tha data configuration yaml file"),
     PROGRAMCONFIGURATIONFILENAME("-pc", "path and filename of tha program configuration yaml file"),
     CSVDELIMITER("-cd", "delimiter to be used for files of type CSV"),

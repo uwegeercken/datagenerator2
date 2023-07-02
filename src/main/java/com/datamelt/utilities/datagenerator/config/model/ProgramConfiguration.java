@@ -7,7 +7,8 @@ import java.util.List;
 
 public class ProgramConfiguration
 {
-    private String outputFilename;
+    private String exportFilename;
+    private DataExportType exportType;
     private long numberOfRowsToGenerate;
     private long generatedRowsLogInterval;
     private CsvExportConfiguration csvExport;
@@ -17,8 +18,11 @@ public class ProgramConfiguration
         if(arguments.getNumberOfRowsToGenerate()!=null) {
             numberOfRowsToGenerate = Long.parseLong(arguments.getNumberOfRowsToGenerate());
         }
-        if(arguments.getOutputFilename()!=null) {
-            outputFilename = arguments.getOutputFilename();
+        if(arguments.getExportFilename()!=null) {
+            exportFilename = arguments.getExportFilename();
+        }
+        if(arguments.getExportType()!=null) {
+            exportType = DataExportType.valueOf(arguments.getExportType().toUpperCase());
         }
         if(arguments.getCsvDelimiter()!=null) {
             csvExport.setDelimiter(arguments.getCsvDelimiter());
@@ -50,8 +54,8 @@ public class ProgramConfiguration
         return csvExport;
     }
 
-    public String getOutputFilename() {
-        return outputFilename;
+    public String getExportFilename() {
+        return exportFilename;
     }
 
     public long getNumberOfRowsToGenerate() {
