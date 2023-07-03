@@ -15,7 +15,7 @@ will override the same attributes from the configuration files.
 - select random values from word lists
 - generate random strings, numbers or dates (to be implemented)
 - generate random data according to a given regular expression (to be implemented)
-- export rows of generated data in CSV
+- export rows of generated data in CSV or Json
 - export rows of generated data in Json or Parquet format (to be implemented)
 
 ## Types of generators
@@ -25,6 +25,7 @@ For each field specified in the yaml configuration file one of the generators ha
 
 ### Random Strings
 This type of generator generates purely random text. The options in the yaml configuration file allow to specify the range of characters to be used for constructing the random text. Additional options allow to specify the minimum and maximum length.
+Setting minLength=maxLength will create a constant length string.
 
 #### Available options:
 | Option           | Description                                     | Data Type   | Default                      |
@@ -146,4 +147,4 @@ The program arguments allow you to override some the values specified in the yam
 
 
 
-last update: uwe geercken - uwe.geercken@web.de - 2023-06-23
+last update: uwe geercken - uwe.geercken@web.de - 2023-07-03
