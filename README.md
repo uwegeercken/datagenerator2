@@ -125,13 +125,15 @@ Finally the data is exported to the desired output format.
 ## Yaml configuration for the datagenerator tool
 The configuration file contains various attributes to steer the behavior of the datagenerator tool.
 
-- the name of the output file for the generated data
+- the name of the export file for the generated data
+- the type of the export file: csv or json
 - the number of rows to generate
 - after how many generated rows a log message shall be output
 - details for the export to a csv file - delimiter and header settings
+- details for the export to a json file - output as seperate lines or as array
 
 ## Yaml configuration for the definition of fields to generate
-The configuration file contains a list of fields/attributes to generate. Besides this definition it contains other configurable settings of the datagenerator tool.
+The configuration file contains a list of fields/attributes to generate - see the sample yaml files in this repository under: src/main/resources/config. Besides this definition it contains other configurable settings of the datagenerator tool.
 - the name of the duckdb which is used
 - the name of the duckdb table to create
 
@@ -144,8 +146,9 @@ You can get help about the available program arguments by running
 
     java -cp . com.datamelt.utilities.datagenerator.DataGenerator --help
 
-The program arguments allow you to override some the values specified in the yaml files.
+See the sample yaml file for the program configuration in this repository under: src/main/resources/config.
 
+The program arguments allow you to override some the values specified in the yaml files.
 
 
 last update: uwe geercken - uwe.geercken@web.de - 2023-07-03

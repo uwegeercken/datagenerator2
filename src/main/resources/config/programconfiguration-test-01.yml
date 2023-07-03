@@ -1,6 +1,10 @@
 --- # ProgramConfiguration - programconfiguration-test-01.yml
-outputFilename: /home/uwe/development/datagenerator2/csv_export.csv
-numberOfRowsToGenerate: 2500
+exportFilename: /tmp/csv_export.json
+exportType: json
+numberOfRowsToGenerate: 5000
+generatedRowsLogInterval: 1000
 csvExport:
-  delimiter: "'"
+  delimiter: comma
   includeHeader: true
+jsonExport:
+  asArray: true
