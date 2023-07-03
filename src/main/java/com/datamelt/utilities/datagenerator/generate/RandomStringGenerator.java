@@ -45,7 +45,14 @@ public class RandomStringGenerator implements RandomValueGenerator
     public <T> T generateRandomValue() throws Exception {
 
         Random random = new Random();
-        long randomLength = random.nextLong(minLength,maxLength);
+        long randomLength;
+        if(minLength != maxLength) {
+            randomLength = random.nextLong(minLength, maxLength);
+        }
+        else
+        {
+            randomLength = minLength;
+        }
         StringBuffer randomString = new StringBuffer();
         for(long i=0;i<randomLength;i++)
         {
