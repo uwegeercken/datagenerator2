@@ -1,6 +1,6 @@
 # datagenerator2
 
-The datagenerator tool is currently (June '23) under development. Additional features and capabilities will be added over time.
+The datagenerator tool is currently (July '23) under development. Additional features and capabilities will be added over time.
 
 The datagenerator tool allows to generate random data. The aim is to have a tool that generates data in a way which is flexible enough to satisfy the needs of developers or analysts or anybody else who needs some sort
 of test data - possibly with dependencies between individual fields and variying/definable distribution of fieldConfiguration values. 
@@ -13,10 +13,11 @@ will override the same attributes from the configuration files.
 
 ## Features
 - select random values from word lists
-- generate random strings, numbers or dates (to be implemented)
+- generate random strings or numbers
+- generate random dates (to be implemented)
 - generate random data according to a given regular expression (to be implemented)
 - export rows of generated data in CSV or Json
-- export rows of generated data in Json or Parquet format (to be implemented)
+- export rows of generated data in Excel or Parquet format (to be implemented)
 
 ## Types of generators
 Different types of generators are available to generate different type of data such as strings, numbers, dates, etc.
