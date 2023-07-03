@@ -1,9 +1,6 @@
 package com.datamelt.utilities.datagenerator.utilities.duckdb;
 
-import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
-import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
-import com.datamelt.utilities.datagenerator.config.model.FieldDataType;
-import com.datamelt.utilities.datagenerator.config.model.FieldType;
+import com.datamelt.utilities.datagenerator.config.model.*;
 import com.datamelt.utilities.datagenerator.export.FileExporter;
 import com.datamelt.utilities.datagenerator.generate.Row;
 import com.datamelt.utilities.datagenerator.utilities.type.DataTypeDuckDb;
@@ -128,9 +125,9 @@ public class DataStore
         appender.flush();
     }
 
-    public void exportToFile(String tablename, String outputFilename) throws Exception
+    public void exportToFile(String tablename, String exportFilename) throws Exception
     {
-        fileExporter.export(connection, tablename, outputFilename);
+        fileExporter.export(connection, tablename, exportFilename);
     }
 
     private String getDuckDbType(FieldType type)

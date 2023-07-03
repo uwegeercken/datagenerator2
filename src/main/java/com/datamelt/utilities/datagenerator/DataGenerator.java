@@ -1,13 +1,12 @@
 package com.datamelt.utilities.datagenerator;
 
 import com.datamelt.utilities.datagenerator.config.CategoryFileLoader;
-import com.datamelt.utilities.datagenerator.config.model.Argument;
-import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
-import com.datamelt.utilities.datagenerator.config.model.ProgramArguments;
-import com.datamelt.utilities.datagenerator.config.model.ProgramConfiguration;
+import com.datamelt.utilities.datagenerator.config.model.*;
 import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
 import com.datamelt.utilities.datagenerator.config.process.DataFieldsProcessor;
 import com.datamelt.utilities.datagenerator.export.CsvFileExporter;
+import com.datamelt.utilities.datagenerator.export.FileExporter;
+import com.datamelt.utilities.datagenerator.export.JsonFileExporter;
 import com.datamelt.utilities.datagenerator.generate.Row;
 import com.datamelt.utilities.datagenerator.generate.RowBuilder;
 import com.datamelt.utilities.datagenerator.utilities.duckdb.DataStore;
@@ -23,8 +22,8 @@ public class DataGenerator
 {
     private static Logger logger = LoggerFactory.getLogger(DataGenerator.class);
     private static final String applicationName = "datagenerator2";
-    private static final String version = "0.0.6";
-    private static final String versionDate = "2023-06-09";
+    private static final String version = "0.0.7";
+    private static final String versionDate = "2023-07-03";
     private static final String contactEmail = "uwe.geercken@web.de";
     private DataConfiguration dataConfiguration;
     private ProgramConfiguration programConfiguration;
@@ -56,7 +55,7 @@ public class DataGenerator
             generator.generateRows();
 
             if(generator.programConfiguration.getExportFilename() != null) {
-                generator.exportToFile(generator.dataConfiguration.getTableName(), generator.programConfiguration.getExportFilename());
+                generator.exportToFile();
             }
         }
         catch (Exception ex)
@@ -101,7 +100,17 @@ public class DataGenerator
 
     private void setupDataStore() throws Exception
     {
-        dataStore = new DataStore(dataConfiguration, new CsvFileExporter(",",true));
+        FileExporter fileExporter;
+        switch(programConfiguration.getExportType())
+        {
+            case JSON:
+                fileExporter = new JsonFileExporter(programConfiguration.getJsonExport().isAsArray());
+                break;
+            default:
+                fileExporter = new CsvFileExporter(programConfiguration.getCsvExport().getDelimiter(),programConfiguration.getCsvExport().isIncludeHeader());
+                break;
+        }
+        dataStore = new DataStore(dataConfiguration, fileExporter);
     }
 
     private void generateRows() throws Exception
@@ -129,9 +138,8 @@ public class DataGenerator
         logger.info("total data generation time: [{}] seconds", (end - start) / 1000);
     }
 
-    private void exportToFile(String tablename, String outputFilename) throws Exception
+    private void exportToFile() throws Exception
     {
-        logger.info("output of generated data to: [{}],", outputFilename);
-        dataStore.exportToFile(tablename, outputFilename);
+        dataStore.exportToFile(dataConfiguration.getTableName(), programConfiguration.getExportFilename());
     }
 }

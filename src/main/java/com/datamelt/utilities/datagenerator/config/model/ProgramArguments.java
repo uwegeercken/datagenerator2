@@ -13,13 +13,11 @@ public class ProgramArguments
     private String programConfigurationFilename;
     private String csvDelimiter;
     private String csvIncludeHeader;
-
     private String generatedRowsLogInterval;
     public ProgramArguments(String[] args) throws Exception
     {
         parseArguments(args);
     }
-
     private void parseArguments(String[] args) throws InvalidConfigurationException
     {
         for(int i=0;i<args.length;i++)

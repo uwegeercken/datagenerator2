@@ -5,23 +5,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class JsonExportConfiguration
 {
     @JsonInclude(JsonInclude.Include.NON_ABSENT)
-    CsvDelimiterType delimiter = CsvDelimiterType.COMMA;
-    @JsonInclude(JsonInclude.Include.NON_ABSENT)
-    boolean includeHeader = true;
+    boolean asArray = true;
 
-    public CsvDelimiterType getDelimiter() {
-        return delimiter;
+    public boolean isAsArray() {
+        return asArray;
     }
 
-    public boolean isIncludeHeader() {
-        return includeHeader;
-    }
-
-    public void setDelimiter(CsvDelimiterType delimiter) {
-        this.delimiter = delimiter;
-    }
-
-    public void setIncludeHeader(boolean includeHeader) {
-        this.includeHeader = includeHeader;
+    public void setAsArray(boolean asArray) {
+        this.asArray = asArray;
     }
 }

@@ -8,10 +8,15 @@ import java.util.List;
 public class ProgramConfiguration
 {
     private String exportFilename;
-    private DataExportType exportType;
-    private long numberOfRowsToGenerate;
-    private long generatedRowsLogInterval;
-    private CsvExportConfiguration csvExport;
+    @JsonInclude(JsonInclude.Include.NON_ABSENT)
+    private DataExportType exportType = DataExportType.CSV;
+    private long numberOfRowsToGenerate = 10000;
+    private long generatedRowsLogInterval = 1000;
+    @JsonInclude(JsonInclude.Include.NON_ABSENT)
+    private CsvExportConfiguration csvExport = new CsvExportConfiguration();
+
+    @JsonInclude(JsonInclude.Include.NON_ABSENT)
+    private JsonExportConfiguration jsonExport = new JsonExportConfiguration();
 
     public void mergeArguments(ProgramArguments arguments) throws InvalidConfigurationException
     {
@@ -25,7 +30,7 @@ public class ProgramConfiguration
             exportType = DataExportType.valueOf(arguments.getExportType().toUpperCase());
         }
         if(arguments.getCsvDelimiter()!=null) {
-            csvExport.setDelimiter(arguments.getCsvDelimiter());
+            csvExport.setDelimiter(CsvDelimiterType.valueOf(arguments.getCsvDelimiter().toUpperCase()));
         }
         if(arguments.getCsvIncludeHeader()!=null) {
             csvExport.setIncludeHeader(Boolean.parseBoolean(arguments.getCsvIncludeHeader()));
@@ -54,6 +59,8 @@ public class ProgramConfiguration
         return csvExport;
     }
 
+    public JsonExportConfiguration getJsonExport() { return jsonExport; }
+
     public String getExportFilename() {
         return exportFilename;
     }
@@ -65,4 +72,6 @@ public class ProgramConfiguration
     public long getGeneratedRowsLogInterval() {
         return generatedRowsLogInterval;
     }
+
+    public DataExportType getExportType() { return exportType; }
 }
