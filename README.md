@@ -126,11 +126,11 @@ Finally the data is exported to the desired output format.
 The configuration file contains various attributes to steer the behavior of the datagenerator tool.
 
 - the name of the export file for the generated data
-- the type of the export file: csv or json
+- the type of the export file: csv, excel or json
 - the number of rows to generate
 - after how many generated rows a log message shall be output
 - details for the export to a csv file - delimiter and header settings
-- details for the export to a json file - output as seperate lines or as array
+- details for the export to a json file - output as separate lines or as array
 
 ## Yaml configuration for the definition of fields to generate
 The configuration file contains a list of fields/attributes to generate - see the sample yaml files in this repository under: src/main/resources/config. Besides this definition it contains other configurable settings of the datagenerator tool.
@@ -151,4 +151,4 @@ See the sample yaml file for the program configuration in this repository under:
 The program arguments allow you to override some the values specified in the yaml files.
 
 
-last update: uwe geercken - uwe.geercken@web.de - 2023-07-03
+last update: uwe geercken - uwe.geercken@web.de - 2023-07-04
