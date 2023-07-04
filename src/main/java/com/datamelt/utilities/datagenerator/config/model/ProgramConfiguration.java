@@ -18,6 +18,9 @@ public class ProgramConfiguration
     @JsonInclude(JsonInclude.Include.NON_ABSENT)
     private JsonExportConfiguration jsonExport = new JsonExportConfiguration();
 
+    @JsonInclude(JsonInclude.Include.NON_ABSENT)
+    private ExcelExportConfiguration excelExport = new ExcelExportConfiguration();
+
     public void mergeArguments(ProgramArguments arguments) throws InvalidConfigurationException
     {
         if(arguments.getNumberOfRowsToGenerate()!=null) {
@@ -60,6 +63,8 @@ public class ProgramConfiguration
     }
 
     public JsonExportConfiguration getJsonExport() { return jsonExport; }
+
+    public ExcelExportConfiguration getExcelExport() { return excelExport; }
 
     public String getExportFilename() {
         return exportFilename;

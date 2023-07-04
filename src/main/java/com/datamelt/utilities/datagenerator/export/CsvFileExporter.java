@@ -2,6 +2,7 @@ package com.datamelt.utilities.datagenerator.export;
 
 import com.datamelt.utilities.datagenerator.DataGenerator;
 import com.datamelt.utilities.datagenerator.config.model.CsvDelimiterType;
+import com.datamelt.utilities.datagenerator.config.model.CsvExportConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.DataExportType;
 import org.duckdb.DuckDBConnection;
 import org.slf4j.Logger;
@@ -15,10 +16,10 @@ public class CsvFileExporter implements FileExporter
     private CsvDelimiterType delimiter;
     private boolean includeHeader;
 
-    public CsvFileExporter(CsvDelimiterType delimiter, boolean includeHeader)
+    public CsvFileExporter(CsvExportConfiguration configuration)
     {
-        this.delimiter = delimiter;
-        this.includeHeader = includeHeader;
+        this.delimiter = configuration.getDelimiter();
+        this.includeHeader = configuration.isIncludeHeader();
     }
     @Override
     public void export(DuckDBConnection connection, String tablename, String exportFilename) throws Exception

@@ -8,3 +8,6 @@ csvExport:
   includeHeader: true
 jsonExport:
   asArray: true
+excelExport:
+  format: gdal
+  driver: xlsx

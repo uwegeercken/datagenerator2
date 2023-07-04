@@ -5,6 +5,7 @@ import com.datamelt.utilities.datagenerator.config.model.*;
 import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
 import com.datamelt.utilities.datagenerator.config.process.DataFieldsProcessor;
 import com.datamelt.utilities.datagenerator.export.CsvFileExporter;
+import com.datamelt.utilities.datagenerator.export.ExcelFileExporter;
 import com.datamelt.utilities.datagenerator.export.FileExporter;
 import com.datamelt.utilities.datagenerator.export.JsonFileExporter;
 import com.datamelt.utilities.datagenerator.generate.Row;
@@ -104,10 +105,13 @@ public class DataGenerator
         switch(programConfiguration.getExportType())
         {
             case JSON:
-                fileExporter = new JsonFileExporter(programConfiguration.getJsonExport().isAsArray());
+                fileExporter = new JsonFileExporter(programConfiguration.getJsonExport());
+                break;
+            case EXCEL:
+                fileExporter = new ExcelFileExporter(programConfiguration.getExcelExport());
                 break;
             default:
-                fileExporter = new CsvFileExporter(programConfiguration.getCsvExport().getDelimiter(),programConfiguration.getCsvExport().isIncludeHeader());
+                fileExporter = new CsvFileExporter(programConfiguration.getCsvExport());
                 break;
         }
         dataStore = new DataStore(dataConfiguration, fileExporter);
