@@ -148,6 +148,7 @@ Sample program configuration:
 - after how many generated rows a log message shall be output
 - details for the export to a csv file - delimiter and header settings
 - details for the export to a json file - output as separate lines or as array
+- details for the export to an excel file
 
 ## Yaml configuration for the definition of fields to generate
 The configuration file contains a list of fields/attributes to generate - see the sample yaml files in this repository under: src/main/resources/config. Besides this definition it contains other configurable settings of the datagenerator tool.
