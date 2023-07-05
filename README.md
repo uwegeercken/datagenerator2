@@ -5,8 +5,8 @@ The datagenerator tool is currently (July '23) under development. Additional fea
 The datagenerator tool allows to generate random data. The aim is to have a tool that generates data in a way which is flexible enough to satisfy the needs of developers or analysts or anybody else who needs some sort
 of test data - possibly with dependencies between individual fields and variying/definable distribution of fieldConfiguration values. 
 
-The tool requires one yaml file which contains configuration details for the tool itself, including attributes for the
-export of the generated data to files. A second yaml file defines how the data is generated in terms of fields, field configuration weight and
+The tool requires a yaml file which contains configuration details for the tool itself, including attributes for the
+export of the generated data to files. A second yaml file defines how the data is generated in terms of fields, field weight and
 other attributes.
 Some of the configuration attributes may also be passed as arguments when running the datagenerator tool. In this case these
 will override the same attributes from the configuration files.
@@ -16,6 +16,7 @@ will override the same attributes from the configuration files.
 - generate random strings, long or double
 - generate random dates (to be implemented)
 - generate random data according to a given regular expression (to be implemented)
+- transform the generated data values: uppercase, lowercase, base64 encode, negate, round, encrypt and more
 - export rows of generated data in CSV, Excel or Json
 - export rows of generated data in Parquet format (to be implemented)
 
@@ -138,6 +139,7 @@ Sample program configuration:
       asArray: true
     excelExport:
       format: gdal
+      driver: xlsx
 
 
 - the name of the export file for the generated data
@@ -158,6 +160,7 @@ Sample fields configuration:
     fields:
       - name: random1
         type: randomstring
+        randomCharacters: abcdefghijk0123456789
         options:
           minLength: 20
           maxLength: 40
