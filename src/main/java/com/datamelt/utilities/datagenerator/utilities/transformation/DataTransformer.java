@@ -22,7 +22,7 @@ public class DataTransformer
         }
         catch(Exception ex )
         {
-            logger.error("error initializing encryption: ",ex.getMessage());
+            logger.error("error initializing encryption: ", ex.getMessage());
             throw new RuntimeException("error initializing encryption - aborting");
         }
     }

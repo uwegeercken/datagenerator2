@@ -13,11 +13,11 @@ will override the same attributes from the configuration files.
 
 ## Features
 - select random values from word lists
-- generate random strings or numbers
+- generate random strings, long or double
 - generate random dates (to be implemented)
 - generate random data according to a given regular expression (to be implemented)
-- export rows of generated data in CSV or Json
-- export rows of generated data in Excel or Parquet format (to be implemented)
+- export rows of generated data in CSV, Excel or Json
+- export rows of generated data in Parquet format (to be implemented)
 
 ## Types of generators
 Different types of generators are available to generate different type of data such as strings, numbers, dates, etc.
@@ -125,6 +125,21 @@ Finally the data is exported to the desired output format.
 ## Yaml configuration for the datagenerator tool
 The configuration file contains various attributes to steer the behavior of the datagenerator tool.
 
+Sample program configuration:
+
+    exportFilename: /tmp/csv_export.json
+    exportType: json
+    numberOfRowsToGenerate: 5000
+    generatedRowsLogInterval: 1000
+    csvExport:
+      delimiter: comma
+      includeHeader: true
+    jsonExport:
+      asArray: true
+    excelExport:
+      format: gdal
+
+
 - the name of the export file for the generated data
 - the type of the export file: csv, excel or json
 - the number of rows to generate
@@ -134,8 +149,60 @@ The configuration file contains various attributes to steer the behavior of the 
 
 ## Yaml configuration for the definition of fields to generate
 The configuration file contains a list of fields/attributes to generate - see the sample yaml files in this repository under: src/main/resources/config. Besides this definition it contains other configurable settings of the datagenerator tool.
-- the name of the duckdb which is used
-- the name of the duckdb table to create
+
+Sample fields configuration:
+
+    name: Sample 1
+    databaseName: /home/uwe/development/datagenerator2/generateddata.duckdb
+    tableName: generateddata
+    fields:
+      - name: random1
+        type: randomstring
+        options:
+          minLength: 20
+          maxLength: 40
+      - name: random2
+        type: randomlong
+        options:
+          minValue: -1000
+          maxValue: 999
+      - name: random3
+        type: randomdouble
+        options:
+          minValue: 100
+          maxValue: 5000
+        transformations:
+          - name: round
+            parameters:
+              - 3
+          - name: negate
+    - name: gender
+      values:
+        - value: m
+          weight: 40
+        - value: f
+          weight: 40
+        - value: d
+          weight: 20
+          valuesFile: /home/uwe/development/datagenerator2/categories/gender.category
+      - name: weekday
+        values:
+          - value: Saturday
+            weight: 5
+          - value: Sunday
+            weight: 5
+            valuesFile: /home/uwe/development/datagenerator2/categories/weekday.category
+      - name: season
+        valuesFile: /home/uwe/development/datagenerator2/categories/season.category
+        values:
+          - value: Summer
+            weight: 70
+      - name: city
+        valuesFile: /home/uwe/development/datagenerator2/categories/city.category
+      - name: number
+        dataType: integer
+        valuesFile: /home/uwe/development/datagenerator2/categories/number.category
+
 
 ## Running the datagenerator tool
 To run the tool:
