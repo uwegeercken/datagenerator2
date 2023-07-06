@@ -4,10 +4,7 @@ import com.datamelt.utilities.datagenerator.config.CategoryFileLoader;
 import com.datamelt.utilities.datagenerator.config.model.*;
 import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
 import com.datamelt.utilities.datagenerator.config.process.DataFieldsProcessor;
-import com.datamelt.utilities.datagenerator.export.CsvFileExporter;
-import com.datamelt.utilities.datagenerator.export.ExcelFileExporter;
-import com.datamelt.utilities.datagenerator.export.FileExporter;
-import com.datamelt.utilities.datagenerator.export.JsonFileExporter;
+import com.datamelt.utilities.datagenerator.export.*;
 import com.datamelt.utilities.datagenerator.generate.Row;
 import com.datamelt.utilities.datagenerator.generate.RowBuilder;
 import com.datamelt.utilities.datagenerator.utilities.duckdb.DataStore;
@@ -106,6 +103,9 @@ public class DataGenerator
         {
             case JSON:
                 fileExporter = new JsonFileExporter(programConfiguration.getJsonExport());
+                break;
+            case PARQUET:
+                fileExporter = new ParquetFileExporter(programConfiguration.getParquetExport());
                 break;
             case EXCEL:
                 fileExporter = new ExcelFileExporter(programConfiguration.getExcelExport());

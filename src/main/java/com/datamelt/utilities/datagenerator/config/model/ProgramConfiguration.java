@@ -17,6 +17,8 @@ public class ProgramConfiguration
 
     @JsonInclude(JsonInclude.Include.NON_ABSENT)
     private JsonExportConfiguration jsonExport = new JsonExportConfiguration();
+    @JsonInclude(JsonInclude.Include.NON_ABSENT)
+    private ParquetExportConfiguration parquetExport = new ParquetExportConfiguration();
 
     @JsonInclude(JsonInclude.Include.NON_ABSENT)
     private ExcelExportConfiguration excelExport = new ExcelExportConfiguration();
@@ -63,6 +65,8 @@ public class ProgramConfiguration
     }
 
     public JsonExportConfiguration getJsonExport() { return jsonExport; }
+
+    public ParquetExportConfiguration getParquetExport() { return parquetExport; }
 
     public ExcelExportConfiguration getExcelExport() { return excelExport; }
 

@@ -140,6 +140,9 @@ Sample program configuration:
     excelExport:
       format: gdal
       driver: xlsx
+    parquetExport:
+      compression: gzip
+      partitionBy: gender
 
 
 - the name of the export file for the generated data
@@ -148,6 +151,7 @@ Sample program configuration:
 - after how many generated rows a log message shall be output
 - details for the export to a csv file - delimiter and header settings
 - details for the export to a json file - output as separate lines or as array
+- details for the export to a parquet file or partitioned file
 - details for the export to an excel file
 
 ## Yaml configuration for the definition of fields to generate
