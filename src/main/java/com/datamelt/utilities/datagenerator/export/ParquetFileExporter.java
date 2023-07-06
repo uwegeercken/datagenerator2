@@ -21,7 +21,14 @@ public class ParquetFileExporter implements FileExporter
     @Override
     public void export(DuckDBConnection connection, String tablename, String exportFilename) throws Exception
     {
-        logger.info("export of generated data to parquet file: [{}],", exportFilename);
+        if(partionBy!=null)
+        {
+            logger.info("export of generated data to parquet to partitioned folder: [{}],", exportFilename);
+        }
+        else {
+            logger.info("export of generated data to parquet file: [{}],", exportFilename);
+        }
+
         Statement stmt = connection.createStatement();
         StringBuffer options = new StringBuffer();
         options.append("(");
