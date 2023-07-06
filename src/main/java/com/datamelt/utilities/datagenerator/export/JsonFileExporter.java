@@ -23,7 +23,8 @@ public class JsonFileExporter implements FileExporter
         Statement stmt = connection.createStatement();
         StringBuffer options = new StringBuffer();
         options.append("(");
-        options.append("ARRAY " + asArray );
+        options.append("ARRAY " + asArray + ", " );
+        options.append("FORMAT JSON" );
         options.append(")");
         stmt.execute("COPY " + tablename + " TO '" + exportFilename + "' " + options.toString());
     }

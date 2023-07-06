@@ -16,9 +16,6 @@ public class FieldConfiguration
     @JsonInclude(JsonInclude.Include.NON_ABSENT)
     FieldType type = FieldType.CATEGORY;
 
-    @JsonInclude(JsonInclude.Include.NON_ABSENT)
-    FieldDataType dataType = FieldDataType.STRING;
-
     Map<String, Object> options = new HashMap<>();
 
     List<TransformationConfiguration> transformations = new ArrayList<>();
@@ -128,11 +125,6 @@ public class FieldConfiguration
     public String getValuesFile()
     {
         return valuesFile;
-    }
-
-    public FieldDataType getDataType()
-    {
-        return dataType;
     }
 
     public FieldType getType() {

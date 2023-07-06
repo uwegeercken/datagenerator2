@@ -31,7 +31,8 @@ public class CsvFileExporter implements FileExporter
         if (includeHeader == true) {
             options.append("HEADER, ");
         }
-        options.append("DELIMITER '" + delimiter.getValue() + "'");
+        options.append("DELIMITER '" + delimiter.getValue() + "', ");
+        options.append("FORMAT CSV" );
         options.append(")");
         stmt.execute("COPY " + tablename + " TO '" + exportFilename + "' " + options.toString());
     }

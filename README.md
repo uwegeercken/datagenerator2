@@ -204,22 +204,22 @@ Sample fields configuration:
       - name: city
         valuesFile: /home/uwe/development/datagenerator2/categories/city.category
       - name: number
-        dataType: integer
         valuesFile: /home/uwe/development/datagenerator2/categories/number.category
 
 
 ## Running the datagenerator tool
-To run the tool:
+To run the tool you must pass at least two arguments to the program as shown below. These point to the program configuration file
+and the data configuration file. There are additional arguments available which can be used to override the values specified in the
+configuration yaml files.
+
+Run the datagenerator tool:
 
     java -cp . com.datamelt.utilities.datagenerator.DataGenerator -pc=<program configuration file> -dc=<data configuration file>
 
-You can get help about the available program arguments by running
+You can get help about the available program arguments by running:
 
     java -cp . com.datamelt.utilities.datagenerator.DataGenerator --help
 
 See the sample yaml file for the program configuration in this repository under: src/main/resources/config.
 
-The program arguments allow you to override some the values specified in the yaml files.
-
-
-last update: uwe geercken - uwe.geercken@web.de - 2023-07-04
+last update: uwe geercken - uwe.geercken@web.de - 2023-07-06
