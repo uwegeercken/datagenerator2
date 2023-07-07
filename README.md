@@ -24,7 +24,8 @@ will override the same attributes from the configuration files.
 Different types of generators are available to generate different type of data such as strings, numbers, dates, etc.
 
 For each field specified in the yaml configuration file one of the generators has to be defined by specifying a field type in the
-data configuration file:
+data configuration file.
+
 The type for each field can be one of following values:
 - category
 - randomstring
@@ -32,7 +33,6 @@ The type for each field can be one of following values:
 - randomdouble
 
 If no type is specified then type=category is assumed.
-
 
 ### Random Strings
 This type of generator (type=randomstring) generates purely random text. The options in the yaml configuration file allow to specify the range of characters to be used for constructing the random text. Additional options allow to specify the minimum and maximum length.
