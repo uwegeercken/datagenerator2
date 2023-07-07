@@ -82,7 +82,7 @@ Word lists allow to define values for certain categories such as "weekdays", "se
 As such all values of the word lists are treated as strings (even if you have a word list containing e.g numbers).
 
 Using word lists offers a few advantages:
-- word lists can be stored in a directory hierarchy where e.g. different directories defined the same word lists but in different languages or the structure deinfes word lists for different environments (test/production)
+- word lists can be stored in a directory hierarchy where e.g. different directories defined the same word lists but in different languages or the structure defines word lists for different environments (test/production)
 - word lists can be created from a data extract from a database, such as a select distinct on a certain column
 - word lists can be constructed from a script processing a data file or consuming a Rest API
 - word lists can be constructed or changed easily using a simple text editor
