@@ -18,11 +18,12 @@ public class DataStoreAppender
         this.appender = appender;
     }
 
-    public void append(Row row)
+    public void append(Row row, long counter)
     {
         try
         {
             appender.beginRow();
+            appendRownumberField(counter);
             for(RowField field : row.getFields())
             {
                 appendField(field);
@@ -52,7 +53,10 @@ public class DataStoreAppender
         appender.flush();
     }
 
-
+    private void appendRownumberField(long counter) throws Exception
+    {
+        appendLong(counter);
+    }
 
     private void appendField(RowField field) throws Exception
     {

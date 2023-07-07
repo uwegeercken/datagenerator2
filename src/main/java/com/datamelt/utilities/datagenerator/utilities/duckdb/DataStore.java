@@ -14,6 +14,8 @@ public class DataStore
 {
     private static Logger logger = LoggerFactory.getLogger(DataStore.class);
     private static final String SCHEMANAME = "main";
+    private static final String COLUMN_ROWNUMBER = "rownumber";
+    private static final String COLUMN_ROWNUMBER_DATATYPE = "long";
     private long numberOfRecordsInserted = 0;
     private DuckDBConnection connection;
     private DataStoreAppender appender;
@@ -100,6 +102,7 @@ public class DataStore
     {
         StringBuffer buffer = new StringBuffer();
         int counter = 0;
+        buffer.append(COLUMN_ROWNUMBER + " " + COLUMN_ROWNUMBER_DATATYPE + ", ");
         for(FieldConfiguration fieldConfiguration : configuration.getFields())
         {
             counter++;
@@ -115,9 +118,9 @@ public class DataStore
         return buffer.toString();
     }
 
-    public void insert(Row row)
+    public void insert(Row row, long counter)
     {
-        appender.append(row);
+        appender.append(row, counter);
     }
 
     public void flush() throws Exception

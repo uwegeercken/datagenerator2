@@ -134,7 +134,7 @@ public class DataGenerator
                 logger.debug("rows generated: [{}]", counter);
             }
             row = rowBuilder.generate(dataConfiguration);
-            dataStore.insert(row);
+            dataStore.insert(row, counter);
         }
         dataStore.flush();
         long end = System.currentTimeMillis();
