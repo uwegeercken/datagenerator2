@@ -66,10 +66,10 @@ This generator (type=randomlong) allows to generate numbers. The options for thi
 This generator (type=randomdouble) allows to generate floating point numbers. The options for this type of generator allow to specify a lowerbound and upperbound for the generated value.
 
 #### Available options:
-| Option     | Description    | Data Type    | Default   |
-|------------|----------------|--------------|-----------|
-| minValue   | minimum value  | long         | 0         |
-| maxValue   | maximum value  | long         | 1000000   |
+| Option     | Description    | Data Type | Default   |
+|------------|----------------|-----------|-----------|
+| minValue   | minimum value  | double    | 0.0       |
+| maxValue   | maximum value  | double    | 1000000.0 |
 
 #### Available transformations:
 | Transformation | Description                                 | Parameters                         |
