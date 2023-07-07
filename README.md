@@ -18,15 +18,24 @@ will override the same attributes from the configuration files.
 - generate random data according to a given regular expression (to be implemented)
 - transform the generated data values: uppercase, lowercase, base64 encode, negate, round, encrypt and more
 - export rows of generated data in CSV, Excel or Json
-- export rows of generated data in Parquet format (to be implemented)
+- export rows of generated data in Parquet format - including partitioning
 
 ## Types of generators
 Different types of generators are available to generate different type of data such as strings, numbers, dates, etc.
 
-For each field specified in the yaml configuration file one of the generators has to be defined.
+For each field specified in the yaml configuration file one of the generators has to be defined by specifying a field type in the
+data configuration file:
+The type for each field can be one of following values:
+- category
+- randomstring
+- randomlong
+- randomdouble
+
+If no type is specified then type=category is assumed.
+
 
 ### Random Strings
-This type of generator generates purely random text. The options in the yaml configuration file allow to specify the range of characters to be used for constructing the random text. Additional options allow to specify the minimum and maximum length.
+This type of generator (type=randomstring) generates purely random text. The options in the yaml configuration file allow to specify the range of characters to be used for constructing the random text. Additional options allow to specify the minimum and maximum length.
 Setting minLength=maxLength will create a constant length string.
 
 #### Available options:
@@ -45,7 +54,7 @@ Setting minLength=maxLength will create a constant length string.
 | base64encode   | encode the value to base64 format      | none       |
 
 ### Random Numbers
-This generator allows to generate numbers. The options for this type of generator allow to specify a lowerbound and upperbound for the generated value.
+This generator (type=randomlong) allows to generate numbers. The options for this type of generator allow to specify a lowerbound and upperbound for the generated value.
 
 #### Available options:
 | Option     | Description    | Data Type    | Default   |
@@ -54,7 +63,7 @@ This generator allows to generate numbers. The options for this type of generato
 | maxValue   | maximum value  | long         | 1000000   |
 
 ### Random Floating Point Numbers
-This generator allows to generate floating point numbers. The options for this type of generator allow to specify a lowerbound and upperbound for the generated value.
+This generator (type=randomdouble) allows to generate floating point numbers. The options for this type of generator allow to specify a lowerbound and upperbound for the generated value.
 
 #### Available options:
 | Option     | Description    | Data Type    | Default   |
@@ -69,7 +78,7 @@ This generator allows to generate floating point numbers. The options for this t
 
 ### Word lists
 Word lists allow to define values for certain categories such as "weekdays", "seasons", "car types",
-"first names", etc. the generator will randomly pick a value from the configured word lists. Word lists are simple text files where each row contains one value.
+"first names", etc. the generator (type=category) will randomly pick a value from the configured word lists. Word lists are simple text files where each row contains one value.
 As such all values of the word lists are treated as strings (even if you have a word list containing e.g numbers).
 
 Using word lists offers a few advantages:
@@ -156,14 +165,6 @@ Sample program configuration:
 
 ## Yaml configuration for the definition of fields to generate
 The configuration file contains a list of fields/attributes to generate - see the sample yaml files in this repository under: src/main/resources/config. Besides this definition it contains other configurable settings of the datagenerator tool.
-
-The type for each field can be one of following values:
-- category
-- randomstring
-- randomlong
-- randomdouble
-
-If no type is specified type=category is assumed.
 
 Sample fields configuration:
 
