@@ -157,6 +157,14 @@ Sample program configuration:
 ## Yaml configuration for the definition of fields to generate
 The configuration file contains a list of fields/attributes to generate - see the sample yaml files in this repository under: src/main/resources/config. Besides this definition it contains other configurable settings of the datagenerator tool.
 
+The type for each field can be one of following values:
+- category
+- randomstring
+- randomlong
+- randomdouble
+
+If no type is specified type=category is assumed.
+
 Sample fields configuration:
 
     name: Sample 1
