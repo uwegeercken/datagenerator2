@@ -13,8 +13,8 @@ will override the same attributes from the configuration files.
 
 ## Features
 - select random values from word lists
-- generate random strings, long or double
-- generate random dates (to be implemented)
+- generate random strings, numbers or floating point numbers
+- generate random dates
 - generate random data according to a given regular expression (to be implemented)
 - transform the generated data values: uppercase, lowercase, base64 encode, negate, round, encrypt and more
 - export rows of generated data in CSV, Excel or Json
@@ -31,6 +31,7 @@ The type for each field can be one of following values:
 - randomstring
 - randomlong
 - randomdouble
+- randomdate
 
 If no type is specified then type=category is assumed.
 
