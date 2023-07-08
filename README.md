@@ -87,9 +87,9 @@ This generator (type=randomdate) allows to generate dates. The options for this 
 | dateFormat   | output format of the date (Java SimpleDateFormat) | string    | yyyy-MM-dd HH:mm:ss  |
 
 #### Available transformations:
-| Transformation | Description                                 | Parameters                         |
-|----------------|---------------------------------------------|------------------------------------|
-| round          | round the value using rounding mode HALF_UP | number of decimal places (integer) |
+| Transformation | Description          | Parameters   |
+|----------------|----------------------|--------------|
+|                |                      |              |
 
 ### Word lists
 Word lists allow to define values for certain categories such as "weekdays", "seasons", "car types",
