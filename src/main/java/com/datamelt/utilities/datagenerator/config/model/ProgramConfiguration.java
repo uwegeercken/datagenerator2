@@ -7,11 +7,7 @@ import java.util.List;
 
 public class ProgramConfiguration
 {
-    private String exportFilename;
-    @JsonInclude(JsonInclude.Include.NON_ABSENT)
-    private DataExportType exportType = DataExportType.CSV;
-    private long numberOfRowsToGenerate = 10000;
-    private long generatedRowsLogInterval = 1000;
+    private ProgramGeneralConfiguration general;
     @JsonInclude(JsonInclude.Include.NON_ABSENT)
     private CsvExportConfiguration csvExport = new CsvExportConfiguration();
 
@@ -26,13 +22,13 @@ public class ProgramConfiguration
     public void mergeArguments(ProgramArguments arguments) throws InvalidConfigurationException
     {
         if(arguments.getNumberOfRowsToGenerate()!=null) {
-            numberOfRowsToGenerate = Long.parseLong(arguments.getNumberOfRowsToGenerate());
+            general.setNumberOfRowsToGenerate(Long.parseLong(arguments.getNumberOfRowsToGenerate()));
         }
         if(arguments.getExportFilename()!=null) {
-            exportFilename = arguments.getExportFilename();
+            general.setExportFilename(arguments.getExportFilename());
         }
         if(arguments.getExportType()!=null) {
-            exportType = DataExportType.valueOf(arguments.getExportType().toUpperCase());
+            general.setExportType(DataExportType.valueOf(arguments.getExportType().toUpperCase()));
         }
         if(arguments.getCsvDelimiter()!=null) {
             csvExport.setDelimiter(CsvDelimiterType.valueOf(arguments.getCsvDelimiter().toUpperCase()));
@@ -42,7 +38,7 @@ public class ProgramConfiguration
         }
         if(arguments.getGeneratedRowsLogInterval()!=null)
         {
-            generatedRowsLogInterval = Long.parseLong(arguments.getGeneratedRowsLogInterval());
+            general.setGeneratedRowsLogInterval(Long.parseLong(arguments.getGeneratedRowsLogInterval()));
         }
 
         validateConfiguration();
@@ -50,11 +46,11 @@ public class ProgramConfiguration
 
     private void validateConfiguration() throws InvalidConfigurationException
     {
-        if(numberOfRowsToGenerate < 0)
+        if(general.getNumberOfRowsToGenerate() < 0)
         {
             throw new InvalidConfigurationException("invalid configuration. number of records to generate can not be smaller than zero");
         }
-        if(generatedRowsLogInterval < 0)
+        if(general.getGeneratedRowsLogInterval() < 0)
         {
             throw new InvalidConfigurationException("invalid configuration. generated rows log interval can not be smaller than zero");
         }
@@ -70,17 +66,8 @@ public class ProgramConfiguration
 
     public ExcelExportConfiguration getExcelExport() { return excelExport; }
 
-    public String getExportFilename() {
-        return exportFilename;
+    public ProgramGeneralConfiguration getGeneral()
+    {
+        return general;
     }
-
-    public long getNumberOfRowsToGenerate() {
-        return numberOfRowsToGenerate;
-    }
-
-    public long getGeneratedRowsLogInterval() {
-        return generatedRowsLogInterval;
-    }
-
-    public DataExportType getExportType() { return exportType; }
 }

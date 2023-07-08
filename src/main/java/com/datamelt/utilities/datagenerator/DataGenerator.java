@@ -53,7 +53,7 @@ public class DataGenerator
             generator = new DataGenerator(arguments);
             generator.generateRows();
 
-            if(generator.programConfiguration.getExportFilename() != null) {
+            if(generator.programConfiguration.getGeneral().getExportFilename() != null) {
                 generator.exportToFile();
             }
         }
@@ -99,7 +99,7 @@ public class DataGenerator
     private void setupDataStore() throws Exception
     {
         FileExporter fileExporter;
-        switch(programConfiguration.getExportType())
+        switch(programConfiguration.getGeneral().getExportType())
         {
             case JSON:
                 fileExporter = new JsonFileExporter(programConfiguration.getJsonExport());
@@ -114,22 +114,22 @@ public class DataGenerator
                 fileExporter = new CsvFileExporter(programConfiguration.getCsvExport());
                 break;
         }
-        dataStore = new DataStore(dataConfiguration, fileExporter);
+        dataStore = new DataStore(programConfiguration, dataConfiguration, fileExporter);
     }
 
     private void generateRows() throws Exception
     {
-        logger.info("generating rows: [{}]", programConfiguration.getNumberOfRowsToGenerate());
+        logger.info("generating rows: [{}]", programConfiguration.getGeneral().getNumberOfRowsToGenerate());
         Row row;
         long counter = 0;
         long start = System.currentTimeMillis();
         RowBuilder rowBuilder = new RowBuilder(dataConfiguration);
-        for(long i=0;i < programConfiguration.getNumberOfRowsToGenerate();i++)
+        for(long i=0;i < programConfiguration.getGeneral().getNumberOfRowsToGenerate();i++)
         {
             counter++;
-            if(programConfiguration.getGeneratedRowsLogInterval() > 0
-                    && programConfiguration.getNumberOfRowsToGenerate() > programConfiguration.getGeneratedRowsLogInterval()
-                    && counter % programConfiguration.getGeneratedRowsLogInterval() == 0)
+            if(programConfiguration.getGeneral().getGeneratedRowsLogInterval() > 0
+                    && programConfiguration.getGeneral().getNumberOfRowsToGenerate() > programConfiguration.getGeneral().getGeneratedRowsLogInterval()
+                    && counter % programConfiguration.getGeneral().getGeneratedRowsLogInterval() == 0)
             {
                 logger.debug("rows generated: [{}]", counter);
             }
@@ -144,6 +144,6 @@ public class DataGenerator
 
     private void exportToFile() throws Exception
     {
-        dataStore.exportToFile(dataConfiguration.getTableName(), programConfiguration.getExportFilename());
+        dataStore.exportToFile(dataConfiguration.getTableName(), programConfiguration.getGeneral().getExportFilename());
     }
 }

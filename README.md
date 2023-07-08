@@ -133,10 +133,11 @@ The configuration file contains various attributes to steer the behavior of the 
 
 Sample program configuration:
 
-    exportFilename: /tmp/csv_export.json
-    exportType: json
-    numberOfRowsToGenerate: 5000
-    generatedRowsLogInterval: 1000
+    general:    
+      exportFilename: /tmp/csv_export.json
+      exportType: json
+      numberOfRowsToGenerate: 5000
+      generatedRowsLogInterval: 1000
     csvExport:
       delimiter: comma
       includeHeader: true

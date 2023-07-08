@@ -14,25 +14,26 @@ public class DataStore
 {
     private static Logger logger = LoggerFactory.getLogger(DataStore.class);
     private static final String SCHEMANAME = "main";
-    private static final String COLUMN_ROWNUMBER = "rownumber";
     private static final String COLUMN_ROWNUMBER_DATATYPE = "long";
     private long numberOfRecordsInserted = 0;
     private DuckDBConnection connection;
     private DataStoreAppender appender;
-    private DataConfiguration configuration;
+    private ProgramConfiguration programConfiguration;
+    private DataConfiguration dataConfiguration;
     private FileExporter fileExporter;
 
-    public DataStore(DataConfiguration configuration, FileExporter fileExporter) throws Exception
+    public DataStore(ProgramConfiguration programConfiguration, DataConfiguration dataConfiguration, FileExporter fileExporter) throws Exception
     {
-        this.configuration = configuration;
+        this.programConfiguration = programConfiguration;
+        this.dataConfiguration = dataConfiguration;
         this.fileExporter = fileExporter;
-        logger.debug("connecting to database [{}]", configuration.getDatabaseName());
-        connection = (DuckDBConnection) DriverManager.getConnection("jdbc:duckdb:" + configuration.getDatabaseName());
+        logger.debug("connecting to database [{}]", dataConfiguration.getDatabaseName());
+        connection = (DuckDBConnection) DriverManager.getConnection("jdbc:duckdb:" + dataConfiguration.getDatabaseName());
 
-        logger.trace("executing database cleanup [{}]", configuration.getDatabaseName());
+        logger.trace("executing database cleanup [{}]", dataConfiguration.getDatabaseName());
         cleanupDatabase();
 
-        logger.trace("creating database structure [{}]", configuration.getDatabaseName());
+        logger.trace("creating database structure [{}]", dataConfiguration.getDatabaseName());
         createDatabaseStructure();
         createAppender();
     }
@@ -51,7 +52,7 @@ public class DataStore
 
     private void createEnums() throws Exception
     {
-        for(FieldConfiguration fieldConfiguration : configuration.getFields())
+        for(FieldConfiguration fieldConfiguration : dataConfiguration.getFields())
         {
             Statement stmt = connection.createStatement();
             if(fieldConfiguration.getType().equals("category"))
@@ -65,7 +66,7 @@ public class DataStore
 
     private void dropEnums() throws Exception
     {
-        for(FieldConfiguration fieldConfiguration : configuration.getFields())
+        for(FieldConfiguration fieldConfiguration : dataConfiguration.getFields())
         {
             if(fieldConfiguration.getType().equals("category"))
             {
@@ -80,7 +81,7 @@ public class DataStore
     private void createTable() throws Exception
     {
         Statement stmt = connection.createStatement();
-        String sqlCreateTable = "create table " + configuration.getTableName() + " (" + getDataTypesAndNames() + ")";
+        String sqlCreateTable = "create table " + dataConfiguration.getTableName() + " (" + getDataTypesAndNames() + ")";
         logger.trace("creating table [{}]", sqlCreateTable);
         stmt.execute(sqlCreateTable);
     }
@@ -88,28 +89,28 @@ public class DataStore
     private void dropTable() throws Exception
     {
         Statement stmt = connection.createStatement();
-        String sqlDropTable = "drop table if exists " + configuration.getTableName();
+        String sqlDropTable = "drop table if exists " + dataConfiguration.getTableName();
         logger.trace("dropping table [{}]", sqlDropTable);
         stmt.execute(sqlDropTable);
     }
 
     private void createAppender() throws Exception
     {
-        this.appender = new DataStoreAppender(connection.createAppender(SCHEMANAME, configuration.getTableName()));
+        this.appender = new DataStoreAppender(connection.createAppender(SCHEMANAME, dataConfiguration.getTableName()));
     }
 
     private String getDataTypesAndNames() throws Exception
     {
         StringBuffer buffer = new StringBuffer();
         int counter = 0;
-        buffer.append(COLUMN_ROWNUMBER + " " + COLUMN_ROWNUMBER_DATATYPE + ", ");
-        for(FieldConfiguration fieldConfiguration : configuration.getFields())
+        buffer.append(programConfiguration.getGeneral().getRowNumberFieldName() + " " + COLUMN_ROWNUMBER_DATATYPE + ", ");
+        for(FieldConfiguration fieldConfiguration : dataConfiguration.getFields())
         {
             counter++;
             buffer.append(fieldConfiguration.getName());
             buffer.append(" ");
             buffer.append(getDuckDbType(fieldConfiguration.getType()));
-            if (counter < configuration.getFields().size())
+            if (counter < dataConfiguration.getFields().size())
             {
                 buffer.append(", ");
             }
@@ -159,7 +160,7 @@ public class DataStore
         try
         {
             Statement stmt = connection.createStatement();
-            try (ResultSet rs = stmt.executeQuery("select " + fieldConfiguration.getName() + ", count(1) as total from " + configuration.getTableName() +" group by " + fieldConfiguration.getName()))
+            try (ResultSet rs = stmt.executeQuery("select " + fieldConfiguration.getName() + ", count(1) as total from " + dataConfiguration.getTableName() +" group by " + fieldConfiguration.getName()))
             {
                 while (rs.next()) {
                     System.out.println("value: " + rs.getString(1) + ", total: " + rs.getDouble("total") / numberOfRecordsInserted * 100);
