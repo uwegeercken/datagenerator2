@@ -61,6 +61,7 @@ public class CategoryProcessor extends FieldProcessor
         }
     }
 
+
     private void checkTotalFieldWeight(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
     {
         if(fieldConfiguration.getSumOfWeights()>100)

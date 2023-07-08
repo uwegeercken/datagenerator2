@@ -106,9 +106,9 @@ and equally distribute the weight value. But, depending on the number of values 
 from the word list might get a slightly higher weight value. If weight definitions are assigned in a way that the remaining percentage for the other values is less than 1 percent an error occurs. 
 
 #### Available options:
-| Option | Description | Data Type   | Default       |
-|--------|-------------|-------------|---------------|
-|        |             |             |               |
+| Option                  | Description                                         | Data Type | Default |
+|-------------------------|-----------------------------------------------------|-----------|---------|
+| categoryFileSeparator   | separator between value and weight in category file | string    | ,       |
 
 #### Available transformations:
 | Transformation | Description                                            | Parameters                |
@@ -164,7 +164,7 @@ Sample program configuration:
 - details for the export to an excel file
 
 ## Yaml configuration for the definition of fields to generate
-The configuration file contains a list of fields/attributes to generate - see the sample yaml files in this repository under: src/main/resources/config. Besides this definition it contains other configurable settings of the datagenerator tool.
+The configuration file contains a list of fields/attributes to generate - see the sample yaml files in this repository under: src/main/resources/config. For each field, options and transformations may be defined depending on the type of generator used.
 
 Sample fields configuration:
 
@@ -211,6 +211,8 @@ Sample fields configuration:
             valuesFile: /home/uwe/development/datagenerator2/categories/weekday.category
       - name: season
         valuesFile: /home/uwe/development/datagenerator2/categories/season.category
+        options:
+          categoryFileSeparator: "#"
         values:
           - value: Summer
             weight: 70
@@ -235,4 +237,4 @@ You can get help about the available program arguments by running:
 
 See the sample yaml file for the program configuration in this repository under: src/main/resources/config.
 
-last update: uwe geercken - uwe.geercken@web.de - 2023-07-06
+last update: uwe geercken - uwe.geercken@web.de - 2023-07-08

@@ -3,6 +3,9 @@ package com.datamelt.utilities.datagenerator.generate;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 
 import com.datamelt.utilities.datagenerator.config.model.TransformationConfiguration;
+import com.datamelt.utilities.datagenerator.config.model.options.CategoryOptions;
+import com.datamelt.utilities.datagenerator.config.model.options.RandomStringOptions;
+import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
 import com.datamelt.utilities.datagenerator.utilities.transformation.MethodHelper;
 import com.datamelt.utilities.datagenerator.utilities.transformation.TransformationExecutor;
 import com.datamelt.utilities.datagenerator.utilities.transformation.TransformationMethod;

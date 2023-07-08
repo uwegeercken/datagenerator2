@@ -34,6 +34,7 @@ public class DataGenerator
         programConfiguration = loadProgramConfiguration(arguments.getProgramConfigurationFilename());
         programConfiguration.mergeArguments(arguments);
         dataConfiguration = loadDataConfiguration(arguments.getDataConfigurationFilename());
+        CategoryFileLoader.loadCategoryFiles(dataConfiguration);
         processConfiguration();
         setupDataStore();
     }
@@ -77,7 +78,6 @@ public class DataGenerator
         InputStream stream = new FileInputStream(new File(dataConfigurationFilename));
         DataConfiguration dataConfiguration = ConfigurationLoader.load(stream.readAllBytes(), DataConfiguration.class);
         stream.close();
-        CategoryFileLoader.loadCategoryFiles(dataConfiguration);
         return dataConfiguration;
     }
 
