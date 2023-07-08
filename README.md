@@ -123,14 +123,10 @@ from the word list might get a slightly higher weight value. If weight definitio
 
 
 ## Processing steps
-First, the given yaml configuration file and the datagenerator yaml file are analyzed for its correctness. Basically the specified options and transformations are checked for correctness.
-
-Any table definitions and data is removed from the DuckDb, if a file with the specified name is found.
+First, the given program configuration and the data configuration yaml files are analyzed for their correctness. Any existing table definitions and data is removed from the DuckDb, if a file with the specified name of the database is found.
 
 After that the value for each field is generated and then transformed (if any transformation options are specified). The fields are processed sequentially and build a row of data.
-The tool generates the desired number of rows and stores it in a local DuckDb instance. The data types specified in the yaml configuration are used to defined the data types of the duckdb table which is created.
-
-Finally the data is exported to the desired output format.
+The tool generates the desired number of rows and stores it in a local DuckDb instance. Finally, the data is exported to the desired output format.
 
 ## Yaml configuration for the datagenerator tool
 The configuration file contains various attributes to steer the behavior of the datagenerator tool.
