@@ -57,6 +57,10 @@ public class DataGenerator
                 generator.exportToFile();
             }
         }
+        catch (InvalidConfigurationException ice)
+        {
+            logger.error("error in configuration: {}", ice.getMessage());
+        }
         catch (Exception ex)
         {
             logger.error("unable to generate data: {}", ex.getMessage());

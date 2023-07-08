@@ -46,7 +46,6 @@ public class DataFieldsProcessor
             else if (fieldConfiguration.getType() == FieldType.RANDOMDATE)
             {
                 processor = new RandomDateProcessor(configuration);
-
             }
 
             processor.setDefaultOptions(fieldConfiguration);

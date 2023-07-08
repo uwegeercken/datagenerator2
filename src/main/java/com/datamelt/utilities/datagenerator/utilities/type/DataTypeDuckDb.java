@@ -7,6 +7,7 @@ public enum DataTypeDuckDb
     DATE,
     DOUBLE,
     INTEGER,
+    LONG,
     VARCHAR;
 
 }

@@ -29,7 +29,6 @@ public class RandomDateProcessor extends FieldProcessor
     {
         checkOptions(fieldConfiguration);
         checkTransformations(fieldConfiguration);
-
     }
 
     private void checkTransformations(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException

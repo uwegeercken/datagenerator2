@@ -145,7 +145,9 @@ public class DataStore
             case RANDOMINTEGER:
                 return DataTypeDuckDb.INTEGER.toString();
             case RANDOMLONG:
-                return DataTypeDuckDb.INTEGER.toString();
+                return DataTypeDuckDb.LONG.toString();
+            case RANDOMDATE:
+                return DataTypeDuckDb.DATE.toString();
             case RANDOMSTRING:
                 return DataTypeDuckDb.VARCHAR.toString();
             case REGULAREXPRESSION:

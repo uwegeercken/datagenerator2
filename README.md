@@ -80,11 +80,11 @@ This generator (type=randomdouble) allows to generate floating point numbers. Th
 This generator (type=randomdate) allows to generate dates. The options for this type of generator allow to specify a minimum and maximun date, as well as the output format for the generated value.
 
 #### Available options:
-| Option       | Description                                       | Data Type | Default              |
-|--------------|---------------------------------------------------|-----------|----------------------|
-| minYear      | minimum value                                     | long      | 2020                 |
-| maxYear      | maximum value                                     | long      | 2030                 |
-| dateFormat   | output format of the date (Java SimpleDateFormat) | string    | yyyy-MM-dd HH:mm:ss  |
+| Option       | Description                                       | Data Type | Default     |
+|--------------|---------------------------------------------------|-----------|-------------|
+| minYear      | minimum value                                     | long      | 2020        |
+| maxYear      | maximum value                                     | long      | 2030        |
+| dateFormat   | output format of the date (Java SimpleDateFormat) | string    | yyyy-MM-dd  |
 
 #### Available transformations:
 | Transformation | Description          | Parameters   |
