@@ -43,6 +43,11 @@ public class DataFieldsProcessor
                //processor = new RegularExpressionProcessor(configuration);
 
             }
+            else if (fieldConfiguration.getType() == FieldType.RANDOMDATE)
+            {
+                processor = new RandomDateProcessor(configuration);
+
+            }
 
             processor.setDefaultOptions(fieldConfiguration);
             processor.validateConfiguration(fieldConfiguration);

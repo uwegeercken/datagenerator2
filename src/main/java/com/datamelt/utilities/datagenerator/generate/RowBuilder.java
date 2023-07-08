@@ -22,11 +22,6 @@ public class RowBuilder
             {
                 rowFields.add(new RowField<String>(new RandomStringGenerator(fieldConfiguration), fieldConfiguration.getName()));
             }
-            else if (fieldConfiguration.getType() == FieldType.RANDOMINTEGER)
-            {
-                // TODO: integer generator !!
-                rowFields.add(new RowField<Integer>(new RandomLongGenerator(fieldConfiguration), fieldConfiguration.getName()));
-            }
             else if (fieldConfiguration.getType() == FieldType.RANDOMLONG)
             {
                 rowFields.add(new RowField<Long>(new RandomLongGenerator(fieldConfiguration), fieldConfiguration.getName()));
@@ -39,12 +34,15 @@ public class RowBuilder
             {
                 rowFields.add(new RowField<String>(new RegularExpressionGenerator(fieldConfiguration), fieldConfiguration.getName()));
             }
+            else if (fieldConfiguration.getType() == FieldType.RANDOMDATE)
+            {
+                rowFields.add(new RowField<String>(new RandomDateGenerator(fieldConfiguration), fieldConfiguration.getName()));
+            }
         }
     }
 
     public Row generate(DataConfiguration dataConfiguration) throws Exception
     {
-        RandomValueGenerator generator = null;
         Row row = new Row();
         for (RowField<?> rowField : rowFields)
         {

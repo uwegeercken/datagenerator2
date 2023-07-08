@@ -3,6 +3,12 @@ name: Test
 databaseName: /home/uwe/development/datagenerator2/generateddata.duckdb
 tableName: generateddata
 fields:
+  - name: randomDate
+    type: randomdate
+    options:
+      minYear: 2023
+      maxYear: 2023
+      dateFormat: yyyy-MM-dd
   - name: gender
     values:
       - value: m

@@ -3,6 +3,7 @@ package com.datamelt.utilities.datagenerator.config.process;
 import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.TransformationConfiguration;
+import com.datamelt.utilities.datagenerator.config.model.options.RandomDateOptions;
 import com.datamelt.utilities.datagenerator.config.model.options.RandomLongOptions;
 import com.datamelt.utilities.datagenerator.config.model.options.Transformations;
 import org.slf4j.Logger;
@@ -35,9 +36,16 @@ public class RandomLongProcessor extends FieldProcessor
 
     private void checkOptions(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
     {
-        if((Long)fieldConfiguration.getOptions().get(RandomLongOptions.MAX_VALUE.getKey()) < (Long)fieldConfiguration.getOptions().get(RandomLongOptions.MIN_VALUE.getKey()))
+        try
         {
-            throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], option [" + RandomLongOptions.MAX_VALUE.getKey() + "] - the value can not be smaller than the option [" + RandomLongOptions.MIN_VALUE.getKey() + "]");
+            if ((Long) fieldConfiguration.getOptions().get(RandomLongOptions.MAX_VALUE.getKey()) < (Long) fieldConfiguration.getOptions().get(RandomLongOptions.MIN_VALUE.getKey()))
+            {
+                throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], option [" + RandomLongOptions.MAX_VALUE.getKey() + "] - the value can not be smaller than the option [" + RandomLongOptions.MIN_VALUE.getKey() + "]");
+            }
+        }
+        catch(ClassCastException cce)
+        {
+            throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], option [" + RandomLongOptions.MIN_VALUE.getKey() + ", " + RandomLongOptions.MAX_VALUE.getKey() + "] - the values must be of type long");
         }
     }
 
