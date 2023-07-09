@@ -34,4 +34,19 @@ public class DataConfiguration
         return databaseName;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
+
+    public void setDatabaseName(String databaseName) {
+        this.databaseName = databaseName;
+    }
+
+    public void setFields(List<FieldConfiguration> fields) {
+        this.fields = fields;
+    }
 }

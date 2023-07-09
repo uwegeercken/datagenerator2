@@ -27,7 +27,7 @@ class YamlFileProcessorTest
         DataFieldsProcessor allFieldsProcessor = new DataFieldsProcessor(dataConfiguration);
         allFieldsProcessor.processAllFields();
         RowBuilder rowBuilder = new RowBuilder(dataConfiguration);
-        Row row = rowBuilder.generate(dataConfiguration);
+        Row row = rowBuilder.generate();
 
         assertEquals(true,true,"blabla");
     }

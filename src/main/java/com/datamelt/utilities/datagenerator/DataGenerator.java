@@ -137,7 +137,7 @@ public class DataGenerator
             {
                 logger.debug("rows generated: [{}]", counter);
             }
-            row = rowBuilder.generate(dataConfiguration);
+            row = rowBuilder.generate();
             dataStore.insert(row, counter);
         }
         dataStore.flush();

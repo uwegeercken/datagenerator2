@@ -56,7 +56,7 @@ public class RandomStringProcessor extends FieldProcessor
     {
         try
         {
-            if ((Long) fieldConfiguration.getOptions().get(RandomStringOptions.MIN_LENGTH.getKey()) < 0)
+            if ((Long) fieldConfiguration.getOptions().get(RandomStringOptions.MIN_LENGTH.getKey()) <= 0)
             {
                 throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], option [" + RandomStringOptions.MIN_LENGTH.getKey() + "] - the value can not be smaller zero");
             }

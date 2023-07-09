@@ -41,7 +41,7 @@ public class RowBuilder
         }
     }
 
-    public Row generate(DataConfiguration dataConfiguration) throws Exception
+    public Row generate() throws Exception
     {
         Row row = new Row();
         for (RowField<?> rowField : rowFields)

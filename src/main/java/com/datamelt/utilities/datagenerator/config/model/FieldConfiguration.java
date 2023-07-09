@@ -140,4 +140,24 @@ public class FieldConfiguration
     {
         return transformations;
     }
+
+    public void setValuesFile(String valuesFile) {
+        this.valuesFile = valuesFile;
+    }
+
+    public void setType(FieldType type) {
+        this.type = type;
+    }
+
+    public void setOptions(Map<String, Object> options) {
+        this.options = options;
+    }
+
+    public void setTransformations(List<TransformationConfiguration> transformations) {
+        this.transformations = transformations;
+    }
+
+    public void setNumberOfDefaultWeights(int numberOfDefaultWeights) {
+        this.numberOfDefaultWeights = numberOfDefaultWeights;
+    }
 }

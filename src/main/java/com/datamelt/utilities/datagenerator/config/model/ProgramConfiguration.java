@@ -70,4 +70,24 @@ public class ProgramConfiguration
     {
         return general;
     }
+
+    public void setGeneral(ProgramGeneralConfiguration general) {
+        this.general = general;
+    }
+
+    public void setCsvExport(CsvExportConfiguration csvExport) {
+        this.csvExport = csvExport;
+    }
+
+    public void setJsonExport(JsonExportConfiguration jsonExport) {
+        this.jsonExport = jsonExport;
+    }
+
+    public void setParquetExport(ParquetExportConfiguration parquetExport) {
+        this.parquetExport = parquetExport;
+    }
+
+    public void setExcelExport(ExcelExportConfiguration excelExport) {
+        this.excelExport = excelExport;
+    }
 }
