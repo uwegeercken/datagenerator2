@@ -12,6 +12,11 @@ public class RowBuilder
     private List<RowField<?>> rowFields = new ArrayList<>();
     public RowBuilder(DataConfiguration dataConfiguration) throws NoSuchMethodException
     {
+        createRowFields(dataConfiguration);
+    }
+
+    private void createRowFields(DataConfiguration dataConfiguration) throws NoSuchMethodException
+    {
         for (FieldConfiguration fieldConfiguration : dataConfiguration.getFields())
         {
             if (fieldConfiguration.getType() == FieldType.CATEGORY)

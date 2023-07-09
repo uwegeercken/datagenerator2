@@ -20,8 +20,8 @@ public class DataGenerator
 {
     private static Logger logger = LoggerFactory.getLogger(DataGenerator.class);
     private static final String applicationName = "datagenerator2";
-    private static final String version = "0.0.7";
-    private static final String versionDate = "2023-07-03";
+    private static final String version = "0.0.8";
+    private static final String versionDate = "2023-07-09";
     private static final String contactEmail = "uwe.geercken@web.de";
     private DataConfiguration dataConfiguration;
     private ProgramConfiguration programConfiguration;
