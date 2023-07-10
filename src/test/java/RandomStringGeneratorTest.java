@@ -48,6 +48,33 @@ class RandomStringGeneratorTest
             RowBuilder rowBuilder = getRowBuilder("testfield", options);
         });
     }
+
+    @Test
+    @DisplayName("testing only defined characters are used")
+    void validateRandomCharacters() throws Exception
+    {
+        String allowedCharacters = "nopqrstuvwxyz";
+
+        Map<String, Object> options = new HashMap<>();
+        options.put(RandomStringOptions.MIN_LENGTH.getKey(), 150L);
+        options.put(RandomStringOptions.MAX_LENGTH.getKey(), 150L);
+        options.put(RandomStringOptions.RANDOM_CHARACTERS.getKey(), allowedCharacters);
+
+        RowBuilder rowBuilder = getRowBuilder("testfield", options);
+        String value = (String) rowBuilder.generate().getFields().get(0).getValue();
+        int countInvalidCharacters = 0;
+        for(int i=0;i< value.length();i++)
+        {
+            String singleChar = value.substring(i, i+1);
+            if (!allowedCharacters.contains(singleChar))
+            {
+                countInvalidCharacters++;
+            }
+        }
+
+        assertTrue(countInvalidCharacters == 0);
+
+    }
     @Test
     @DisplayName("testing exception when min length <= 0")
     void validateErrorMinLengthSmallerEqualZero()
@@ -90,7 +117,7 @@ class RandomStringGeneratorTest
         for(int i=0;i<1000;i++)
         {
             String value = (String)rowBuilder.generate().getFields().get(0).getValue();
-            assertTrue(value.length()>=minValue && value.length()<=maxValue);
+            assertTrue(value.length()>=minValue && value.length()<=maxValue, "length of value must correspond to minValue and mxValue");
         }
     }
 }
