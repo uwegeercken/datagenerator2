@@ -252,4 +252,10 @@ You can get help about the available program arguments by running:
 
 See the sample yaml file for the program configuration in this repository under: src/main/resources/config.
 
+## Building the datagenerator tool jar file
+To build the jar file either download the release from https://github.com/uwegeercken/datagenerator2/tags or clone this repository and run:
+
+    mvn clean install
+
+
 last update: uwe geercken - uwe.geercken@web.de - 2023-07-19
