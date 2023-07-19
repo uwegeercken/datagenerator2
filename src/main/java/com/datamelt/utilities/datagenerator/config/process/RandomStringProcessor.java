@@ -22,7 +22,8 @@ public class RandomStringProcessor extends FieldProcessor
             Transformations.BASE64ENCODE.getName(),
             Transformations.PREPEND.getName(),
             Transformations.APPEND.getName(),
-            Transformations.REVERSE.getName()
+            Transformations.REVERSE.getName(),
+            Transformations.TRIM.getName()
     );
 
     public RandomStringProcessor(DataConfiguration configuration)

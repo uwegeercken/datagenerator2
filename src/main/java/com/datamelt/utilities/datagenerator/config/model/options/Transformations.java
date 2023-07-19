@@ -10,6 +10,7 @@ public enum Transformations
 {
     LOWERCASE ("lowercase", new Class[]{String.class}),
     UPPERCASE("uppercase", new Class[]{String.class}),
+    TRIM("trim", new Class[]{String.class}),
     NEGATE("negate", new Class[]{Long.class, Double.class}),
     ROUND("round", new Class[]{Double.class}),
     REVERSE("reverse", new Class[]{String.class}),

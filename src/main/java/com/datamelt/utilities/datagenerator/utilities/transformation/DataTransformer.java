@@ -37,6 +37,10 @@ public class DataTransformer
         return value.toUpperCase();
     }
 
+    public static String trim(String value)
+    {
+        return value.trim();
+    }
     public static String base64encode(String value)
     {
         return Base64.getEncoder().encodeToString(value.getBytes(StandardCharsets.UTF_8));

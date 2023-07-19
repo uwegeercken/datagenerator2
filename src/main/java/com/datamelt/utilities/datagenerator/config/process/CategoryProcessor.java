@@ -22,7 +22,8 @@ public class CategoryProcessor extends FieldProcessor
             Transformations.PREPEND.getName(),
             Transformations.APPEND.getName(),
             Transformations.REVERSE.getName(),
-            Transformations.ENCRYPT.getName()
+            Transformations.ENCRYPT.getName(),
+            Transformations.TRIM.getName()
     );
 
     public CategoryProcessor(DataConfiguration configuration)

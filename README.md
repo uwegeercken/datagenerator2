@@ -47,12 +47,13 @@ Setting minLength=maxLength will create a constant length string.
 | randomCharacters | characters to be used when generating the value | String      | [a-z] + [A-Z] + [0-9] + [-_] |
 
 #### Available transformations:
-| Transformation | Description                            | Parameters |
-|----------------|----------------------------------------|------------|
-| uppercase      | convert the value to uppercase         | none       |
-| lowercase      | convert the value to lowercase         | none       |
-| reverse        | reverse the characters of the value    | none       |
-| base64encode   | encode the value to base64 format      | none       |
+| Transformation | Description                          | Parameters |
+|----------------|--------------------------------------|------------|
+| uppercase      | convert the value to uppercase       | none       |
+| lowercase      | convert the value to lowercase       | none       |
+| reverse        | reverse the characters of the value  | none       |
+| base64encode   | encode the value to base64 format    | none       |
+| trim           | remove leading and trailing spaces   | none       |
 
 ### Random Numbers
 This generator (type=randomlong) allows to generate numbers. The options for this type of generator allow to specify a lowerbound and upperbound for the generated value.
@@ -136,6 +137,7 @@ from the word list might get a slightly higher weight value. If weight definitio
 | append         | add a suffix to the value                              | suffix to add (String)    |
 | base64encode   | encode the value to base64 format                      | none                      | 
 | encrypt        | encrypt the value using AES/CBC/PKCS5Padding algorithm | none                      |
+| trim           | remove leading and trailing spaces                     | none                      |
 
 
 ## Processing steps
@@ -250,4 +252,4 @@ You can get help about the available program arguments by running:
 
 See the sample yaml file for the program configuration in this repository under: src/main/resources/config.
 
-last update: uwe geercken - uwe.geercken@web.de - 2023-07-08
+last update: uwe geercken - uwe.geercken@web.de - 2023-07-19
