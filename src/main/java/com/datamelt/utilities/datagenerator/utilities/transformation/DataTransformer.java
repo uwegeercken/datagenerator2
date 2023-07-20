@@ -27,10 +27,7 @@ public class DataTransformer
         }
     }
 
-    public static String lowercase(String value)
-    {
-        return value.toLowerCase();
-    }
+    public static String lowercase(String value) { return value.toLowerCase(); }
 
     public static String uppercase(String value)
     {

@@ -148,6 +148,8 @@ public class DataStore
                 return DataTypeDuckDb.LONG.toString();
             case RANDOMDATE:
                 return DataTypeDuckDb.DATE.toString();
+            case DATEREFERENCE:
+                return DataTypeDuckDb.VARCHAR.toString();
             case RANDOMSTRING:
                 return DataTypeDuckDb.VARCHAR.toString();
             case REGULAREXPRESSION:

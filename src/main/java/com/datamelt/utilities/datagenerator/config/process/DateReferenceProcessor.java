@@ -3,6 +3,7 @@ package com.datamelt.utilities.datagenerator.config.process;
 import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.TransformationConfiguration;
+import com.datamelt.utilities.datagenerator.config.model.options.DateReferenceOptions;
 import com.datamelt.utilities.datagenerator.config.model.options.RandomDateOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,14 +12,14 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 
-public class RandomDateProcessor extends FieldProcessor
+public class DateReferenceProcessor extends FieldProcessor
 {
-    private static Logger logger = LoggerFactory.getLogger(RandomDateProcessor.class);
+    private static Logger logger = LoggerFactory.getLogger(DateReferenceProcessor.class);
 
     private static List<String> availableTransformations = Arrays.asList(
     );
 
-    public RandomDateProcessor(DataConfiguration configuration)
+    public DateReferenceProcessor(DataConfiguration configuration)
     {
         super(configuration);
     }
@@ -48,35 +49,23 @@ public class RandomDateProcessor extends FieldProcessor
     {
         try
         {
-            if ((Long) fieldConfiguration.getOptions().get(RandomDateOptions.MIN_YEAR.getKey()) < 0)
+            if ((String) fieldConfiguration.getOptions().get(DateReferenceOptions.REFERENCE.getKey()) == null)
             {
-                throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], option [" + RandomDateOptions.MIN_YEAR.getKey() + "] - the value can not be smaller zero");
+                throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], option [" + DateReferenceOptions.REFERENCE.getKey() + "] - the value can not be null");
             }
         }
         catch(ClassCastException cce)
         {
-            throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], option [" + RandomDateOptions.MIN_YEAR.getKey() + "] - the value must be of type long");
+            throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], option [" + DateReferenceOptions.REFERENCE.getKey() + "] - the value must be of type string");
         }
 
         try
         {
-            if ((Long) fieldConfiguration.getOptions().get(RandomDateOptions.MAX_YEAR.getKey()) < (Long) fieldConfiguration.getOptions().get(RandomDateOptions.MIN_YEAR.getKey()))
-            {
-                throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], option [" + RandomDateOptions.MAX_YEAR.getKey() + "] - the value can not be smaller than the option [" + RandomDateOptions.MIN_YEAR.getKey() + "]");
-            }
-        }
-        catch(ClassCastException cce)
-        {
-            throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], option [" + RandomDateOptions.MAX_YEAR.getKey() + "] - the value must be of type long");
-        }
-
-        try
-        {
-            SimpleDateFormat sdf = new SimpleDateFormat((String)fieldConfiguration.getOptions().get(RandomDateOptions.DATE_FORMAT.getKey()));
+            SimpleDateFormat sdf = new SimpleDateFormat((String)fieldConfiguration.getOptions().get(DateReferenceOptions.DATE_FORMAT.getKey()));
         }
         catch(Exception ex)
         {
-            throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], option [" + RandomDateOptions.DATE_FORMAT.getKey() + "] - the value can not be parsed as a SimpleDateFormat");
+            throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], option [" + DateReferenceOptions.DATE_FORMAT.getKey() + "] - the value can not be parsed as a SimpleDateFormat");
         }
 
     }

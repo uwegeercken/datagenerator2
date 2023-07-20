@@ -35,4 +35,9 @@ public class RowField<T> {
     {
         this.value = value;
     }
+
+    public RandomValueGenerator getGenerator()
+    {
+        return generator;
+    }
 }

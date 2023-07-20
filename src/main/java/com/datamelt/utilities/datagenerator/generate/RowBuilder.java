@@ -3,6 +3,7 @@ package com.datamelt.utilities.datagenerator.generate;
 import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldType;
+import com.datamelt.utilities.datagenerator.config.model.options.DateReferenceOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +44,36 @@ public class RowBuilder
             {
                 rowFields.add(new RowField<String>(new RandomDateGenerator(fieldConfiguration), fieldConfiguration.getName()));
             }
+            else if (fieldConfiguration.getType() == FieldType.DATEREFERENCE)
+            {
+                rowFields.add(new RowField<String>(new DateReferenceGenerator(fieldConfiguration), fieldConfiguration.getName()));
+            }
         }
+
+        for (FieldConfiguration fieldConfiguration : dataConfiguration.getFields())
+        {
+            if (fieldConfiguration.getType() == FieldType.DATEREFERENCE)
+            {
+                String referenceFieldName = (String)fieldConfiguration.getOptions().get(DateReferenceOptions.REFERENCE.getKey());
+                RowField<?> referenceRowField = getRowfield(referenceFieldName);
+                RowField<?> rowField = getRowfield(fieldConfiguration.getName());
+
+                DateReferenceGenerator generator = (DateReferenceGenerator) rowField.getGenerator();
+                generator.addReferenceRowField(referenceRowField);
+            }
+        }
+    }
+
+    public RowField<?> getRowfield(String name)
+    {
+        for(RowField<?> rowField : rowFields)
+        {
+            if(rowField.getName().equals(name))
+            {
+                return rowField;
+            }
+        }
+        return null;
     }
 
     public Row generate() throws Exception

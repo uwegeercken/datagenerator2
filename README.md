@@ -32,6 +32,7 @@ The type for each field can be one of following values:
 - randomlong
 - randomdouble
 - randomdate
+- datereference
 
 If no type is specified then type=category is assumed.
 
@@ -187,6 +188,12 @@ Sample fields configuration:
     databaseName: /home/uwe/development/datagenerator2/generateddata.duckdb
     tableName: generateddata
     fields:
+      - name: randomDate1
+        type: randomdate
+        options:
+          minYear: 2023
+          maxYear: 2023
+          dateFormat: yyyy-MM-dd
       - name: random1
         type: randomstring
         randomCharacters: abcdefghijk0123456789
@@ -252,7 +259,7 @@ You can get help about the available program arguments by running:
 
 See the sample yaml file for the program configuration in this repository under: src/main/resources/config.
 
-## Building the datagenerator tool jar file
+## Building the datagenerator jar file
 To build the jar file either download the release from https://github.com/uwegeercken/datagenerator2/tags or clone this repository and run:
 
     mvn clean install
