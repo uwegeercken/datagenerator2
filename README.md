@@ -94,6 +94,21 @@ This generator (type=randomdate) allows to generate dates. The options for this 
 |----------------|----------------------|--------------|
 |                |                      |              |
 
+### Date Reference
+This generator (type=datereference) allows to generate a date string based on another date. This means that the values of this date and the referenced date correspond to each other.
+The options for this type of generator allow to specify the date field that shall be referenced, as well as the output format for the generated value.
+
+#### Available options:
+| Option     | Description                                       | Data Type | Default    |
+|------------|---------------------------------------------------|-----------|------------|
+| reference  | name of the field which is the reference date     | string    |            |
+| dateFormat | output format of the date (Java SimpleDateFormat) | string    | yyyy-MM-dd |
+
+#### Available transformations:
+| Transformation | Description          | Parameters   |
+|----------------|----------------------|--------------|
+|                |                      |              |
+
 ### Word lists
 Word lists allow to define values for certain categories such as "weekdays", "seasons", "car types",
 "first names", etc. the generator (type=category) will randomly pick a value from the configured word lists. Word lists are simple text files where each row contains one value.
@@ -194,6 +209,11 @@ Sample fields configuration:
           minYear: 2023
           maxYear: 2023
           dateFormat: yyyy-MM-dd
+      - name: month
+        type: datereference
+        options:
+          reference: randomDate1
+          dateFormat: MM
       - name: random1
         type: randomstring
         randomCharacters: abcdefghijk0123456789
@@ -265,4 +285,4 @@ To build the jar file either download the release from https://github.com/uwegee
     mvn clean install
 
 
-last update: uwe geercken - uwe.geercken@web.de - 2023-07-19
+last update: uwe geercken - uwe.geercken@web.de - 2023-07-20
