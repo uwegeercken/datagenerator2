@@ -105,9 +105,10 @@ The options for this type of generator allow to specify the date field that shal
 | dateFormat | output format of the date (Java SimpleDateFormat) | string    | yyyy-MM-dd |
 
 #### Available transformations:
-| Transformation | Description          | Parameters   |
-|----------------|----------------------|--------------|
-|                |                      |              |
+| Transformation | Description                                                                                          | Parameters |
+|----------------|------------------------------------------------------------------------------------------------------|------------|
+| toQuarter      | If the dateFormat of the field is "MM" it will be converted to the relevant quarter (Q1, Q2, Q3, Q4) | none       |
+| toHalfYear     | If a result of the field is "MM" it will be converted to the relevant half year (H1, H2)             | none       |
 
 ### Word lists
 Word lists allow to define values for certain categories such as "weekdays", "seasons", "car types",

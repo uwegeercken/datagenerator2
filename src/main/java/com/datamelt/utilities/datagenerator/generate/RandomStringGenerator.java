@@ -38,7 +38,7 @@ public class RandomStringGenerator implements RandomValueGenerator
     {
         for(TransformationConfiguration transformationConfiguration : fieldConfiguration.getTransformations())
         {
-            transformationMethods.add(new TransformationMethod(  MethodHelper.getMethod(DATATYPE, transformationConfiguration),transformationConfiguration.getParameters()));
+            transformationMethods.add(new TransformationMethod(MethodHelper.getMethod(DATATYPE, transformationConfiguration),transformationConfiguration.getParameters()));
         }
     }
     @Override

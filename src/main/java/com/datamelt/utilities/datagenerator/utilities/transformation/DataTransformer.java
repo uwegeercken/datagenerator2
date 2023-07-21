@@ -93,4 +93,46 @@ public class DataTransformer
         // TODO: implement later
         return null;
     }
+
+    public static String toQuarter(String value)
+    {
+        int month = Integer.parseInt(value);
+        if(month<1 || month>12)
+        {
+            return null;
+        }
+        if(month >=1 && month <4)
+        {
+            return "Q1";
+        }
+        else if(month >=4 && month <7)
+        {
+            return "Q2";
+        }
+        else if(month >=7 && month <10)
+        {
+            return "Q3";
+        }
+        else
+        {
+            return "Q4";
+        }
+    }
+
+    public static String toHalfYear(String value)
+    {
+        int month = Integer.parseInt(value);
+        if(month<1 || month>12)
+        {
+            return null;
+        }
+        if(month >=1 && month <7)
+        {
+            return "H1";
+        }
+        else
+        {
+            return "H2";
+        }
+    }
 }

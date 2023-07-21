@@ -1,5 +1,6 @@
 package com.datamelt.utilities.datagenerator.config.model;
 
+import com.datamelt.utilities.datagenerator.config.model.options.Transformations;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -159,5 +160,17 @@ public class FieldConfiguration
 
     public void setNumberOfDefaultWeights(int numberOfDefaultWeights) {
         this.numberOfDefaultWeights = numberOfDefaultWeights;
+    }
+
+    public boolean containsTransformation(Transformations transformation)
+    {
+        for(TransformationConfiguration transformationConfiguration : transformations)
+        {
+            if(transformationConfiguration.getName().equals(transformation.getName()))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
