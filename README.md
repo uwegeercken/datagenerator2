@@ -280,6 +280,52 @@ Sample fields configuration:
       - name: city
         valuesFile: /home/uwe/development/datagenerator2/categories/city.category
 
+## Sample output in Json Format
+    
+    [
+        {
+            "autonumber": 1,
+            "date": {
+              "fulldate": "2023-07-21",
+              "year": "2023",
+              "month": "07",
+              "dayofmonth": "21",
+              "dayofweek": "Freitag"
+            },
+            "randomstring": "2DCoVUNDER",
+            "season": "Summer",
+            "city": "Cologne",
+            "price": 229.4
+            },
+        {
+            "autonumber": 2,
+            "date": {
+              "fulldate": "2023-09-21",
+              "year": "2023",
+              "month": "09",
+              "dayofmonth": "21",
+              "dayofweek": "Donnerstag"
+            },
+            "randomstring": "Nl7zZFoapYN",
+            "season": "Summer",
+            "city": "Barcelona",
+            "price": 295.59
+        },
+        {
+            "autonumber": 3,
+            "date": {
+              "fulldate": "2023-09-12",
+              "year": "2023",
+              "month": "09",
+              "dayofmonth": "12",
+              "dayofweek": "Dienstag"
+            },
+            "randomstring": "ZBrkQ1tuoCdkAVyGTyzzQ",
+            "season": "Summer",
+            "city": "New York",
+            "price": 450.34
+        }
+    ]
 
 ## Running the datagenerator tool
 To run the tool you must pass at least two arguments to the program as shown below. These point to the program configuration file
