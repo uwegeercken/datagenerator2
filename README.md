@@ -198,8 +198,9 @@ Sample program configuration:
 ## Yaml configuration for the definition of fields to generate
 The configuration file contains a list of fields/attributes to generate - see the sample yaml files in this repository under: src/main/resources/config. For each field, options and transformations may be defined depending on the type of generator used.
 
-Fields is a list of fields for which data is to be generated. Each field has a unique name. Each field is assigned a type. Fields may have additional (optional) options. Fields may have one or more transformations assigned and the transformations may
-require additional parameters to be executed. Fields of type=category may have either defintions for values or a a values file or both, but one of them must be present. The definition for values contains the value itself and optionally a weight for the value.
+Fields is a list of fields for which data is to be generated. Each field has a unique name. A substructure can be created by prefixing the field name of one or multiple fields with the same value plus the dot separator - eg. address.street and address.city.
+This will create a substructure named "address" with the fields street and city. Each field is assigned a type. Fields may have additional (optional) options. Fields may have one or more transformations assigned and the transformations may require
+additional parameters to be executed. Fields of type=category may have either defintions for values or a a values file or both, but one of them must be present. The definition for values contains the value itself and optionally a weight for the value.
 
 Sample fields configuration:
 
@@ -207,17 +208,32 @@ Sample fields configuration:
     databaseName: /home/uwe/development/datagenerator2/generateddata.duckdb
     tableName: generateddata
     fields:
-      - name: created_date
+      - name: date.fulldate
         type: randomdate
         options:
           minYear: 2023
           maxYear: 2023
           dateFormat: yyyy-MM-dd
-      - name: month
+      - name: date.year
         type: datereference
         options:
-          reference: created_date
+          reference: date.fulldate
+          dateFormat: YYYY
+      - name: date.month
+        type: datereference
+        options:
+          reference: date.fulldate
           dateFormat: MM
+      - name: date.dayofmonth
+        type: datereference
+        options:
+          reference: date.fulldate
+          dateFormat: dd
+      - name: date.dayofweek
+        type: datereference
+        options:
+          reference: date.fulldate
+          dateFormat: EEEE
       - name: random1
         type: randomstring
         randomCharacters: abcdefghijk0123456789
@@ -247,14 +263,13 @@ Sample fields configuration:
           weight: 40
         - value: d
           weight: 20
-          valuesFile: /home/uwe/development/datagenerator2/categories/gender.category
       - name: weekday
         values:
           - value: Saturday
             weight: 5
           - value: Sunday
             weight: 5
-            valuesFile: /home/uwe/development/datagenerator2/categories/weekday.category
+        valuesFile: /home/uwe/development/datagenerator2/categories/weekday.category
       - name: season
         valuesFile: /home/uwe/development/datagenerator2/categories/season.category
         options:
@@ -264,8 +279,6 @@ Sample fields configuration:
             weight: 70
       - name: city
         valuesFile: /home/uwe/development/datagenerator2/categories/city.category
-      - name: number
-        valuesFile: /home/uwe/development/datagenerator2/categories/number.category
 
 
 ## Running the datagenerator tool
