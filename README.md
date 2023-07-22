@@ -207,7 +207,7 @@ Sample fields configuration:
     databaseName: /home/uwe/development/datagenerator2/generateddata.duckdb
     tableName: generateddata
     fields:
-      - name: randomDate1
+      - name: created_date
         type: randomdate
         options:
           minYear: 2023
@@ -216,7 +216,7 @@ Sample fields configuration:
       - name: month
         type: datereference
         options:
-          reference: randomDate1
+          reference: created_date
           dateFormat: MM
       - name: random1
         type: randomstring
