@@ -33,6 +33,17 @@ public class Row {
         return fields;
     }
 
+    public RowField getField(String name)
+    {
+        for(RowField<?> field : fields)
+        {
+            if(field.getName().equals(name))
+            {
+                return field;
+            }
+        }
+        return null;
+    }
     @Override
     public String toString()
     {

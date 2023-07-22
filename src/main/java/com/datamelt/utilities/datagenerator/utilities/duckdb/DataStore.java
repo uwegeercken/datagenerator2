@@ -9,6 +9,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class DataStore
 {
@@ -96,7 +100,7 @@ public class DataStore
 
     private void createAppender() throws Exception
     {
-        this.appender = new DataStoreAppender(connection.createAppender(SCHEMANAME, dataConfiguration.getTableName()));
+        this.appender = new DataStoreAppender(connection.createAppender(SCHEMANAME, dataConfiguration.getTableName()),getStructs());
     }
 
     private String getDataTypesAndNames() throws Exception
@@ -104,19 +108,85 @@ public class DataStore
         StringBuffer buffer = new StringBuffer();
         int counter = 0;
         buffer.append(programConfiguration.getGeneral().getRowNumberFieldName() + " " + COLUMN_ROWNUMBER_DATATYPE + ", ");
+        Map<String, Struct> structs = getStructs();
+        List<String> processedStructs = new ArrayList<>();
         for(FieldConfiguration fieldConfiguration : dataConfiguration.getFields())
         {
             counter++;
+            String[] namesParts = fieldConfiguration.getName().split("\\.");
+            if(namesParts.length==1)
+            {
+                buffer.append("\"");
+                buffer.append(fieldConfiguration.getName());
+                buffer.append("\" ");
+                buffer.append(getDuckDbType(fieldConfiguration.getType()));
+
+                if (counter < dataConfiguration.getFields().size())
+                {
+                    buffer.append(", ");
+                }
+            }
+            else
+            {
+                if(structs.containsKey(namesParts[0]) && !processedStructs.contains(namesParts[0]))
+                {
+                    Struct struct = structs.get(namesParts[0]);
+                    buffer.append(createStruct(struct));
+                    processedStructs.add(namesParts[0]);
+
+                    if (counter < dataConfiguration.getFields().size())
+                    {
+                        buffer.append(", ");
+                    }
+                }
+            }
+        }
+        return buffer.toString();
+    }
+
+    private Map<String, Struct> getStructs()
+    {
+        Map<String, Struct> structs = new HashMap<>();
+        for(FieldConfiguration fieldConfiguration : dataConfiguration.getFields())
+        {
+            String[] namesParts = fieldConfiguration.getName().split("\\.");
+            if(namesParts.length==2)
+            {
+                if(structs.containsKey(namesParts[0]))
+                {
+                    Struct struct = structs.get(namesParts[0]);
+                    struct.addField(namesParts[1], fieldConfiguration.getType());
+                }
+                else
+                {
+                    Struct struct = new Struct(namesParts[0]);
+                    struct.addField(namesParts[1], fieldConfiguration.getType());
+                    structs.put(namesParts[0], struct);
+                }
+            }
+        }
+        return structs;
+    }
+    private String createStruct(Struct struct)
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(struct.getName());
+        buffer.append(" struct(");
+        int counter = 0;
+        for(StructField field : struct.getFields())
+        {
+            counter++;
             buffer.append("\"");
-            buffer.append(fieldConfiguration.getName());
+            buffer.append(field.getName());
             buffer.append("\" ");
-            buffer.append(getDuckDbType(fieldConfiguration.getType()));
-            if (counter < dataConfiguration.getFields().size())
+            buffer.append(getDuckDbType(field.getFieldType()));
+
+            if (counter < struct.getFields().size())
             {
                 buffer.append(", ");
             }
-
         }
+        buffer.append(")");
         return buffer.toString();
     }
 
