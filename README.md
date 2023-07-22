@@ -121,7 +121,7 @@ Using word lists offers a few advantages:
 - word lists can be constructed from a script processing a data file or consuming a Rest API
 - word lists can be constructed or changed easily using a simple text editor
 
-In the yaml configuration additional values for a given word list (also value which are already defined in the word list itself) may be defined, including a weight for individual values.
+In the yaml configuration additional values for a given word list (also value which are already defined in the word list) may be defined, including a weight for individual values.
 This allows to specify a higher priority/weight for defined values. The weight of a value is always specified on the base of 100 percent. 
 
 E.g. one may define the days of the week in a word list and in the configuration file "Saturday" with a weight of 10 percent and 
@@ -132,7 +132,7 @@ If a value for a given word list appears both in the word list file and the yaml
 The datagenerator will then produce random data (pick random values from the word list) according to the weights assigned. In the example above "saturday" and "sunday" will occur
 less often in the generated number of rows then the other days, because these values have a lower weight.
 
-A word list is optional. All values to be used for randomly generating data can also be defined solely in the yaml configuration file. Anyways, the sum of the weight definition
+A word list is optional. All values to be used for randomly generating data can also be defined solely in the yaml configuration file. Anyway, the sum of the weight definition
 must be 100 percent (and can not exceed 100 percent). Individual values can not be negative percentage values.
 
 **NOTE**: If values and their weight are specified in a word lists but for some values no weight is defined, the datagenerator will calculate the weight for those fields that have no weight definition
@@ -197,6 +197,9 @@ Sample program configuration:
 
 ## Yaml configuration for the definition of fields to generate
 The configuration file contains a list of fields/attributes to generate - see the sample yaml files in this repository under: src/main/resources/config. For each field, options and transformations may be defined depending on the type of generator used.
+
+Fields is a list of fields for which data is to be generated. Each field has a unique name. Each field is assigned a type. Fields may have additional (optional) options. Fields may have one or more transformations assigned and the transformations may
+require additional parameters to be executed. Fields of type=category may have either defintions for values or a a values file or both, but one of them must be present. The definition for values contains the value itself and optionally a weight for the value.
 
 Sample fields configuration:
 
@@ -286,4 +289,4 @@ To build the jar file either download the release from https://github.com/uwegee
     mvn clean install
 
 
-last update: uwe geercken - uwe.geercken@web.de - 2023-07-20
+last update: uwe geercken - uwe.geercken@web.de - 2023-07-22
