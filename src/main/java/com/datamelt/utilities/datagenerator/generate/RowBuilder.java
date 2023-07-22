@@ -4,6 +4,7 @@ import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldType;
 import com.datamelt.utilities.datagenerator.config.model.options.DateReferenceOptions;
+import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,12 +12,12 @@ import java.util.List;
 public class RowBuilder
 {
     private List<RowField<?>> rowFields = new ArrayList<>();
-    public RowBuilder(DataConfiguration dataConfiguration) throws NoSuchMethodException
+    public RowBuilder(DataConfiguration dataConfiguration) throws NoSuchMethodException, InvalidConfigurationException
     {
         createRowFields(dataConfiguration);
     }
 
-    private void createRowFields(DataConfiguration dataConfiguration) throws NoSuchMethodException
+    private void createRowFields(DataConfiguration dataConfiguration) throws NoSuchMethodException, InvalidConfigurationException
     {
         for (FieldConfiguration fieldConfiguration : dataConfiguration.getFields())
         {
@@ -56,6 +57,10 @@ public class RowBuilder
             {
                 String referenceFieldName = (String)fieldConfiguration.getOptions().get(DateReferenceOptions.REFERENCE.getKey());
                 RowField<?> referenceRowField = getRowfield(referenceFieldName);
+                if(referenceRowField==null)
+                {
+                    throw new InvalidConfigurationException("field [" +fieldConfiguration.getName() + "] references field [" + referenceFieldName + "] but this field does not exist");
+                }
                 RowField<?> rowField = getRowfield(fieldConfiguration.getName());
 
                 DateReferenceGenerator generator = (DateReferenceGenerator) rowField.getGenerator();
