@@ -107,8 +107,9 @@ public class DataStore
         for(FieldConfiguration fieldConfiguration : dataConfiguration.getFields())
         {
             counter++;
+            buffer.append("\"");
             buffer.append(fieldConfiguration.getName());
-            buffer.append(" ");
+            buffer.append("\" ");
             buffer.append(getDuckDbType(fieldConfiguration.getType()));
             if (counter < dataConfiguration.getFields().size())
             {
