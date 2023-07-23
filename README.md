@@ -328,9 +328,20 @@ Sample fields configuration:
     ]
 
 ## Running the datagenerator tool
-To run the tool you must pass at least two arguments to the program as shown below. These point to the program configuration file
-and the data configuration file. There are additional arguments available which can be used to override the values specified in the
-configuration yaml files.
+To run the tool you must pass at least the mandatory arguments to the program as shown below. These point to the program configuration file
+and the data configuration file. You may pass the other arguments, which will override the relevant default value as well as the value from
+the programm configuration file.
+
+#### Program arguments:
+| Argument              | Type      | Default                  | Description                                                                | 
+|-----------------------|-----------|--------------------------|----------------------------------------------------------------------------|
+| -n=<number>           | optional  | 10000                    | number of rows to generate                                                 |
+| -l=<number>           | optional  | 1000                     | interval for log messages during data generation                           |
+| -xp=<path + filename> | optional  | datagenerator_export.csv | path and filename of the export file                                       |            
+| -xt=<type>            | optional  | csv                      | type of the export to generate. possible values: csv, excel, json, parquet | 
+| -dc=<path + filename> | mandatory | - none -                 | path and filename of tha data configuration yaml file                      |
+| -pc=<path + filename> | mandatory | - none -                 | path and filename of tha program configuration yaml file                   | 
+| -s                    | optional  | false                    | output statistics for the generated field values                           |
 
 Run the datagenerator tool:
 
