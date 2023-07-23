@@ -5,7 +5,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 public class ProgramGeneralConfiguration
 {
-    private String exportFilename;
+    @JsonInclude(JsonInclude.Include.NON_ABSENT)
+    private String exportFilename = "datagenerator_export.csv";
     @JsonInclude(JsonInclude.Include.NON_ABSENT)
     private DataExportType exportType = DataExportType.CSV;
     private long numberOfRowsToGenerate = 10000;

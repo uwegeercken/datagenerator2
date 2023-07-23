@@ -11,8 +11,6 @@ public class ProgramArguments
     private String exportType;
     private String dataConfigurationFilename;
     private String programConfigurationFilename;
-    private String csvDelimiter;
-    private String csvIncludeHeader;
     private String generatedRowsLogInterval;
     private boolean generateStatistics;
     public ProgramArguments(String[] args) throws Exception
@@ -47,14 +45,6 @@ public class ProgramArguments
             {
                 programConfigurationFilename = args[i].substring(args[i].indexOf("=")+1).trim();
             }
-            else if(args[i].startsWith(Argument.CSVDELIMITER.getAbbreviation()))
-            {
-                csvDelimiter = args[i].substring(args[i].indexOf("=")+1).trim();
-            }
-            else if(args[i].startsWith(Argument.CSVINCLUDEHEADER.getAbbreviation()))
-            {
-                csvIncludeHeader = args[i].substring(args[i].indexOf("=")+1).trim();
-            }
             else if(args[i].equals(Argument.GENERATESTATISTICS.getAbbreviation()))
             {
                 generateStatistics = true;
@@ -64,7 +54,6 @@ public class ProgramArguments
                 throw new InvalidConfigurationException("invalid configuration. the argument " + args[i] + " is unknown");
             }
         }
-
         validate();
     }
 
@@ -78,9 +67,6 @@ public class ProgramArguments
         {
             throw new InvalidConfigurationException("invalid configuration. program requires a data configuration yaml file to run");
         }
-    }
-    public String getCsvDelimiter() {
-        return csvDelimiter;
     }
 
     public String getDataConfigurationFilename() {
@@ -100,10 +86,6 @@ public class ProgramArguments
 
     public String getNumberOfRowsToGenerate() {
         return numberOfRowsToGenerate;
-    }
-
-    public String getCsvIncludeHeader() {
-        return csvIncludeHeader;
     }
 
     public String getGeneratedRowsLogInterval() {

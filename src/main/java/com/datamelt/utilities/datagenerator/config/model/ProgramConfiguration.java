@@ -24,22 +24,17 @@ public class ProgramConfiguration
         if(arguments.getNumberOfRowsToGenerate()!=null) {
             general.setNumberOfRowsToGenerate(Long.parseLong(arguments.getNumberOfRowsToGenerate()));
         }
+        if(arguments.getGeneratedRowsLogInterval()!=null)
+        {
+            general.setGeneratedRowsLogInterval(Long.parseLong(arguments.getGeneratedRowsLogInterval()));
+        }
         if(arguments.getExportFilename()!=null) {
             general.setExportFilename(arguments.getExportFilename());
         }
         if(arguments.getExportType()!=null) {
             general.setExportType(DataExportType.valueOf(arguments.getExportType().toUpperCase()));
         }
-        if(arguments.getCsvDelimiter()!=null) {
-            csvExport.setDelimiter(CsvDelimiterType.valueOf(arguments.getCsvDelimiter().toUpperCase()));
-        }
-        if(arguments.getCsvIncludeHeader()!=null) {
-            csvExport.setIncludeHeader(Boolean.parseBoolean(arguments.getCsvIncludeHeader()));
-        }
-        if(arguments.getGeneratedRowsLogInterval()!=null)
-        {
-            general.setGeneratedRowsLogInterval(Long.parseLong(arguments.getGeneratedRowsLogInterval()));
-        }
+
 
         validateConfiguration();
     }
