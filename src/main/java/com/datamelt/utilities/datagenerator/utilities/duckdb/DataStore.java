@@ -8,6 +8,8 @@ import org.duckdb.DuckDBConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -190,9 +192,10 @@ public class DataStore
         return buffer.toString();
     }
 
-    public void insert(Row row, long counter)
+    public void insert(Row row, long rowNumber)
     {
-        appender.append(row, counter);
+        appender.append(row, rowNumber);
+        numberOfRecordsInserted++;
     }
 
     public void flush() throws Exception
@@ -230,21 +233,35 @@ public class DataStore
         }
     }
 
-    public void getValueCounts(FieldConfiguration fieldConfiguration)
+    public FieldStatistics getValueCounts(FieldConfiguration fieldConfiguration)
     {
+        FieldStatistics statistics = new FieldStatistics(fieldConfiguration.getName());
         try
         {
             Statement stmt = connection.createStatement();
-            try (ResultSet rs = stmt.executeQuery("select " + fieldConfiguration.getName() + ", count(1) as total from " + dataConfiguration.getTableName() +" group by " + fieldConfiguration.getName()))
+            String sqlDistinct = "select count(distinct " + fieldConfiguration.getName() + ") as distinctValues from " + dataConfiguration.getTableName();
+            ResultSet rsDistinct = stmt.executeQuery(sqlDistinct);
+            rsDistinct.next();
+            long numberOfDistinctValues = rsDistinct.getLong("distinctValues");
+            rsDistinct.close();
+            statistics.setNumberOfDistinctValues(numberOfDistinctValues);
+
+            if(numberOfDistinctValues <= 50)
             {
-                while (rs.next()) {
-                    System.out.println("value: " + rs.getString(1) + ", total: " + rs.getDouble("total") / numberOfRecordsInserted * 100);
+                String sql = "select " + fieldConfiguration.getName() + " as fieldvalue, count(1) as total from " + dataConfiguration.getTableName() + " group by " + fieldConfiguration.getName();
+                ResultSet rsCounts = stmt.executeQuery(sql);
+                while (rsCounts.next())
+                {
+                    BigDecimal valueCount = new BigDecimal(rsCounts.getDouble("total") / numberOfRecordsInserted * 100);
+                    valueCount = valueCount.setScale(2, RoundingMode.HALF_UP);
+                    statistics.addValueCount(rsCounts.getString("fieldvalue"), valueCount.doubleValue());
                 }
             }
         }
         catch(Exception ex)
         {
-            logger.error("error executing insert statement");
+            logger.error("error collecting value counts for field [{}]. error [{}]", fieldConfiguration.getName(), ex.getMessage());
         }
+        return statistics;
     }
 }

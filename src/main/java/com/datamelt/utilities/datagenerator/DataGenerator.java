@@ -8,6 +8,7 @@ import com.datamelt.utilities.datagenerator.export.*;
 import com.datamelt.utilities.datagenerator.generate.Row;
 import com.datamelt.utilities.datagenerator.generate.RowBuilder;
 import com.datamelt.utilities.datagenerator.utilities.duckdb.DataStore;
+import com.datamelt.utilities.datagenerator.utilities.duckdb.FieldStatistics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.File;
@@ -56,6 +57,8 @@ public class DataGenerator
             if(generator.programConfiguration.getGeneral().getExportFilename() != null) {
                 generator.exportToFile();
             }
+
+            generator.outputStatistics();
         }
         catch (InvalidConfigurationException ice)
         {
@@ -144,6 +147,23 @@ public class DataGenerator
         long end = System.currentTimeMillis();
         logger.info("total rows generated: [{}]", counter);
         logger.info("total data generation time: [{}] seconds", (end - start) / 1000);
+    }
+
+    private void outputStatistics()
+    {
+        logger.info("collecting statistics for generated field values...");
+        for(FieldConfiguration fieldConfiguration : dataConfiguration.getFields())
+        {
+            FieldStatistics fieldStatistics = dataStore.getValueCounts(fieldConfiguration);
+            if(fieldStatistics.getNumberOfDistinctValues()<= 50)
+            {
+                logger.info("field: [{}], type: [{}], distinct values: [{}], values and percentages: [{}]", fieldConfiguration.getName(), fieldConfiguration.getType(), fieldStatistics.getNumberOfDistinctValues(), fieldStatistics.getFieldStatistics());
+            }
+            else
+            {
+                logger.info("field: [{}], type: [{}], distinct values: [{}], values and percentages: [{}]", fieldConfiguration.getName(), fieldConfiguration.getType(), fieldStatistics.getNumberOfDistinctValues(), "no statistics generated - too many distinct values");
+            }
+        }
     }
 
     private void exportToFile() throws Exception
