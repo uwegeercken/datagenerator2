@@ -58,7 +58,10 @@ public class DataGenerator
                 generator.exportToFile();
             }
 
-            generator.outputStatistics();
+            if(arguments.getGenerateStatistics())
+            {
+                generator.outputStatistics();
+            }
         }
         catch (InvalidConfigurationException ice)
         {

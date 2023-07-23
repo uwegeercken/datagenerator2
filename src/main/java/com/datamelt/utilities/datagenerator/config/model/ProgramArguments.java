@@ -14,6 +14,7 @@ public class ProgramArguments
     private String csvDelimiter;
     private String csvIncludeHeader;
     private String generatedRowsLogInterval;
+    private boolean generateStatistics;
     public ProgramArguments(String[] args) throws Exception
     {
         parseArguments(args);
@@ -53,6 +54,10 @@ public class ProgramArguments
             else if(args[i].startsWith(Argument.CSVINCLUDEHEADER.getAbbreviation()))
             {
                 csvIncludeHeader = args[i].substring(args[i].indexOf("=")+1).trim();
+            }
+            else if(args[i].equals(Argument.GENERATESTATISTICS.getAbbreviation()))
+            {
+                generateStatistics = true;
             }
             else
             {
@@ -103,5 +108,10 @@ public class ProgramArguments
 
     public String getGeneratedRowsLogInterval() {
         return generatedRowsLogInterval;
+    }
+
+    public boolean getGenerateStatistics()
+    {
+        return generateStatistics;
     }
 }
