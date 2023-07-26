@@ -37,7 +37,7 @@ class RandomStringGeneratorTest
     }
 
     @Test
-    @DisplayName("testing exception when max length >= min length")
+    @DisplayName("testing exception when max length < min length")
     void validateErrorMaxLengthSmallerMinLength()
     {
         Map<String, Object> options = new HashMap<>();
@@ -103,7 +103,7 @@ class RandomStringGeneratorTest
     }
 
     @Test
-    @DisplayName("testing varying length  between limits for 1000 cases")
+    @DisplayName("testing varying length between limits for 1000 cases")
     void validateVaryingLengthString() throws Exception
     {
         Long minValue = 10L;
