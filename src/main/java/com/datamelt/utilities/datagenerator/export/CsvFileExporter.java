@@ -1,9 +1,7 @@
 package com.datamelt.utilities.datagenerator.export;
 
-import com.datamelt.utilities.datagenerator.DataGenerator;
 import com.datamelt.utilities.datagenerator.config.model.CsvDelimiterType;
 import com.datamelt.utilities.datagenerator.config.model.CsvExportConfiguration;
-import com.datamelt.utilities.datagenerator.config.model.DataExportType;
 import org.duckdb.DuckDBConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

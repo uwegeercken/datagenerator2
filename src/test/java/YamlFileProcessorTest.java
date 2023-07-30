@@ -1,14 +1,12 @@
-import com.datamelt.utilities.datagenerator.ConfigurationLoader;
+import com.datamelt.utilities.datagenerator.utilities.ConfigurationLoader;
 import com.datamelt.utilities.datagenerator.config.CategoryFileLoader;
 import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
-import com.datamelt.utilities.datagenerator.config.process.CategoryProcessor;
 import com.datamelt.utilities.datagenerator.config.process.DataFieldsProcessor;
 import com.datamelt.utilities.datagenerator.generate.Row;
 import com.datamelt.utilities.datagenerator.generate.RowBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -345,11 +345,11 @@ the programm configuration file.
 
 Run the datagenerator tool:
 
-    java -cp . com.datamelt.utilities.datagenerator.DataGenerator -pc=<program configuration file> -dc=<data configuration file>
+    java -cp . com.datamelt.utilities.datagenerator.application.DataGenerator -pc=<program configuration file> -dc=<data configuration file>
 
 You can get help about the available program arguments by running:
 
-    java -cp . com.datamelt.utilities.datagenerator.DataGenerator --help
+    java -cp . com.datamelt.utilities.datagenerator.application.DataGenerator --help
 
 See the sample yaml file for the program configuration in this repository under: src/main/resources/config.
 

@@ -1,4 +1,4 @@
-package com.datamelt.utilities.datagenerator;
+package com.datamelt.utilities.datagenerator.application;
 
 import com.datamelt.utilities.datagenerator.config.CategoryFileLoader;
 import com.datamelt.utilities.datagenerator.config.model.*;
@@ -7,6 +7,7 @@ import com.datamelt.utilities.datagenerator.config.process.DataFieldsProcessor;
 import com.datamelt.utilities.datagenerator.export.*;
 import com.datamelt.utilities.datagenerator.generate.Row;
 import com.datamelt.utilities.datagenerator.generate.RowBuilder;
+import com.datamelt.utilities.datagenerator.utilities.ConfigurationLoader;
 import com.datamelt.utilities.datagenerator.utilities.duckdb.DataStore;
 import com.datamelt.utilities.datagenerator.utilities.duckdb.FieldStatistics;
 import org.slf4j.Logger;
