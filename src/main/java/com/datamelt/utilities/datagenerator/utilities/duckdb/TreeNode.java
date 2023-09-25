@@ -58,7 +58,7 @@ public class TreeNode implements Comparable<TreeNode>
         return children;
     }
 
-    private void addField(String name)
+    public void addField(String name)
     {
         fields.add(name);
     }
@@ -77,61 +77,7 @@ public class TreeNode implements Comparable<TreeNode>
 
     }
 
-
-    public static void main(String[] args)
-    {
-        List<String> fields = new ArrayList<>();
-
-        fields.add("person.address.street.name");
-        fields.add("person.address.street.number");
-        fields.add("job.company.location.name");
-
-        List<TreeNode> rootNodes = new ArrayList<>();
-
-        for(String field : fields)
-        {
-            String[] fieldParts = field.split("\\.");
-            TreeNode rootNode = null;
-            for (TreeNode node: rootNodes )
-            {
-                if(node.name.equals(fieldParts[0]))
-                {
-                    rootNode = node;
-                    break;
-                }
-            }
-            if(rootNode==null)
-            {
-                rootNode = new TreeNode(fieldParts[0]);
-                rootNodes.add(rootNode);
-            }
-
-            TreeNode currentNode = null;
-            for(int i=1; i<fieldParts.length-1;i++)
-            {
-                if(currentNode==null)
-                {
-                    currentNode = rootNode.addChild(fieldParts[i]);
-                }
-                else
-                {
-                    currentNode = currentNode.addChild(fieldParts[i]);
-                }
-            }
-            currentNode.addField(fieldParts[fieldParts.length-1]);
-        }
-
-        for (TreeNode node: rootNodes )
-        {
-            System.out.println("start node: " + node.name);
-            getChildren(node);
-        }
-
-        System.out.println();
-
-    }
-
-    public static void getChildren(TreeNode node )
+    public static void getChildren(TreeNode node)
     {
         for (TreeNode childNode : node.getChildren())
         {
