@@ -133,12 +133,11 @@ public class TreeNode implements Comparable<TreeNode>
 
     public static void getChildren(TreeNode node )
     {
-        Iterator<TreeNode> iterator = node.getChildren().iterator();
-        while(iterator.hasNext())
+        for (TreeNode childNode : node.getChildren())
         {
-            TreeNode childNode = iterator.next();
             //TODO: process fields
-            System.out.println("start node child: " + childNode.name);
+            System.out.println("child: " + childNode.name);
+            System.out.println("child fields: " + childNode.getFields());
             getChildren(childNode);
         }
     }
