@@ -6,16 +6,16 @@ import java.util.*;
 
 public class TableStructure
 {
-    private TreeNode<String> base;
+    private TreeNode base;
 
     public void addStruct(FieldConfiguration fieldConfiguration)
     {
         String[] parts = fieldConfiguration.getName().split("\\.");
         if(parts.length>1)
         {
-            base = new TreeNode<>(parts[0]);
+            base = new TreeNode(parts[0]);
 
-            TreeNode<String> currentNode = base;
+            TreeNode currentNode = base;
             for(int i=1;i<parts.length-1;i++)
             {
                 currentNode = currentNode.addChild(parts[i]);
