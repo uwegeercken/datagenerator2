@@ -146,7 +146,14 @@ public class CategoryProcessor extends FieldProcessor
                     int remainder = (100 - sumOfWeights) % fieldConfiguration.getNumberOfDefaultWeights();
 
                     logger.debug("field [{}] - total elements [{}]. elements without weight definition: [{}]", fieldConfiguration.getName(), numberOfValues, fieldConfiguration.getNumberOfDefaultWeights());
-                    logger.debug("field [{}] - distributing weight over [{}] elements: [{}] * [{}] and [{}] * [{}]", fieldConfiguration.getName(), fieldConfiguration.getNumberOfDefaultWeights(), remainder, averageWeightValue + 1, fieldConfiguration.getNumberOfDefaultWeights() - remainder, averageWeightValue);
+                    if(remainder!=0) {
+                        logger.debug("field [{}] - distributing weight over [{}] elements: [{}] * [{}] and [{}] * [{}]", fieldConfiguration.getName(), fieldConfiguration.getNumberOfDefaultWeights(), remainder, averageWeightValue + 1, fieldConfiguration.getNumberOfDefaultWeights() - remainder, averageWeightValue);
+                    }
+                    else
+                    {
+                        logger.debug("field [{}] - distributing weight over [{}] elements: [{}] * [{}]", fieldConfiguration.getName(), fieldConfiguration.getNumberOfDefaultWeights(), fieldConfiguration.getNumberOfDefaultWeights() - remainder, averageWeightValue);
+
+                    }
                     int counter = 0;
                     for (FieldConfigurationValue value : fieldConfiguration.getValues())
                     {
