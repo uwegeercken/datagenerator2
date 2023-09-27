@@ -2,21 +2,23 @@ package com.datamelt.utilities.datagenerator.config.model;
 
 public enum Argument
 {
-    NUMBEROFROWSTOGENERATE("-n","number of rows to generate"),
-    GENERATEDROWSLOGINTERVAL("-l", "interval for log messages during data generation"),
-    EXPORTFILENAME("-xp", "path and filename of the export file"),
-    EXPORTTYPE("-xt", "type of the export to generate. possible values: csv"),
-    DATACONFIGURATIONFILENAME("-dc", "path and filename of tha data configuration yaml file"),
-    PROGRAMCONFIGURATIONFILENAME("-pc", "path and filename of tha program configuration yaml file"),
-    CSVDELIMITER("-cd", "delimiter to be used for export files of type CSV"),
-    CSVINCLUDEHEADER("-ch", "indicator if a header row should be output for export files of type CSV"),
-    GENERATESTATISTICS("-s", "output statistics for the generated field values");
+    NUMBEROFROWSTOGENERATE("-n", false,"number of rows to generate"),
+    GENERATEDROWSLOGINTERVAL("-l", false,"interval for log messages during data generation"),
+    EXPORTFILENAME("-xp", false, "path and filename of the export file"),
+    EXPORTTYPE("-xt", false,"type of the export to generate. possible values: csv"),
+    DATACONFIGURATIONFILENAME("-dc", true, "path and filename of tha data configuration yaml file"),
+    PROGRAMCONFIGURATIONFILENAME("-pc", true, "path and filename of tha program configuration yaml file"),
+    CSVDELIMITER("-cd", false, "delimiter to be used for export files of type CSV"),
+    CSVINCLUDEHEADER("-ch", false, "indicator if a header row should be output for export files of type CSV"),
+    GENERATESTATISTICS("-s", false,"output statistics for the generated field values");
 
     private String abbreviation;
+    private boolean mandatory;
     private String explanation;
-    Argument(String abbreviation, String explanation)
+    Argument(String abbreviation, boolean mandatory, String explanation)
     {
         this.abbreviation = abbreviation;
+        this.mandatory = mandatory;
         this.explanation = explanation;
     }
 
@@ -29,4 +31,6 @@ public enum Argument
     {
         return explanation;
     }
+
+    public boolean isMandatory() { return mandatory;  }
 }
