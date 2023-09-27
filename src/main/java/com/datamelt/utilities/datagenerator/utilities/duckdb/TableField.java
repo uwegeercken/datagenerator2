@@ -2,12 +2,12 @@ package com.datamelt.utilities.datagenerator.utilities.duckdb;
 
 import com.datamelt.utilities.datagenerator.config.model.FieldType;
 
-public class StructField
+public class TableField
 {
     private String name;
     private FieldType fieldType;
 
-    public StructField(String name, FieldType fieldType)
+    public TableField(String name, FieldType fieldType)
     {
         this.name = name;
         this.fieldType = fieldType;

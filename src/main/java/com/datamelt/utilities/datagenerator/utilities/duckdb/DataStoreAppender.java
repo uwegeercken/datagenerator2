@@ -1,6 +1,5 @@
 package com.datamelt.utilities.datagenerator.utilities.duckdb;
 
-import com.datamelt.utilities.datagenerator.config.model.FieldType;
 import com.datamelt.utilities.datagenerator.generate.Row;
 import com.datamelt.utilities.datagenerator.generate.RowField;
 import org.duckdb.DuckDBAppender;
@@ -8,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -62,7 +60,7 @@ public class DataStoreAppender
         StringBuffer buffer = new StringBuffer();
         buffer.append("{");
         int counter = 0;
-        for(StructField field : struct.getFields())
+        for(TableField field : struct.getFields())
         {
             counter++;
             RowField<?> rowField = row.getField(struct.getName() + "." + field.getName());

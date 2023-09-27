@@ -177,7 +177,7 @@ public class DataStore
         buffer.append(struct.getName());
         buffer.append(" struct(");
         int counter = 0;
-        for(StructField field : struct.getFields())
+        for(TableField field : struct.getFields())
         {
             counter++;
             buffer.append("\"");

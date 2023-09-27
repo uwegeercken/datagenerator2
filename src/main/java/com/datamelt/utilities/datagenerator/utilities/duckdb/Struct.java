@@ -8,7 +8,7 @@ import java.util.List;
 public class Struct
 {
     private String name;
-    private List<StructField> fields = new ArrayList<>();
+    private List<TableField> fields = new ArrayList<>();
 
     public Struct(String name)
     {
@@ -23,18 +23,18 @@ public class Struct
         this.name = name;
     }
 
-    public List<StructField> getFields()
+    public List<TableField> getFields()
     {
         return fields;
     }
 
-    public void setFields(List<StructField> fields)
+    public void setFields(List<TableField> fields)
     {
         this.fields = fields;
     }
 
     public void addField(String name, FieldType fieldType)
     {
-        fields.add(new StructField(name, fieldType));
+        fields.add(new TableField(name, fieldType));
     }
 }
