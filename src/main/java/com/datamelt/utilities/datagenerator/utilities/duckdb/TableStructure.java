@@ -11,16 +11,18 @@ import java.util.*;
 public class TableStructure
 {
     private static final String STRUCT_SPLIT_REGEX_CHARACTER = "\\.";
+    private static final String COLUMN_ROWNUMBER_DATATYPE = "long";
     private static List<TreeNode> rootNodes;
     private static List<TableField> fields;
     private static StringBuilder createTableStatementBuilder;
-    public static String getCreateTableStatement(DataConfiguration dataConfiguration)
+    public static String getCreateTableStatement(ProgramConfiguration programConfiguration, DataConfiguration dataConfiguration)
     {
         createTableStatementBuilder = new StringBuilder();
         rootNodes = new ArrayList<>();
         fields = new ArrayList<>();
         createStructs(dataConfiguration);
         inititalizeCreateTableStatement(dataConfiguration.getTableName());
+        buildRownumberField(programConfiguration.getGeneral().getRowNumberFieldName());
         buildStandardFieldsStatement();
         buildStructsStatement();
         finalizeCreateTableStatement();
@@ -32,6 +34,13 @@ public class TableStructure
         createTableStatementBuilder.append("create table " + tableName +"(");
     }
 
+    private static void buildRownumberField(String rownumberFieldName)
+    {
+        createTableStatementBuilder.append("\"")
+                .append(rownumberFieldName)
+                .append("\"")
+                .append(" " + COLUMN_ROWNUMBER_DATATYPE + ", ");
+    }
     private static void finalizeCreateTableStatement()
     {
         createTableStatementBuilder.append(")");
@@ -131,7 +140,9 @@ public class TableStructure
     {
         for(int i=0; i< node.fields.size();i++)
         {
+            createTableStatementBuilder.append("\"");
             createTableStatementBuilder.append(node.fields.get(i).getName());
+            createTableStatementBuilder.append("\"");
             createTableStatementBuilder.append(" ");
             createTableStatementBuilder.append(getDuckDbType(node.fields.get(i).getFieldType()));
             if(i<node.fields.size()-1)
@@ -145,7 +156,9 @@ public class TableStructure
     {
         for(int i=0; i< fields.size();i++)
         {
+            createTableStatementBuilder.append("\"");
             createTableStatementBuilder.append(fields.get(i).getName());
+            createTableStatementBuilder.append("\"");
             createTableStatementBuilder.append(" ");
             createTableStatementBuilder.append(getDuckDbType(fields.get(i).getFieldType()));
             if(i<fields.size()-1)

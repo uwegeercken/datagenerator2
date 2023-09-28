@@ -86,9 +86,12 @@ public class DataStore
 
     private void createTable() throws Exception
     {
+
         Statement stmt = connection.createStatement();
-        String sqlCreateTable = "create table " + dataConfiguration.getTableName() + " (" + getDataTypesAndNames() + ")";
-        logger.trace("creating table [{}]", sqlCreateTable);
+        String sqlCreateTable = "create table " + dataConfiguration.getTableName() + "(" + getDataTypesAndNames() + ")";
+        String createTableStatement = TableStructure.getCreateTableStatement(programConfiguration, dataConfiguration);
+        logger.info("TEST: creating table [{}]", createTableStatement);
+        logger.info("      creating table [{}]", sqlCreateTable);
         stmt.execute(sqlCreateTable);
     }
 
@@ -109,7 +112,10 @@ public class DataStore
     {
         StringBuffer buffer = new StringBuffer();
         int counter = 0;
-        buffer.append(programConfiguration.getGeneral().getRowNumberFieldName() + " " + COLUMN_ROWNUMBER_DATATYPE + ", ");
+        buffer.append("\"")
+              .append(programConfiguration.getGeneral().getRowNumberFieldName())
+              .append("\"")
+              .append(" " + COLUMN_ROWNUMBER_DATATYPE + ", ");
         Map<String, Struct> structs = getStructs();
         List<String> processedStructs = new ArrayList<>();
         for(FieldConfiguration fieldConfiguration : dataConfiguration.getFields())
@@ -118,10 +124,10 @@ public class DataStore
             String[] namesParts = fieldConfiguration.getName().split("\\.");
             if(namesParts.length==1)
             {
-                buffer.append("\"");
-                buffer.append(fieldConfiguration.getName());
-                buffer.append("\" ");
-                buffer.append(getDuckDbType(fieldConfiguration.getType()));
+                buffer.append("\"")
+                    .append(fieldConfiguration.getName())
+                    .append("\" ")
+                    .append(getDuckDbType(fieldConfiguration.getType()));
 
                 if (counter < dataConfiguration.getFields().size())
                 {
@@ -149,7 +155,6 @@ public class DataStore
     private Map<String, Struct> getStructs()
     {
         //TODO: remove after testing
-        String createTableStatement = TableStructure.getCreateTableStatement(dataConfiguration);
         Map<String, Struct> structs = new HashMap<>();
         for(FieldConfiguration fieldConfiguration : dataConfiguration.getFields())
         {
