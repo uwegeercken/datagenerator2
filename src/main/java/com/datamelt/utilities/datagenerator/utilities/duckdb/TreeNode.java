@@ -1,5 +1,8 @@
 package com.datamelt.utilities.datagenerator.utilities.duckdb;
 
+import com.datamelt.utilities.datagenerator.config.model.FieldType;
+import com.datamelt.utilities.datagenerator.utilities.type.DataTypeDuckDb;
+
 import java.util.*;
 
 public class TreeNode implements Comparable<TreeNode>
@@ -8,7 +11,7 @@ public class TreeNode implements Comparable<TreeNode>
     TreeNode parent;
     TreeSet<TreeNode> children;
 
-    List<String> fields;
+    List<TableField> fields;
 
     public TreeNode(String name) {
         this.name = name;
@@ -49,21 +52,17 @@ public class TreeNode implements Comparable<TreeNode>
                 lastChild = lastChild.addChild(children[i]);
             }
         }
-        lastChild.addField(children[children.length-1]);
         return lastChild;
     }
 
-    public TreeSet<TreeNode> getChildren()
+
+
+    public void addField(TableField field)
     {
-        return children;
+        fields.add(field);
     }
 
-    public void addField(String name)
-    {
-        fields.add(name);
-    }
-
-    public List<String> getFields()
+    public List<TableField> getFields()
     {
         return fields;
     }
@@ -77,14 +76,28 @@ public class TreeNode implements Comparable<TreeNode>
 
     }
 
-    public static void getChildren(TreeNode node)
-    {
-        for (TreeNode childNode : node.getChildren())
-        {
-            //TODO: process fields
-            System.out.println("child: " + childNode.name);
-            System.out.println("child fields: " + childNode.getFields());
-            getChildren(childNode);
+
+
+    private String getDuckDbType(FieldType type) {
+        switch (type) {
+            case CATEGORY:
+                return DataTypeDuckDb.VARCHAR.toString();
+            case RANDOMDOUBLE:
+                return DataTypeDuckDb.DOUBLE.toString();
+            case RANDOMINTEGER:
+                return DataTypeDuckDb.INTEGER.toString();
+            case RANDOMLONG:
+                return DataTypeDuckDb.LONG.toString();
+            case RANDOMDATE:
+                return DataTypeDuckDb.DATE.toString();
+            case DATEREFERENCE:
+                return DataTypeDuckDb.VARCHAR.toString();
+            case RANDOMSTRING:
+                return DataTypeDuckDb.VARCHAR.toString();
+            case REGULAREXPRESSION:
+                return DataTypeDuckDb.VARCHAR.toString();
+            default:
+                return DataTypeDuckDb.VARCHAR.toString();
         }
     }
 
