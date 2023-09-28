@@ -3,6 +3,7 @@ package com.datamelt.utilities.datagenerator.utilities.duckdb;
 import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldType;
+import com.datamelt.utilities.datagenerator.config.model.ProgramConfiguration;
 import com.datamelt.utilities.datagenerator.utilities.type.DataTypeDuckDb;
 
 import java.util.*;
@@ -10,34 +11,33 @@ import java.util.*;
 public class TableStructure
 {
     private static final String STRUCT_SPLIT_REGEX_CHARACTER = "\\.";
-    private List<TreeNode> rootNodes = new ArrayList<>();
-    private List<TableField> fields = new ArrayList<>();
-
-    private StringBuilder createTableStatementBuilder = new StringBuilder();
-    private String createTableStatement;
-    public TableStructure(DataConfiguration dataConfiguration)
+    private static List<TreeNode> rootNodes;
+    private static List<TableField> fields;
+    private static StringBuilder createTableStatementBuilder;
+    public static String getCreateTableStatement(DataConfiguration dataConfiguration)
     {
+        createTableStatementBuilder = new StringBuilder();
+        rootNodes = new ArrayList<>();
+        fields = new ArrayList<>();
         createStructs(dataConfiguration);
-        inititalizeCreateTableStatement();
+        inititalizeCreateTableStatement(dataConfiguration.getTableName());
         buildStandardFieldsStatement();
         buildStructsStatement();
         finalizeCreateTableStatement();
-        this.createTableStatement = createTableStatementBuilder.toString();
-        System.out.println(createTableStatement);
-
+        return createTableStatementBuilder.toString();
     }
 
-    private void inititalizeCreateTableStatement()
+    private static void inititalizeCreateTableStatement(String tableName)
     {
-        createTableStatementBuilder.append("create table " + "testtable (");
+        createTableStatementBuilder.append("create table " + tableName +"(");
     }
 
-    private void finalizeCreateTableStatement()
+    private static void finalizeCreateTableStatement()
     {
         createTableStatementBuilder.append(")");
     }
 
-    private void createStructs(DataConfiguration dataConfiguration)
+    private static void createStructs(DataConfiguration dataConfiguration)
     {
         for(FieldConfiguration fieldConfiguration : dataConfiguration.getFields())
         {
@@ -87,12 +87,12 @@ public class TableStructure
         }
     }
 
-    private List<TreeNode> getRootNodes()
+    private static List<TreeNode> getRootNodes()
     {
         return rootNodes;
     }
 
-    private void buildStructsStatement()
+    private static void buildStructsStatement()
     {
         for (int i=0;i< rootNodes.size();i++ )
         {
@@ -108,7 +108,7 @@ public class TableStructure
         }
     }
 
-    private void getChildren(TreeNode node)
+    private static void getChildren(TreeNode node)
     {
         int counter = 0;
         for (TreeNode childNode : node.children)
@@ -127,7 +127,7 @@ public class TableStructure
         }
     }
 
-    private void buildStructFieldsStatement(TreeNode node)
+    private static void buildStructFieldsStatement(TreeNode node)
     {
         for(int i=0; i< node.fields.size();i++)
         {
@@ -141,7 +141,7 @@ public class TableStructure
         }
     }
 
-    private void buildStandardFieldsStatement()
+    private static void buildStandardFieldsStatement()
     {
         for(int i=0; i< fields.size();i++)
         {
@@ -158,7 +158,7 @@ public class TableStructure
         }
     }
 
-    private String getDuckDbType(FieldType type)
+    private static String getDuckDbType(FieldType type)
     {
         switch(type)
         {
