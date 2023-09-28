@@ -149,7 +149,7 @@ public class DataStore
     private Map<String, Struct> getStructs()
     {
         //TODO: remove after testing
-        TableStructure structure = new TableStructure(dataConfiguration);
+        String createTableStatement = TableStructure.getCreateTableStatement(dataConfiguration);
         Map<String, Struct> structs = new HashMap<>();
         for(FieldConfiguration fieldConfiguration : dataConfiguration.getFields())
         {
