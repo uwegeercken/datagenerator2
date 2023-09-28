@@ -37,26 +37,6 @@ public class TreeNode implements Comparable<TreeNode>
         return childNode;
     }
 
-    public TreeNode addChildren(String name)
-    {
-        String[] children = name.split("\\.");
-        TreeNode lastChild = null;
-        for(int i=1;i<children.length-1;i++)
-        {
-            if(lastChild == null)
-            {
-                lastChild = addChild(children[i]);
-            }
-            else
-            {
-                lastChild = lastChild.addChild(children[i]);
-            }
-        }
-        return lastChild;
-    }
-
-
-
     public void addField(TableField field)
     {
         fields.add(field);
@@ -73,33 +53,5 @@ public class TreeNode implements Comparable<TreeNode>
         if(this.name.equals(treeNode.name))
             return 0;
         return 1;
-
     }
-
-
-
-    private String getDuckDbType(FieldType type) {
-        switch (type) {
-            case CATEGORY:
-                return DataTypeDuckDb.VARCHAR.toString();
-            case RANDOMDOUBLE:
-                return DataTypeDuckDb.DOUBLE.toString();
-            case RANDOMINTEGER:
-                return DataTypeDuckDb.INTEGER.toString();
-            case RANDOMLONG:
-                return DataTypeDuckDb.LONG.toString();
-            case RANDOMDATE:
-                return DataTypeDuckDb.DATE.toString();
-            case DATEREFERENCE:
-                return DataTypeDuckDb.VARCHAR.toString();
-            case RANDOMSTRING:
-                return DataTypeDuckDb.VARCHAR.toString();
-            case REGULAREXPRESSION:
-                return DataTypeDuckDb.VARCHAR.toString();
-            default:
-                return DataTypeDuckDb.VARCHAR.toString();
-        }
-    }
-
-
 }
