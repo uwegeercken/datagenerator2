@@ -107,8 +107,11 @@ public class TableStructure
         {
             createTableStatementBuilder.append(rootNodes.get(i).name).append(" struct(");
             buildStructFieldsStatement(rootNodes.get(i));
-            createTableStatementBuilder.append(",");
-            getChildren(rootNodes.get(i));
+            if(rootNodes.get(i).children.size()>0) {
+                createTableStatementBuilder.append(",");
+                getChildren(rootNodes.get(i));
+            }
+
             createTableStatementBuilder.append(")");
             if(i< rootNodes.size()-1)
             {
@@ -129,7 +132,7 @@ public class TableStructure
             buildStructFieldsStatement(childNode);
             getChildren(childNode);
             createTableStatementBuilder.append(")");
-            if(counter< node.children.size())
+            if(counter< node.children.size()-1)
             {
                 createTableStatementBuilder.append(",");
             }
