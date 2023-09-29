@@ -39,7 +39,7 @@ public class TableStructure
         createTableStatementBuilder.append("\"")
                 .append(rownumberFieldName)
                 .append("\"")
-                .append(" " + COLUMN_ROWNUMBER_DATATYPE + ", ");
+                .append(" " + COLUMN_ROWNUMBER_DATATYPE + ",");
     }
     private static void finalizeCreateTableStatement()
     {
@@ -107,13 +107,12 @@ public class TableStructure
         {
             createTableStatementBuilder.append(rootNodes.get(i).name).append(" struct(");
             buildStructFieldsStatement(rootNodes.get(i));
-            if(rootNodes.get(i).children.size()>0) {
-                createTableStatementBuilder.append(",");
+            if(rootNodes.get(i).children.size()>0)
+            {
                 getChildren(rootNodes.get(i));
             }
-
             createTableStatementBuilder.append(")");
-            if(i< rootNodes.size()-1)
+            if(i < rootNodes.size()-1)
             {
                 createTableStatementBuilder.append(",");
             }
@@ -122,26 +121,27 @@ public class TableStructure
 
     private static void getChildren(TreeNode node)
     {
-        int counter = 0;
-        for (TreeNode childNode : node.children)
+        for (int i=0;i<node.children.size();i++)
         {
-            counter++;
-            //TODO: process fields
-            //StringBuilder builder = new StringBuilder();
-            createTableStatementBuilder.append(childNode.name).append(" struct(");
-            buildStructFieldsStatement(childNode);
-            getChildren(childNode);
-            createTableStatementBuilder.append(")");
-            if(counter< node.children.size()-1)
+            createTableStatementBuilder.append(node.children.get(i).name).append(" struct(");
+            buildStructFieldsStatement(node.children.get(i));
+            if(node.children.get(i).children.size()>0) {
+                getChildren(node.children.get(i));
+            }
+            if(i<node.children.size()-1)
             {
+                createTableStatementBuilder.append(")");
                 createTableStatementBuilder.append(",");
+            }
+            else {
+                createTableStatementBuilder.append(")");
             }
         }
     }
 
     private static void buildStructFieldsStatement(TreeNode node)
     {
-        for(int i=0; i< node.fields.size();i++)
+        for(int i=0;i < node.fields.size();i++)
         {
             createTableStatementBuilder.append("\"");
             createTableStatementBuilder.append(node.fields.get(i).getName());
@@ -150,14 +150,18 @@ public class TableStructure
             createTableStatementBuilder.append(getDuckDbType(node.fields.get(i).getFieldType()));
             if(i<node.fields.size()-1)
             {
-                createTableStatementBuilder.append(", ");
+                createTableStatementBuilder.append(",");
             }
+        }
+        if(node.fields.size()>0 && node.children.size()>0)
+        {
+            createTableStatementBuilder.append(",");
         }
     }
 
     private static void buildStandardFieldsStatement()
     {
-        for(int i=0; i< fields.size();i++)
+        for(int i=0;i < fields.size();i++)
         {
             createTableStatementBuilder.append("\"");
             createTableStatementBuilder.append(fields.get(i).getName());
@@ -166,7 +170,7 @@ public class TableStructure
             createTableStatementBuilder.append(getDuckDbType(fields.get(i).getFieldType()));
             if(i<fields.size()-1)
             {
-                createTableStatementBuilder.append(", ");
+                createTableStatementBuilder.append(",");
             }
         }
         if(rootNodes.size()>0) {

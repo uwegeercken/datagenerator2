@@ -9,13 +9,13 @@ public class TreeNode implements Comparable<TreeNode>
 {
     String name;
     TreeNode parent;
-    TreeSet<TreeNode> children;
+    LinkedList<TreeNode> children;
 
     List<TableField> fields;
 
     public TreeNode(String name) {
         this.name = name;
-        this.children = new TreeSet<TreeNode>();
+        this.children = new LinkedList<TreeNode>();
         this.fields = new ArrayList<>();
     }
 
