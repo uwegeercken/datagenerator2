@@ -8,13 +8,15 @@ import java.util.*;
 public class TreeNode implements Comparable<TreeNode>
 {
     String name;
+    String allStructsName;
     TreeNode parent;
     LinkedList<TreeNode> children;
 
     List<TableField> fields;
 
-    public TreeNode(String name) {
+    public TreeNode(String allStructsName,String name) {
         this.name = name;
+        this.allStructsName = allStructsName;
         this.children = new LinkedList<TreeNode>();
         this.fields = new ArrayList<>();
     }
@@ -30,7 +32,7 @@ public class TreeNode implements Comparable<TreeNode>
         }
         if(childNode==null)
         {
-            childNode = new TreeNode(child);
+            childNode = new TreeNode(allStructsName, child);
             childNode.parent = this;
             this.children.add(childNode);
         }
@@ -46,6 +48,8 @@ public class TreeNode implements Comparable<TreeNode>
     {
         return fields;
     }
+
+    public String getAllStructsName() { return allStructsName; }
 
     @Override
     public int compareTo(TreeNode treeNode)

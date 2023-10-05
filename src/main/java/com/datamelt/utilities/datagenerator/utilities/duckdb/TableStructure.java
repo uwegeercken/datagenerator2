@@ -12,14 +12,16 @@ public class TableStructure
 {
     private static final String STRUCT_SPLIT_REGEX_CHARACTER = "\\.";
     private static final String COLUMN_ROWNUMBER_DATATYPE = "long";
-    private static List<TreeNode> rootNodes;
-    private static List<TableField> fields;
-    private static StringBuilder createTableStatementBuilder;
+    private static final List<TreeNode> rootNodes = new ArrayList<>();
+    private static final List<TableField> fields= new ArrayList<>();
+
+    private static int fieldNumber;
+    private static final Map<String, Integer> fieldMap = new HashMap<>();
+    private static final StringBuilder createTableStatementBuilder = new StringBuilder();
+    private static final StringBuilder appenderStatementBuilder = new StringBuilder();
+
     public static String getCreateTableStatement(ProgramConfiguration programConfiguration, DataConfiguration dataConfiguration)
     {
-        createTableStatementBuilder = new StringBuilder();
-        rootNodes = new ArrayList<>();
-        fields = new ArrayList<>();
         createStructs(dataConfiguration);
         inititalizeCreateTableStatement(dataConfiguration.getTableName());
         buildRownumberField(programConfiguration.getGeneral().getRowNumberFieldName());
@@ -39,7 +41,9 @@ public class TableStructure
         createTableStatementBuilder.append("\"")
                 .append(rownumberFieldName)
                 .append("\"")
-                .append(" " + COLUMN_ROWNUMBER_DATATYPE + ",");
+                .append(" ").append(COLUMN_ROWNUMBER_DATATYPE)
+                .append(",");
+        appenderStatementBuilder.append(rownumberFieldName).append(",");
     }
     private static void finalizeCreateTableStatement()
     {
@@ -51,8 +55,11 @@ public class TableStructure
         for(FieldConfiguration fieldConfiguration : dataConfiguration.getFields())
         {
             String[] fieldParts = fieldConfiguration.getName().split(STRUCT_SPLIT_REGEX_CHARACTER);
+
             if(fieldParts.length>1)
             {
+                int lastRegexCharacter = fieldConfiguration.getName().lastIndexOf(".");
+                String allStructsName = fieldConfiguration.getName().substring(0, lastRegexCharacter);
                 TreeNode rootNode = null;
                 for (TreeNode node: rootNodes )
                 {
@@ -64,7 +71,7 @@ public class TableStructure
                 }
                 if(rootNode==null)
                 {
-                    rootNode = new TreeNode(fieldParts[0]);
+                    rootNode = new TreeNode(allStructsName, fieldParts[0]);
                     rootNodes.add(rootNode);
                 }
 
@@ -106,15 +113,18 @@ public class TableStructure
         for (int i=0;i< rootNodes.size();i++ )
         {
             createTableStatementBuilder.append(rootNodes.get(i).name).append(" struct(");
+            appenderStatementBuilder.append("{");
             buildStructFieldsStatement(rootNodes.get(i));
             if(rootNodes.get(i).children.size()>0)
             {
                 getChildren(rootNodes.get(i));
             }
             createTableStatementBuilder.append(")");
+            appenderStatementBuilder.append("}");
             if(i < rootNodes.size()-1)
             {
                 createTableStatementBuilder.append(",");
+                appenderStatementBuilder.append(",");
             }
         }
     }
@@ -124,6 +134,7 @@ public class TableStructure
         for (int i=0;i<node.children.size();i++)
         {
             createTableStatementBuilder.append(node.children.get(i).name).append(" struct(");
+            appenderStatementBuilder.append("{");
             buildStructFieldsStatement(node.children.get(i));
             if(node.children.get(i).children.size()>0) {
                 getChildren(node.children.get(i));
@@ -132,9 +143,12 @@ public class TableStructure
             {
                 createTableStatementBuilder.append(")");
                 createTableStatementBuilder.append(",");
+                appenderStatementBuilder.append("}");
+                appenderStatementBuilder.append(",");
             }
             else {
                 createTableStatementBuilder.append(")");
+                appenderStatementBuilder.append("}");
             }
         }
     }
@@ -148,14 +162,17 @@ public class TableStructure
             createTableStatementBuilder.append("\"");
             createTableStatementBuilder.append(" ");
             createTableStatementBuilder.append(getDuckDbType(node.fields.get(i).getFieldType()));
+            appenderStatementBuilder.append(node.allStructsName + "." + node.fields.get(i).getName());
             if(i<node.fields.size()-1)
             {
                 createTableStatementBuilder.append(",");
+                appenderStatementBuilder.append(",");
             }
         }
         if(node.fields.size()>0 && node.children.size()>0)
         {
             createTableStatementBuilder.append(",");
+            appenderStatementBuilder.append(",");
         }
     }
 
@@ -168,13 +185,16 @@ public class TableStructure
             createTableStatementBuilder.append("\"");
             createTableStatementBuilder.append(" ");
             createTableStatementBuilder.append(getDuckDbType(fields.get(i).getFieldType()));
+            appenderStatementBuilder.append(fields.get(i).getName());
             if(i<fields.size()-1)
             {
                 createTableStatementBuilder.append(",");
+                appenderStatementBuilder.append(",");
             }
         }
         if(rootNodes.size()>0) {
             createTableStatementBuilder.append(",");
+            appenderStatementBuilder.append(",");
         }
     }
 
