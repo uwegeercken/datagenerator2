@@ -14,9 +14,6 @@ public class TableStructure
     private static final String COLUMN_ROWNUMBER_DATATYPE = "long";
     private static final List<TreeNode> rootNodes = new ArrayList<>();
     private static final List<TableField> fields= new ArrayList<>();
-
-    private static int fieldNumber;
-    private static final Map<String, Integer> fieldMap = new HashMap<>();
     private static final StringBuilder createTableStatementBuilder = new StringBuilder();
 
     public static String getCreateTableStatement(ProgramConfiguration programConfiguration, DataConfiguration dataConfiguration)
@@ -56,8 +53,6 @@ public class TableStructure
 
             if(fieldParts.length>1)
             {
-                int lastRegexCharacter = fieldConfiguration.getName().lastIndexOf(".");
-                String allStructsName = fieldConfiguration.getName().substring(0, lastRegexCharacter);
                 TreeNode rootNode = null;
                 for (TreeNode node: rootNodes )
                 {
@@ -105,6 +100,8 @@ public class TableStructure
     {
         return rootNodes;
     }
+
+    public static List<TableField> getFields() { return fields;}
 
     private static void buildStructsStatement()
     {

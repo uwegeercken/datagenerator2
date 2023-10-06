@@ -8,20 +8,17 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class DataStoreAppender
 {
     private static Logger logger = LoggerFactory.getLogger(DataStoreAppender.class);
     private DuckDBAppender appender;
-    private Map<String,Struct> structs;
-    private List<TreeNode> rootNodes;
+    private TableFields tableFields;
 
-    public DataStoreAppender(DuckDBAppender appender, Map<String,Struct> structs, List<TreeNode> rootNodes)
+    public DataStoreAppender(DuckDBAppender appender, TableFields tableFields)
     {
         this.appender = appender;
-        this.structs = structs;
-        this.rootNodes = rootNodes;
+        this.tableFields = tableFields;
     }
 
     public void append(Row row, long counter)
@@ -31,31 +28,39 @@ public class DataStoreAppender
         {
             appender.beginRow();
             appendRownumberField(counter);
-            for(RowField field : row.getFields())
+
+            for(String fieldName : tableFields.getFieldNames())
             {
-                String[] nameParts = field.getName().split("\\.");
-                if(nameParts.length==1)
+                TreeNode node = getRootNode(fieldName);
+                if(node==null)
                 {
-                    appendField(field);
+                    appendField(row.getField(fieldName));
                 }
                 else
                 {
-//                    if(structs.containsKey(nameParts[0]) && !processedStructs.contains(nameParts[0]))
+                    String value = createStruct(node, row);
+                    appendString(value);
+                }
+            }
+
+//            for(RowField field : row.getFields())
+//            {
+//                String[] nameParts = field.getName().split("\\.");
+//                if(nameParts.length==1)
+//                {
+//                    appendField(field);
+//                }
+//                else
+//                {
+//                    if (!processedStructs.contains(nameParts[0]))
 //                    {
-//                        Struct struct = structs.get(nameParts[0]);
-//                        String value = createStruct(struct, row);
+//                        TreeNode node = getRootNode(nameParts[0]);
+//                        String value = createStruct(node, row);
 //                        appendString(value);
 //                        processedStructs.add(nameParts[0]);
 //                    }
-                    if (!processedStructs.contains(nameParts[0]))
-                    {
-                        TreeNode node = getRootNode(nameParts[0]);
-                        String value = createStruct2(node, row);
-                        appendString(value);
-                        processedStructs.add(nameParts[0]);
-                    }
-                }
-            }
+//                }
+//            }
             appender.endRow();
         }
         catch(Exception ex)
@@ -64,33 +69,9 @@ public class DataStoreAppender
         }
     }
 
-    private String createStruct(Struct struct, Row row)
-    {
-        StringBuffer buffer = new StringBuffer();
-        buffer.append("{");
-        int counter = 0;
-        for(TableField field : struct.getFields())
-        {
-            counter++;
-            RowField<?> rowField = row.getField(struct.getName() + "." + field.getName());
-            buffer.append("\"");
-            buffer.append(field.getName());
-            buffer.append("\": '");
-            buffer.append(rowField.getValue());
-            buffer.append("'");
-
-            if (counter < struct.getFields().size())
-            {
-                buffer.append(", ");
-            }
-        }
-        buffer.append("}");
-        return buffer.toString();
-    }
-
     private TreeNode getRootNode(String name)
     {
-        for(TreeNode node : rootNodes)
+        for(TreeNode node : tableFields.getRootNodes())
         {
             if(node.getName().equals(name))
             {
@@ -100,7 +81,7 @@ public class DataStoreAppender
         return null;
     }
 
-    private String createStruct2(TreeNode node, Row row)
+    private String createStruct(TreeNode node, Row row)
     {
         StringBuffer buffer = new StringBuffer();
         buffer.append("{");
@@ -137,8 +118,6 @@ public class DataStoreAppender
             buffer.append(node.getChildren().get(i).getName());
             buffer.append("\":");
             buffer.append(" {");
-
-
             buildStructFieldsStatement(fullName, node.getChildren().get(i), row, buffer);
             if(node.getChildren().get(i).getChildren().size()>0) {
                 getChildren(fullName, node.getChildren().get(i), row, buffer);
@@ -244,5 +223,4 @@ public class DataStoreAppender
     {
         appender.append(value);
     }
-
 }

@@ -3,7 +3,6 @@ package com.datamelt.utilities.datagenerator.utilities.duckdb;
 import com.datamelt.utilities.datagenerator.config.model.*;
 import com.datamelt.utilities.datagenerator.export.FileExporter;
 import com.datamelt.utilities.datagenerator.generate.Row;
-import com.datamelt.utilities.datagenerator.utilities.type.DataTypeDuckDb;
 import org.duckdb.DuckDBConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,16 +10,12 @@ import org.slf4j.LoggerFactory;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class DataStore
 {
     private static Logger logger = LoggerFactory.getLogger(DataStore.class);
     private static final String SCHEMANAME = "main";
-    private static final String COLUMN_ROWNUMBER_DATATYPE = "long";
     private long numberOfRecordsInserted = 0;
     private DuckDBConnection connection;
     private DataStoreAppender appender;
@@ -28,7 +23,7 @@ public class DataStore
     private DataConfiguration dataConfiguration;
     private FileExporter fileExporter;
 
-    private List<TreeNode> rootNodes;
+    TableFields tableFields;
 
     public DataStore(ProgramConfiguration programConfiguration, DataConfiguration dataConfiguration, FileExporter fileExporter) throws Exception
     {
@@ -90,12 +85,9 @@ public class DataStore
     {
 
         Statement stmt = connection.createStatement();
-        String sqlCreateTable = "create table " + dataConfiguration.getTableName() + "(" + getDataTypesAndNames() + ")";
         String createTableStatement = TableStructure.getCreateTableStatement(programConfiguration, dataConfiguration);
-        rootNodes = TableStructure.getRootNodes();
-        logger.info("TEST: creating table [{}]", createTableStatement);
-        logger.info("      creating table [{}]", sqlCreateTable);
-        //stmt.execute(sqlCreateTable);
+        tableFields = new TableFields(TableStructure.getFields(), TableStructure.getRootNodes());
+        logger.info("creating table  [{}], statement [{}]", dataConfiguration.getTableName(), createTableStatement);
         stmt.execute(createTableStatement);
     }
 
@@ -109,99 +101,9 @@ public class DataStore
 
     private void createAppender() throws Exception
     {
-        this.appender = new DataStoreAppender(connection.createAppender(SCHEMANAME, dataConfiguration.getTableName()),getStructs(), rootNodes);
+        this.appender = new DataStoreAppender(connection.createAppender(SCHEMANAME, dataConfiguration.getTableName()), tableFields);
     }
 
-    private String getDataTypesAndNames() throws Exception
-    {
-        StringBuffer buffer = new StringBuffer();
-        int counter = 0;
-        buffer.append("\"")
-              .append(programConfiguration.getGeneral().getRowNumberFieldName())
-              .append("\"")
-              .append(" " + COLUMN_ROWNUMBER_DATATYPE + ", ");
-        Map<String, Struct> structs = getStructs();
-        List<String> processedStructs = new ArrayList<>();
-        for(FieldConfiguration fieldConfiguration : dataConfiguration.getFields())
-        {
-            counter++;
-            String[] namesParts = fieldConfiguration.getName().split("\\.");
-            if(namesParts.length==1)
-            {
-                buffer.append("\"")
-                    .append(fieldConfiguration.getName())
-                    .append("\" ")
-                    .append(getDuckDbType(fieldConfiguration.getType()));
-
-                if (counter < dataConfiguration.getFields().size())
-                {
-                    buffer.append(", ");
-                }
-            }
-            else
-            {
-                if(structs.containsKey(namesParts[0]) && !processedStructs.contains(namesParts[0]))
-                {
-                    Struct struct = structs.get(namesParts[0]);
-                    buffer.append(createStruct(struct));
-                    processedStructs.add(namesParts[0]);
-
-                    if (counter < dataConfiguration.getFields().size())
-                    {
-                        buffer.append(", ");
-                    }
-                }
-            }
-        }
-        return buffer.toString();
-    }
-
-    private Map<String, Struct> getStructs()
-    {
-        //TODO: remove after testing
-        Map<String, Struct> structs = new HashMap<>();
-        for(FieldConfiguration fieldConfiguration : dataConfiguration.getFields())
-        {
-            String[] namesParts = fieldConfiguration.getName().split("\\.");
-            if(namesParts.length==2)
-            {
-                if(structs.containsKey(namesParts[0]))
-                {
-                    Struct struct = structs.get(namesParts[0]);
-                    struct.addField(namesParts[1], fieldConfiguration.getType());
-                }
-                else
-                {
-                    Struct struct = new Struct(namesParts[0]);
-                    struct.addField(namesParts[1], fieldConfiguration.getType());
-                    structs.put(namesParts[0], struct);
-                }
-            }
-        }
-        return structs;
-    }
-    private String createStruct(Struct struct)
-    {
-        StringBuffer buffer = new StringBuffer();
-        buffer.append(struct.getName());
-        buffer.append(" struct(");
-        int counter = 0;
-        for(TableField field : struct.getFields())
-        {
-            counter++;
-            buffer.append("\"");
-            buffer.append(field.getName());
-            buffer.append("\" ");
-            buffer.append(getDuckDbType(field.getFieldType()));
-
-            if (counter < struct.getFields().size())
-            {
-                buffer.append(", ");
-            }
-        }
-        buffer.append(")");
-        return buffer.toString();
-    }
 
     public void insert(Row row, long rowNumber)
     {
@@ -217,31 +119,6 @@ public class DataStore
     public void exportToFile(String tablename, String exportFilename) throws Exception
     {
         fileExporter.export(connection, tablename, exportFilename);
-    }
-
-    private String getDuckDbType(FieldType type)
-    {
-        switch(type)
-        {
-            case CATEGORY:
-                return DataTypeDuckDb.VARCHAR.toString();
-            case RANDOMDOUBLE:
-                return DataTypeDuckDb.DOUBLE.toString();
-            case RANDOMINTEGER:
-                return DataTypeDuckDb.INTEGER.toString();
-            case RANDOMLONG:
-                return DataTypeDuckDb.LONG.toString();
-            case RANDOMDATE:
-                return DataTypeDuckDb.DATE.toString();
-            case DATEREFERENCE:
-                return DataTypeDuckDb.VARCHAR.toString();
-            case RANDOMSTRING:
-                return DataTypeDuckDb.VARCHAR.toString();
-            case REGULAREXPRESSION:
-                return DataTypeDuckDb.VARCHAR.toString();
-            default:
-                return DataTypeDuckDb.VARCHAR.toString();
-        }
     }
 
     public FieldStatistics getValueCounts(FieldConfiguration fieldConfiguration)
