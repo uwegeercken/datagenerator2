@@ -18,7 +18,6 @@ public class TableStructure
     private static int fieldNumber;
     private static final Map<String, Integer> fieldMap = new HashMap<>();
     private static final StringBuilder createTableStatementBuilder = new StringBuilder();
-    private static final StringBuilder appenderStatementBuilder = new StringBuilder();
 
     public static String getCreateTableStatement(ProgramConfiguration programConfiguration, DataConfiguration dataConfiguration)
     {
@@ -43,7 +42,6 @@ public class TableStructure
                 .append("\"")
                 .append(" ").append(COLUMN_ROWNUMBER_DATATYPE)
                 .append(",");
-        appenderStatementBuilder.append(rownumberFieldName).append(",");
     }
     private static void finalizeCreateTableStatement()
     {
@@ -63,7 +61,7 @@ public class TableStructure
                 TreeNode rootNode = null;
                 for (TreeNode node: rootNodes )
                 {
-                    if(node.name.equals(fieldParts[0]))
+                    if(node.getName().equals(fieldParts[0]))
                     {
                         rootNode = node;
                         break;
@@ -71,7 +69,7 @@ public class TableStructure
                 }
                 if(rootNode==null)
                 {
-                    rootNode = new TreeNode(allStructsName, fieldParts[0]);
+                    rootNode = new TreeNode(fieldParts[0]);
                     rootNodes.add(rootNode);
                 }
 
@@ -103,7 +101,7 @@ public class TableStructure
         }
     }
 
-    private static List<TreeNode> getRootNodes()
+    public static List<TreeNode> getRootNodes()
     {
         return rootNodes;
     }
@@ -112,67 +110,57 @@ public class TableStructure
     {
         for (int i=0;i< rootNodes.size();i++ )
         {
-            createTableStatementBuilder.append(rootNodes.get(i).name).append(" struct(");
-            appenderStatementBuilder.append("{");
+            createTableStatementBuilder.append(rootNodes.get(i).getName()).append(" struct(");
             buildStructFieldsStatement(rootNodes.get(i));
-            if(rootNodes.get(i).children.size()>0)
+            if(rootNodes.get(i).getChildren().size()>0)
             {
                 getChildren(rootNodes.get(i));
             }
             createTableStatementBuilder.append(")");
-            appenderStatementBuilder.append("}");
             if(i < rootNodes.size()-1)
             {
                 createTableStatementBuilder.append(",");
-                appenderStatementBuilder.append(",");
             }
         }
     }
 
     private static void getChildren(TreeNode node)
     {
-        for (int i=0;i<node.children.size();i++)
+        for (int i=0;i<node.getChildren().size();i++)
         {
-            createTableStatementBuilder.append(node.children.get(i).name).append(" struct(");
-            appenderStatementBuilder.append("{");
-            buildStructFieldsStatement(node.children.get(i));
-            if(node.children.get(i).children.size()>0) {
-                getChildren(node.children.get(i));
+            createTableStatementBuilder.append(node.getChildren().get(i).getName()).append(" struct(");
+            buildStructFieldsStatement(node.getChildren().get(i));
+            if(node.getChildren().get(i).getChildren().size()>0) {
+                getChildren(node.getChildren().get(i));
             }
-            if(i<node.children.size()-1)
+            if(i<node.getChildren().size()-1)
             {
                 createTableStatementBuilder.append(")");
                 createTableStatementBuilder.append(",");
-                appenderStatementBuilder.append("}");
-                appenderStatementBuilder.append(",");
             }
             else {
                 createTableStatementBuilder.append(")");
-                appenderStatementBuilder.append("}");
             }
         }
     }
 
     private static void buildStructFieldsStatement(TreeNode node)
     {
-        for(int i=0;i < node.fields.size();i++)
+        for(int i=0;i < node.getFields().size();i++)
         {
             createTableStatementBuilder.append("\"");
-            createTableStatementBuilder.append(node.fields.get(i).getName());
+            createTableStatementBuilder.append(node.getFields().get(i).getName());
             createTableStatementBuilder.append("\"");
             createTableStatementBuilder.append(" ");
-            createTableStatementBuilder.append(getDuckDbType(node.fields.get(i).getFieldType()));
-            appenderStatementBuilder.append(node.allStructsName + "." + node.fields.get(i).getName());
-            if(i<node.fields.size()-1)
+            createTableStatementBuilder.append(getDuckDbType(node.getFields().get(i).getFieldType()));
+            if(i<node.getFields().size()-1)
             {
                 createTableStatementBuilder.append(",");
-                appenderStatementBuilder.append(",");
             }
         }
-        if(node.fields.size()>0 && node.children.size()>0)
+        if(node.getFields().size()>0 && node.getChildren().size()>0)
         {
             createTableStatementBuilder.append(",");
-            appenderStatementBuilder.append(",");
         }
     }
 
@@ -185,16 +173,13 @@ public class TableStructure
             createTableStatementBuilder.append("\"");
             createTableStatementBuilder.append(" ");
             createTableStatementBuilder.append(getDuckDbType(fields.get(i).getFieldType()));
-            appenderStatementBuilder.append(fields.get(i).getName());
             if(i<fields.size()-1)
             {
                 createTableStatementBuilder.append(",");
-                appenderStatementBuilder.append(",");
             }
         }
         if(rootNodes.size()>0) {
             createTableStatementBuilder.append(",");
-            appenderStatementBuilder.append(",");
         }
     }
 

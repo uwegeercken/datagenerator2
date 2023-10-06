@@ -28,6 +28,8 @@ public class DataStore
     private DataConfiguration dataConfiguration;
     private FileExporter fileExporter;
 
+    private List<TreeNode> rootNodes;
+
     public DataStore(ProgramConfiguration programConfiguration, DataConfiguration dataConfiguration, FileExporter fileExporter) throws Exception
     {
         this.programConfiguration = programConfiguration;
@@ -90,9 +92,11 @@ public class DataStore
         Statement stmt = connection.createStatement();
         String sqlCreateTable = "create table " + dataConfiguration.getTableName() + "(" + getDataTypesAndNames() + ")";
         String createTableStatement = TableStructure.getCreateTableStatement(programConfiguration, dataConfiguration);
+        rootNodes = TableStructure.getRootNodes();
         logger.info("TEST: creating table [{}]", createTableStatement);
         logger.info("      creating table [{}]", sqlCreateTable);
-        stmt.execute(sqlCreateTable);
+        //stmt.execute(sqlCreateTable);
+        stmt.execute(createTableStatement);
     }
 
     private void dropTable() throws Exception
@@ -105,7 +109,7 @@ public class DataStore
 
     private void createAppender() throws Exception
     {
-        this.appender = new DataStoreAppender(connection.createAppender(SCHEMANAME, dataConfiguration.getTableName()),getStructs());
+        this.appender = new DataStoreAppender(connection.createAppender(SCHEMANAME, dataConfiguration.getTableName()),getStructs(), rootNodes);
     }
 
     private String getDataTypesAndNames() throws Exception

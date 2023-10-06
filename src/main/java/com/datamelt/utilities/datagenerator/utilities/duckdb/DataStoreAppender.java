@@ -15,11 +15,13 @@ public class DataStoreAppender
     private static Logger logger = LoggerFactory.getLogger(DataStoreAppender.class);
     private DuckDBAppender appender;
     private Map<String,Struct> structs;
+    private List<TreeNode> rootNodes;
 
-    public DataStoreAppender(DuckDBAppender appender, Map<String,Struct> structs)
+    public DataStoreAppender(DuckDBAppender appender, Map<String,Struct> structs, List<TreeNode> rootNodes)
     {
         this.appender = appender;
         this.structs = structs;
+        this.rootNodes = rootNodes;
     }
 
     public void append(Row row, long counter)
@@ -38,10 +40,17 @@ public class DataStoreAppender
                 }
                 else
                 {
-                    if(structs.containsKey(nameParts[0]) && !processedStructs.contains(nameParts[0]))
+//                    if(structs.containsKey(nameParts[0]) && !processedStructs.contains(nameParts[0]))
+//                    {
+//                        Struct struct = structs.get(nameParts[0]);
+//                        String value = createStruct(struct, row);
+//                        appendString(value);
+//                        processedStructs.add(nameParts[0]);
+//                    }
+                    if (!processedStructs.contains(nameParts[0]))
                     {
-                        Struct struct = structs.get(nameParts[0]);
-                        String value = createStruct(struct, row);
+                        TreeNode node = getRootNode(nameParts[0]);
+                        String value = createStruct2(node, row);
                         appendString(value);
                         processedStructs.add(nameParts[0]);
                     }
@@ -78,6 +87,95 @@ public class DataStoreAppender
         buffer.append("}");
         return buffer.toString();
     }
+
+    private TreeNode getRootNode(String name)
+    {
+        for(TreeNode node : rootNodes)
+        {
+            if(node.getName().equals(name))
+            {
+                return node;
+            }
+        }
+        return null;
+    }
+
+    private String createStruct2(TreeNode node, Row row)
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("{");
+        int counter = 0;
+        for(TableField field : node.getFields())
+        {
+            counter++;
+            RowField<?> rowField = row.getField(node.getName() + "." + field.getName());
+            buffer.append("\"");
+            buffer.append(field.getName());
+            buffer.append("\": '");
+            buffer.append(rowField.getValue());
+            buffer.append("'");
+            if (counter < node.getFields().size())
+            {
+                buffer.append(", ");
+            }
+        }
+        if(node.getChildren().size()>0)
+        {
+            buffer.append(",");
+            getChildren(node.getName(), node, row, buffer);
+        }
+        buffer.append("}");
+        return buffer.toString();
+    }
+
+    private static void getChildren(String name, TreeNode node, Row row, StringBuffer buffer)
+    {
+        for (int i=0;i<node.getChildren().size();i++)
+        {
+            String fullName = name + "." + node.getChildren().get(i).getName();
+            buffer.append("\"");
+            buffer.append(node.getChildren().get(i).getName());
+            buffer.append("\":");
+            buffer.append(" {");
+
+
+            buildStructFieldsStatement(fullName, node.getChildren().get(i), row, buffer);
+            if(node.getChildren().get(i).getChildren().size()>0) {
+                getChildren(fullName, node.getChildren().get(i), row, buffer);
+            }
+            if(i<node.getChildren().size()-1)
+            {
+                buffer.append("}");
+                buffer.append(",");
+            }
+            else {
+                buffer.append("}");
+            }
+        }
+    }
+
+    private static void buildStructFieldsStatement(String name, TreeNode node, Row row, StringBuffer buffer)
+    {
+        for(int i=0;i < node.getFields().size();i++)
+        {
+            RowField<?> rowField = row.getField(name + "." + node.getFields().get(i).getName());
+            buffer.append("\"");
+            buffer.append(node.getFields().get(i).getName());
+            buffer.append("\": '");
+            buffer.append(rowField.getValue());
+            buffer.append("'");
+            if(i<node.getFields().size()-1)
+            {
+                buffer.append(",");
+            }
+        }
+        if(node.getFields().size()>0 && node.getChildren().size()>0)
+        {
+            buffer.append(",");
+        }
+    }
+
+
     public void beginRow() throws Exception
     {
         appender.beginRow();
