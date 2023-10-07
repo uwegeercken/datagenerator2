@@ -65,7 +65,7 @@ public class DataStoreAppender
 
     private String createStruct(TreeNode node, Row row)
     {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         buffer.append("{");
         int counter = 0;
         for(TableField field : node.getFields())
@@ -91,7 +91,7 @@ public class DataStoreAppender
         return buffer.toString();
     }
 
-    private static void getChildren(String name, TreeNode node, Row row, StringBuffer buffer)
+    private static void getChildren(String name, TreeNode node, Row row, StringBuilder buffer)
     {
         for (int i=0;i<node.getChildren().size();i++)
         {
@@ -115,7 +115,7 @@ public class DataStoreAppender
         }
     }
 
-    private static void buildStructFieldsStatement(String name, TreeNode node, Row row, StringBuffer buffer)
+    private static void buildStructFieldsStatement(String name, TreeNode node, Row row, StringBuilder buffer)
     {
         for(int i=0;i < node.getFields().size();i++)
         {

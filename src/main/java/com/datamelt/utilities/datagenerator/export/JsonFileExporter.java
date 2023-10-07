@@ -20,11 +20,8 @@ public class JsonFileExporter implements FileExporter
     {
         logger.info("export of generated data to json file: [{}],", exportFilename);
         Statement stmt = connection.createStatement();
-        StringBuffer options = new StringBuffer();
-        options.append("(");
-        options.append("ARRAY " + asArray + ", " );
-        options.append("FORMAT JSON" );
-        options.append(")");
+        StringBuilder options = new StringBuilder()
+            .append("(ARRAY ").append(asArray).append(", FORMAT JSON)");
         stmt.execute("COPY " + tablename + " TO '" + exportFilename + "' " + options.toString());
     }
 }

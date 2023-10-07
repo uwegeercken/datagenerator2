@@ -30,15 +30,11 @@ public class ParquetFileExporter implements FileExporter
         }
 
         Statement stmt = connection.createStatement();
-        StringBuffer options = new StringBuffer();
-        options.append("(");
-        options.append("FORMAT PARQUET, ");
-        options.append("COMPRESSION  '" + compression + "', " );
-        options.append(("OVERWRITE_OR_IGNORE"));
+        StringBuilder options = new StringBuilder()
+            .append("(FORMAT PARQUET, COMPRESSION  '").append(compression).append("', OVERWRITE_OR_IGNORE");
         if(partionBy!=null)
         {
-            options.append(", ");
-            options.append("PARTITION_BY (" + partionBy + ")");
+            options.append(", PARTITION_BY (").append(partionBy).append(")");
         }
         options.append(")");
         stmt.execute("COPY " + tablename + " TO '" + exportFilename + "' " + options.toString());

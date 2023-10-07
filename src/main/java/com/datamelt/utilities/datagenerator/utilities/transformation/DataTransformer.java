@@ -45,7 +45,7 @@ public class DataTransformer
 
     public static String reverse(String value)
     {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         for(int i=value.length()-1;i>=0;i--)
         {
             buffer.append(value.substring(i, i+1));

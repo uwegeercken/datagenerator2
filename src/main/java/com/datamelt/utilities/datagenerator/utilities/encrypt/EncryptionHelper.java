@@ -50,7 +50,7 @@ public class EncryptionHelper
     {
         Random random = new Random();
         long randomLength = random.nextLong(0,40);
-        StringBuffer randomString = new StringBuffer();
+        StringBuilder randomString = new StringBuilder();
         for(long i=0;i<randomLength;i++)
         {
             int position = random.nextInt(AVAILABLE_CHARACTERS.length());

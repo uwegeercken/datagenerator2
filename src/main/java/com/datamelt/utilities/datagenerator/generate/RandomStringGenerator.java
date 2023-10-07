@@ -53,7 +53,7 @@ public class RandomStringGenerator implements RandomValueGenerator
         {
             randomLength = minLength;
         }
-        StringBuffer randomString = new StringBuffer();
+        StringBuilder randomString = new StringBuilder();
         for(long i=0;i<randomLength;i++)
         {
             int position = random.nextInt(randomCharacters.length());

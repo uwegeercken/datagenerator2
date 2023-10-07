@@ -22,13 +22,10 @@ public class ExcelFileExporter implements FileExporter
     {
         logger.info("export of generated data to excel file: [{}],", exportFilename);
         Statement stmt = connection.createStatement();
-        StringBuffer options = new StringBuffer();
-        options.append(" WITH (");
-        options.append("FORMAT " + format + ", " );
-        options.append("DRIVER '" + driver + "'");
-        options.append(")");
+        StringBuilder options = new StringBuilder()
+            .append(" WITH (FORMAT ").append(format).append(", " ).append("DRIVER '").append(driver).append("')");
         stmt.execute("install spatial");
         stmt.execute("load spatial");
-        stmt.execute("COPY " + tablename + " TO '" + exportFilename + "' " + options.toString());
+        stmt.execute("COPY " + tablename + " TO '" + exportFilename + "' " + options);
     }
 }

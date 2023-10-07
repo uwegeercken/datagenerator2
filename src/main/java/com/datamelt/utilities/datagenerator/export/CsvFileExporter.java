@@ -24,14 +24,12 @@ public class CsvFileExporter implements FileExporter
     {
         logger.info("export of generated data to csv file: [{}],", exportFilename);
         Statement stmt = connection.createStatement();
-        StringBuffer options = new StringBuffer();
-        options.append("(");
+        StringBuilder options = new StringBuilder()
+            .append("(");
         if (includeHeader == true) {
             options.append("HEADER, ");
         }
-        options.append("DELIMITER '" + delimiter.getValue() + "', ");
-        options.append("FORMAT CSV" );
-        options.append(")");
+        options.append("DELIMITER '").append(delimiter.getValue()).append("', FORMAT CSV)");
         stmt.execute("COPY " + tablename + " TO '" + exportFilename + "' " + options.toString());
     }
 }

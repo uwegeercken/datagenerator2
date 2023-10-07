@@ -14,7 +14,7 @@ public class Row {
 
     public String getRowHeader()
     {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         int counter = 0;
         for(RowField<?> field : fields)
         {
@@ -47,7 +47,7 @@ public class Row {
     @Override
     public String toString()
     {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         int counter = 0;
         for(RowField<?> field : fields)
         {

@@ -60,7 +60,7 @@ public class FieldConfiguration
 
     public String getValuesAndWeights()
     {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         int counter = 0;
         int sum = 0;
         for(FieldConfigurationValue value : values)
@@ -78,7 +78,7 @@ public class FieldConfiguration
 
     public String getValuesAsString()
     {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         int counter = 0;
         int sum = 0;
         for(FieldConfigurationValue value : values)
