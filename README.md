@@ -1,6 +1,6 @@
 # datagenerator2
 
-The datagenerator tool is currently (July '23) under development. Additional features and capabilities will be added over time.
+The datagenerator tool is currently (October '23) under development. Additional features and capabilities will be added over time.
 
 The datagenerator tool allows to generate random data. The aim is to have a tool that generates data in a way which is flexible enough to satisfy the needs of developers or analysts or anybody else who needs some sort
 of test data - possibly with dependencies between individual fields and variying/definable distribution of fieldConfiguration values. 
@@ -14,11 +14,12 @@ will override the same attributes from the configuration files.
 ## Features
 - select random values from word lists
 - generate random strings, numbers or floating point numbers
-- generate random dates
+- generate random dates. generate date fields referencing another date field
 - generate random data according to a given regular expression (to be implemented)
 - transform the generated data values: uppercase, lowercase, base64 encode, negate, round, encrypt and more
 - export rows of generated data in CSV, Excel or Json
 - export rows of generated data in Parquet format - including partitioning
+- define nested structures for the data output
 
 ## Types of generators
 Different types of generators are available to generate different type of data such as strings, numbers, dates, etc.
@@ -198,9 +199,9 @@ Sample program configuration:
 ## Yaml configuration for the definition of fields to generate
 The configuration file contains a list of fields/attributes to generate - see the sample yaml files in this repository under: src/main/resources/config. For each field, options and transformations may be defined depending on the type of generator used.
 
-Fields is a list of fields for which data is to be generated. Each field has a unique name. A substructure can be created by prefixing the field name of one or multiple fields with the same value plus the dot separator - eg. address.street and address.city.
-This will create a substructure named "address" with the fields street and city. Each field is assigned a type. Fields may have additional (optional) options. Fields may have one or more transformations assigned and the transformations may require
-additional parameters to be executed. Fields of type=category may have either defintions for values or a a values file or both, but one of them must be present. The definition for values contains the value itself and optionally a weight for the value.
+Fields is a list of fields for which data is to be generated. Each field has a unique name. A substructure can be created by dividing the structure and the field name with the dot separator - eg. address.street, address.city, person.country.name, etc.
+This will e.g. create a substructure named "address" with the fields street and city. Multiple levels/substructures may be defined. Each field is assigned a type. Fields may have additional (optional) options. Fields may have one or more transformations assigned and the transformations may require
+additional parameters to be executed. Fields of type=category may either specify valid values in the configuration file or in a category file or both, but one of them must be present. The definition for values contains the value itself and optionally a weight for the value.
 
 Sample fields configuration:
 
@@ -310,20 +311,6 @@ Sample fields configuration:
             "season": "Summer",
             "city": "Barcelona",
             "price": 295.59
-        },
-        {
-            "autonumber": 3,
-            "date": {
-              "fulldate": "2023-09-12",
-              "year": "2023",
-              "month": "09",
-              "dayofmonth": "12",
-              "dayofweek": "Dienstag"
-            },
-            "randomstring": "ZBrkQ1tuoCdkAVyGTyzzQ",
-            "season": "Summer",
-            "city": "New York",
-            "price": 450.34
         }
     ]
 
@@ -359,4 +346,4 @@ To build the jar file either download the release from https://github.com/uwegee
     mvn clean install
 
 
-last update: uwe geercken - uwe.geercken@web.de - 2023-07-22
+last update: uwe geercken - uwe.geercken@web.de - 2023-10-07
