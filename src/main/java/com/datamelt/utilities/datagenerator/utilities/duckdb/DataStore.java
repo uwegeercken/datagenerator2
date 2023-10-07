@@ -88,7 +88,8 @@ public class DataStore
         Statement stmt = connection.createStatement();
         String createTableStatement = TableLayout.getCreateTableStatement(programConfiguration, dataConfiguration);
         tableInsertLayout = new TableInsertLayout(TableLayout.getFields(), TableLayout.getRootNodes());
-        logger.info("creating table  [{}], statement [{}]", dataConfiguration.getTableName(), createTableStatement);
+        logger.debug("creating table  [{}]", dataConfiguration.getTableName());
+        logger.trace("creating table statement [{}]", createTableStatement);
         stmt.execute(createTableStatement);
     }
 
