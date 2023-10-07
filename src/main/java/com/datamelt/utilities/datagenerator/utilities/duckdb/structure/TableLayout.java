@@ -1,4 +1,4 @@
-package com.datamelt.utilities.datagenerator.utilities.duckdb;
+package com.datamelt.utilities.datagenerator.utilities.duckdb.structure;
 
 import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
@@ -8,9 +8,11 @@ import com.datamelt.utilities.datagenerator.utilities.type.DataTypeDuckDb;
 
 import java.util.*;
 
-public class TableStructure
+import static com.datamelt.utilities.datagenerator.utilities.Constants.FIELD_SPLIT_REGEX_CHARACTER;
+
+public class TableLayout
 {
-    private static final String STRUCT_SPLIT_REGEX_CHARACTER = "\\.";
+
     private static final String COLUMN_ROWNUMBER_DATATYPE = "long";
     private static final List<TreeNode> rootNodes = new ArrayList<>();
     private static final List<TableField> fields= new ArrayList<>();
@@ -49,7 +51,7 @@ public class TableStructure
     {
         for(FieldConfiguration fieldConfiguration : dataConfiguration.getFields())
         {
-            String[] fieldParts = fieldConfiguration.getName().split(STRUCT_SPLIT_REGEX_CHARACTER);
+            String[] fieldParts = fieldConfiguration.getName().split(FIELD_SPLIT_REGEX_CHARACTER);
 
             if(fieldParts.length>1)
             {

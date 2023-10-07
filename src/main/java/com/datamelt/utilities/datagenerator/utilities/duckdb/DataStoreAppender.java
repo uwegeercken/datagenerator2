@@ -2,34 +2,35 @@ package com.datamelt.utilities.datagenerator.utilities.duckdb;
 
 import com.datamelt.utilities.datagenerator.generate.Row;
 import com.datamelt.utilities.datagenerator.generate.RowField;
+import com.datamelt.utilities.datagenerator.utilities.duckdb.structure.TableField;
+import com.datamelt.utilities.datagenerator.utilities.duckdb.structure.TableInsertLayout;
+import com.datamelt.utilities.datagenerator.utilities.duckdb.structure.TreeNode;
 import org.duckdb.DuckDBAppender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
+import static com.datamelt.utilities.datagenerator.utilities.Constants.FIELD_DEVIDER_CHARACTER;
 
 public class DataStoreAppender
 {
     private static Logger logger = LoggerFactory.getLogger(DataStoreAppender.class);
     private DuckDBAppender appender;
-    private TableFields tableFields;
+    private TableInsertLayout tableInsertLayout;
 
-    public DataStoreAppender(DuckDBAppender appender, TableFields tableFields)
+    public DataStoreAppender(DuckDBAppender appender, TableInsertLayout tableInsertLayout)
     {
         this.appender = appender;
-        this.tableFields = tableFields;
+        this.tableInsertLayout = tableInsertLayout;
     }
 
     public void append(Row row, long counter)
     {
-        List<String> processedStructs = new ArrayList<>();
         try
         {
             appender.beginRow();
             appendRownumberField(counter);
 
-            for(String fieldName : tableFields.getFieldNames())
+            for(String fieldName : tableInsertLayout.getFieldNames())
             {
                 TreeNode node = getRootNode(fieldName);
                 if(node==null)
@@ -42,25 +43,6 @@ public class DataStoreAppender
                     appendString(value);
                 }
             }
-
-//            for(RowField field : row.getFields())
-//            {
-//                String[] nameParts = field.getName().split("\\.");
-//                if(nameParts.length==1)
-//                {
-//                    appendField(field);
-//                }
-//                else
-//                {
-//                    if (!processedStructs.contains(nameParts[0]))
-//                    {
-//                        TreeNode node = getRootNode(nameParts[0]);
-//                        String value = createStruct(node, row);
-//                        appendString(value);
-//                        processedStructs.add(nameParts[0]);
-//                    }
-//                }
-//            }
             appender.endRow();
         }
         catch(Exception ex)
@@ -71,7 +53,7 @@ public class DataStoreAppender
 
     private TreeNode getRootNode(String name)
     {
-        for(TreeNode node : tableFields.getRootNodes())
+        for(TreeNode node : tableInsertLayout.getRootNodes())
         {
             if(node.getName().equals(name))
             {
@@ -89,7 +71,7 @@ public class DataStoreAppender
         for(TableField field : node.getFields())
         {
             counter++;
-            RowField<?> rowField = row.getField(node.getName() + "." + field.getName());
+            RowField<?> rowField = row.getField(node.getName() + FIELD_DEVIDER_CHARACTER + field.getName());
             buffer.append("\"");
             buffer.append(field.getName());
             buffer.append("\": '");
@@ -113,7 +95,7 @@ public class DataStoreAppender
     {
         for (int i=0;i<node.getChildren().size();i++)
         {
-            String fullName = name + "." + node.getChildren().get(i).getName();
+            String fullName = name + FIELD_DEVIDER_CHARACTER + node.getChildren().get(i).getName();
             buffer.append("\"");
             buffer.append(node.getChildren().get(i).getName());
             buffer.append("\":");
@@ -137,7 +119,7 @@ public class DataStoreAppender
     {
         for(int i=0;i < node.getFields().size();i++)
         {
-            RowField<?> rowField = row.getField(name + "." + node.getFields().get(i).getName());
+            RowField<?> rowField = row.getField(name + FIELD_DEVIDER_CHARACTER + node.getFields().get(i).getName());
             buffer.append("\"");
             buffer.append(node.getFields().get(i).getName());
             buffer.append("\": '");
@@ -175,7 +157,7 @@ public class DataStoreAppender
         appendLong(counter);
     }
 
-    private void appendField(RowField field) throws Exception
+    private void appendField(RowField<?> field) throws Exception
     {
         if(field.getValue() instanceof Integer)
         {

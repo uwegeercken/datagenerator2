@@ -1,7 +1,4 @@
-package com.datamelt.utilities.datagenerator.utilities.duckdb;
-
-import com.datamelt.utilities.datagenerator.config.model.FieldType;
-import com.datamelt.utilities.datagenerator.utilities.type.DataTypeDuckDb;
+package com.datamelt.utilities.datagenerator.utilities.duckdb.structure;
 
 import java.util.*;
 

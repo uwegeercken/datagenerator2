@@ -3,6 +3,8 @@ package com.datamelt.utilities.datagenerator.utilities.duckdb;
 import com.datamelt.utilities.datagenerator.config.model.*;
 import com.datamelt.utilities.datagenerator.export.FileExporter;
 import com.datamelt.utilities.datagenerator.generate.Row;
+import com.datamelt.utilities.datagenerator.utilities.duckdb.structure.TableInsertLayout;
+import com.datamelt.utilities.datagenerator.utilities.duckdb.structure.TableLayout;
 import org.duckdb.DuckDBConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.*;
-import java.util.List;
 
 public class DataStore
 {
@@ -23,7 +24,7 @@ public class DataStore
     private DataConfiguration dataConfiguration;
     private FileExporter fileExporter;
 
-    TableFields tableFields;
+    TableInsertLayout tableInsertLayout;
 
     public DataStore(ProgramConfiguration programConfiguration, DataConfiguration dataConfiguration, FileExporter fileExporter) throws Exception
     {
@@ -85,8 +86,8 @@ public class DataStore
     {
 
         Statement stmt = connection.createStatement();
-        String createTableStatement = TableStructure.getCreateTableStatement(programConfiguration, dataConfiguration);
-        tableFields = new TableFields(TableStructure.getFields(), TableStructure.getRootNodes());
+        String createTableStatement = TableLayout.getCreateTableStatement(programConfiguration, dataConfiguration);
+        tableInsertLayout = new TableInsertLayout(TableLayout.getFields(), TableLayout.getRootNodes());
         logger.info("creating table  [{}], statement [{}]", dataConfiguration.getTableName(), createTableStatement);
         stmt.execute(createTableStatement);
     }
@@ -101,7 +102,7 @@ public class DataStore
 
     private void createAppender() throws Exception
     {
-        this.appender = new DataStoreAppender(connection.createAppender(SCHEMANAME, dataConfiguration.getTableName()), tableFields);
+        this.appender = new DataStoreAppender(connection.createAppender(SCHEMANAME, dataConfiguration.getTableName()), tableInsertLayout);
     }
 
 
