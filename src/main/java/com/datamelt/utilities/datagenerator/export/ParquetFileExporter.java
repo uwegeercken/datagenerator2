@@ -37,6 +37,8 @@ public class ParquetFileExporter implements FileExporter
             options.append(", PARTITION_BY (").append(partionBy).append(")");
         }
         options.append(")");
+        stmt.execute("install parquet");
+        stmt.execute("load parquet");
         stmt.execute("COPY " + tablename + " TO '" + exportFilename + "' " + options.toString());
     }
 }
