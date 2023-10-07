@@ -177,7 +177,7 @@ public class TableLayout
                 createTableStatementBuilder.append(",");
             }
         }
-        if(rootNodes.size()>0) {
+        if(rootNodes.size()>0 && fields.size()>0) {
             createTableStatementBuilder.append(",");
         }
     }
