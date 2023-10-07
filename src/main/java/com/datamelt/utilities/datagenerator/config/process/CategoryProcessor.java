@@ -91,7 +91,7 @@ public class CategoryProcessor extends FieldProcessor
 
     private void checkFieldWeightsDistribution(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
     {
-        if(fieldConfiguration.getValues() != null && fieldConfiguration.getNumberOfDefaultWeights() > 0)
+        if(fieldConfiguration.getValues() != null && fieldConfiguration.getNumberOfDefaultWeights() > 0 && fieldConfiguration.getNumberOfDefaultWeights()!= fieldConfiguration.getValues().size())
         {
             double calculatedWeightDistribution = (100 - fieldConfiguration.getSumOfWeights()) / fieldConfiguration.getNumberOfDefaultWeights();
             if(calculatedWeightDistribution < 1)
@@ -134,7 +134,7 @@ public class CategoryProcessor extends FieldProcessor
 
     private void distributeWeightValues(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
     {
-        if (fieldConfiguration.getNumberOfDefaultWeights()>0)
+        if (fieldConfiguration.getNumberOfDefaultWeights()!= fieldConfiguration.getValues().size() && fieldConfiguration.getNumberOfDefaultWeights()>0)
         {
             int numberOfValues = fieldConfiguration.getNumberOfFieldValues();
             int sumOfWeights = fieldConfiguration.getSumOfWeights();
@@ -175,7 +175,7 @@ public class CategoryProcessor extends FieldProcessor
                 }
             }
         }
-        else if(fieldConfiguration.getSumOfWeights()<100)
+        else if(fieldConfiguration.getNumberOfDefaultWeights()!= fieldConfiguration.getValues().size() && fieldConfiguration.getSumOfWeights()<100)
         {
             throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "] - the total sum of weight values must be 100");
         }
