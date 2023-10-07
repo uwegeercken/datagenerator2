@@ -13,9 +13,9 @@ import static com.datamelt.utilities.datagenerator.utilities.Constants.FIELD_DEV
 
 public class DataStoreAppender
 {
-    private static Logger logger = LoggerFactory.getLogger(DataStoreAppender.class);
-    private DuckDBAppender appender;
-    private TableInsertLayout tableInsertLayout;
+    private static final Logger logger = LoggerFactory.getLogger(DataStoreAppender.class);
+    private final DuckDBAppender appender;
+    private final TableInsertLayout tableInsertLayout;
 
     public DataStoreAppender(DuckDBAppender appender, TableInsertLayout tableInsertLayout)
     {
