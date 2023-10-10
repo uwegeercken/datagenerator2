@@ -1,0 +1,6 @@
+autonumber,date,person
+1,"{'fulldate': 2023-07-01, 'year': 2023, 'month': 07, 'dayofmonth': 01, 'dayofweek': Samstag}","{'firstname': Johnny, 'lastname': Clark, 'address': {'city': {'name': Columbus}, 'street': {'name': College Avenue, 'number': 116}}}"
+2,"{'fulldate': 2023-06-24, 'year': 2023, 'month': 06, 'dayofmonth': 24, 'dayofweek': Samstag}","{'firstname': Alexia, 'lastname': Young, 'address': {'city': {'name': Tucson}, 'street': {'name': Broad Street, 'number': 54}}}"
+3,"{'fulldate': 2023-03-23, 'year': 2023, 'month': 03, 'dayofmonth': 23, 'dayofweek': Donnerstag}","{'firstname': Ted, 'lastname': Knight, 'address': {'city': {'name': Mesa}, 'street': {'name': Park Avenue, 'number': 224}}}"
+4,"{'fulldate': 2023-08-14, 'year': 2023, 'month': 08, 'dayofmonth': 14, 'dayofweek': Montag}","{'firstname': Gemma, 'lastname': Cook, 'address': {'city': {'name': Los Angeles}, 'street': {'name': Center Street, 'number': 168}}}"
+5,"{'fulldate': 2023-08-22, 'year': 2023, 'month': 08, 'dayofmonth': 22, 'dayofweek': Dienstag}","{'firstname': Hector, 'lastname': Powell, 'address': {'city': {'name': Philadelphia}, 'street': {'name': Elm Street, 'number': 282}}}"

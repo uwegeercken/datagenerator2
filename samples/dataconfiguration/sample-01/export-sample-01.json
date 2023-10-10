@@ -1,0 +1,117 @@
+[
+  {
+    "autonumber": 1,
+    "date": {
+      "fulldate": "2023-12-11",
+      "year": "2023",
+      "month": "12",
+      "dayofmonth": "11",
+      "dayofweek": "Montag"
+    },
+    "person": {
+      "firstname": "Alberto",
+      "lastname": "Richmond",
+      "address": {
+        "city": {
+          "name": "Oklahoma City"
+        },
+        "street": {
+          "name": "3rd Avenue",
+          "number": 68
+        }
+      }
+    }
+  },
+  {
+    "autonumber": 2,
+    "date": {
+      "fulldate": "2023-03-31",
+      "year": "2023",
+      "month": "03",
+      "dayofmonth": "31",
+      "dayofweek": "Freitag"
+    },
+    "person": {
+      "firstname": "Gerald",
+      "lastname": "Foster",
+      "address": {
+        "city": {
+          "name": "Minneapolis"
+        },
+        "street": {
+          "name": "2nd Avenue",
+          "number": 162
+        }
+      }
+    }
+  },
+  {
+    "autonumber": 3,
+    "date": {
+      "fulldate": "2023-04-22",
+      "year": "2023",
+      "month": "04",
+      "dayofmonth": "22",
+      "dayofweek": "Samstag"
+    },
+    "person": {
+      "firstname": "Sandra",
+      "lastname": "Martinez",
+      "address": {
+        "city": {
+          "name": "Las Vegas"
+        },
+        "street": {
+          "name": "Creek Road",
+          "number": 44
+        }
+      }
+    }
+  },
+  {
+    "autonumber": 4,
+    "date": {
+      "fulldate": "2023-07-24",
+      "year": "2023",
+      "month": "07",
+      "dayofmonth": "24",
+      "dayofweek": "Montag"
+    },
+    "person": {
+      "firstname": "Sophia",
+      "lastname": "Murray",
+      "address": {
+        "city": {
+          "name": "Fresno"
+        },
+        "street": {
+          "name": "Maple Avenue",
+          "number": 187
+        }
+      }
+    }
+  },
+  {
+    "autonumber": 5,
+    "date": {
+      "fulldate": "2023-02-08",
+      "year": "2023",
+      "month": "02",
+      "dayofmonth": "08",
+      "dayofweek": "Mittwoch"
+    },
+    "person": {
+      "firstname": "Bruce",
+      "lastname": "Crawford",
+      "address": {
+        "city": {
+          "name": "San Francisco"
+        },
+        "street": {
+          "name": "Broad Street",
+          "number": 210
+        }
+      }
+    }
+  }
+]
