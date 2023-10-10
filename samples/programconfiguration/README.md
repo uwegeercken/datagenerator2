@@ -57,3 +57,6 @@ The "partitionBy" attribute can be set to a column defined in the generated data
 Please note that structures and substructures generated with the datagenerator2 tool can not be exported
 to Excel format because Excel does not support complex structures. You can export data with complex structures
 to Json or Parquet format.
+
+If the generated data contains structures and substructures and is output to CSV format, the these structures will be output as columns of text,
+as the CSV standard does not define complex structures.
