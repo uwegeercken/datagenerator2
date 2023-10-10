@@ -1,0 +1,17 @@
+general:
+  exportFilename: /home/user1/datagenerator2/datagenerator_export.json
+  exportType: json
+  numberOfRowsToGenerate: 1000
+  generatedRowsLogInterval: 100
+  rowNumberFieldName: autonumber
+csvExport:
+  delimiter: comma
+  includeHeader: true
+jsonExport:
+  asArray: true
+excelExport:
+  format: gdal
+  driver: xlsx
+parquetExport:
+  compression: gzip
+  #partitionBy: weekday
