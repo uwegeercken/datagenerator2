@@ -11,6 +11,8 @@ other attributes.
 Some of the configuration attributes may also be passed as arguments when running the datagenerator tool. In this case these
 will override the same attributes from the configuration files.
 
+Samples, wordlists (category files) and details for the configuration can be found in the samples folder in this repository.
+
 ## Features
 - select random values from word lists
 - generate random strings, numbers or floating point numbers
@@ -188,9 +190,9 @@ Sample program configuration:
 
 
 - the name of the export file for the generated data
-- the type of the export file: csv, excel or json
+- the type of the export file: csv, excel, parquet or json
 - the number of rows to generate
-- after how many generated rows a log message shall be output
+- after how many generated rows a log message will be output
 - details for the export to a csv file - delimiter and header settings
 - details for the export to a json file - output as separate lines or as array
 - details for the export to a parquet file or partitioned file
