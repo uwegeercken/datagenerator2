@@ -5,6 +5,7 @@ public enum DataTypeDuckDb
     BIGINT,
     BOOLEAN,
     DATE,
+    TIMESTAMP,
     DOUBLE,
     INTEGER,
     LONG,

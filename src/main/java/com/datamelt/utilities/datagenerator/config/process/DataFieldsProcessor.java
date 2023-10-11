@@ -47,6 +47,10 @@ public class DataFieldsProcessor
             {
                 processor = new RandomDateProcessor(configuration);
             }
+            else if (fieldConfiguration.getType() == FieldType.RANDOMTIMESTAMP)
+            {
+                processor = new RandomTimestampProcessor(configuration);
+            }
             else if (fieldConfiguration.getType() == FieldType.DATEREFERENCE)
             {
                 processor = new DateReferenceProcessor(configuration);
