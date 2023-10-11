@@ -16,7 +16,7 @@ Samples, wordlists (category files) and details for the configuration can be fou
 ## Features
 - select random values from word lists
 - generate random strings, numbers or floating point numbers
-- generate random dates. generate date fields referencing another date field
+- generate random dates and timestamps. generate date fields referencing another date field
 - generate random data according to a given regular expression (to be implemented)
 - transform the generated data values: uppercase, lowercase, base64 encode, negate, round, encrypt and more
 - export rows of generated data in CSV, Excel or Json
@@ -35,6 +35,7 @@ The type for each field can be one of following values:
 - randomlong
 - randomdouble
 - randomdate
+- randomtimestamp
 - datereference
 
 If no type is specified then type=category is assumed.
@@ -83,7 +84,7 @@ This generator (type=randomdouble) allows to generate floating point numbers. Th
 | round          | round the value using rounding mode HALF_UP | number of decimal places (integer) |
 
 ### Random Dates
-This generator (type=randomdate) allows to generate dates. The options for this type of generator allow to specify a minimum and maximun date, as well as the output format for the generated value.
+This generator (type=randomdate) allows to generate dates. The options for this type of generator allow to specify a minimum and maximun year, as well as the output format for the generated value.
 
 #### Available options:
 | Option       | Description                                       | Data Type | Default     |
@@ -91,6 +92,21 @@ This generator (type=randomdate) allows to generate dates. The options for this 
 | minYear      | minimum value                                     | long      | 2020        |
 | maxYear      | maximum value                                     | long      | 2030        |
 | dateFormat   | output format of the date (Java SimpleDateFormat) | string    | yyyy-MM-dd  |
+
+#### Available transformations:
+| Transformation | Description          | Parameters   |
+|----------------|----------------------|--------------|
+|                |                      |              |
+
+### Random Timestamps
+This generator (type=randomtimestamp) allows to generate timestamps. The options for this type of generator allow to specify a minimum and maximun year, as well as the output format for the generated value.
+
+#### Available options:
+| Option       | Description                                       | Data Type | Default             |
+|--------------|---------------------------------------------------|-----------|---------------------|
+| minYear      | minimum value                                     | long      | 2020                |
+| maxYear      | maximum value                                     | long      | 2030                |
+| dateFormat   | output format of the date (Java SimpleDateFormat) | string    | yyyy-MM-dd HH:mm:ss |
 
 #### Available transformations:
 | Transformation | Description          | Parameters   |
