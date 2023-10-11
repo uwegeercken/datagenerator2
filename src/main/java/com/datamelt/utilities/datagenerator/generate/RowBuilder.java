@@ -5,6 +5,7 @@ import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldType;
 import com.datamelt.utilities.datagenerator.config.model.options.DateReferenceOptions;
 import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
+import com.datamelt.utilities.datagenerator.config.process.RandomTimestampProcessor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +45,10 @@ public class RowBuilder
             else if (fieldConfiguration.getType() == FieldType.RANDOMDATE)
             {
                 rowFields.add(new RowField<String>(new RandomDateGenerator(fieldConfiguration), fieldConfiguration.getName()));
+            }
+            else if (fieldConfiguration.getType() == FieldType.RANDOMTIMESTAMP)
+            {
+                rowFields.add(new RowField<String>(new RandomTimestampGenerator(fieldConfiguration), fieldConfiguration.getName()));
             }
             else if (fieldConfiguration.getType() == FieldType.DATEREFERENCE)
             {

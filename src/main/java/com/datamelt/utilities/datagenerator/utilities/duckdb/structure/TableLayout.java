@@ -196,6 +196,8 @@ public class TableLayout
                 return DataTypeDuckDb.LONG.toString();
             case RANDOMDATE:
                 return DataTypeDuckDb.DATE.toString();
+            case RANDOMTIMESTAMP:
+                return DataTypeDuckDb.TIMESTAMP.toString();
             case DATEREFERENCE:
                 return DataTypeDuckDb.VARCHAR.toString();
             case RANDOMSTRING:
