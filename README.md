@@ -166,28 +166,8 @@ First, the given program configuration and the data configuration yaml files are
 After that the value for each field is generated and then transformed (if any transformation options are specified). The fields are processed sequentially and build a row of data.
 The tool generates the desired number of rows and stores it in a local DuckDb instance. Finally, the data is exported to the desired output format.
 
-## Yaml configuration for the datagenerator tool
+## Yaml configuration for the datagenerator2 tool
 The configuration file contains various attributes to steer the behavior of the datagenerator tool.
-
-Sample program configuration:
-
-    general:    
-      exportFilename: /tmp/csv_export.json
-      exportType: json
-      numberOfRowsToGenerate: 5000
-      generatedRowsLogInterval: 1000
-    csvExport:
-      delimiter: comma
-      includeHeader: true
-    jsonExport:
-      asArray: true
-    excelExport:
-      format: gdal
-      driver: xlsx
-    parquetExport:
-      compression: gzip
-      partitionBy: gender
-
 
 - the name of the export file for the generated data
 - the type of the export file: csv, excel, parquet or json
@@ -198,123 +178,14 @@ Sample program configuration:
 - details for the export to a parquet file or partitioned file
 - details for the export to an excel file
 
+See the sample yaml files in this repository under: samples/programconfiguration.
+
 ## Yaml configuration for the definition of fields to generate
-The configuration file contains a list of fields/attributes to generate - see the sample yaml files in this repository under: src/main/resources/config. For each field, options and transformations may be defined depending on the type of generator used.
+The configuration file contains a list of fields/attributes to generate - see the sample yaml files in this repository under: samples/dataconfiguration. For each field, options and transformations may be defined depending on the type of generator used.
 
 Fields is a list of fields for which data is to be generated. Each field has a unique name. A substructure can be created by dividing the structure and the field name with the dot separator - eg. address.street, address.city, person.country.name, etc.
 This will e.g. create a substructure named "address" with the fields street and city. Multiple levels/substructures may be defined. Each field is assigned a type. Fields may have additional (optional) options. Fields may have one or more transformations assigned and the transformations may require
 additional parameters to be executed. Fields of type=category may either specify valid values in the configuration file or in a category file or both, but one of them must be present. The definition for values contains the value itself and optionally a weight for the value.
-
-Sample fields configuration:
-
-    name: Sample 1
-    databaseName: /home/uwe/development/datagenerator2/generateddata.duckdb
-    tableName: generateddata
-    fields:
-      - name: date.fulldate
-        type: randomdate
-        options:
-          minYear: 2023
-          maxYear: 2023
-          dateFormat: yyyy-MM-dd
-      - name: date.year
-        type: datereference
-        options:
-          reference: date.fulldate
-          dateFormat: YYYY
-      - name: date.month
-        type: datereference
-        options:
-          reference: date.fulldate
-          dateFormat: MM
-      - name: date.dayofmonth
-        type: datereference
-        options:
-          reference: date.fulldate
-          dateFormat: dd
-      - name: date.dayofweek
-        type: datereference
-        options:
-          reference: date.fulldate
-          dateFormat: EEEE
-      - name: random1
-        type: randomstring
-        randomCharacters: abcdefghijk0123456789
-        options:
-          minLength: 20
-          maxLength: 40
-      - name: random2
-        type: randomlong
-        options:
-          minValue: -1000
-          maxValue: 999
-      - name: random3
-        type: randomdouble
-        options:
-          minValue: 100
-          maxValue: 5000
-        transformations:
-          - name: round
-            parameters:
-              - 3
-          - name: negate
-    - name: gender
-      values:
-        - value: m
-          weight: 40
-        - value: f
-          weight: 40
-        - value: d
-          weight: 20
-      - name: weekday
-        values:
-          - value: Saturday
-            weight: 5
-          - value: Sunday
-            weight: 5
-        valuesFile: /home/uwe/development/datagenerator2/categories/weekday.category
-      - name: season
-        valuesFile: /home/uwe/development/datagenerator2/categories/season.category
-        options:
-          categoryFileSeparator: "#"
-        values:
-          - value: Summer
-            weight: 70
-      - name: city
-        valuesFile: /home/uwe/development/datagenerator2/categories/city.category
-
-## Sample output in Json Format
-    
-    [
-        {
-            "autonumber": 1,
-            "date": {
-              "fulldate": "2023-07-21",
-              "year": "2023",
-              "month": "07",
-              "dayofmonth": "21",
-              "dayofweek": "Freitag"
-            },
-            "randomstring": "2DCoVUNDER",
-            "season": "Summer",
-            "city": "Cologne",
-            "price": 229.4
-            },
-        {
-            "autonumber": 2,
-            "date": {
-              "fulldate": "2023-09-21",
-              "year": "2023",
-              "month": "09",
-              "dayofmonth": "21",
-              "dayofweek": "Donnerstag"
-            },
-            "randomstring": "Nl7zZFoapYN",
-            "season": "Summer",
-            "city": "Barcelona",
-            "price": 295.59
-        }
-    ]
 
 ## Running the datagenerator tool
 To run the tool you must pass at least the mandatory arguments to the program as shown below. These point to the program configuration file
@@ -348,4 +219,4 @@ To build the jar file either download the release from https://github.com/uwegee
     mvn clean install
 
 
-last update: uwe geercken - uwe.geercken@web.de - 2023-10-07
+last update: uwe geercken - uwe.geercken@web.de - 2023-10-11
