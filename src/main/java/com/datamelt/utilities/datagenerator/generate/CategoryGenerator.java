@@ -3,9 +3,6 @@ package com.datamelt.utilities.datagenerator.generate;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 
 import com.datamelt.utilities.datagenerator.config.model.TransformationConfiguration;
-import com.datamelt.utilities.datagenerator.config.model.options.CategoryOptions;
-import com.datamelt.utilities.datagenerator.config.model.options.RandomStringOptions;
-import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
 import com.datamelt.utilities.datagenerator.utilities.transformation.MethodHelper;
 import com.datamelt.utilities.datagenerator.utilities.transformation.TransformationExecutor;
 import com.datamelt.utilities.datagenerator.utilities.transformation.TransformationMethod;
@@ -20,7 +17,7 @@ public class CategoryGenerator implements RandomValueGenerator
 {
     private static Logger logger = LoggerFactory.getLogger(CategoryGenerator.class);
     private FieldConfiguration fieldConfiguration;
-    private static final Class DATATYPE = String.class;
+    private static final Class BASE_DATATYPE = String.class;
     private List<TransformationMethod> transformationMethods = new ArrayList<>();
 
     public CategoryGenerator(FieldConfiguration fieldConfiguration) throws NoSuchMethodException
@@ -33,7 +30,7 @@ public class CategoryGenerator implements RandomValueGenerator
     {
         for(TransformationConfiguration transformationConfiguration : fieldConfiguration.getTransformations())
         {
-            transformationMethods.add(new TransformationMethod(MethodHelper.getMethod(DATATYPE, transformationConfiguration),transformationConfiguration.getParameters()));
+            transformationMethods.add(new TransformationMethod(MethodHelper.getMethod(BASE_DATATYPE, transformationConfiguration),transformationConfiguration.getParameters()));
         }
     }
 

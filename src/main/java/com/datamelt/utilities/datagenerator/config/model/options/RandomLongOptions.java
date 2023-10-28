@@ -1,15 +1,18 @@
 package com.datamelt.utilities.datagenerator.config.model.options;
 
+import com.datamelt.utilities.datagenerator.utilities.type.DataTypeDuckDb;
+
 import java.util.Arrays;
 import java.util.List;
 
 public enum RandomLongOptions
 {
     MIN_VALUE("minValue",0L),
-    MAX_VALUE("maxValue", 1000000L);
+    MAX_VALUE("maxValue", 1000000L),
+    OUTPUT_TYPE("outputType", DataTypeDuckDb.LONG.name());
 
-    private String key;
-    private Object defaultValue;
+    private final String key;
+    private final Object defaultValue;
 
     RandomLongOptions(String key, Object defaultValue)
     {

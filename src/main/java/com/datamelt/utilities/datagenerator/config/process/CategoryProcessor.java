@@ -1,10 +1,9 @@
 package com.datamelt.utilities.datagenerator.config.process;
 
-import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfigurationValue;
-import com.datamelt.utilities.datagenerator.config.model.TransformationConfiguration;
-import com.datamelt.utilities.datagenerator.config.model.options.Transformations;
+import com.datamelt.utilities.datagenerator.config.model.options.*;
+import com.datamelt.utilities.datagenerator.utilities.type.DataTypeDuckDb;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,136 +25,147 @@ public class CategoryProcessor extends FieldProcessor
             Transformations.TRIM.getName()
     );
 
-    public CategoryProcessor(DataConfiguration configuration)
+    private static final List<DataTypeDuckDb> availableOutputTypes = Arrays.asList(
+            DataTypeDuckDb.VARCHAR
+    );
+
+    private static final List<FieldOption> availableOptions = Arrays.asList(
+      new FieldOption(OptionKey.CATEGORY_FILE_SEPARATOR, ","),
+      new FieldOption(OptionKey.OUTPUT_TYPE, DataTypeDuckDb.VARCHAR.name())
+    );
+
+    public CategoryProcessor(FieldConfiguration fieldConfiguration)
     {
-        super(configuration);
+        super(fieldConfiguration);
     }
 
     @Override
-    protected void validateConfiguration(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
+    protected void validateConfiguration() throws InvalidConfigurationException
     {
-        checkTotalNumberOfFieldValues(fieldConfiguration);
-        checkFieldWeights(fieldConfiguration);
-        checkTotalFieldWeight(fieldConfiguration);
-        checkFieldWeightsDistribution(fieldConfiguration);
-        checkTransformations(fieldConfiguration);
+        checkOptions();
+        checkTotalNumberOfFieldValues();
+        checkFieldWeights();
+        checkTotalFieldWeight();
+        checkFieldWeightsDistribution();
     }
 
     @Override
-    protected void setDefaultOptions(FieldConfiguration fieldConfiguration)
+    protected void processConfiguration() throws InvalidConfigurationException
     {
-        // TODO: define method when there are options available
+        distributeWeightValues();
+        removeZeroWeightValues();
     }
 
     @Override
-    protected void processConfiguration(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
+    protected List<String> getAvailableTransformations()
     {
-        distributeWeightValues(fieldConfiguration);
-        removeZeroWeightValues(fieldConfiguration);
+        return availableTransformations;
     }
 
-    private void checkTotalNumberOfFieldValues(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
+    @Override
+    protected List<DataTypeDuckDb> getAvailableOutputTypes()
     {
-        if(fieldConfiguration.getValues().size()==0)
+        return availableOutputTypes;
+    }
+
+    @Override
+    protected List<FieldOption> getAvailableOptions()
+    {
+        return availableOptions;
+    }
+
+    private void checkOptions() throws InvalidConfigurationException
+    {
+    }
+
+    private void checkTotalNumberOfFieldValues() throws InvalidConfigurationException
+    {
+        if(getFieldConfiguration().getValues().size()==0)
         {
-            throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "] - the number of values can not be zero");
+            throw new InvalidConfigurationException("field [" + getFieldConfiguration().getName() + "] - the number of values can not be zero");
         }
     }
 
 
-    private void checkTotalFieldWeight(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
+    private void checkTotalFieldWeight() throws InvalidConfigurationException
     {
-        if(fieldConfiguration.getSumOfWeights()>100)
+        if(getFieldConfiguration().getSumOfWeights()>100)
         {
-            throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "] - sum of weights cannot be larger than 100");
+            throw new InvalidConfigurationException("field [" + getFieldConfiguration().getName() + "] - sum of weights cannot be larger than 100");
         }
     }
 
-    private void checkFieldWeights(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
+    private void checkFieldWeights() throws InvalidConfigurationException
     {
-        if(fieldConfiguration.getValues()!=null)
+        if(getFieldConfiguration().getValues()!=null)
         {
-           for(FieldConfigurationValue value : fieldConfiguration.getValues())
+           for(FieldConfigurationValue value : getFieldConfiguration().getValues())
            {
                if(value.getWeight() < -1)
                {
-                   throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], value [" + value.getValue() + "] - value of weight cannot be smaller than -1");
+                   throw new InvalidConfigurationException("field [" + getFieldConfiguration().getName() + "], value [" + value.getValue() + "] - value of weight cannot be smaller than -1");
                }
                if(value.getWeight() > 100)
                {
-                   throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], value [" + value.getValue() + "] - value of weight cannot be greater than 100");
+                   throw new InvalidConfigurationException("field [" + getFieldConfiguration().getName() + "], value [" + value.getValue() + "] - value of weight cannot be greater than 100");
                }
            }
         }
     }
 
-    private void checkFieldWeightsDistribution(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
+    private void checkFieldWeightsDistribution() throws InvalidConfigurationException
     {
-        if(fieldConfiguration.getValues() != null && fieldConfiguration.getNumberOfDefaultWeights() > 0 && fieldConfiguration.getNumberOfDefaultWeights()!= fieldConfiguration.getValues().size())
+        if(getFieldConfiguration().getValues() != null && getFieldConfiguration().getNumberOfDefaultWeights() > 0 && getFieldConfiguration().getNumberOfDefaultWeights()!= getFieldConfiguration().getValues().size())
         {
-            double calculatedWeightDistribution = (100 - fieldConfiguration.getSumOfWeights()) / fieldConfiguration.getNumberOfDefaultWeights();
+            double calculatedWeightDistribution = (100 - getFieldConfiguration().getSumOfWeights()) / getFieldConfiguration().getNumberOfDefaultWeights();
             if(calculatedWeightDistribution < 1)
             {
-                throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "] value for fields without weight definition can not be distributed to at least 1 percent");
+                throw new InvalidConfigurationException("field [" + getFieldConfiguration().getName() + "] value for fields without weight definition can not be distributed to at least 1 percent");
             }
         }
     }
 
-    private void checkTransformations(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
+    private void removeZeroWeightValues() throws InvalidConfigurationException
     {
-        if(fieldConfiguration.getTransformations()!=null)
+        if(getFieldConfiguration().getValues()!=null)
         {
-            for(TransformationConfiguration configuredTransformation : fieldConfiguration.getTransformations())
-            {
-                if(!availableTransformations.contains(configuredTransformation.getName()))
-                {
-                    throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], transformation [" + configuredTransformation.getName() + "] is not allowed - must be in list: " + Arrays.toString(availableTransformations.toArray()));
-                }
-            }
-        }
-    }
-
-    private void removeZeroWeightValues(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
-    {
-        if(fieldConfiguration.getValues()!=null)
-        {
-            Iterator<FieldConfigurationValue> iterator = fieldConfiguration.getValues().iterator();
+            Iterator<FieldConfigurationValue> iterator = getFieldConfiguration().getValues().iterator();
             while (iterator.hasNext())
             {
                 FieldConfigurationValue value = iterator.next();
                 if(value.getWeight()==0)
                 {
-                    logger.debug("field [{}] - removing value [{}] because weight is set to zero", fieldConfiguration.getName(), value.getValue());
+                    logger.debug("field [{}] - removing value [{}] because weight is set to zero", getFieldConfiguration().getName(), value.getValue());
                     iterator.remove();
                 }
             }
         }
     }
 
-    private void distributeWeightValues(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
+    private void distributeWeightValues() throws InvalidConfigurationException
     {
-        if (fieldConfiguration.getNumberOfDefaultWeights()!= fieldConfiguration.getValues().size() && fieldConfiguration.getNumberOfDefaultWeights()>0)
+        if (getFieldConfiguration().getNumberOfDefaultWeights()!= getFieldConfiguration().getValues().size() && getFieldConfiguration().getNumberOfDefaultWeights()>0)
         {
-            int numberOfValues = fieldConfiguration.getNumberOfFieldValues();
-            int sumOfWeights = fieldConfiguration.getSumOfWeights();
+            int numberOfValues = getFieldConfiguration().getNumberOfFieldValues();
+            int sumOfWeights = getFieldConfiguration().getSumOfWeights();
             if (sumOfWeights < 100)
             {
-                int averageWeightValue = (100 - sumOfWeights) / fieldConfiguration.getNumberOfDefaultWeights();
+                int averageWeightValue = (100 - sumOfWeights) / getFieldConfiguration().getNumberOfDefaultWeights();
                 if (averageWeightValue > 0)
                 {
-                    int remainder = (100 - sumOfWeights) % fieldConfiguration.getNumberOfDefaultWeights();
+                    int remainder = (100 - sumOfWeights) % getFieldConfiguration().getNumberOfDefaultWeights();
 
-                    logger.debug("field [{}] - total elements [{}]. elements without weight definition: [{}]", fieldConfiguration.getName(), numberOfValues, fieldConfiguration.getNumberOfDefaultWeights());
+                    logger.debug("field [{}] - total elements [{}]. elements without weight definition: [{}]", getFieldConfiguration().getName(), numberOfValues, getFieldConfiguration().getNumberOfDefaultWeights());
                     if(remainder!=0) {
-                        logger.debug("field [{}] - distributing weight over [{}] elements: [{}] * [{}] and [{}] * [{}]", fieldConfiguration.getName(), fieldConfiguration.getNumberOfDefaultWeights(), remainder, averageWeightValue + 1, fieldConfiguration.getNumberOfDefaultWeights() - remainder, averageWeightValue);
+                        logger.debug("field [{}] - distributing weight over [{}] elements: [{}] * [{}] and [{}] * [{}]", getFieldConfiguration().getName(), getFieldConfiguration().getNumberOfDefaultWeights(), remainder, averageWeightValue + 1, getFieldConfiguration().getNumberOfDefaultWeights() - remainder, averageWeightValue);
                     }
                     else
                     {
-                        logger.debug("field [{}] - distributing weight over [{}] elements: [{}] * [{}]", fieldConfiguration.getName(), fieldConfiguration.getNumberOfDefaultWeights(), fieldConfiguration.getNumberOfDefaultWeights() - remainder, averageWeightValue);
+                        logger.debug("field [{}] - distributing weight over [{}] elements: [{}] * [{}]", getFieldConfiguration().getName(), getFieldConfiguration().getNumberOfDefaultWeights(), getFieldConfiguration().getNumberOfDefaultWeights() - remainder, averageWeightValue);
 
                     }
                     int counter = 0;
-                    for (FieldConfigurationValue value : fieldConfiguration.getValues())
+                    for (FieldConfigurationValue value : getFieldConfiguration().getValues())
                     {
                         if (value.getWeight() == FieldConfigurationValue.DEFAULT_WEIGHT)
                         {
@@ -171,13 +181,13 @@ public class CategoryProcessor extends FieldProcessor
                     }
                 } else
                 {
-                    throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "] - cannot distribute at least 1 percent of weight to the values which have no weight defined");
+                    throw new InvalidConfigurationException("field [" + getFieldConfiguration().getName() + "] - cannot distribute at least 1 percent of weight to the values which have no weight defined");
                 }
             }
         }
-        else if(fieldConfiguration.getNumberOfDefaultWeights()!= fieldConfiguration.getValues().size() && fieldConfiguration.getSumOfWeights()<100)
+        else if(getFieldConfiguration().getNumberOfDefaultWeights()!= getFieldConfiguration().getValues().size() && getFieldConfiguration().getSumOfWeights()<100)
         {
-            throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "] - the total sum of weight values must be 100");
+            throw new InvalidConfigurationException("field [" + getFieldConfiguration().getName() + "] - the total sum of weight values must be 100");
         }
     }
 }

@@ -20,7 +20,7 @@ public class RandomTimestampGenerator implements RandomValueGenerator
 {
     private static Logger logger = LoggerFactory.getLogger(RandomTimestampGenerator.class);
 
-    private static final Class DATATYPE = Double.class;
+    private static final Class BASE_DATATYPE = Double.class;
     private FieldConfiguration fieldConfiguration;
 
     private List<TransformationMethod> transformationMethods = new ArrayList<>();
@@ -56,7 +56,7 @@ public class RandomTimestampGenerator implements RandomValueGenerator
     {
         for(TransformationConfiguration transformationConfiguration : fieldConfiguration.getTransformations())
         {
-            transformationMethods.add(new TransformationMethod(MethodHelper.getMethod(DATATYPE, transformationConfiguration),transformationConfiguration.getParameters()));
+            transformationMethods.add(new TransformationMethod(MethodHelper.getMethod(BASE_DATATYPE, transformationConfiguration),transformationConfiguration.getParameters()));
         }
     }
 

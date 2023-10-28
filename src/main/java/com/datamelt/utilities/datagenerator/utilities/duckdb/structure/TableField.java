@@ -1,16 +1,18 @@
 package com.datamelt.utilities.datagenerator.utilities.duckdb.structure;
 
 import com.datamelt.utilities.datagenerator.config.model.FieldType;
+import com.datamelt.utilities.datagenerator.utilities.type.DataTypeDuckDb;
 
 public class TableField
 {
-    private String name;
-    private FieldType fieldType;
+    private final String name;
 
-    public TableField(String name, FieldType fieldType)
+    private final DataTypeDuckDb dataTypeDuckDb;
+
+    public TableField(String name, DataTypeDuckDb dataTypeDuckDb)
     {
         this.name = name;
-        this.fieldType = fieldType;
+        this.dataTypeDuckDb = dataTypeDuckDb;
     }
 
     public String getName()
@@ -18,8 +20,8 @@ public class TableField
         return name;
     }
 
-    public FieldType getFieldType()
+    public DataTypeDuckDb getDataTypeDuckDb()
     {
-        return fieldType;
+        return dataTypeDuckDb;
     }
 }

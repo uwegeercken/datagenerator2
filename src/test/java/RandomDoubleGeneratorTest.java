@@ -27,8 +27,8 @@ class RandomDoubleGeneratorTest
         List<FieldConfiguration> fields = new ArrayList<>();
         fields.add(fieldConfiguration);
         dataConfiguration.setFields(fields);
-        DataFieldsProcessor allFieldsProcessor = new DataFieldsProcessor(dataConfiguration);
-        allFieldsProcessor.processAllFields();
+        DataFieldsProcessor allFieldsProcessor = new DataFieldsProcessor();
+        allFieldsProcessor.processAllFields(dataConfiguration);
         return new RowBuilder(dataConfiguration);
     }
 

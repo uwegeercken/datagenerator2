@@ -104,8 +104,8 @@ public class DataGenerator
 
     private void processConfiguration() throws InvalidConfigurationException
     {
-        DataFieldsProcessor allFieldsProcessor = new DataFieldsProcessor(dataConfiguration);
-        allFieldsProcessor.processAllFields();
+        DataFieldsProcessor allFieldsProcessor = new DataFieldsProcessor();
+        allFieldsProcessor.processAllFields(dataConfiguration);
     }
 
     private void setupDataStore() throws Exception

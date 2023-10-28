@@ -6,59 +6,54 @@ import com.datamelt.utilities.datagenerator.config.model.FieldType;
 
 public class DataFieldsProcessor
 {
-    private DataConfiguration configuration;
-
-    public DataFieldsProcessor(DataConfiguration configuration)
-    {
-        this.configuration = configuration;
-    }
-
-    public void processAllFields() throws InvalidConfigurationException
+    public void processAllFields(DataConfiguration configuration) throws InvalidConfigurationException
     {
         for (FieldConfiguration fieldConfiguration : configuration.getFields())
         {
             FieldProcessor processor = null;
             if (fieldConfiguration.getType() == FieldType.CATEGORY)
             {
-                processor = new CategoryProcessor(configuration);
+                processor = new CategoryProcessor(fieldConfiguration);
             }
             else if (fieldConfiguration.getType() == FieldType.RANDOMSTRING)
             {
-               processor = new RandomStringProcessor(configuration);
+               processor = new RandomStringProcessor(fieldConfiguration);
             }
             else if (fieldConfiguration.getType() == FieldType.RANDOMINTEGER)
             {
-                processor = new RandomLongProcessor(configuration);
+                processor = new RandomLongProcessor(fieldConfiguration);
             }
             else if (fieldConfiguration.getType() == FieldType.RANDOMLONG)
             {
-                processor = new RandomLongProcessor(configuration);
+                processor = new RandomLongProcessor(fieldConfiguration);
             }
             else if (fieldConfiguration.getType() == FieldType.RANDOMDOUBLE)
             {
-                processor = new RandomDoubleProcessor(configuration);
+                processor = new RandomDoubleProcessor(fieldConfiguration);
             }
             else if (fieldConfiguration.getType() == FieldType.REGULAREXPRESSION)
             {
-               //processor = new RegularExpressionProcessor(configuration);
+               //processor = new RegularExpressionProcessor(fieldConfiguration);
 
             }
             else if (fieldConfiguration.getType() == FieldType.RANDOMDATE)
             {
-                processor = new RandomDateProcessor(configuration);
+                processor = new RandomDateProcessor(fieldConfiguration);
             }
             else if (fieldConfiguration.getType() == FieldType.RANDOMTIMESTAMP)
             {
-                processor = new RandomTimestampProcessor(configuration);
+                processor = new RandomTimestampProcessor(fieldConfiguration);
             }
             else if (fieldConfiguration.getType() == FieldType.DATEREFERENCE)
             {
-                processor = new DateReferenceProcessor(configuration);
+                processor = new DateReferenceProcessor(fieldConfiguration);
             }
 
-            processor.setDefaultOptions(fieldConfiguration);
-            processor.validateConfiguration(fieldConfiguration);
-            processor.processConfiguration(fieldConfiguration);
+            processor.setDefaultOptions();
+            processor.validateTransformations();
+            processor.validateOutputType();
+            processor.validateConfiguration();
+            processor.processConfiguration();
         }
     }
 }

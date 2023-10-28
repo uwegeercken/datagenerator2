@@ -16,7 +16,7 @@ import java.util.Random;
 public class RandomStringGenerator implements RandomValueGenerator
 {
     private static Logger logger = LoggerFactory.getLogger(RandomStringGenerator.class);
-    private static final Class DATATYPE = String.class;
+    private static final Class BASE_DATATYPE = String.class;
     private FieldConfiguration fieldConfiguration;
 
     private long minLength;
@@ -38,7 +38,7 @@ public class RandomStringGenerator implements RandomValueGenerator
     {
         for(TransformationConfiguration transformationConfiguration : fieldConfiguration.getTransformations())
         {
-            transformationMethods.add(new TransformationMethod(MethodHelper.getMethod(DATATYPE, transformationConfiguration),transformationConfiguration.getParameters()));
+            transformationMethods.add(new TransformationMethod(MethodHelper.getMethod(BASE_DATATYPE, transformationConfiguration),transformationConfiguration.getParameters()));
         }
     }
     @Override

@@ -1,15 +1,17 @@
 package com.datamelt.utilities.datagenerator.config.model.options;
 
+import com.datamelt.utilities.datagenerator.utilities.type.DataTypeDuckDb;
+
 import java.util.Arrays;
 import java.util.List;
 
 public enum RandomDoubleOptions
 {
     MIN_VALUE("minValue",0L),
-    MAX_VALUE("maxValue", 1000000L);
-
-    private String key;
-    private Object defaultValue;
+    MAX_VALUE("maxValue", 1000000L),
+    OUTPUT_TYPE("outputType", DataTypeDuckDb.DOUBLE.name());
+    private final String key;
+    private final Object defaultValue;
 
     RandomDoubleOptions(String key, Object defaultValue)
     {

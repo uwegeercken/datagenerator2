@@ -8,6 +8,7 @@ import com.datamelt.utilities.datagenerator.utilities.DateUtility;
 import com.datamelt.utilities.datagenerator.utilities.transformation.MethodHelper;
 import com.datamelt.utilities.datagenerator.utilities.transformation.TransformationExecutor;
 import com.datamelt.utilities.datagenerator.utilities.transformation.TransformationMethod;
+import com.datamelt.utilities.datagenerator.utilities.type.DataTypeDuckDb;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,17 +22,19 @@ public class RandomDateGenerator implements RandomValueGenerator
 {
     private static Logger logger = LoggerFactory.getLogger(RandomDateGenerator.class);
 
-    private static final Class DATATYPE = Double.class;
+    private static final Class BASE_DATATYPE = Double.class;
     private FieldConfiguration fieldConfiguration;
 
     private List<TransformationMethod> transformationMethods = new ArrayList<>();
 
     private int minYear;
     private int maxYear;
-
-    private long generatedRandomValue;
-
     private SimpleDateFormat dateFormat;
+    private DataTypeDuckDb outputType;
+
+    private Long generatedRandomValue;
+
+
 
     public RandomDateGenerator(FieldConfiguration fieldConfiguration) throws NoSuchMethodException
     {
@@ -49,7 +52,10 @@ public class RandomDateGenerator implements RandomValueGenerator
         {
             dateFormat = new SimpleDateFormat((String) fieldConfiguration.getOptions().get(RandomDateOptions.DATE_FORMAT.getKey()));
         }
-
+        if(fieldConfiguration.getOptions().get(RandomDateOptions.OUTPUT_TYPE.getKey()) instanceof String)
+        {
+            outputType = fieldConfiguration.getOutputType();
+        }
         this.prepareMethods();
     }
 
@@ -57,7 +63,7 @@ public class RandomDateGenerator implements RandomValueGenerator
     {
         for(TransformationConfiguration transformationConfiguration : fieldConfiguration.getTransformations())
         {
-            transformationMethods.add(new TransformationMethod(MethodHelper.getMethod(DATATYPE, transformationConfiguration),transformationConfiguration.getParameters()));
+            transformationMethods.add(new TransformationMethod(MethodHelper.getMethod(BASE_DATATYPE, transformationConfiguration),transformationConfiguration.getParameters()));
         }
     }
 
@@ -68,7 +74,14 @@ public class RandomDateGenerator implements RandomValueGenerator
         Long minYearMilliseonds = DateUtility.getMinDate(minYear);
         Long maxYearMilliseonds = DateUtility.getMaxDate(maxYear);
         generatedRandomValue = random.nextLong(minYearMilliseonds, maxYearMilliseonds);
-        return (T) dateFormat.format(generatedRandomValue) ;
+        if(fieldConfiguration.getOutputType()== DataTypeDuckDb.LONG)
+        {
+            return (T) generatedRandomValue;
+        }
+        else
+        {
+            return (T) dateFormat.format(generatedRandomValue) ;
+        }
     }
 
     @Override

@@ -3,9 +3,8 @@ package com.datamelt.utilities.datagenerator.config.process;
 import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.TransformationConfiguration;
-import com.datamelt.utilities.datagenerator.config.model.options.RandomLongOptions;
-import com.datamelt.utilities.datagenerator.config.model.options.RandomStringOptions;
-import com.datamelt.utilities.datagenerator.config.model.options.Transformations;
+import com.datamelt.utilities.datagenerator.config.model.options.*;
+import com.datamelt.utilities.datagenerator.utilities.type.DataTypeDuckDb;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,75 +25,75 @@ public class RandomStringProcessor extends FieldProcessor
             Transformations.TRIM.getName()
     );
 
-    public RandomStringProcessor(DataConfiguration configuration)
+    private static final List<DataTypeDuckDb> availableOutputTypes = Arrays.asList(
+            DataTypeDuckDb.VARCHAR
+    );
+
+    private static final List<FieldOption> availableOptions = Arrays.asList(
+            new FieldOption(OptionKey.MIN_LENGTH, 0),
+            new FieldOption(OptionKey.MAX_LENGTH,40),
+            new FieldOption(OptionKey.RANDOM_CHARACTERS, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_"),
+            new FieldOption(OptionKey.OUTPUT_TYPE, DataTypeDuckDb.VARCHAR.name())
+    );
+
+    public RandomStringProcessor(FieldConfiguration fieldConfiguration)
     {
-        super(configuration);
+        super(fieldConfiguration);
     }
 
     @Override
-    protected void validateConfiguration(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
+    protected void validateConfiguration() throws InvalidConfigurationException
     {
-        checkOptions(fieldConfiguration);
-        checkTransformations(fieldConfiguration);
-
+        checkOptions();
     }
 
-    private void checkTransformations(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
-    {
-        if(fieldConfiguration.getTransformations()!=null)
-        {
-            for(TransformationConfiguration configuredTransformation : fieldConfiguration.getTransformations())
-            {
-                if(!availableTransformations.contains(configuredTransformation.getName()))
-                {
-                    throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], transformation [" + configuredTransformation.getName() + "] is not allowed - must be in list: " + Arrays.toString(availableTransformations.toArray()));
-                }
-            }
-        }
-    }
-
-    private void checkOptions(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
+    private void checkOptions() throws InvalidConfigurationException
     {
         try
         {
-            if ((Long) fieldConfiguration.getOptions().get(RandomStringOptions.MIN_LENGTH.getKey()) <= 0)
+            if ((Long) getFieldConfiguration().getOptions().get(RandomStringOptions.MIN_LENGTH.getKey()) <= 0)
             {
-                throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], option [" + RandomStringOptions.MIN_LENGTH.getKey() + "] - the value can not be smaller zero");
+                throw new InvalidConfigurationException("field [" + getFieldConfiguration().getName() + "], option [" + RandomStringOptions.MIN_LENGTH.getKey() + "] - the value can not be smaller zero");
             }
         }
         catch(ClassCastException cce)
         {
-            throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], option [" + RandomStringOptions.MIN_LENGTH.getKey() + "] - the value must be of type long");
+            throw new InvalidConfigurationException("field [" + getFieldConfiguration().getName() + "], option [" + RandomStringOptions.MIN_LENGTH.getKey() + "] - the value must be of type long");
         }
 
         try
         {
-            if ((Long) fieldConfiguration.getOptions().get(RandomStringOptions.MAX_LENGTH.getKey()) < (Long) fieldConfiguration.getOptions().get(RandomStringOptions.MIN_LENGTH.getKey()))
+            if ((Long) getFieldConfiguration().getOptions().get(RandomStringOptions.MAX_LENGTH.getKey()) < (Long) getFieldConfiguration().getOptions().get(RandomStringOptions.MIN_LENGTH.getKey()))
             {
-                throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], option [" + RandomStringOptions.MAX_LENGTH.getKey() + "] - the value can not be smaller than the option [" + RandomStringOptions.MIN_LENGTH.getKey() + "]");
+                throw new InvalidConfigurationException("field [" + getFieldConfiguration().getName() + "], option [" + RandomStringOptions.MAX_LENGTH.getKey() + "] - the value can not be smaller than the option [" + RandomStringOptions.MIN_LENGTH.getKey() + "]");
             }
         }
         catch(ClassCastException cce)
         {
-            throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], option [" + RandomStringOptions.MAX_LENGTH.getKey() + "] - the value must be of type long");
+            throw new InvalidConfigurationException("field [" + getFieldConfiguration().getName() + "], option [" + RandomStringOptions.MAX_LENGTH.getKey() + "] - the value must be of type long");
         }
+    }
+
+    @Override
+    protected void processConfiguration() throws InvalidConfigurationException {
 
     }
 
     @Override
-    protected void setDefaultOptions(FieldConfiguration fieldConfiguration)
+    protected List<String> getAvailableTransformations()
     {
-        for(RandomStringOptions defaultOption : RandomStringOptions.values())
-        {
-            if(!fieldConfiguration.getOptions().containsKey(defaultOption.getKey()))
-            {
-                fieldConfiguration.getOptions().put(defaultOption.getKey(), defaultOption.getDefaultValue());
-            }
-        }
+        return availableTransformations;
     }
 
     @Override
-    protected void processConfiguration(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException {
+    protected List<DataTypeDuckDb> getAvailableOutputTypes()
+    {
+        return availableOutputTypes;
+    }
 
+    @Override
+    protected List<FieldOption> getAvailableOptions()
+    {
+        return availableOptions;
     }
 }
