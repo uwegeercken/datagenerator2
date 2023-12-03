@@ -1,11 +1,14 @@
 package com.datamelt.utilities.datagenerator.config.model.options;
 
+import com.datamelt.utilities.datagenerator.utilities.type.DataTypeDuckDb;
+
 public enum DateReferenceOptions
 {
     REFERENCE("reference",null),
-    DATE_FORMAT("dateFormat", null);
-    private String key;
-    private Object defaultValue;
+    DATE_FORMAT("dateFormat", null),
+    OUTPUT_TYPE("outputType", DataTypeDuckDb.VARCHAR.name());
+    private final String key;
+    private final Object defaultValue;
 
     DateReferenceOptions(String key, Object defaultValue)
     {

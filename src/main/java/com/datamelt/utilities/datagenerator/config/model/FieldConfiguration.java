@@ -1,6 +1,8 @@
 package com.datamelt.utilities.datagenerator.config.model;
 
+import com.datamelt.utilities.datagenerator.config.model.options.GenericOptions;
 import com.datamelt.utilities.datagenerator.config.model.options.Transformations;
+import com.datamelt.utilities.datagenerator.utilities.type.DataTypeDuckDb;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -172,5 +174,10 @@ public class FieldConfiguration
             }
         }
         return false;
+    }
+
+    public DataTypeDuckDb getOutputType()
+    {
+        return DataTypeDuckDb.getDataType((String) options.get(GenericOptions.OUTPUT_TYPE.getKey()));
     }
 }

@@ -2,7 +2,9 @@ package com.datamelt.utilities.datagenerator.config;
 
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfigurationValue;
-import com.datamelt.utilities.datagenerator.config.model.options.CategoryOptions;
+import com.datamelt.utilities.datagenerator.config.model.options.OptionKey;
+import com.datamelt.utilities.datagenerator.config.process.CategoryProcessor;
+import com.datamelt.utilities.datagenerator.config.process.FieldProcessor;
 import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
 import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
 import org.slf4j.Logger;
@@ -11,8 +13,6 @@ import org.slf4j.LoggerFactory;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-
-import static com.datamelt.utilities.datagenerator.utilities.Constants.CATEGORY_FILE_VALUE_WEIGHT_SEPARATOR;
 
 public class CategoryFileLoader
 {
@@ -41,24 +41,25 @@ public class CategoryFileLoader
     {
         try
         {
-            String separator = (String)fieldConfiguration.getOptions().get(CategoryOptions.CATEGORY_FILE_SEPARATOR.getKey());
+            String separator = (String)fieldConfiguration.getOptions().get(OptionKey.CATEGORY_FILE_SEPARATOR.getKey());
         }
         catch (Exception ex)
         {
-            throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], option [" + CategoryOptions.CATEGORY_FILE_SEPARATOR.getKey() + "] - the value must be a string");
+            throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], option [" + OptionKey.CATEGORY_FILE_SEPARATOR.getKey() + "] - the value must be a string");
         }
     }
     private static void loadCategoryFile(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException {
         File file = new File(fieldConfiguration.getValuesFile());
         String valueWeightSeparator;
-        String test = (String)fieldConfiguration.getOptions().get(CategoryOptions.CATEGORY_FILE_SEPARATOR.getKey());
-        if((String)fieldConfiguration.getOptions().get(CategoryOptions.CATEGORY_FILE_SEPARATOR.getKey())!=null)
+        if((String)fieldConfiguration.getOptions().get(OptionKey.CATEGORY_FILE_SEPARATOR.getKey())!=null)
         {
-            valueWeightSeparator = (String)fieldConfiguration.getOptions().get(CategoryOptions.CATEGORY_FILE_SEPARATOR.getKey());
+            valueWeightSeparator = (String)fieldConfiguration.getOptions().get(OptionKey.CATEGORY_FILE_SEPARATOR.getKey());
         }
         else
         {
-            valueWeightSeparator = (String) CategoryOptions.CATEGORY_FILE_SEPARATOR.getDefaultValue();
+            FieldProcessor processor = new CategoryProcessor(fieldConfiguration);
+            String defaultValue = (String) processor.getFieldOption(OptionKey.CATEGORY_FILE_SEPARATOR).getDefaultValue();
+            valueWeightSeparator =  defaultValue;
         }
         try(BufferedReader reader = new BufferedReader(new FileReader(file.getPath()));)
         {

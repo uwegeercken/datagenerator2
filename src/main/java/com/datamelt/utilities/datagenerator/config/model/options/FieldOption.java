@@ -1,19 +1,17 @@
 package com.datamelt.utilities.datagenerator.config.model.options;
 
-public enum CategoryOptions
+public class FieldOption
 {
-    CATEGORY_FILE_SEPARATOR("categoryFileSeparator",",");
+    private final OptionKey key;
 
-    private String key;
-    private Object defaultValue;
+    private final Object defaultValue;
 
-    CategoryOptions(String key, Object defaultValue)
+    public FieldOption(OptionKey key, Object defaultValue)
     {
         this.key = key;
         this.defaultValue = defaultValue;
     }
-
-    public String getKey()
+    public OptionKey getOptionKey()
     {
         return key;
     }

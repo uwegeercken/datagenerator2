@@ -22,8 +22,8 @@ class YamlFileProcessorTest
         InputStream stream = getClass().getResourceAsStream("config/" + DATACONFIGURATION_TESTFILE_01);
         DataConfiguration dataConfiguration = ConfigurationLoader.load(stream.readAllBytes(), DataConfiguration.class);
         CategoryFileLoader.loadCategoryFiles(dataConfiguration);
-        DataFieldsProcessor allFieldsProcessor = new DataFieldsProcessor(dataConfiguration);
-        allFieldsProcessor.processAllFields();
+        DataFieldsProcessor allFieldsProcessor = new DataFieldsProcessor();
+        allFieldsProcessor.processAllFields(dataConfiguration);
         RowBuilder rowBuilder = new RowBuilder(dataConfiguration);
         Row row = rowBuilder.generate();
 

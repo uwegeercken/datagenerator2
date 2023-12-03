@@ -11,4 +11,16 @@ public enum DataTypeDuckDb
     LONG,
     VARCHAR;
 
+    public static DataTypeDuckDb getDataType(String key)
+    {
+        for(DataTypeDuckDb type : DataTypeDuckDb.values())
+        {
+            if(key.trim().toUpperCase().equals(type.name()))
+            {
+                return type;
+            }
+        }
+        return null;
+    }
+
 }

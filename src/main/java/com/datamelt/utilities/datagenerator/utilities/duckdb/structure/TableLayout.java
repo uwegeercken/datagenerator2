@@ -4,6 +4,7 @@ import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldType;
 import com.datamelt.utilities.datagenerator.config.model.ProgramConfiguration;
+import com.datamelt.utilities.datagenerator.config.model.options.RandomDateOptions;
 import com.datamelt.utilities.datagenerator.utilities.type.DataTypeDuckDb;
 
 import java.util.*;
@@ -84,16 +85,16 @@ public class TableLayout
                 }
                 if(currentNode==null)
                 {
-                    rootNode.addField(new TableField(fieldParts[fieldParts.length-1], fieldConfiguration.getType()));
+                    rootNode.addField(new TableField(fieldParts[fieldParts.length-1], fieldConfiguration.getOutputType()));
                 }
                 else
                 {
-                    currentNode.addField(new TableField(fieldParts[fieldParts.length-1], fieldConfiguration.getType()));
+                    currentNode.addField(new TableField(fieldParts[fieldParts.length-1], fieldConfiguration.getOutputType()));
                 }
             }
             else
             {
-                fields.add(new TableField(fieldParts[0], fieldConfiguration.getType()));
+                fields.add(new TableField(fieldParts[0], fieldConfiguration.getOutputType()));
             }
         }
     }
@@ -151,7 +152,7 @@ public class TableLayout
             createTableStatementBuilder.append(node.getFields().get(i).getName());
             createTableStatementBuilder.append("\"");
             createTableStatementBuilder.append(" ");
-            createTableStatementBuilder.append(getDuckDbType(node.getFields().get(i).getFieldType()));
+            createTableStatementBuilder.append(node.getFields().get(i).getDataTypeDuckDb().name());
             if(i<node.getFields().size()-1)
             {
                 createTableStatementBuilder.append(",");
@@ -171,7 +172,7 @@ public class TableLayout
             createTableStatementBuilder.append(fields.get(i).getName());
             createTableStatementBuilder.append("\"");
             createTableStatementBuilder.append(" ");
-            createTableStatementBuilder.append(getDuckDbType(fields.get(i).getFieldType()));
+            createTableStatementBuilder.append(fields.get(i).getDataTypeDuckDb().name());
             if(i<fields.size()-1)
             {
                 createTableStatementBuilder.append(",");
