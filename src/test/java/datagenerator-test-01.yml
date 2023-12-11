@@ -27,5 +27,4 @@ fields:
   - name: city
     valuesFile: /home/uwe/development/datagenerator2/categories/city.category
   - name: number
-    dataType: integer
     valuesFile: /home/uwe/development/datagenerator2/categories/number.category
