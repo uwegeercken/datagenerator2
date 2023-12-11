@@ -7,6 +7,8 @@ import com.datamelt.utilities.datagenerator.generate.RowBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -19,7 +21,8 @@ class YamlFileProcessorTest
     @DisplayName("test1")
     void validateConfiguration() throws Exception
     {
-        InputStream stream = getClass().getResourceAsStream("config/" + DATACONFIGURATION_TESTFILE_01);
+        File dataConfigurationFile = new File("./src/test/java/" + DATACONFIGURATION_TESTFILE_01);
+        InputStream stream = new FileInputStream(dataConfigurationFile);
         DataConfiguration dataConfiguration = ConfigurationLoader.load(stream.readAllBytes(), DataConfiguration.class);
         CategoryFileLoader.loadCategoryFiles(dataConfiguration);
         DataFieldsProcessor allFieldsProcessor = new DataFieldsProcessor();
@@ -27,6 +30,6 @@ class YamlFileProcessorTest
         RowBuilder rowBuilder = new RowBuilder(dataConfiguration);
         Row row = rowBuilder.generate();
 
-        assertEquals(true,true,"blabla");
+        assertEquals(true,true,"invalid configuration file");
     }
 }
