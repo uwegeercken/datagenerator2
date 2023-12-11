@@ -22,8 +22,11 @@ class YamlFileProcessorTest
     void validateConfiguration() throws Exception
     {
         File dataConfigurationFile = new File("./src/test/java/" + DATACONFIGURATION_TESTFILE_01);
-        InputStream stream = new FileInputStream(dataConfigurationFile);
-        DataConfiguration dataConfiguration = ConfigurationLoader.load(stream.readAllBytes(), DataConfiguration.class);
+        DataConfiguration dataConfiguration;
+        try (InputStream stream = new FileInputStream(dataConfigurationFile))
+        {
+            dataConfiguration = ConfigurationLoader.load(stream.readAllBytes(), DataConfiguration.class);
+        }
         CategoryFileLoader.loadCategoryFiles(dataConfiguration);
         DataFieldsProcessor allFieldsProcessor = new DataFieldsProcessor();
         allFieldsProcessor.processAllFields(dataConfiguration);
