@@ -201,7 +201,9 @@ The configuration file contains a list of fields/attributes to generate - see th
 
 Fields is a list of fields for which data is to be generated. Each field has a unique name. A substructure can be created by dividing the structure and the field name with the dot separator - eg. address.street, address.city, person.country.name, etc.
 This will e.g. create a substructure named "address" with the fields street and city. Multiple levels/substructures may be defined. Each field is assigned a type. Fields may have additional (optional) options. Fields may have one or more transformations assigned and the transformations may require
-additional parameters to be executed. Fields of type=category may either specify valid values in the configuration file or in a category file or both, but one of them must be present. The definition for values contains the value itself and optionally a weight for the value.
+additional parameters to be executed. Be aware to not create duplicate structures. Like e.g. when you create a structure person.city.name.firstname then you can not also have a structure person.city or person.city.name. But you can of course have a structure person.city.location
+
+Fields of type=category may either specify valid values in the configuration file or in a category file or both, but one of them must be present. The definition for values contains the value itself and optionally a weight for the value.
 
 ## Running the datagenerator tool
 To run the tool you must pass at least the mandatory arguments to the program as shown below. These point to the program configuration file
