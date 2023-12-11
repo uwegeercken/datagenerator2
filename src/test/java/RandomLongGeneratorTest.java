@@ -38,7 +38,7 @@ class RandomLongGeneratorTest
     void validateErrorMaxValueSmallerMinValue()
     {
         Map<String, Object> options = new HashMap<>();
-        options.put(RandomLongOptions.MIN_VALUE.getKey(), 5L);
+        options.put(RandomLongOptions.MIN_VALUE.getKey(), 15L);
         options.put(RandomLongOptions.MAX_VALUE.getKey(), 10L);
 
         assertThrows(InvalidConfigurationException.class,()->{
