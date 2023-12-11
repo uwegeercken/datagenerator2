@@ -22,7 +22,7 @@ public class DataGenerator
 {
     private static Logger logger = LoggerFactory.getLogger(DataGenerator.class);
     private static final String applicationName = "datagenerator2";
-    private static final String version = "0.2.2";
+    private static final String version = "0.2.3";
     private static final String versionDate = "2023-12-11";
     private static final String contactEmail = "uwe.geercken@web.de";
     private DataConfiguration dataConfiguration;
