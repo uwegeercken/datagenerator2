@@ -84,7 +84,10 @@ public class DataStoreAppender
         }
         if(node.getChildren().size()>0)
         {
-            buffer.append(",");
+            if(node.getFields().size()>0)
+            {
+                buffer.append(",");
+            }
             getChildren(node.getName(), node, row, buffer);
         }
         buffer.append("}");
