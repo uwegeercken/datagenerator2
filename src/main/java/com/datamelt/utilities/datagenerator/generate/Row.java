@@ -6,7 +6,6 @@ import java.util.List;
 public class Row {
     private static final String DELIMITER = ",";
     private List<RowField<?>> fields = new ArrayList<>();
-
     public void addField(RowField<?> field)
     {
         fields.add(field);

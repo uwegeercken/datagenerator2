@@ -5,14 +5,14 @@ import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldType;
 import com.datamelt.utilities.datagenerator.config.model.options.DateReferenceOptions;
 import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
-import com.datamelt.utilities.datagenerator.config.process.RandomTimestampProcessor;
+import com.datamelt.utilities.datagenerator.utilities.type.DataTypeDuckDb;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RowBuilder
 {
-    private List<RowField<?>> rowFields = new ArrayList<>();
+    private final List<RowField<?>> rowFields = new ArrayList<>();
     public RowBuilder(DataConfiguration dataConfiguration) throws NoSuchMethodException, InvalidConfigurationException
     {
         createRowFields(dataConfiguration);
@@ -44,7 +44,14 @@ public class RowBuilder
             }
             else if (fieldConfiguration.getType() == FieldType.RANDOMDATE)
             {
-                rowFields.add(new RowField<String>(new RandomDateGenerator(fieldConfiguration), fieldConfiguration.getName()));
+                if(fieldConfiguration.getOutputType() == DataTypeDuckDb.LONG)
+                {
+                    rowFields.add(new RowField<Long>(new RandomDateAsLongGenerator(fieldConfiguration), fieldConfiguration.getName()));
+                }
+                else
+                {
+                    rowFields.add(new RowField<String>(new RandomDateGenerator(fieldConfiguration), fieldConfiguration.getName()));
+                }
             }
             else if (fieldConfiguration.getType() == FieldType.RANDOMTIMESTAMP)
             {

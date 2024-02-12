@@ -11,8 +11,8 @@ import java.util.Base64;
 
 public class DataTransformer
 {
-    private static Logger logger = LoggerFactory.getLogger(DataTransformer.class);
-    private static Cipher cipherEncrypt;
+    private static final Logger logger = LoggerFactory.getLogger(DataTransformer.class);
+    private static final Cipher cipherEncrypt;
 
     static
     {
@@ -22,7 +22,7 @@ public class DataTransformer
         }
         catch(Exception ex )
         {
-            logger.error("error initializing encryption: ", ex.getMessage());
+            logger.error("error initializing encryption: [{}]", ex.getMessage());
             throw new RuntimeException("error initializing encryption - aborting");
         }
     }

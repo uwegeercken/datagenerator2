@@ -1,29 +1,25 @@
 package com.datamelt.utilities.datagenerator.generate;
 
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
-import com.datamelt.utilities.datagenerator.config.model.TransformationConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.options.RandomLongOptions;
 import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
-import com.datamelt.utilities.datagenerator.utilities.transformation.MethodHelper;
 import com.datamelt.utilities.datagenerator.utilities.transformation.TransformationExecutor;
 import com.datamelt.utilities.datagenerator.utilities.transformation.TransformationMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class RandomLongGenerator implements RandomValueGenerator
+public class RandomLongGenerator implements RandomValueGenerator<Long>
 {
-    private static Logger logger = LoggerFactory.getLogger(RandomLongGenerator.class);
-    private static final Class BASE_DATATYPE = Long.class;
-    private FieldConfiguration fieldConfiguration;
+    private static final Logger logger = LoggerFactory.getLogger(RandomLongGenerator.class);
+    private static final Class<Long> BASE_DATATYPE = Long.class;
+    private final FieldConfiguration fieldConfiguration;
 
-    private List<TransformationMethod> transformationMethods = new ArrayList<>();
-
-    private long minValue;
-    private long maxValue;
+    private final List<TransformationMethod> transformationMethods;
+    private final long minValue;
+    private final long maxValue;
 
     public RandomLongGenerator(FieldConfiguration fieldConfiguration) throws NoSuchMethodException
     {
@@ -46,28 +42,20 @@ public class RandomLongGenerator implements RandomValueGenerator
             maxValue = (Long) fieldConfiguration.getOptions().get(RandomLongOptions.MAX_VALUE.getKey());
         }
 
-        prepareMethods();
-    }
-
-    private void prepareMethods() throws NoSuchMethodException
-    {
-        for(TransformationConfiguration transformationConfiguration : fieldConfiguration.getTransformations())
-        {
-            transformationMethods.add(new TransformationMethod(MethodHelper.getMethod(BASE_DATATYPE, transformationConfiguration),transformationConfiguration.getParameters()));
-        }
+        transformationMethods = prepareMethods(BASE_DATATYPE, fieldConfiguration);
     }
 
     @Override
-    public <T> T generateRandomValue() throws InvalidConfigurationException {
+    public Long generateRandomValue() throws InvalidConfigurationException {
 
         Random random = new Random();
         Long value = random.nextLong(minValue, maxValue);
-        return (T) value ;
+        return value ;
     }
 
     @Override
-    public <T> T transformRandomValue(T value) throws InvalidConfigurationException
+    public Long transformRandomValue(Long value) throws InvalidConfigurationException
     {
-        return (T) TransformationExecutor.executeAll(value, transformationMethods);
+        return TransformationExecutor.executeAll(value, transformationMethods);
     }
 }

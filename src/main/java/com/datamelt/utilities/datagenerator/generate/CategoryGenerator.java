@@ -2,41 +2,30 @@ package com.datamelt.utilities.datagenerator.generate;
 
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 
-import com.datamelt.utilities.datagenerator.config.model.TransformationConfiguration;
 import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
-import com.datamelt.utilities.datagenerator.utilities.transformation.MethodHelper;
 import com.datamelt.utilities.datagenerator.utilities.transformation.TransformationExecutor;
 import com.datamelt.utilities.datagenerator.utilities.transformation.TransformationMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class CategoryGenerator implements RandomValueGenerator
+public class CategoryGenerator implements RandomValueGenerator<String>
 {
     private static Logger logger = LoggerFactory.getLogger(CategoryGenerator.class);
-    private FieldConfiguration fieldConfiguration;
-    private static final Class BASE_DATATYPE = String.class;
-    private List<TransformationMethod> transformationMethods = new ArrayList<>();
+    private final FieldConfiguration fieldConfiguration;
+    private static final Class<String> BASE_DATATYPE = String.class;
+    private final List<TransformationMethod> transformationMethods;
 
     public CategoryGenerator(FieldConfiguration fieldConfiguration) throws NoSuchMethodException
     {
         this.fieldConfiguration = fieldConfiguration;
-        this.prepareMethods();
-    }
-
-    private void prepareMethods() throws NoSuchMethodException
-    {
-        for(TransformationConfiguration transformationConfiguration : fieldConfiguration.getTransformations())
-        {
-            transformationMethods.add(new TransformationMethod(MethodHelper.getMethod(BASE_DATATYPE, transformationConfiguration),transformationConfiguration.getParameters()));
-        }
+        transformationMethods = prepareMethods(BASE_DATATYPE, fieldConfiguration);
     }
 
     @Override
-    public <T> T generateRandomValue()
+    public String generateRandomValue()
     {
         Random random = new Random();
         if(fieldConfiguration.getNumberOfDefaultWeights()!=fieldConfiguration.getValues().size())
@@ -58,18 +47,20 @@ public class CategoryGenerator implements RandomValueGenerator
             }
             logger.trace("field [{}] - values and weights {}", fieldConfiguration.getName(), fieldConfiguration.getValuesAndWeights());
             logger.trace("field [{}] - randomPercentValue [{}], sum [{}], selected value [{}] ", fieldConfiguration.getName(), randomPercentValue, sum, fieldConfiguration.getValues().get(counter - 1).getValue());
-            return (T) fieldConfiguration.getValues().get(counter-1).getValue();
+            return fieldConfiguration.getValues().get(counter-1).getValue();
         }
         else
         {
             int randomValue = random.nextInt(1, fieldConfiguration.getValues().size()+1);
-            return (T) fieldConfiguration.getValues().get(randomValue-1).getValue();
+            return fieldConfiguration.getValues().get(randomValue-1).getValue();
         }
     }
 
     @Override
-    public <T> T transformRandomValue(T value) throws InvalidConfigurationException
+    public String transformRandomValue(String value) throws InvalidConfigurationException
     {
-        return (T) TransformationExecutor.executeAll(value, transformationMethods);
+        return TransformationExecutor.executeAll(value, transformationMethods);
     }
+
+
 }

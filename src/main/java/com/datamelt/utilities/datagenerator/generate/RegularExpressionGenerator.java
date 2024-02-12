@@ -1,36 +1,26 @@
 package com.datamelt.utilities.datagenerator.generate;
 
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
-import com.datamelt.utilities.datagenerator.config.model.TransformationConfiguration;
 import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
-import com.datamelt.utilities.datagenerator.utilities.transformation.MethodHelper;
 import com.datamelt.utilities.datagenerator.utilities.transformation.TransformationMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class RegularExpressionGenerator implements RandomValueGenerator
+public class RegularExpressionGenerator implements RandomValueGenerator<String>
 {
-    private static Logger logger = LoggerFactory.getLogger(RegularExpressionGenerator.class);
-    private static final Class BASE_DATATYPE = String.class;
-    private FieldConfiguration fieldConfiguration;
-    private List<TransformationMethod> transformationMethods = new ArrayList<>();
+    private static final Logger logger = LoggerFactory.getLogger(RegularExpressionGenerator.class);
+    private static final Class<String> BASE_DATATYPE = String.class;
+    private final FieldConfiguration fieldConfiguration;
+    private final List<TransformationMethod> transformationMethods;
 
     public RegularExpressionGenerator(FieldConfiguration fieldConfiguration) throws NoSuchMethodException
     {
         this.fieldConfiguration = fieldConfiguration;
-        prepareMethods();
+        transformationMethods = prepareMethods(BASE_DATATYPE, fieldConfiguration);
     }
 
-    private void prepareMethods() throws NoSuchMethodException
-    {
-        for(TransformationConfiguration transformationConfiguration : fieldConfiguration.getTransformations())
-        {
-            transformationMethods.add(new TransformationMethod(  MethodHelper.getMethod(BASE_DATATYPE, transformationConfiguration),transformationConfiguration.getParameters()));
-        }
-    }
     @Override
     public String generateRandomValue() throws InvalidConfigurationException
     {
@@ -38,7 +28,7 @@ public class RegularExpressionGenerator implements RandomValueGenerator
     }
 
     @Override
-    public <T> T transformRandomValue(T value) throws InvalidConfigurationException
+    public String transformRandomValue(String value) throws InvalidConfigurationException
     {
         return null;
     }
