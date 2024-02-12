@@ -6,6 +6,7 @@ import org.duckdb.DuckDBConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.SQLException;
 import java.sql.Statement;
 
 public class ParquetFileExporter implements FileExporter
@@ -19,7 +20,7 @@ public class ParquetFileExporter implements FileExporter
         this.partionBy = configuration.getPartitionBy();
     }
     @Override
-    public void export(DuckDBConnection connection, String tablename, String exportFilename) throws Exception
+    public void export(DuckDBConnection connection, String tablename, String exportFilename) throws SQLException
     {
         if(partionBy!=null)
         {

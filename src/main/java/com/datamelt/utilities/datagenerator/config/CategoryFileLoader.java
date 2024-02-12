@@ -17,7 +17,7 @@ import java.io.FileReader;
 public class CategoryFileLoader
 {
     private static Logger logger = LoggerFactory.getLogger(CategoryFileLoader.class);
-    public static void loadCategoryFiles(DataConfiguration configuration) throws Exception
+    public static void loadCategoryFiles(DataConfiguration configuration) throws InvalidConfigurationException
     {
         for(FieldConfiguration fieldConfiguration : configuration.getFields())
         {

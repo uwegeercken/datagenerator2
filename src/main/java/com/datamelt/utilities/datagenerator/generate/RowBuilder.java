@@ -86,7 +86,7 @@ public class RowBuilder
         return null;
     }
 
-    public Row generate() throws Exception
+    public Row generate() throws InvalidConfigurationException
     {
         Row row = new Row();
         for (RowField<?> rowField : rowFields)

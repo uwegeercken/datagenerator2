@@ -26,7 +26,7 @@ public class DataStore
 
     TableInsertLayout tableInsertLayout;
 
-    public DataStore(ProgramConfiguration programConfiguration, DataConfiguration dataConfiguration, FileExporter fileExporter) throws Exception
+    public DataStore(ProgramConfiguration programConfiguration, DataConfiguration dataConfiguration, FileExporter fileExporter) throws SQLException
     {
         this.programConfiguration = programConfiguration;
         this.dataConfiguration = dataConfiguration;
@@ -42,13 +42,13 @@ public class DataStore
         createAppender();
     }
 
-    private void cleanupDatabase() throws Exception
+    private void cleanupDatabase() throws SQLException
     {
         dropTable();
         //dropEnums();
     }
 
-    private void createDatabaseStructure() throws Exception
+    private void createDatabaseStructure() throws SQLException
     {
         //createEnums();
         createTable();
@@ -82,7 +82,7 @@ public class DataStore
         }
     }
 
-    private void createTable() throws Exception
+    private void createTable() throws SQLException
     {
 
         Statement stmt = connection.createStatement();
@@ -93,7 +93,7 @@ public class DataStore
         stmt.execute(createTableStatement);
     }
 
-    private void dropTable() throws Exception
+    private void dropTable() throws SQLException
     {
         Statement stmt = connection.createStatement();
         String sqlDropTable = "drop table if exists " + dataConfiguration.getTableName();
@@ -101,7 +101,7 @@ public class DataStore
         stmt.execute(sqlDropTable);
     }
 
-    private void createAppender() throws Exception
+    private void createAppender() throws SQLException
     {
         this.appender = new DataStoreAppender(connection.createAppender(SCHEMANAME, dataConfiguration.getTableName()), tableInsertLayout);
     }
@@ -113,12 +113,12 @@ public class DataStore
         numberOfRecordsInserted++;
     }
 
-    public void flush() throws Exception
+    public void flush() throws SQLException
     {
         appender.flush();
     }
 
-    public void exportToFile(String tablename, String exportFilename) throws Exception
+    public void exportToFile(String tablename, String exportFilename) throws SQLException
     {
         fileExporter.export(connection, tablename, exportFilename);
     }
@@ -148,7 +148,7 @@ public class DataStore
                 }
             }
         }
-        catch(Exception ex)
+        catch(SQLException ex)
         {
             logger.error("error collecting value counts for field [{}]. error [{}]", fieldConfiguration.getName(), ex.getMessage());
         }

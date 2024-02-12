@@ -6,7 +6,7 @@ import com.datamelt.utilities.datagenerator.config.model.FieldType;
 
 public class DataFieldsProcessor
 {
-    public void processAllFields(DataConfiguration configuration) throws InvalidConfigurationException
+    public static void processAllFields(DataConfiguration configuration) throws InvalidConfigurationException
     {
         for (FieldConfiguration fieldConfiguration : configuration.getFields())
         {

@@ -9,6 +9,8 @@ import org.duckdb.DuckDBAppender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.SQLException;
+
 import static com.datamelt.utilities.datagenerator.utilities.Constants.FIELD_DEVIDER_CHARACTER;
 
 public class DataStoreAppender
@@ -45,7 +47,7 @@ public class DataStoreAppender
             }
             appender.endRow();
         }
-        catch(Exception ex)
+        catch(SQLException ex)
         {
             logger.error("error appending row [{}]. error {}", row.toString(), ex.getMessage());
         }
@@ -140,27 +142,27 @@ public class DataStoreAppender
     }
 
 
-    public void beginRow() throws Exception
+    public void beginRow() throws SQLException
     {
         appender.beginRow();
     }
 
-    public void endRow() throws Exception
+    public void endRow() throws SQLException
     {
         appender.endRow();
     }
 
-    public void flush() throws Exception
+    public void flush()  throws SQLException
     {
         appender.flush();
     }
 
-    private void appendRownumberField(long counter) throws Exception
+    private void appendRownumberField(long counter) throws SQLException
     {
         appendLong(counter);
     }
 
-    private void appendField(RowField<?> field) throws Exception
+    private void appendField(RowField<?> field) throws SQLException
     {
         if(field.getValue() instanceof Integer)
         {
@@ -184,27 +186,27 @@ public class DataStoreAppender
         }
     }
 
-    private void appendInt(int value) throws Exception
+    private void appendInt(int value) throws SQLException
     {
         appender.append(value);
     }
 
-    private void appendLong(long value) throws Exception
+    private void appendLong(long value) throws SQLException
     {
         appender.append(value);
     }
 
-    private void appendString(String value) throws Exception
+    private void appendString(String value) throws SQLException
     {
         appender.append(value);
     }
 
-    private void appendDouble(double value) throws Exception
+    private void appendDouble(double value) throws SQLException
     {
         appender.append(value);
     }
 
-    private void appendFloat(float value) throws Exception
+    private void appendFloat(float value) throws SQLException
     {
         appender.append(value);
     }

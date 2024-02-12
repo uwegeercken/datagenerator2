@@ -8,7 +8,7 @@ import java.util.List;
 public class TransformationExecutor
 {
     private static Class<DataTransformer> dataTransformer = DataTransformer.class;
-    public static <T> T executeAll(T value, List<TransformationMethod> methods) throws Exception
+    public static <T> T executeAll(T value, List<TransformationMethod> methods) throws InvalidConfigurationException
     {
         T transformedValue = value;
         for(TransformationMethod method : methods)

@@ -5,6 +5,7 @@ import org.duckdb.DuckDBConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.SQLException;
 import java.sql.Statement;
 
 public class JsonFileExporter implements FileExporter
@@ -16,7 +17,7 @@ public class JsonFileExporter implements FileExporter
         this.asArray = configuration.isAsArray();
     }
     @Override
-    public void export(DuckDBConnection connection, String tablename, String exportFilename) throws Exception
+    public void export(DuckDBConnection connection, String tablename, String exportFilename) throws SQLException
     {
         logger.info("export of generated data to json file: [{}],", exportFilename);
         Statement stmt = connection.createStatement();

@@ -12,9 +12,13 @@ import com.datamelt.utilities.datagenerator.utilities.duckdb.DataStore;
 import com.datamelt.utilities.datagenerator.utilities.duckdb.FieldStatistics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
+
+import java.io.*;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.LongStream;
 
 import static java.lang.System.exit;
 
@@ -22,28 +26,24 @@ public class DataGenerator
 {
     private static Logger logger = LoggerFactory.getLogger(DataGenerator.class);
     private static final String applicationName = "datagenerator2";
-    private static final String version = "0.2.3";
-    private static final String versionDate = "2023-12-11";
+    private static final String version = "0.2.4";
+    private static final String versionDate = "2024-02-11";
     private static final String contactEmail = "uwe.geercken@web.de";
-    private DataConfiguration dataConfiguration;
-    private ProgramConfiguration programConfiguration;
-    private DataStore dataStore;
-
+    private static DataConfiguration dataConfiguration;
+    private static ProgramConfiguration programConfiguration;
+    private static DataStore dataStore;
     private static ProgramArguments arguments;
 
-    public DataGenerator(ProgramArguments arguments) throws Exception
+    private static void processDataConfiguration(String dataConfigurationFilename) throws IOException, InvalidConfigurationException
     {
-        programConfiguration = loadProgramConfiguration(arguments.getProgramConfigurationFilename());
-        programConfiguration.mergeArguments(arguments);
-        dataConfiguration = loadDataConfiguration(arguments.getDataConfigurationFilename());
+        loadDataConfiguration(dataConfigurationFilename);
         CategoryFileLoader.loadCategoryFiles(dataConfiguration);
-        processConfiguration();
-        setupDataStore();
+        DataFieldsProcessor.processAllFields(dataConfiguration);
     }
-    public static void main(String[] args) throws Exception
+
+    public static void main(String[] args)
     {
         logger.info(applicationName +  " application - version: " + version + " (" + versionDate + ")");
-        DataGenerator generator = null;
         if(args.length == 0 || args[0].equals("-h") || args[0].equals("--help"))
         {
             help();
@@ -52,16 +52,19 @@ public class DataGenerator
         try
         {
             arguments = new ProgramArguments(args);
-            generator = new DataGenerator(arguments);
-            generator.generateRows();
+            loadProgramConfiguration(arguments.getProgramConfigurationFilename());
+            programConfiguration.mergeArguments(arguments);
 
-            if(generator.programConfiguration.getGeneral().getExportFilename() != null) {
-                generator.exportToFile();
+            processDataConfiguration(arguments.getDataConfigurationFilename());
+            setupDataStore();
+            generateRows();
+
+            if(programConfiguration.getGeneral().getExportFilename() != null) {
+                exportToFile();
             }
-
             if(arguments.getGenerateStatistics())
             {
-                generator.outputStatistics();
+                outputStatistics();
             }
         }
         catch (InvalidConfigurationException ice)
@@ -84,31 +87,23 @@ public class DataGenerator
         logger.info("contact: {}", contactEmail);
     }
 
-    private DataConfiguration loadDataConfiguration(String dataConfigurationFilename) throws Exception
+    private static void loadDataConfiguration(String dataConfigurationFilename) throws IOException
     {
         logger.debug("processing data configuration file: [{}],", dataConfigurationFilename);
-        InputStream stream = new FileInputStream(new File(dataConfigurationFilename));
-        DataConfiguration dataConfiguration = ConfigurationLoader.load(stream.readAllBytes(), DataConfiguration.class);
+        InputStream stream = new FileInputStream(dataConfigurationFilename);
+        dataConfiguration = ConfigurationLoader.load(stream.readAllBytes(), DataConfiguration.class);
         stream.close();
-        return dataConfiguration;
     }
 
-    private ProgramConfiguration loadProgramConfiguration(String programConfigurationFilename) throws Exception
+    private static void loadProgramConfiguration(String programConfigurationFilename) throws IOException
     {
         logger.debug("processing program configuration file: [{}],", programConfigurationFilename);
-        InputStream stream = new FileInputStream(new File(programConfigurationFilename));
-        ProgramConfiguration programConfiguration = ConfigurationLoader.load(stream.readAllBytes(), ProgramConfiguration.class);
+        InputStream stream = new FileInputStream(programConfigurationFilename);
+        programConfiguration = ConfigurationLoader.load(stream.readAllBytes(), ProgramConfiguration.class);
         stream.close();
-        return programConfiguration;
     }
 
-    private void processConfiguration() throws InvalidConfigurationException
-    {
-        DataFieldsProcessor allFieldsProcessor = new DataFieldsProcessor();
-        allFieldsProcessor.processAllFields(dataConfiguration);
-    }
-
-    private void setupDataStore() throws Exception
+    private static void setupDataStore() throws Exception
     {
         FileExporter fileExporter;
         switch(programConfiguration.getGeneral().getExportType())
@@ -129,7 +124,7 @@ public class DataGenerator
         dataStore = new DataStore(programConfiguration, dataConfiguration, fileExporter);
     }
 
-    private void generateRows() throws Exception
+    private static void generateRows() throws NoSuchMethodException, InvalidConfigurationException, SQLException
     {
         logger.info("generating rows: [{}]", programConfiguration.getGeneral().getNumberOfRowsToGenerate());
         Row row;
@@ -154,7 +149,20 @@ public class DataGenerator
         logger.info("total data generation time: [{}] seconds", (end - start) / 1000);
     }
 
-    private void outputStatistics()
+    public static List<Row> generateRows(String dataConfigurationFilename, long numberOfRows) throws IOException, InvalidConfigurationException, NoSuchMethodException
+    {
+        List<Row> rows = new ArrayList<>();
+        processDataConfiguration(dataConfigurationFilename);
+        RowBuilder rowBuilder = new RowBuilder(dataConfiguration);
+        for(long i=0;i < numberOfRows;i++)
+        {
+            Row row = rowBuilder.generate();
+            rows.add(row);
+        }
+        return rows;
+    }
+
+    private static void outputStatistics()
     {
         logger.info("collecting statistics for generated field values...");
         for(FieldConfiguration fieldConfiguration : dataConfiguration.getFields())
@@ -171,7 +179,7 @@ public class DataGenerator
         }
     }
 
-    private void exportToFile() throws Exception
+    private static void exportToFile() throws Exception
     {
         dataStore.exportToFile(dataConfiguration.getTableName(), programConfiguration.getGeneral().getExportFilename());
     }

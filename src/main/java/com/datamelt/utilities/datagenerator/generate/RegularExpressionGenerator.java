@@ -2,6 +2,7 @@ package com.datamelt.utilities.datagenerator.generate;
 
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.TransformationConfiguration;
+import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
 import com.datamelt.utilities.datagenerator.utilities.transformation.MethodHelper;
 import com.datamelt.utilities.datagenerator.utilities.transformation.TransformationMethod;
 import org.slf4j.Logger;
@@ -31,13 +32,13 @@ public class RegularExpressionGenerator implements RandomValueGenerator
         }
     }
     @Override
-    public String generateRandomValue() throws Exception
+    public String generateRandomValue() throws InvalidConfigurationException
     {
         return null;
     }
 
     @Override
-    public <T> T transformRandomValue(T value) throws Exception
+    public <T> T transformRandomValue(T value) throws InvalidConfigurationException
     {
         return null;
     }

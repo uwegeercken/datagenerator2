@@ -3,6 +3,7 @@ package com.datamelt.utilities.datagenerator.generate;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.TransformationConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.options.RandomLongOptions;
+import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
 import com.datamelt.utilities.datagenerator.utilities.transformation.MethodHelper;
 import com.datamelt.utilities.datagenerator.utilities.transformation.TransformationExecutor;
 import com.datamelt.utilities.datagenerator.utilities.transformation.TransformationMethod;
@@ -15,15 +16,15 @@ import java.util.Random;
 
 public class RandomDoubleGenerator implements RandomValueGenerator
 {
-    private static Logger logger = LoggerFactory.getLogger(RandomDoubleGenerator.class);
+    private static final Logger logger = LoggerFactory.getLogger(RandomDoubleGenerator.class);
 
     private static final Class BASE_DATATYPE = Double.class;
-    private FieldConfiguration fieldConfiguration;
+    private final FieldConfiguration fieldConfiguration;
 
-    private List<TransformationMethod> transformationMethods = new ArrayList<>();
+    private final List<TransformationMethod> transformationMethods = new ArrayList<>();
 
-    private long minValue;
-    private long maxValue;
+    private final long minValue;
+    private final long maxValue;
 
     public RandomDoubleGenerator(FieldConfiguration fieldConfiguration) throws NoSuchMethodException
     {
@@ -58,16 +59,16 @@ public class RandomDoubleGenerator implements RandomValueGenerator
     }
 
     @Override
-    public <T> T  generateRandomValue() throws Exception {
-
+    public <T> T generateRandomValue() throws InvalidConfigurationException
+    {
         Random random = new Random();
         Double value = random.nextDouble(minValue, maxValue);
         return (T) value ;
     }
 
     @Override
-    public <T> T transformRandomValue(T value) throws Exception
+    public <T> T transformRandomValue(T value) throws InvalidConfigurationException
     {
-        return (T) TransformationExecutor.executeAll(value, transformationMethods);
+        return TransformationExecutor.executeAll(value, transformationMethods);
     }
 }

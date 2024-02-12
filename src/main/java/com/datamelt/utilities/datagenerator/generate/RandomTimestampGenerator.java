@@ -4,6 +4,7 @@ import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.TransformationConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.options.RandomDateOptions;
 import com.datamelt.utilities.datagenerator.config.model.options.RandomTimestampOptions;
+import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
 import com.datamelt.utilities.datagenerator.utilities.DateUtility;
 import com.datamelt.utilities.datagenerator.utilities.transformation.MethodHelper;
 import com.datamelt.utilities.datagenerator.utilities.transformation.TransformationExecutor;
@@ -61,7 +62,8 @@ public class RandomTimestampGenerator implements RandomValueGenerator
     }
 
     @Override
-    public <T> T generateRandomValue() throws Exception {
+    public <T> T generateRandomValue() throws InvalidConfigurationException
+    {
 
         Random random = new Random();
         Long minYearMilliseonds = DateUtility.getMinDate(minYear);
@@ -71,7 +73,7 @@ public class RandomTimestampGenerator implements RandomValueGenerator
     }
 
     @Override
-    public <T> T transformRandomValue(T value) throws Exception
+    public <T> T transformRandomValue(T value) throws InvalidConfigurationException
     {
         return (T) TransformationExecutor.executeAll(value, transformationMethods);
     }
