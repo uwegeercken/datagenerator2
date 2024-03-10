@@ -1,29 +1,25 @@
 package com.datamelt.utilities.datagenerator.generate;
 
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
-import com.datamelt.utilities.datagenerator.config.model.TransformationConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.options.RandomStringOptions;
 import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
-import com.datamelt.utilities.datagenerator.utilities.transformation.MethodHelper;
 import com.datamelt.utilities.datagenerator.utilities.transformation.TransformationExecutor;
 import com.datamelt.utilities.datagenerator.utilities.transformation.TransformationMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class RandomStringGenerator implements RandomValueGenerator
+public class RandomStringGenerator implements RandomValueGenerator<String>
 {
-    private static Logger logger = LoggerFactory.getLogger(RandomStringGenerator.class);
-    private static final Class BASE_DATATYPE = String.class;
-    private FieldConfiguration fieldConfiguration;
-
-    private long minLength;
-    private long maxLength;
-    private List<TransformationMethod> transformationMethods = new ArrayList<>();
-    String randomCharacters;
+    private final static Logger logger = LoggerFactory.getLogger(RandomStringGenerator.class);
+    private static final Class<String> BASE_DATATYPE = String.class;
+    private final FieldConfiguration fieldConfiguration;
+    private final long minLength;
+    private final long maxLength;
+    private final List<TransformationMethod> transformationMethods;
+    private final String randomCharacters;
 
     public RandomStringGenerator(FieldConfiguration fieldConfiguration) throws NoSuchMethodException
     {
@@ -33,17 +29,11 @@ public class RandomStringGenerator implements RandomValueGenerator
         maxLength = (Long) fieldConfiguration.getOptions().get(RandomStringOptions.MAX_LENGTH.getKey());
         randomCharacters = (String) fieldConfiguration.getOptions().get(RandomStringOptions.RANDOM_CHARACTERS.getKey());
 
-        prepareMethods();
+        transformationMethods = prepareMethods(BASE_DATATYPE, fieldConfiguration);
     }
-    private void prepareMethods() throws NoSuchMethodException
-    {
-        for(TransformationConfiguration transformationConfiguration : fieldConfiguration.getTransformations())
-        {
-            transformationMethods.add(new TransformationMethod(MethodHelper.getMethod(BASE_DATATYPE, transformationConfiguration),transformationConfiguration.getParameters()));
-        }
-    }
+
     @Override
-    public <T> T generateRandomValue() throws InvalidConfigurationException {
+    public String generateRandomValue() throws InvalidConfigurationException {
 
         Random random = new Random();
         long randomLength;
@@ -60,12 +50,12 @@ public class RandomStringGenerator implements RandomValueGenerator
             int position = random.nextInt(randomCharacters.length());
             randomString.append(randomCharacters.substring(position, position+1));
         }
-        return (T) randomString.toString();
+        return randomString.toString();
     }
 
     @Override
-    public <T> T transformRandomValue(T value) throws InvalidConfigurationException
+    public String transformRandomValue(String value) throws InvalidConfigurationException
     {
-        return (T) TransformationExecutor.executeAll(value, transformationMethods);
+        return TransformationExecutor.executeAll(value, transformationMethods);
     }
 }

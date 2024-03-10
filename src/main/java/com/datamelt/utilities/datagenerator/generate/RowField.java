@@ -1,14 +1,13 @@
 package com.datamelt.utilities.datagenerator.generate;
 
-import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
 
 public class RowField<T> {
-    private String name;
+    private final String name;
     private T value;
-    private RandomValueGenerator generator;
+    private final RandomValueGenerator<T> generator;
 
-    public RowField(RandomValueGenerator generator, String name)
+    public RowField(RandomValueGenerator<T> generator, String name)
     {
         this.generator = generator;
         this.name = name;
@@ -19,7 +18,7 @@ public class RowField<T> {
         this.value = transformValue(generator.generateRandomValue());
     }
 
-    private <T> T transformValue(T value) throws InvalidConfigurationException
+    private T transformValue(T value) throws InvalidConfigurationException
     {
         return generator.transformRandomValue(value);
     }
@@ -37,7 +36,7 @@ public class RowField<T> {
         this.value = value;
     }
 
-    public RandomValueGenerator getGenerator()
+    public RandomValueGenerator<T> getGenerator()
     {
         return generator;
     }

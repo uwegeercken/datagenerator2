@@ -229,7 +229,13 @@ You can get help about the available program arguments by running:
 
     java -cp . com.datamelt.utilities.datagenerator.application.DataGenerator --help
 
-See the sample yaml file for the program configuration in this repository under: src/main/resources/config.
+See the sample yaml file for the program configuration in this repository under: samples/dataconfiguration
+
+You may also use the tool programmatically by calling the static method "generateRows". Pass the path and name of the dataconfiguration yaml file and the number of rows to be generated.
+The method returns a list of rows (com.datamelt.utilities.datagenerator.generate.Row).
+
+    List<Row> generateRows(String dataConfigurationFilename, long numberOfRows)
+
 
 ## Building the datagenerator jar file
 To build the jar file either download the release from https://github.com/uwegeercken/datagenerator2/tags or clone this repository and run:
@@ -237,4 +243,4 @@ To build the jar file either download the release from https://github.com/uwegee
     mvn clean install
 
 
-last update: uwe geercken - uwe.geercken@web.de - 2023-12-11
+last update: uwe geercken - uwe.geercken@web.de - 2024-03-10
