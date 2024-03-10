@@ -17,17 +17,15 @@ import java.io.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.LongStream;
 
 import static java.lang.System.exit;
 
 public class DataGenerator
 {
-    private static Logger logger = LoggerFactory.getLogger(DataGenerator.class);
+    private static final Logger logger = LoggerFactory.getLogger(DataGenerator.class);
     private static final String applicationName = "datagenerator2";
-    private static final String version = "0.2.4";
-    private static final String versionDate = "2024-02-11";
+    private static final String version = "0.2.5";
+    private static final String versionDate = "2024-03-10";
     private static final String contactEmail = "uwe.geercken@web.de";
     private static DataConfiguration dataConfiguration;
     private static ProgramConfiguration programConfiguration;
@@ -105,22 +103,13 @@ public class DataGenerator
 
     private static void setupDataStore() throws Exception
     {
-        FileExporter fileExporter;
-        switch(programConfiguration.getGeneral().getExportType())
+        FileExporter fileExporter = switch (programConfiguration.getGeneral().getExportType())
         {
-            case JSON:
-                fileExporter = new JsonFileExporter(programConfiguration.getJsonExport());
-                break;
-            case PARQUET:
-                fileExporter = new ParquetFileExporter(programConfiguration.getParquetExport());
-                break;
-            case EXCEL:
-                fileExporter = new ExcelFileExporter(programConfiguration.getExcelExport());
-                break;
-            default:
-                fileExporter = new CsvFileExporter(programConfiguration.getCsvExport());
-                break;
-        }
+            case JSON -> new JsonFileExporter(programConfiguration.getJsonExport());
+            case PARQUET -> new ParquetFileExporter(programConfiguration.getParquetExport());
+            case EXCEL -> new ExcelFileExporter(programConfiguration.getExcelExport());
+            default -> new CsvFileExporter(programConfiguration.getCsvExport());
+        };
         dataStore = new DataStore(programConfiguration, dataConfiguration, fileExporter);
     }
 

@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Row {
     private static final String DELIMITER = ",";
-    private List<RowField<?>> fields = new ArrayList<>();
+    private final List<RowField<?>> fields = new ArrayList<>();
     public void addField(RowField<?> field)
     {
         fields.add(field);
@@ -32,7 +32,7 @@ public class Row {
         return fields;
     }
 
-    public RowField getField(String name)
+    public RowField<?> getField(String name)
     {
         for(RowField<?> field : fields)
         {
