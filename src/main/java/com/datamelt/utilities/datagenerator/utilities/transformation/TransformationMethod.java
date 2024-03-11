@@ -5,8 +5,8 @@ import java.util.List;
 
 public class TransformationMethod
 {
-    private Method method;
-    private List<Object> parameters;
+    private final Method method;
+    private final List<Object> parameters;
 
     public TransformationMethod(Method method, List<Object> parameters)
     {

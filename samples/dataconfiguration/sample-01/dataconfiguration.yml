@@ -37,6 +37,8 @@ fields:
   - name: person.address.city.name
     type: category
     valuesFile: /home/uwe/development/datagenerator2/categories/city.category
+    transformations:
+      - name: uppercase
   - name: person.address.street.name
     type: category
     valuesFile: /home/uwe/development/datagenerator2/categories/street.category

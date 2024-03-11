@@ -3,6 +3,7 @@ package com.datamelt.utilities.datagenerator.generate;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.options.RandomDateOptions;
 import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
+import com.datamelt.utilities.datagenerator.config.process.TransformationExecutionException;
 import com.datamelt.utilities.datagenerator.utilities.DateUtility;
 import com.datamelt.utilities.datagenerator.utilities.transformation.TransformationExecutor;
 import com.datamelt.utilities.datagenerator.utilities.transformation.TransformationMethod;
@@ -52,7 +53,7 @@ public class RandomDateGenerator implements RandomValueGenerator<String>, Random
     }
 
     @Override
-    public String generateRandomValue() throws InvalidConfigurationException
+    public String generateRandomValue()
     {
         Random random = new Random();
         Long minYearMilliseonds = DateUtility.getMinDate(minYear);
@@ -62,7 +63,7 @@ public class RandomDateGenerator implements RandomValueGenerator<String>, Random
     }
 
     @Override
-    public String transformRandomValue(String value) throws InvalidConfigurationException
+    public String transformRandomValue(String value) throws TransformationExecutionException
     {
         return TransformationExecutor.executeAll(value, transformationMethods);
     }
