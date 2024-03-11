@@ -15,8 +15,8 @@ public class UseListOfGeneratedRows
     @DisplayName("test1")
     void test1() throws Exception
     {
-        List<Row> rows =  DataGenerator.generateRows(dataConfigurationFilename, 0);
-        assertTrue(() -> rows.size()==0);
+        List<Row> rows =  DataGenerator.generateRows(dataConfigurationFilename, 10);
+        assertTrue(() -> rows.size()==10);
 
     }
 }
