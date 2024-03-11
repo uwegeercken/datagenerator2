@@ -152,17 +152,26 @@ public class DataGenerator
         RowBuilder rowBuilder = new RowBuilder(dataConfiguration);
 
         LongStream.rangeClosed(0, programConfiguration.getGeneral().getNumberOfRowsToGenerate())
-                //.forEach(rangeValue -> dataStore.insert(rowBuilder.generate(), rangeValue));
+                .peek(DataGenerator::logProcessedRows)
                 .mapToObj(rangeValue -> rowBuilder.generate())
                 .filter(Try::isSuccess)
                 .forEach(rowTry -> dataStore.insert(rowTry.getResult()));
-
-
 
         dataStore.flush();
         long end = System.currentTimeMillis();
         logger.info("total rows generated: [{}]", programConfiguration.getGeneral().getNumberOfRowsToGenerate());
         logger.info("total data generation time: [{}] seconds", (end - start) / 1000);
+    }
+
+    private static void logProcessedRows(long counter)
+    {
+        if(programConfiguration.getGeneral().getGeneratedRowsLogInterval() > 0
+                && programConfiguration.getGeneral().getNumberOfRowsToGenerate() > programConfiguration.getGeneral().getGeneratedRowsLogInterval()
+                && counter % programConfiguration.getGeneral().getGeneratedRowsLogInterval() == 0
+                && counter > 0)
+        {
+            logger.debug("rows generated: [{}]", counter);
+        }
     }
 
     public static List<Row> generateRows(String dataConfigurationFilename, long numberOfRows) throws IOException, InvalidConfigurationException, NoSuchMethodException
