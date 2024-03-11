@@ -4,7 +4,6 @@ import com.datamelt.utilities.datagenerator.config.CategoryFileLoader;
 import com.datamelt.utilities.datagenerator.config.model.*;
 import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
 import com.datamelt.utilities.datagenerator.config.process.DataFieldsProcessor;
-import com.datamelt.utilities.datagenerator.error.Success;
 import com.datamelt.utilities.datagenerator.error.Try;
 import com.datamelt.utilities.datagenerator.export.*;
 import com.datamelt.utilities.datagenerator.generate.Row;
@@ -58,7 +57,7 @@ public class DataGenerator
 
             processDataConfiguration(arguments.getDataConfigurationFilename());
             setupDataStore();
-            generateRowsFunctional();
+            generateRows();
 
             if(programConfiguration.getGeneral().getExportFilename() != null) {
                 exportToFile();
@@ -123,41 +122,14 @@ public class DataGenerator
     private static void generateRows() throws NoSuchMethodException, InvalidConfigurationException, SQLException
     {
         logger.info("starting to generate total of [{}] rows", programConfiguration.getGeneral().getNumberOfRowsToGenerate());
-        Row row;
-        long counter = 0;
-        long start = System.currentTimeMillis();
-        RowBuilder rowBuilder = new RowBuilder(dataConfiguration);
-        for(long i=0;i < programConfiguration.getGeneral().getNumberOfRowsToGenerate();i++)
-        {
-            counter++;
-            if(programConfiguration.getGeneral().getGeneratedRowsLogInterval() > 0
-                    && programConfiguration.getGeneral().getNumberOfRowsToGenerate() > programConfiguration.getGeneral().getGeneratedRowsLogInterval()
-                    && counter % programConfiguration.getGeneral().getGeneratedRowsLogInterval() == 0)
-            {
-                logger.debug("rows generated: [{}]", counter);
-            }
-           // row = rowBuilder.generate();
-           // TODO: dataStore.insert(row, counter);
-        }
-        dataStore.flush();
-        long end = System.currentTimeMillis();
-        logger.info("total rows generated: [{}]", counter);
-        logger.info("total data generation time: [{}] seconds", (end - start) / 1000);
-    }
-
-    private static void generateRowsFunctional() throws NoSuchMethodException, InvalidConfigurationException, SQLException
-    {
-        logger.info("starting to generate total of [{}] rows", programConfiguration.getGeneral().getNumberOfRowsToGenerate());
         long start = System.currentTimeMillis();
         RowBuilder rowBuilder = new RowBuilder(dataConfiguration);
 
-        LongStream.rangeClosed(0, programConfiguration.getGeneral().getNumberOfRowsToGenerate())
-                //.forEach(rangeValue -> dataStore.insert(rowBuilder.generate(), rangeValue));
+        LongStream.range(0, programConfiguration.getGeneral().getNumberOfRowsToGenerate())
+                .peek(DataGenerator::logProcessedRows)
                 .mapToObj(rangeValue -> rowBuilder.generate())
                 .filter(Try::isSuccess)
                 .forEach(rowTry -> dataStore.insert(rowTry.getResult()));
-
-
 
         dataStore.flush();
         long end = System.currentTimeMillis();
@@ -165,17 +137,27 @@ public class DataGenerator
         logger.info("total data generation time: [{}] seconds", (end - start) / 1000);
     }
 
+    private static void logProcessedRows(long counter)
+    {
+        if(programConfiguration.getGeneral().getGeneratedRowsLogInterval() > 0
+                && programConfiguration.getGeneral().getNumberOfRowsToGenerate() > programConfiguration.getGeneral().getGeneratedRowsLogInterval()
+                && counter % programConfiguration.getGeneral().getGeneratedRowsLogInterval() == 0
+                && counter > 0)
+        {
+            logger.debug("rows generated: [{}]", counter);
+        }
+    }
+
     public static List<Row> generateRows(String dataConfigurationFilename, long numberOfRows) throws IOException, InvalidConfigurationException, NoSuchMethodException
     {
-        List<Row> rows = new ArrayList<>();
         processDataConfiguration(dataConfigurationFilename);
         RowBuilder rowBuilder = new RowBuilder(dataConfiguration);
-        for(long i=0;i < numberOfRows;i++)
-        {
-            //Row row = rowBuilder.generate();
-            //rows.add(row);
-        }
-        return rows;
+
+        return LongStream.range(0, numberOfRows)
+                .mapToObj(rangeValue -> rowBuilder.generate())
+                .filter(Try::isSuccess)
+                .map(rowTry -> rowTry.getResult())
+                .toList();
     }
 
     private static void outputStatistics()
