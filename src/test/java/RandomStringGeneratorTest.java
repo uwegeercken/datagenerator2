@@ -4,14 +4,11 @@ import com.datamelt.utilities.datagenerator.config.model.FieldType;
 import com.datamelt.utilities.datagenerator.config.model.options.RandomStringOptions;
 import com.datamelt.utilities.datagenerator.config.process.DataFieldsProcessor;
 import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
-import com.datamelt.utilities.datagenerator.config.process.RandomStringProcessor;
-import com.datamelt.utilities.datagenerator.generate.RandomStringGenerator;
+import com.datamelt.utilities.datagenerator.error.Try;
 import com.datamelt.utilities.datagenerator.generate.Row;
 import com.datamelt.utilities.datagenerator.generate.RowBuilder;
-import com.datamelt.utilities.datagenerator.utilities.transformation.DataTransformer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -61,7 +58,8 @@ class RandomStringGeneratorTest
         options.put(RandomStringOptions.RANDOM_CHARACTERS.getKey(), allowedCharacters);
 
         RowBuilder rowBuilder = getRowBuilder("testfield", options);
-        String value = (String) rowBuilder.generate().getFields().get(0).getValue();
+        Try<Row> row = rowBuilder.generate();
+        String value = (String) row.getResult().getFields().get(0).getValue();
         int countInvalidCharacters = 0;
         for(int i=0;i< value.length();i++)
         {
@@ -98,7 +96,8 @@ class RandomStringGeneratorTest
         options.put(RandomStringOptions.MAX_LENGTH.getKey(), 10L);
 
         RowBuilder rowBuilder = getRowBuilder("testfield", options);
-        String value = (String) rowBuilder.generate().getFields().get(0).getValue();
+        Try<Row> row = rowBuilder.generate();
+        String value = (String) row.getResult().getFields().get(0).getValue();
         assertEquals(10, value.length());
     }
 
@@ -116,7 +115,8 @@ class RandomStringGeneratorTest
         RowBuilder rowBuilder = getRowBuilder("testfield", options);
         for(int i=0;i<1000;i++)
         {
-            String value = (String)rowBuilder.generate().getFields().get(0).getValue();
+            Try<Row> row = rowBuilder.generate();
+            String value = (String)row.getResult().getFields().get(0).getValue();
             assertTrue(value.length()>=minValue && value.length()<=maxValue, "length of value must correspond to minValue and mxValue");
         }
     }

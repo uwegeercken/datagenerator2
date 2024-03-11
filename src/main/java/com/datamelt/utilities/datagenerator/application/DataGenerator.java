@@ -4,6 +4,8 @@ import com.datamelt.utilities.datagenerator.config.CategoryFileLoader;
 import com.datamelt.utilities.datagenerator.config.model.*;
 import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
 import com.datamelt.utilities.datagenerator.config.process.DataFieldsProcessor;
+import com.datamelt.utilities.datagenerator.error.Success;
+import com.datamelt.utilities.datagenerator.error.Try;
 import com.datamelt.utilities.datagenerator.export.*;
 import com.datamelt.utilities.datagenerator.generate.Row;
 import com.datamelt.utilities.datagenerator.generate.RowBuilder;
@@ -17,6 +19,7 @@ import java.io.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.LongStream;
 
 import static java.lang.System.exit;
 
@@ -24,8 +27,8 @@ public class DataGenerator
 {
     private static final Logger logger = LoggerFactory.getLogger(DataGenerator.class);
     private static final String applicationName = "datagenerator2";
-    private static final String version = "0.2.5";
-    private static final String versionDate = "2024-03-10";
+    private static final String version = "0.2.6";
+    private static final String versionDate = "2024-03-11";
     private static final String contactEmail = "uwe.geercken@web.de";
     private static DataConfiguration dataConfiguration;
     private static ProgramConfiguration programConfiguration;
@@ -55,7 +58,7 @@ public class DataGenerator
 
             processDataConfiguration(arguments.getDataConfigurationFilename());
             setupDataStore();
-            generateRows();
+            generateRowsFunctional();
 
             if(programConfiguration.getGeneral().getExportFilename() != null) {
                 exportToFile();
@@ -68,6 +71,10 @@ public class DataGenerator
         catch (InvalidConfigurationException ice)
         {
             logger.error("error in configuration: {}", ice.getMessage());
+        }
+        catch (NoSuchMethodException nsm)
+        {
+            logger.error("error in transformation: {}", nsm.getMessage());
         }
         catch (Exception ex)
         {
@@ -115,7 +122,7 @@ public class DataGenerator
 
     private static void generateRows() throws NoSuchMethodException, InvalidConfigurationException, SQLException
     {
-        logger.info("generating rows: [{}]", programConfiguration.getGeneral().getNumberOfRowsToGenerate());
+        logger.info("starting to generate total of [{}] rows", programConfiguration.getGeneral().getNumberOfRowsToGenerate());
         Row row;
         long counter = 0;
         long start = System.currentTimeMillis();
@@ -129,12 +136,32 @@ public class DataGenerator
             {
                 logger.debug("rows generated: [{}]", counter);
             }
-            row = rowBuilder.generate();
-            dataStore.insert(row, counter);
+           // row = rowBuilder.generate();
+           // TODO: dataStore.insert(row, counter);
         }
         dataStore.flush();
         long end = System.currentTimeMillis();
         logger.info("total rows generated: [{}]", counter);
+        logger.info("total data generation time: [{}] seconds", (end - start) / 1000);
+    }
+
+    private static void generateRowsFunctional() throws NoSuchMethodException, InvalidConfigurationException, SQLException
+    {
+        logger.info("starting to generate total of [{}] rows", programConfiguration.getGeneral().getNumberOfRowsToGenerate());
+        long start = System.currentTimeMillis();
+        RowBuilder rowBuilder = new RowBuilder(dataConfiguration);
+
+        LongStream.rangeClosed(0, programConfiguration.getGeneral().getNumberOfRowsToGenerate())
+                //.forEach(rangeValue -> dataStore.insert(rowBuilder.generate(), rangeValue));
+                .mapToObj(rangeValue -> rowBuilder.generate())
+                .filter(Try::isSuccess)
+                .forEach(rowTry -> dataStore.insert(rowTry.getResult()));
+
+
+
+        dataStore.flush();
+        long end = System.currentTimeMillis();
+        logger.info("total rows generated: [{}]", programConfiguration.getGeneral().getNumberOfRowsToGenerate());
         logger.info("total data generation time: [{}] seconds", (end - start) / 1000);
     }
 
@@ -145,8 +172,8 @@ public class DataGenerator
         RowBuilder rowBuilder = new RowBuilder(dataConfiguration);
         for(long i=0;i < numberOfRows;i++)
         {
-            Row row = rowBuilder.generate();
-            rows.add(row);
+            //Row row = rowBuilder.generate();
+            //rows.add(row);
         }
         return rows;
     }

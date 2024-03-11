@@ -1,3 +1,4 @@
+import com.datamelt.utilities.datagenerator.error.Try;
 import com.datamelt.utilities.datagenerator.utilities.ConfigurationLoader;
 import com.datamelt.utilities.datagenerator.config.CategoryFileLoader;
 import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
@@ -31,7 +32,7 @@ class YamlFileProcessorTest
         DataFieldsProcessor allFieldsProcessor = new DataFieldsProcessor();
         allFieldsProcessor.processAllFields(dataConfiguration);
         RowBuilder rowBuilder = new RowBuilder(dataConfiguration);
-        Row row = rowBuilder.generate();
+        Try<Row> row = rowBuilder.generate();
 
         assertEquals(true,true,"invalid configuration file");
     }

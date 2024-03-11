@@ -1,6 +1,7 @@
 package com.datamelt.utilities.datagenerator.utilities.transformation;
 
 import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
+import com.datamelt.utilities.datagenerator.config.process.TransformationExecutionException;
 
 import java.util.Arrays;
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.List;
 public class TransformationExecutor
 {
     private static Class<DataTransformer> dataTransformer = DataTransformer.class;
-    public static <T> T executeAll(T value, List<TransformationMethod> methods) throws InvalidConfigurationException
+    public static <T> T executeAll(T value, List<TransformationMethod> methods) throws TransformationExecutionException
     {
         T transformedValue = value;
         for(TransformationMethod method : methods)
@@ -18,7 +19,7 @@ public class TransformationExecutor
         return transformedValue;
     }
 
-    private static <T> T execute(TransformationMethod transformationMethod, T value) throws InvalidConfigurationException
+    private static <T> T execute(TransformationMethod transformationMethod, T value) throws TransformationExecutionException
     {
         Object[] parameterValues = null;
         try
@@ -27,7 +28,7 @@ public class TransformationExecutor
         }
         catch(Exception ex)
         {
-            throw new InvalidConfigurationException("the transformation [" + transformationMethod.getMethod().getName() + "] with the configured parameters: " + Arrays.toString(parameterValues) + ", types: " + Arrays.toString(transformationMethod.getMethod().getParameterTypes()) + " does not exist");
+            throw new TransformationExecutionException("the transformation [" + transformationMethod.getMethod().getName() + "] with the configured parameters: " + Arrays.toString(parameterValues) + ", types: " + Arrays.toString(transformationMethod.getMethod().getParameterTypes()) + " does not exist");
         }
     }
 

@@ -26,7 +26,7 @@ public abstract class FieldProcessor
             {
                 if (!getAvailableTransformations().contains(configuredTransformation.getName()))
                 {
-                    throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], transformation [" + configuredTransformation.getName() + "] is not allowed - must be in list: " + Arrays.toString(getAvailableTransformations().toArray()));
+                    throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], transformation [" + configuredTransformation.getName() + "] is not available - must be one of: " + Arrays.toString(getAvailableTransformations().toArray()));
                 }
             }
         }
@@ -47,7 +47,7 @@ public abstract class FieldProcessor
         {
             if(!getAvailableOutputTypes().contains(fieldConfiguration.getOutputType()))
             {
-                throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], output type [" + fieldConfiguration.getOutputType() + "] is not allowed - must be in list: " + Arrays.toString(getAvailableOutputTypes().toArray()));
+                throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], output type [" + fieldConfiguration.getOutputType() + "] is not available - must be one of: " + Arrays.toString(getAvailableOutputTypes().toArray()));
             }
         }
         else

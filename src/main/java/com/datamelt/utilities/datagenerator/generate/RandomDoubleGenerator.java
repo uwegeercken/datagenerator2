@@ -3,6 +3,7 @@ package com.datamelt.utilities.datagenerator.generate;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.options.RandomLongOptions;
 import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
+import com.datamelt.utilities.datagenerator.config.process.TransformationExecutionException;
 import com.datamelt.utilities.datagenerator.utilities.transformation.TransformationExecutor;
 import com.datamelt.utilities.datagenerator.utilities.transformation.TransformationMethod;
 import org.slf4j.Logger;
@@ -45,7 +46,7 @@ public class RandomDoubleGenerator implements RandomValueGenerator<Double>
     }
 
     @Override
-    public Double generateRandomValue() throws InvalidConfigurationException
+    public Double generateRandomValue()
     {
         Random random = new Random();
         Double value = random.nextDouble(minValue, maxValue);
@@ -53,7 +54,7 @@ public class RandomDoubleGenerator implements RandomValueGenerator<Double>
     }
 
     @Override
-    public Double transformRandomValue(Double value) throws InvalidConfigurationException
+    public Double transformRandomValue(Double value) throws TransformationExecutionException
     {
         return TransformationExecutor.executeAll(value, transformationMethods);
     }

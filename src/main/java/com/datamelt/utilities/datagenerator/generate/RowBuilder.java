@@ -5,6 +5,10 @@ import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldType;
 import com.datamelt.utilities.datagenerator.config.model.options.DateReferenceOptions;
 import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
+import com.datamelt.utilities.datagenerator.config.process.TransformationExecutionException;
+import com.datamelt.utilities.datagenerator.error.Failure;
+import com.datamelt.utilities.datagenerator.error.Success;
+import com.datamelt.utilities.datagenerator.error.Try;
 import com.datamelt.utilities.datagenerator.utilities.type.DataTypeDuckDb;
 
 import java.util.ArrayList;
@@ -93,14 +97,21 @@ public class RowBuilder
         return null;
     }
 
-    public Row generate() throws InvalidConfigurationException
+    public Try<Row> generate()
     {
         Row row = new Row();
         for (RowField<?> rowField : rowFields)
         {
-            rowField.generateValue();
-            row.addField(rowField);
+            try
+            {
+                rowField.generateValue();
+                row.addField(rowField);
+            }
+            catch (InvalidConfigurationException | TransformationExecutionException ex)
+            {
+                return new Failure<Row>(ex);
+            }
         }
-        return row;
+        return new Success<>(row);
     }
 }

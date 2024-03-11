@@ -12,13 +12,13 @@ import java.util.Base64;
 public class DataTransformer
 {
     private static final Logger logger = LoggerFactory.getLogger(DataTransformer.class);
-    private static final Cipher cipherEncrypt;
-
-    static
+    private static Cipher cipherEncrypt;
+    private static void initializeEncryption()
     {
+        logger.info("preparing encryption using " + EncryptionHelper.ENCRYPTION_ALGORITHM + " ...");
         try
         {
-            cipherEncrypt = EncryptionHelper.getCypher();
+             cipherEncrypt = EncryptionHelper.getCypher();
         }
         catch(Exception ex )
         {
@@ -82,16 +82,12 @@ public class DataTransformer
 
     public static String encrypt(String value) throws BadPaddingException, IllegalBlockSizeException
     {
+        if(cipherEncrypt == null)
+        {
+            initializeEncryption();
+        }
         byte[] cipherText = cipherEncrypt.doFinal(value.getBytes());
         return Base64.getEncoder().encodeToString(cipherText);
-    }
-
-    public static String decrypt(String value) throws BadPaddingException, IllegalBlockSizeException
-    {
-        //byte[] plainText = cipherDecrypt.doFinal(Base64.getDecoder().decode(value));
-        //return new String(plainText);
-        // TODO: implement later
-        return null;
     }
 
     public static String toQuarter(String value)

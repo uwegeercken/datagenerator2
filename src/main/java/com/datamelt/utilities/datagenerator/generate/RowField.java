@@ -1,6 +1,7 @@
 package com.datamelt.utilities.datagenerator.generate;
 
 import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
+import com.datamelt.utilities.datagenerator.config.process.TransformationExecutionException;
 
 public class RowField<T> {
     private final String name;
@@ -13,12 +14,12 @@ public class RowField<T> {
         this.name = name;
     }
 
-    public void generateValue() throws InvalidConfigurationException
+    public void generateValue() throws InvalidConfigurationException, TransformationExecutionException
     {
         this.value = transformValue(generator.generateRandomValue());
     }
 
-    private T transformValue(T value) throws InvalidConfigurationException
+    private T transformValue(T value) throws TransformationExecutionException
     {
         return generator.transformRandomValue(value);
     }

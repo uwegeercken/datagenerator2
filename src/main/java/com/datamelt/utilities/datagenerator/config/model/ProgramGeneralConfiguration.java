@@ -1,7 +1,8 @@
 package com.datamelt.utilities.datagenerator.config.model;
 
-import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
 import com.fasterxml.jackson.annotation.JsonInclude;
+
+import java.util.function.LongUnaryOperator;
 
 public class ProgramGeneralConfiguration
 {
