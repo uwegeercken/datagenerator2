@@ -156,7 +156,7 @@ public class DataGenerator
         return LongStream.range(0, numberOfRows)
                 .mapToObj(rangeValue -> rowBuilder.generate())
                 .filter(Try::isSuccess)
-                .map(rowTry -> rowTry.getResult())
+                .map(Try::getResult)
                 .toList();
     }
 
