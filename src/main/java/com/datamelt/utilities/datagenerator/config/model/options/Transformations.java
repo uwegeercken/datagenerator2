@@ -19,7 +19,9 @@ public enum Transformations
     ENCRYPT("encrypt", new Class[]{String.class}),
     BASE64ENCODE("base64encode", new Class[]{String.class}),
     TOQUARTER("toQuarter", new Class[]{String.class}),
-    TOHALFYEAR("toHalfYear", new Class[]{String.class});;
+    TOHALFYEAR("toHalfYear", new Class[]{String.class}),
+    MASKLEADING("maskLeading", new Class[]{String.class}),
+    MASKTRAILING("maskTrailing", new Class[]{String.class});
 
     private String name;
     private Class[] classes;

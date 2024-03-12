@@ -87,4 +87,60 @@ class DataTransformerTest
         double input = 123.456789;
         assertEquals(123, DataTransformer.round(input,0l));
     }
+
+    @Test
+    @DisplayName("testing maskLeading")
+    void validateMaskLeading() throws Exception
+    {
+        String input = "1234567890";
+        assertEquals("#####67890", DataTransformer.maskLeading(input, 5, "#"));
+    }
+
+    @Test
+    @DisplayName("testing maskLeading all")
+    void validateMaskLeadingAll() throws Exception
+    {
+        String input = "1234567890";
+        assertEquals("##########", DataTransformer.maskLeading(input, 55, "#"));
+    }
+
+    @Test
+    @DisplayName("testing maskLeading none")
+    void validateMaskLeadingNone() throws Exception
+    {
+        String input = "1234567890";
+        assertEquals("1234567890", DataTransformer.maskLeading(input, 0, "#"));
+    }
+
+    @Test
+    @DisplayName("testing maskLeading double character")
+    void validateMaskLeadingDoubleCharacter() throws Exception
+    {
+        String input = "1234567890";
+        assertEquals("#:#:34567890", DataTransformer.maskLeading(input, 2, "#:"));
+    }
+
+    @Test
+    @DisplayName("testing maskTrailing")
+    void validateMaskTrailing() throws Exception
+    {
+        String input = "1234567890";
+        assertEquals("12345#####", DataTransformer.maskTrailing(input, 5L, "#"));
+    }
+
+    @Test
+    @DisplayName("testing maskTrailing all")
+    void validateMaskTrailingAll() throws Exception
+    {
+        String input = "1234567890";
+        assertEquals("##########", DataTransformer.maskTrailing(input, 99L, "#"));
+    }
+
+    @Test
+    @DisplayName("testing maskTrailing none")
+    void validateMaskTrailingNone() throws Exception
+    {
+        String input = "1234567890";
+        assertEquals("1234567890", DataTransformer.maskTrailing(input, 0L, "#"));
+    }
 }

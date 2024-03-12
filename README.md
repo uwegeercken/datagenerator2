@@ -1,6 +1,6 @@
 # datagenerator2
 
-The datagenerator tool is currently (October '23) under development. Additional features and capabilities will be added over time.
+The datagenerator tool is currently (March '24) under development. Additional features and capabilities will be added over time.
 
 The datagenerator tool allows to generate random data. The aim is to have a tool that generates data in a way which is flexible enough to satisfy the needs of developers or analysts or anybody else who needs some sort
 of test data - possibly with dependencies between individual fields and variying/definable distribution of fieldConfiguration values. 
@@ -40,6 +40,8 @@ The type for each field can be one of following values:
 
 If no type is specified then type=category is assumed.
 
+Several transformations are available which are applied after a value is generated. Find below a list of transformations for the individual generator types.
+
 ### Random Strings
 This type of generator (type=randomstring) generates purely random text. The options in the yaml configuration file allow to specify the range of characters to be used for constructing the random text. Additional options allow to specify the minimum and maximum length.
 Setting minLength=maxLength will create a constant length string.
@@ -52,13 +54,15 @@ Setting minLength=maxLength will create a constant length string.
 | randomCharacters | characters to be used when generating the value | String      | [a-z] + [A-Z] + [0-9] + [-_] |
 
 #### Available transformations:
-| Transformation | Description                          | Parameters |
-|----------------|--------------------------------------|------------|
-| uppercase      | convert the value to uppercase       | none       |
-| lowercase      | convert the value to lowercase       | none       |
-| reverse        | reverse the characters of the value  | none       |
-| base64encode   | encode the value to base64 format    | none       |
-| trim           | remove leading and trailing spaces   | none       |
+| Transformation | Description                                                  | Parameters                                                          |
+|----------------|--------------------------------------------------------------|---------------------------------------------------------------------|
+| uppercase      | convert the value to uppercase                               | none                                                                |
+| lowercase      | convert the value to lowercase                               | none                                                                |
+| reverse        | reverse the characters of the value                          | none                                                                |
+| base64encode   | encode the value to base64 format                            | none                                                                |
+| trim           | remove leading and trailing spaces                           | none                                                                |
+| maskLeading    | mask leading characters of the value using a mask character  | number of characters to mask (long), mask character to use (string) |
+| maskTrailing   | mask trailing characters of the value using a mask character | number of characters to mask (long), mask character to use (string) |
 
 ### Random Numbers
 This generator (type=randomlong) allows to generate numbers. The options for this type of generator allow to specify a lowerbound and upperbound for the generated value.
@@ -165,17 +169,20 @@ from the word list might get a slightly higher weight value. If weight definitio
 | categoryFileSeparator   | separator between value and weight in category file | string    | ,       |
 
 #### Available transformations:
-| Transformation | Description                                            | Parameters                |
-|----------------|--------------------------------------------------------|---------------------------|
-| uppercase      | convert the value to uppercase                         | none                      |
-| lowercase      | convert the value to lowercase                         | none                      |
-| reverse        | reverse the characters of the value                    | none                      |            
-| prepend        | add a prefix to the value                              | prefix to add (String)    | 
-| append         | add a suffix to the value                              | suffix to add (String)    |
-| base64encode   | encode the value to base64 format                      | none                      | 
-| encrypt        | encrypt the value using AES/CBC/PKCS5Padding algorithm | none                      |
-| trim           | remove leading and trailing spaces                     | none                      |
+| Transformation | Description                                                  | Parameters                                                          |
+|----------------|--------------------------------------------------------------|---------------------------------------------------------------------|
+| uppercase      | convert the value to uppercase                               | none                                                                |
+| lowercase      | convert the value to lowercase                               | none                                                                |
+| reverse        | reverse the characters of the value                          | none                                                                |            
+| prepend        | add a prefix to the value                                    | prefix to add (string)                                              | 
+| append         | add a suffix to the value                                    | suffix to add (string)                                              |
+| base64encode   | encode the value to base64 format                            | none                                                                | 
+| encrypt        | encrypt the value using AES/CBC/PKCS5Padding algorithm       | none                                                                |
+| maskLeading    | mask leading characters of the value using a mask character  | number of characters to mask (long), mask character to use (string) |
+| maskTrailing   | mask trailing characters of the value using a mask character | number of characters to mask (long), mask character to use (string) |
+| trim           | remove leading and trailing spaces                           | none                                                                |
 
+maskTrailing
 
 ## Processing steps
 First, the given program configuration and the data configuration yaml files are analyzed for their correctness. Any existing table definitions and data is removed from the DuckDb, if a file with the specified name of the database is found.
@@ -244,4 +251,4 @@ To build the jar file either download the release from https://github.com/uwegee
     mvn clean install
 
 
-last update: uwe geercken - uwe.geercken@web.de - 2024-03-11
+last update: uwe geercken - uwe.geercken@web.de - 2024-03-12

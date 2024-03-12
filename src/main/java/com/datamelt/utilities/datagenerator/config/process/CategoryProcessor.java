@@ -22,7 +22,9 @@ public class CategoryProcessor extends FieldProcessor
             Transformations.APPEND.getName(),
             Transformations.REVERSE.getName(),
             Transformations.ENCRYPT.getName(),
-            Transformations.TRIM.getName()
+            Transformations.TRIM.getName(),
+            Transformations.MASKLEADING.getName(),
+            Transformations.MASKTRAILING.getName()
     );
 
     private static final List<DataTypeDuckDb> availableOutputTypes = Arrays.asList(

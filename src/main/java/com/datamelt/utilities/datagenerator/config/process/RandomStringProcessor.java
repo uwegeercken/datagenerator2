@@ -22,7 +22,9 @@ public class RandomStringProcessor extends FieldProcessor
             Transformations.PREPEND.getName(),
             Transformations.APPEND.getName(),
             Transformations.REVERSE.getName(),
-            Transformations.TRIM.getName()
+            Transformations.TRIM.getName(),
+            Transformations.MASKLEADING.getName(),
+            Transformations.MASKTRAILING.getName()
     );
 
     private static final List<DataTypeDuckDb> availableOutputTypes = Arrays.asList(

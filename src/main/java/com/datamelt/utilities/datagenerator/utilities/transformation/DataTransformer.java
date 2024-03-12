@@ -90,6 +90,62 @@ public class DataTransformer
         return Base64.getEncoder().encodeToString(cipherText);
     }
 
+    public static String maskLeading(String value, Long numberOfCharacters, String maskCharacter)
+    {
+        if(numberOfCharacters>0 && maskCharacter!=null && !maskCharacter.isEmpty())
+        {
+            StringBuilder builder = new StringBuilder();
+            if (value.length() >= numberOfCharacters)
+            {
+                for (long i = 0; i < numberOfCharacters; i++)
+                {
+                    builder.append(maskCharacter);
+                }
+                builder.append(value.substring(Math.toIntExact(numberOfCharacters)));
+            } else
+            {
+                for (int i = 0; i < value.length(); i++)
+                {
+                    builder.append(maskCharacter);
+                }
+            }
+            return builder.toString();
+        }
+        else
+        {
+            return value;
+        }
+    }
+
+    public static String maskTrailing(String value, Long numberOfCharacters, String maskCharacter)
+    {
+        if(numberOfCharacters>0 && maskCharacter!=null && !maskCharacter.isEmpty())
+        {
+            StringBuilder builder = new StringBuilder();
+            if (value.length() >= numberOfCharacters)
+            {
+                builder.append(value.substring(0, Math.toIntExact(numberOfCharacters)));
+                for (long i = numberOfCharacters; i > 0; i--)
+                {
+                    builder.append(maskCharacter);
+                }
+            } else
+            {
+                for (int i = 0; i < value.length(); i++)
+                {
+                    builder.append(maskCharacter);
+                }
+            }
+            return builder.toString();
+        }
+        else
+        {
+            return value;
+        }
+    }
+
+
+
     public static String toQuarter(String value)
     {
         int month = Integer.parseInt(value);
