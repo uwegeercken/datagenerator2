@@ -93,7 +93,7 @@ class DataTransformerTest
     void validateMaskLeading() throws Exception
     {
         String input = "1234567890";
-        assertEquals("#####67890", DataTransformer.maskLeading(input, 5, "#"));
+        assertEquals("#####67890", DataTransformer.maskLeading(input, 5L, "#"));
     }
 
     @Test
@@ -101,7 +101,7 @@ class DataTransformerTest
     void validateMaskLeadingAll() throws Exception
     {
         String input = "1234567890";
-        assertEquals("##########", DataTransformer.maskLeading(input, 55, "#"));
+        assertEquals("##########", DataTransformer.maskLeading(input, 55L, "#"));
     }
 
     @Test
@@ -109,7 +109,7 @@ class DataTransformerTest
     void validateMaskLeadingNone() throws Exception
     {
         String input = "1234567890";
-        assertEquals("1234567890", DataTransformer.maskLeading(input, 0, "#"));
+        assertEquals("1234567890", DataTransformer.maskLeading(input, 0L, "#"));
     }
 
     @Test
@@ -117,7 +117,7 @@ class DataTransformerTest
     void validateMaskLeadingDoubleCharacter() throws Exception
     {
         String input = "1234567890";
-        assertEquals("#:#:34567890", DataTransformer.maskLeading(input, 2, "#:"));
+        assertEquals("#:#:34567890", DataTransformer.maskLeading(input, 2L, "#:"));
     }
 
     @Test
