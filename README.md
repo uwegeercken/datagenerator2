@@ -40,7 +40,7 @@ The type for each field can be one of following values:
 
 If no type is specified then type=category is assumed.
 
-Several transformations are available which are applied after a value is generated. Find below a list of transformations for the individual generator types.
+Some of the generators allow to specify a transformation. It is applied after a value is generated. When one or more parameters are listed for a transformation, these need to be specified in the configuration. You may also specify multiple transformations. Find below a list of transformations for the individual generator types.
 
 ### Random Strings
 This type of generator (type=randomstring) generates purely random text. The options in the yaml configuration file allow to specify the range of characters to be used for constructing the random text. Additional options allow to specify the minimum and maximum length.
@@ -54,15 +54,15 @@ Setting minLength=maxLength will create a constant length string.
 | randomCharacters | characters to be used when generating the value | String      | [a-z] + [A-Z] + [0-9] + [-_] |
 
 #### Available transformations:
-| Transformation | Description                                                  | Parameters                                                          |
-|----------------|--------------------------------------------------------------|---------------------------------------------------------------------|
-| uppercase      | convert the value to uppercase                               | none                                                                |
-| lowercase      | convert the value to lowercase                               | none                                                                |
-| reverse        | reverse the characters of the value                          | none                                                                |
-| base64encode   | encode the value to base64 format                            | none                                                                |
-| trim           | remove leading and trailing spaces                           | none                                                                |
-| maskLeading    | mask leading characters of the value using a mask character  | number of characters to mask (long), mask character to use (string) |
-| maskTrailing   | mask trailing characters of the value using a mask character | number of characters to mask (long), mask character to use (string) |
+| Transformation | Description                                                  | Parameters                                                             |
+|----------------|--------------------------------------------------------------|------------------------------------------------------------------------|
+| uppercase      | convert the value to uppercase                               | none                                                                   |
+| lowercase      | convert the value to lowercase                               | none                                                                   |
+| reverse        | reverse the characters of the value                          | none                                                                   |
+| base64encode   | encode the value to base64 format                            | none                                                                   |
+| trim           | remove leading and trailing spaces                           | none                                                                   |
+| maskLeading    | mask leading characters of the value using a mask character  | number of characters to mask (long), mask character(s) to use (string) |
+| maskTrailing   | mask trailing characters of the value using a mask character | number of characters to mask (long), mask character(s) to use (string) |
 
 ### Random Numbers
 This generator (type=randomlong) allows to generate numbers. The options for this type of generator allow to specify a lowerbound and upperbound for the generated value.
@@ -169,18 +169,18 @@ from the word list might get a slightly higher weight value. If weight definitio
 | categoryFileSeparator   | separator between value and weight in category file | string    | ,       |
 
 #### Available transformations:
-| Transformation | Description                                                  | Parameters                                                          |
-|----------------|--------------------------------------------------------------|---------------------------------------------------------------------|
-| uppercase      | convert the value to uppercase                               | none                                                                |
-| lowercase      | convert the value to lowercase                               | none                                                                |
-| reverse        | reverse the characters of the value                          | none                                                                |            
-| prepend        | add a prefix to the value                                    | prefix to add (string)                                              | 
-| append         | add a suffix to the value                                    | suffix to add (string)                                              |
-| base64encode   | encode the value to base64 format                            | none                                                                | 
-| encrypt        | encrypt the value using AES/CBC/PKCS5Padding algorithm       | none                                                                |
-| maskLeading    | mask leading characters of the value using a mask character  | number of characters to mask (long), mask character to use (string) |
-| maskTrailing   | mask trailing characters of the value using a mask character | number of characters to mask (long), mask character to use (string) |
-| trim           | remove leading and trailing spaces                           | none                                                                |
+| Transformation | Description                                                  | Parameters                                                             |
+|----------------|--------------------------------------------------------------|------------------------------------------------------------------------|
+| uppercase      | convert the value to uppercase                               | none                                                                   |
+| lowercase      | convert the value to lowercase                               | none                                                                   |
+| reverse        | reverse the characters of the value                          | none                                                                   |            
+| prepend        | add a prefix to the value                                    | prefix to add (string)                                                 | 
+| append         | add a suffix to the value                                    | suffix to add (string)                                                 |
+| base64encode   | encode the value to base64 format                            | none                                                                   | 
+| encrypt        | encrypt the value using AES/CBC/PKCS5Padding algorithm       | none                                                                   |
+| maskLeading    | mask leading characters of the value using a mask character  | number of characters to mask (long), mask character(s) to use (string) |
+| maskTrailing   | mask trailing characters of the value using a mask character | number of characters to mask (long), mask character(s) to use (string) |
+| trim           | remove leading and trailing spaces                           | none                                                                   |
 
 maskTrailing
 
@@ -189,6 +189,8 @@ First, the given program configuration and the data configuration yaml files are
 
 After that the value for each field is generated and then transformed (if any transformation options are specified). The fields are processed sequentially and build a row of data.
 The tool generates the desired number of rows and stores it in a local DuckDb instance. Finally, the data is exported to the desired output format.
+
+The DuckDb database is not deleted after the process is completed. You can remove it manually or otherwise further use the generated data in the database.
 
 ## Yaml configuration for the datagenerator2 tool
 The configuration file contains various attributes to steer the behavior of the datagenerator tool.
@@ -206,6 +208,10 @@ See the sample yaml files in this repository under: samples/programconfiguration
 
 ## Yaml configuration for the definition of fields to generate
 The configuration file contains a list of fields/attributes to generate - see the sample yaml files in this repository under: samples/dataconfiguration. For each field, options and transformations may be defined depending on the type of generator used.
+
+There are three generic attributes defined in the configuration file: name, databaseName and tableName. The name attribute assign a name to the configuration but is otherwise not used. The databaseName attribute defined the path and name fo the duckdb database that is used to collect the generated
+data. the tableName attribute defines the table where the generated is stored. If you run a configuration multiple times but with different table names, the database will contain the data of both runs. If you run a configuration multiple times but do not change the tablename, the data of the second run will
+overwrite all data of the first run (the data of the first run will be removed). 
 
 Fields is a list of fields for which data is to be generated. Each field has a unique name. A substructure can be created by dividing the structure and the field name with the dot separator - eg. address.street, address.city, person.country.name, etc.
 This will e.g. create a substructure named "address" with the fields street and city. Multiple levels/substructures may be defined. Each field is assigned a type. Fields may have additional (optional) options. Fields may have one or more transformations assigned and the transformations may require
