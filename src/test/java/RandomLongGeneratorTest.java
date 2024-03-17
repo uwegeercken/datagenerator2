@@ -28,8 +28,7 @@ class RandomLongGeneratorTest
         List<FieldConfiguration> fields = new ArrayList<>();
         fields.add(fieldConfiguration);
         dataConfiguration.setFields(fields);
-        DataFieldsProcessor allFieldsProcessor = new DataFieldsProcessor();
-        allFieldsProcessor.processAllFields(dataConfiguration);
+        DataFieldsProcessor.processAllFields(dataConfiguration);
         return new RowBuilder(dataConfiguration);
     }
 

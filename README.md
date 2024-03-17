@@ -40,7 +40,8 @@ The type for each field can be one of following values:
 
 If no type is specified then type=category is assumed.
 
-Some of the generators allow to specify a transformation. It is applied after a value is generated. When one or more parameters are listed for a transformation, these need to be specified in the configuration. You may also specify multiple transformations. Find below a list of transformations for the individual generator types.
+Some of the generators allow to specify a transformation. It is applied after a value is generated. When one or more parameters are listed for a transformation, these need to be specified in the configuration. You may also specify multiple transformations.
+Find below a list of transformations for the individual generator types. If an error occurs during transformation, then the original value passed to the transformation will be returned instead of the transformed one.
 
 ### Random Strings
 This type of generator (type=randomstring) generates purely random text. The options in the yaml configuration file allow to specify the range of characters to be used for constructing the random text. Additional options allow to specify the minimum and maximum length.
@@ -182,7 +183,6 @@ from the word list might get a slightly higher weight value. If weight definitio
 | maskTrailing   | mask trailing characters of the value using a mask character | number of characters to mask (long), mask character(s) to use (string) |
 | trim           | remove leading and trailing spaces                           | none                                                                   |
 
-maskTrailing
 
 ## Processing steps
 First, the given program configuration and the data configuration yaml files are analyzed for their correctness. Any existing table definitions and data is removed from the DuckDb, if a file with the specified name of the database is found.

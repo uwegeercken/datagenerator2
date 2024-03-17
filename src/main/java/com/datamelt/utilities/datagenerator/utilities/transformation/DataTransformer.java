@@ -3,7 +3,6 @@ package com.datamelt.utilities.datagenerator.utilities.transformation;
 import com.datamelt.utilities.datagenerator.utilities.encrypt.EncryptionHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import javax.crypto.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
@@ -11,22 +10,6 @@ import java.util.Base64;
 
 public class DataTransformer
 {
-    private static final Logger logger = LoggerFactory.getLogger(DataTransformer.class);
-    private static Cipher cipherEncrypt;
-    private static void initializeEncryption()
-    {
-        logger.info("preparing encryption using " + EncryptionHelper.ENCRYPTION_ALGORITHM + " ...");
-        try
-        {
-             cipherEncrypt = EncryptionHelper.getCypher();
-        }
-        catch(Exception ex )
-        {
-            logger.error("error initializing encryption: [{}]", ex.getMessage());
-            throw new RuntimeException("error initializing encryption - aborting");
-        }
-    }
-
     public static String lowercase(String value) { return value.toLowerCase(); }
 
     public static String uppercase(String value)
@@ -80,14 +63,9 @@ public class DataTransformer
         return bd.doubleValue();
     }
 
-    public static String encrypt(String value) throws BadPaddingException, IllegalBlockSizeException
+    public static String encrypt(String value)
     {
-        if(cipherEncrypt == null)
-        {
-            initializeEncryption();
-        }
-        byte[] cipherText = cipherEncrypt.doFinal(value.getBytes());
-        return Base64.getEncoder().encodeToString(cipherText);
+        return EncryptionHelper.encrypt(value);
     }
 
     public static String maskLeading(String value, Long numberOfCharacters, String maskCharacter)
@@ -151,7 +129,7 @@ public class DataTransformer
         int month = Integer.parseInt(value);
         if(month<1 || month>12)
         {
-            return null;
+            return value;
         }
         if(month >=1 && month <4)
         {
@@ -176,7 +154,7 @@ public class DataTransformer
         int month = Integer.parseInt(value);
         if(month<1 || month>12)
         {
-            return null;
+            return value;
         }
         if(month >=1 && month <7)
         {
