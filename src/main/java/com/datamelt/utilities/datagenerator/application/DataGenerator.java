@@ -160,6 +160,14 @@ public class DataGenerator
                 .toList();
     }
 
+    public static Try<Row> generateRow(String dataConfigurationFilename) throws IOException, InvalidConfigurationException, NoSuchMethodException
+    {
+        processDataConfiguration(dataConfigurationFilename);
+        RowBuilder rowBuilder = new RowBuilder(dataConfiguration);
+
+        return rowBuilder.generate();
+    }
+
     private static void outputStatistics()
     {
         logger.info("collecting statistics for generated field values...");

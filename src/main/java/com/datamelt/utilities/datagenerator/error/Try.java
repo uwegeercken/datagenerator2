@@ -1,11 +1,7 @@
 package com.datamelt.utilities.datagenerator.error;
 
-import com.datamelt.utilities.datagenerator.generate.Row;
-import com.sun.net.httpserver.Authenticator;
-
 import java.util.concurrent.Callable;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 public sealed interface Try<T> permits Success, Failure
 {
