@@ -142,19 +142,19 @@ The options for this type of generator allow to specify the date field that shal
 
 ### Word lists
 Word lists allow to define values for certain categories such as "weekdays", "seasons", "car types",
-"first names", etc. the generator (type=category) will randomly pick a value from the configured word lists. Word lists are simple text files where each row contains one value.
+"first names", etc. in a file. The generator (type=category) will randomly pick a value from the configured word list file. Word lists are simple text files where each row contains one value.
 As such all values of the word lists are treated as strings (even if you have a word list containing e.g numbers).
 
 Using word lists offers a few advantages:
-- word lists can be stored in a directory hierarchy where e.g. different directories defined the same word lists but in different languages or the structure defines word lists for different environments (test/production)
+- word lists can be stored in a directory hierarchy where e.g. different directories contain the same word lists but in different languages or the structure defines word lists for different environments (test/production)
 - word lists can be created from a data extract from a database, such as a select distinct on a certain column
 - word lists can be constructed from a script processing a data file or consuming a Rest API
 - word lists can be constructed or changed easily using a simple text editor
 
-In the yaml configuration additional values for a given word list (also value which are already defined in the word list) may be defined, including a weight for individual values.
+In the yaml configuration, additional values for a given word list (also values which are already defined in the word list file) may be defined, including a weight for individual values.
 This allows to specify a higher priority/weight for defined values. The weight of a value is always specified on the base of 100 percent. 
 
-E.g. one may define the days of the week in a word list and in the configuration file "Saturday" with a weight of 10 percent and 
+E.g. one may define the days of the week in a word list file and in the configuration file "Saturday" with a weight of 10 percent and 
 "Sunday" with a weight of 10 percent. The other days "Monday" to "Friday" will then be assigned a weight of 16 percent so that the overall sum of percentages is 100 %.
 
 If a value for a given word list appears both in the word list file and the yaml configuration file, the setting from the configuration will overrule the value from the word list file.
@@ -166,7 +166,7 @@ A word list is optional. All values to be used for randomly generating data can 
 must be 100 percent (and can not exceed 100 percent). Individual values can not be negative percentage values.
 
 **NOTE**: If values and their weight are specified in a word lists but for some values no weight is defined, the datagenerator will calculate the weight for those fields that have no weight definition
-and equally distribute the weight value. But, depending on the number of values without a weight definition , it might not be possible to exactly evenly distribute the value. In this case some values
+and equally distribute the weight value. But, depending on the number of values without a weight definition, it might not be possible to exactly evenly distribute the value. In this case some values
 from the word list might get a slightly higher weight value. If weight definitions are assigned in a way that the remaining percentage for the other values is less than 1 percent an error occurs. 
 
 #### Available options:
