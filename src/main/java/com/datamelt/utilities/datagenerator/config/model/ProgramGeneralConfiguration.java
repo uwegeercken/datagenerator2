@@ -1,8 +1,7 @@
 package com.datamelt.utilities.datagenerator.config.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-
-import java.util.function.LongUnaryOperator;
+import org.apache.logging.log4j.Level;
 
 public class ProgramGeneralConfiguration
 {

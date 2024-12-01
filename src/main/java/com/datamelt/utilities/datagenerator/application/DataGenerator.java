@@ -12,6 +12,7 @@ import com.datamelt.utilities.datagenerator.utilities.ConfigurationLoader;
 import com.datamelt.utilities.datagenerator.utilities.duckdb.DataStore;
 import com.datamelt.utilities.datagenerator.utilities.duckdb.FieldStatistics;
 import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.config.Configurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,10 +37,9 @@ public class DataGenerator
 
     public static void main(String[] args)
     {
-        CustomLog4jConfig.setupLog4j2Config(parseLoglevel(args));
-        logger = LoggerFactory.getLogger(DataGenerator.class);
 
-        logger.info(applicationName +  " application - version: " + version + " (" + versionDate + ")");
+
+
         if(args.length == 0 || args[0].equals("-h") || args[0].equals("--help"))
         {
             help();
@@ -47,9 +47,15 @@ public class DataGenerator
         }
         try
         {
+            CustomLog4jConfig.setupLog4j2Config(parseLoglevel(args));
+            logger = LoggerFactory.getLogger(DataGenerator.class);
+            logger.info(applicationName +  " application - version: " + version + " (" + versionDate + ")");
+
             arguments = new ProgramArguments(args);
+            //logger.debug("processing program configuration file: [{}],", programConfigurationFilename);
             loadProgramConfiguration(arguments.getProgramConfigurationFilename());
             programConfiguration.mergeArguments(arguments);
+
 
             processDataConfiguration(arguments.getDataConfigurationFilename());
             setupDataStore();
@@ -98,14 +104,14 @@ public class DataGenerator
     private static void loadDataConfiguration(String dataConfigurationFilename) throws IOException
     {
         logger.debug("processing data configuration file: [{}],", dataConfigurationFilename);
-        InputStream stream = new FileInputStream(dataConfigurationFilename);
-        dataConfiguration = ConfigurationLoader.load(stream.readAllBytes(), DataConfiguration.class);
-        stream.close();
+        try(InputStream stream = new FileInputStream(dataConfigurationFilename))
+        {
+            dataConfiguration = ConfigurationLoader.load(stream.readAllBytes(), DataConfiguration.class);
+        }
     }
 
     private static void loadProgramConfiguration(String programConfigurationFilename) throws IOException
     {
-        logger.debug("processing program configuration file: [{}],", programConfigurationFilename);
         try(InputStream stream = new FileInputStream(programConfigurationFilename))
         {
             programConfiguration = ConfigurationLoader.load(stream.readAllBytes(), ProgramConfiguration.class);

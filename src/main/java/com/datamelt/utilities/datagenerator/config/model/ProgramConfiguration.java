@@ -3,6 +3,7 @@ package com.datamelt.utilities.datagenerator.config.model;
 import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.logging.log4j.Level;
 
 public class ProgramConfiguration
 {
@@ -34,8 +35,6 @@ public class ProgramConfiguration
         if(arguments.getExportType()!=null) {
             generalConfiguration.setExportType(DataExportType.valueOf(arguments.getExportType().toUpperCase()));
         }
-
-
         validateConfiguration();
     }
 
