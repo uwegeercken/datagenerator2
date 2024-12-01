@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.LongStream;
 
@@ -26,8 +25,8 @@ public class DataGenerator
 {
     private static final Logger logger = LoggerFactory.getLogger(DataGenerator.class);
     private static final String applicationName = "datagenerator2";
-    private static final String version = "0.2.7";
-    private static final String versionDate = "2024-03-12";
+    private static final String version = "0.2.8";
+    private static final String versionDate = "2024-12-01";
     private static final String contactEmail = "uwe.geercken@web.de";
     private static DataConfiguration dataConfiguration;
     private static ProgramConfiguration programConfiguration;

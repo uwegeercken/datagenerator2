@@ -54,15 +54,16 @@ Setting minLength=maxLength will create a constant length string.
 | randomCharacters | characters to be used when generating the value | String      | [a-z] + [A-Z] + [0-9] + [-_] |
 
 #### Available transformations:
-| Transformation | Description                                                  | Parameters                                                             |
-|----------------|--------------------------------------------------------------|------------------------------------------------------------------------|
-| uppercase      | convert the value to uppercase                               | none                                                                   |
-| lowercase      | convert the value to lowercase                               | none                                                                   |
-| reverse        | reverse the characters of the value                          | none                                                                   |
-| base64encode   | encode the value to base64 format                            | none                                                                   |
-| trim           | remove leading and trailing spaces                           | none                                                                   |
-| maskLeading    | mask leading characters of the value using a mask character  | number of characters to mask (long), mask character(s) to use (string) |
-| maskTrailing   | mask trailing characters of the value using a mask character | number of characters to mask (long), mask character(s) to use (string) |
+| Transformation | Description                                                                                                | Parameters                                                             |
+|----------------|------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------|
+| uppercase      | convert the value to uppercase                                                                             | none                                                                   |
+| lowercase      | convert the value to lowercase                                                                             | none                                                                   |
+| reverse        | reverse the characters of the value                                                                        | none                                                                   |
+| base64encode   | encode the value to base64 format                                                                          | none                                                                   |
+| trim           | remove leading and trailing spaces                                                                         | none                                                                   |
+| maskLeading    | mask leading characters of the value using a mask character                                                | number of characters to mask (long), mask character(s) to use (string) |
+| maskTrailing   | mask trailing characters of the value using a mask character                                               | number of characters to mask (long), mask character(s) to use (string) |
+| replaceAll     | replaces each substring of the value that matches the given regular expression with the given replacement  | regular expression (string), replacement (string)                      |
 
 ### Random Numbers
 This generator (type=randomlong) allows to generate numbers. The options for this type of generator allow to specify a lowerbound and upperbound for the generated value.
@@ -169,18 +170,19 @@ from the word list might get a slightly higher weight value. If weight definitio
 | categoryFileSeparator   | separator between value and weight in category file | string    | ,       |
 
 #### Available transformations:
-| Transformation | Description                                                  | Parameters                                                             |
-|----------------|--------------------------------------------------------------|------------------------------------------------------------------------|
-| uppercase      | convert the value to uppercase                               | none                                                                   |
-| lowercase      | convert the value to lowercase                               | none                                                                   |
-| reverse        | reverse the characters of the value                          | none                                                                   |            
-| prepend        | add a prefix to the value                                    | prefix to add (string)                                                 | 
-| append         | add a suffix to the value                                    | suffix to add (string)                                                 |
-| base64encode   | encode the value to base64 format                            | none                                                                   | 
-| encrypt        | encrypt the value using AES/CBC/PKCS5Padding algorithm       | none                                                                   |
-| maskLeading    | mask leading characters of the value using a mask character  | number of characters to mask (long), mask character(s) to use (string) |
-| maskTrailing   | mask trailing characters of the value using a mask character | number of characters to mask (long), mask character(s) to use (string) |
-| trim           | remove leading and trailing spaces                           | none                                                                   |
+| Transformation | Description                                                                                               | Parameters                                                             |
+|----------------|-----------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------|
+| uppercase      | convert the value to uppercase                                                                            | none                                                                   |
+| lowercase      | convert the value to lowercase                                                                            | none                                                                   |
+| reverse        | reverse the characters of the value                                                                       | none                                                                   |            
+| prepend        | add a prefix to the value                                                                                 | prefix to add (string)                                                 | 
+| append         | add a suffix to the value                                                                                 | suffix to add (string)                                                 |
+| base64encode   | encode the value to base64 format                                                                         | none                                                                   | 
+| encrypt        | encrypt the value using AES/CBC/PKCS5Padding algorithm                                                    | none                                                                   |
+| maskLeading    | mask leading characters of the value using a mask character                                               | number of characters to mask (long), mask character(s) to use (string) |
+| maskTrailing   | mask trailing characters of the value using a mask character                                              | number of characters to mask (long), mask character(s) to use (string) |
+| trim           | remove leading and trailing spaces                                                                        | none                                                                   |
+| replaceAll     | replaces each substring of the value that matches the given regular expression with the given replacement | regular expression (string), replacement (string)                      |
 
 maskTrailing
 

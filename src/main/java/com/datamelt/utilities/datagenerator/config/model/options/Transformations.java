@@ -21,6 +21,7 @@ public enum Transformations
     TOQUARTER("toQuarter", new Class[]{String.class}),
     TOHALFYEAR("toHalfYear", new Class[]{String.class}),
     MASKLEADING("maskLeading", new Class[]{String.class}),
+    REPLACEALL("replaceAll", new Class[]{String.class}),
     MASKTRAILING("maskTrailing", new Class[]{String.class});
 
     private String name;

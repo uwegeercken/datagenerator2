@@ -34,6 +34,11 @@ public class DataTransformer
         return value.toUpperCase();
     }
 
+    public static String replaceAll(String value, String regularExpression, String replacement)
+    {
+        return value.replaceAll(regularExpression, replacement);
+    }
+
     public static String trim(String value)
     {
         return value.trim();

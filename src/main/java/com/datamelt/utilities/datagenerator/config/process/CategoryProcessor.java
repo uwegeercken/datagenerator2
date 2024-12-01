@@ -13,8 +13,8 @@ import java.util.List;
 
 public class CategoryProcessor extends FieldProcessor
 {
-    private static Logger logger = LoggerFactory.getLogger(CategoryProcessor.class);
-    private static List<String> availableTransformations = Arrays.asList(
+    private static final Logger logger = LoggerFactory.getLogger(CategoryProcessor.class);
+    private static final List<String> availableTransformations = Arrays.asList(
             Transformations.LOWERCASE.getName(),
             Transformations.UPPERCASE.getName(),
             Transformations.BASE64ENCODE.getName(),
@@ -24,7 +24,8 @@ public class CategoryProcessor extends FieldProcessor
             Transformations.ENCRYPT.getName(),
             Transformations.TRIM.getName(),
             Transformations.MASKLEADING.getName(),
-            Transformations.MASKTRAILING.getName()
+            Transformations.MASKTRAILING.getName(),
+            Transformations.REPLACEALL.getName()
     );
 
     private static final List<DataTypeDuckDb> availableOutputTypes = Arrays.asList(

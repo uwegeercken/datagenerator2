@@ -143,4 +143,20 @@ class DataTransformerTest
         String input = "1234567890";
         assertEquals("1234567890", DataTransformer.maskTrailing(input, 0L, "#"));
     }
+
+    @Test
+    @DisplayName("testing replaceAll")
+    void validateStringReplaceAll() throws Exception
+    {
+        String input = "This is my world";
+        assertEquals("This is your world", DataTransformer.replaceAll(input, "my", "your"));
+    }
+
+    @Test
+    @DisplayName("testing replaceAll multiple")
+    void validateStringReplaceAllMultiple() throws Exception
+    {
+        String input = "This is my world for my children";
+        assertEquals("This is your world for your children", DataTransformer.replaceAll(input, "my", "your"));
+    }
 }
