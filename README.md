@@ -189,8 +189,6 @@ from the word list might get a slightly higher weight value. If weight definitio
 | trim           | remove leading and trailing spaces                                                                        | none                                                                   |
 | replaceAll     | replaces each substring of the value that matches the given regular expression with the given replacement | regular expression (string), replacement (string)                      |
 
-maskTrailing
-
 ## Processing steps
 First, the given program configuration and the data configuration yaml files are analyzed for their correctness. Any existing table definitions and data is removed from the DuckDb, if a file with the specified name of the database is found.
 
