@@ -216,8 +216,8 @@ See the sample yaml files in this repository under: samples/programconfiguration
 ## Yaml configuration for the definition of fields to generate
 The configuration file contains a list of fields/attributes to generate - see the sample yaml files in this repository under: samples/dataconfiguration. For each field, options and transformations may be defined depending on the type of generator used.
 
-There are three generic attributes defined in the configuration file: name, databaseName and tableName. The name attribute assign a name to the configuration but is otherwise not used. The databaseName attribute defined the path and name fo the duckdb database that is used to collect the generated
-data. the tableName attribute defines the table where the generated is stored. If you run a configuration multiple times but with different table names, the database will contain the data of both runs. If you run a configuration multiple times but do not change the tablename, the data of the second run will
+There are three generic attributes defined in the configuration file: name, databaseName and tableName. The name attribute assign a name to the configuration but is otherwise not used. The databaseName attribute defines the path and name for the duckdb database that is used to collect the generated
+data. the tableName attribute defines the table of the duchdb database where the generated is stored. If you run a configuration multiple times but with different table names, the database will contain the data of both runs. If you run a configuration multiple times but do not change the tablename, the data of the second run will
 overwrite all data of the first run (the data of the first run will be removed). 
 
 Fields is a list of fields for which data is to be generated. Each field has a unique name. A substructure can be created by dividing the structure and the field name with the dot separator - eg. address.street, address.city, person.country.name, etc.
