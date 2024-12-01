@@ -1,9 +1,12 @@
 package com.datamelt.utilities.datagenerator.config.model;
 
+import org.apache.logging.log4j.Level;
+
 public enum Argument
 {
     NUMBEROFROWSTOGENERATE("-n", false,"number of rows to generate"),
     GENERATEDROWSLOGINTERVAL("-l", false,"interval for log messages during data generation"),
+    LOGLEVEL("-g", false,"log level to be used for logging output. must be one out of [OFF, FATAL, ERROR, WARN, INFO, DEBUG, TRACE, ALL]"),
     EXPORTFILENAME("-xp", false, "path and filename of the export file"),
     EXPORTTYPE("-xt", false,"type of the export to generate. possible values: csv"),
     DATACONFIGURATIONFILENAME("-dc", true, "path and filename of tha data configuration yaml file"),

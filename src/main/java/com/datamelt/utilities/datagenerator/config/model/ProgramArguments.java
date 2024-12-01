@@ -1,8 +1,10 @@
 package com.datamelt.utilities.datagenerator.config.model;
 
 import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
+import org.apache.logging.log4j.Level;
 
 import java.util.Map;
+import java.util.Optional;
 
 public class ProgramArguments
 {
@@ -12,12 +14,15 @@ public class ProgramArguments
     private String dataConfigurationFilename;
     private String programConfigurationFilename;
     private String generatedRowsLogInterval;
+    private String logLevel;
     private boolean generateStatistics;
-    public ProgramArguments(String[] args) throws Exception
+
+    public ProgramArguments(String[] args) throws InvalidConfigurationException
     {
         parseArguments(args);
     }
-    private void parseArguments(String[] args) throws InvalidConfigurationException
+
+    public void parseArguments(String[] args) throws InvalidConfigurationException
     {
         for(int i=0;i<args.length;i++)
         {
@@ -49,6 +54,10 @@ public class ProgramArguments
             {
                 generateStatistics = true;
             }
+            else if (args[i].startsWith(Argument.LOGLEVEL.getAbbreviation()))
+            {
+                logLevel = args[i].substring(args[i].indexOf("=") + 1).trim();
+            }
             else
             {
                 throw new InvalidConfigurationException("invalid configuration. the argument " + args[i] + " is unknown");
@@ -75,7 +84,7 @@ public class ProgramArguments
 
     public String getProgramConfigurationFilename() { return programConfigurationFilename; }
 
-       public String getExportFilename() {
+    public String getExportFilename() {
         return exportFilename;
     }
 
@@ -90,6 +99,11 @@ public class ProgramArguments
 
     public String getGeneratedRowsLogInterval() {
         return generatedRowsLogInterval;
+    }
+
+    public String getLogLevel()
+    {
+        return logLevel;
     }
 
     public boolean getGenerateStatistics()

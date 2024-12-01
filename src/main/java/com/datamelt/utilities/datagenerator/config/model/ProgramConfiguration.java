@@ -2,12 +2,12 @@ package com.datamelt.utilities.datagenerator.config.model;
 
 import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
 import com.fasterxml.jackson.annotation.JsonInclude;
-
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ProgramConfiguration
 {
-    private ProgramGeneralConfiguration general;
+    @JsonProperty("general")
+    private ProgramGeneralConfiguration generalConfiguration;
     @JsonInclude(JsonInclude.Include.NON_ABSENT)
     private CsvExportConfiguration csvExport = new CsvExportConfiguration();
 
@@ -22,17 +22,17 @@ public class ProgramConfiguration
     public void mergeArguments(ProgramArguments arguments) throws InvalidConfigurationException
     {
         if(arguments.getNumberOfRowsToGenerate()!=null) {
-            general.setNumberOfRowsToGenerate(Long.parseLong(arguments.getNumberOfRowsToGenerate()));
+            generalConfiguration.setNumberOfRowsToGenerate(Long.parseLong(arguments.getNumberOfRowsToGenerate()));
         }
         if(arguments.getGeneratedRowsLogInterval()!=null)
         {
-            general.setGeneratedRowsLogInterval(Long.parseLong(arguments.getGeneratedRowsLogInterval()));
+            generalConfiguration.setGeneratedRowsLogInterval(Long.parseLong(arguments.getGeneratedRowsLogInterval()));
         }
         if(arguments.getExportFilename()!=null) {
-            general.setExportFilename(arguments.getExportFilename());
+            generalConfiguration.setExportFilename(arguments.getExportFilename());
         }
         if(arguments.getExportType()!=null) {
-            general.setExportType(DataExportType.valueOf(arguments.getExportType().toUpperCase()));
+            generalConfiguration.setExportType(DataExportType.valueOf(arguments.getExportType().toUpperCase()));
         }
 
 
@@ -41,11 +41,11 @@ public class ProgramConfiguration
 
     private void validateConfiguration() throws InvalidConfigurationException
     {
-        if(general.getNumberOfRowsToGenerate() < 0)
+        if(generalConfiguration.getNumberOfRowsToGenerate() < 0)
         {
             throw new InvalidConfigurationException("invalid configuration. number of records to generate can not be smaller than zero");
         }
-        if(general.getGeneratedRowsLogInterval() < 0)
+        if(generalConfiguration.getGeneratedRowsLogInterval() < 0)
         {
             throw new InvalidConfigurationException("invalid configuration. generated rows log interval can not be smaller than zero");
         }
@@ -61,13 +61,13 @@ public class ProgramConfiguration
 
     public ExcelExportConfiguration getExcelExport() { return excelExport; }
 
-    public ProgramGeneralConfiguration getGeneral()
+    public ProgramGeneralConfiguration getGeneralConfiguration()
     {
-        return general;
+        return generalConfiguration;
     }
 
-    public void setGeneral(ProgramGeneralConfiguration general) {
-        this.general = general;
+    public void setGeneralConfiguration(ProgramGeneralConfiguration generalConfiguration) {
+        this.generalConfiguration = generalConfiguration;
     }
 
     public void setCsvExport(CsvExportConfiguration csvExport) {

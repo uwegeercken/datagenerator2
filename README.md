@@ -227,15 +227,16 @@ and the data configuration file. You may pass the other arguments, which will ov
 the programm configuration file.
 
 #### Program arguments:
-| Argument              | Type      | Default                  | Description                                                                | 
-|-----------------------|-----------|--------------------------|----------------------------------------------------------------------------|
-| -n=<number>           | optional  | 10000                    | number of rows to generate                                                 |
-| -l=<number>           | optional  | 1000                     | interval for log messages during data generation                           |
-| -xp=<path + filename> | optional  | datagenerator_export.csv | path and filename of the export file                                       |            
-| -xt=<type>            | optional  | csv                      | type of the export to generate. possible values: csv, excel, json, parquet | 
-| -dc=<path + filename> | mandatory | - none -                 | path and filename of tha data configuration yaml file                      |
-| -pc=<path + filename> | mandatory | - none -                 | path and filename of tha program configuration yaml file                   | 
-| -s                    | optional  | false                    | output statistics for the generated field values                           |
+| Argument              | Type      | Default                    | Description                                                                                                    | 
+|-----------------------|-----------|----------------------------|----------------------------------------------------------------------------------------------------------------|
+| -n=<number>           | optional  | 10000                      | number of rows to generate                                                                                     |
+| -l=<number>           | optional  | 1000                       | interval for log messages during data generation                                                               |
+| -g=<loglevel>         | optional  | INFO                       | log level to be used for logging output. must be one out of: OFF, FATAL, ERROR, WARN, INFO, DEBUG, TRACE, ALL  |
+| -xp=<path + filename> | optional  | datagenerator_export.csv   | path and filename of the export file                                                                           |            
+| -xt=<type>            | optional  | csv                        | type of the export to generate. possible values: csv, excel, json, parquet                                     | 
+| -dc=<path + filename> | mandatory | -none-                     | path and filename of tha data configuration yaml file                                                          |
+| -pc=<path + filename> | mandatory | -none-                     | path and filename of tha program configuration yaml file                                                       | 
+| -s                    | optional  | false                      | output statistics for the generated field values                                                               |
 
 Run the datagenerator tool:
 

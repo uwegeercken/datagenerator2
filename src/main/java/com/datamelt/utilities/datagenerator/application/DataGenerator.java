@@ -11,6 +11,7 @@ import com.datamelt.utilities.datagenerator.generate.RowBuilder;
 import com.datamelt.utilities.datagenerator.utilities.ConfigurationLoader;
 import com.datamelt.utilities.datagenerator.utilities.duckdb.DataStore;
 import com.datamelt.utilities.datagenerator.utilities.duckdb.FieldStatistics;
+import org.apache.logging.log4j.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +24,7 @@ import static java.lang.System.exit;
 
 public class DataGenerator
 {
-    private static final Logger logger = LoggerFactory.getLogger(DataGenerator.class);
+    private static Logger logger;;
     private static final String applicationName = "datagenerator2";
     private static final String version = "0.2.8";
     private static final String versionDate = "2024-12-01";
@@ -42,6 +43,9 @@ public class DataGenerator
 
     public static void main(String[] args)
     {
+        CustomLog4jConfig.setupLog4j2Config(parseLoglevel(args));
+        logger = LoggerFactory.getLogger(DataGenerator.class);
+
         logger.info(applicationName +  " application - version: " + version + " (" + versionDate + ")");
         if(args.length == 0 || args[0].equals("-h") || args[0].equals("--help"))
         {
@@ -58,7 +62,7 @@ public class DataGenerator
             setupDataStore();
             generateRows();
 
-            if(programConfiguration.getGeneral().getExportFilename() != null) {
+            if(programConfiguration.getGeneralConfiguration().getExportFilename() != null) {
                 exportToFile();
             }
             if(arguments.getGenerateStatistics())
@@ -78,6 +82,7 @@ public class DataGenerator
         {
             logger.error("unable to generate data: {}", ex.getMessage());
         }
+        logger.info("processing completed");
     }
 
     private static void help()
@@ -101,14 +106,15 @@ public class DataGenerator
     private static void loadProgramConfiguration(String programConfigurationFilename) throws IOException
     {
         logger.debug("processing program configuration file: [{}],", programConfigurationFilename);
-        InputStream stream = new FileInputStream(programConfigurationFilename);
-        programConfiguration = ConfigurationLoader.load(stream.readAllBytes(), ProgramConfiguration.class);
-        stream.close();
+        try(InputStream stream = new FileInputStream(programConfigurationFilename))
+        {
+            programConfiguration = ConfigurationLoader.load(stream.readAllBytes(), ProgramConfiguration.class);
+        }
     }
 
     private static void setupDataStore() throws Exception
     {
-        FileExporter fileExporter = switch (programConfiguration.getGeneral().getExportType())
+        FileExporter fileExporter = switch (programConfiguration.getGeneralConfiguration().getExportType())
         {
             case JSON -> new JsonFileExporter(programConfiguration.getJsonExport());
             case PARQUET -> new ParquetFileExporter(programConfiguration.getParquetExport());
@@ -120,11 +126,11 @@ public class DataGenerator
 
     private static void generateRows() throws NoSuchMethodException, InvalidConfigurationException, SQLException
     {
-        logger.info("starting to generate total of [{}] rows", programConfiguration.getGeneral().getNumberOfRowsToGenerate());
+        logger.info("starting to generate total of [{}] rows", programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate());
         long start = System.currentTimeMillis();
         RowBuilder rowBuilder = new RowBuilder(dataConfiguration);
 
-        LongStream.range(0, programConfiguration.getGeneral().getNumberOfRowsToGenerate())
+        LongStream.range(0, programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate())
                 .peek(DataGenerator::logProcessedRows)
                 .mapToObj(rangeValue -> rowBuilder.generate())
                 .filter(Try::isSuccess)
@@ -132,15 +138,15 @@ public class DataGenerator
 
         dataStore.flush();
         long end = System.currentTimeMillis();
-        logger.info("total rows generated: [{}]", programConfiguration.getGeneral().getNumberOfRowsToGenerate());
+        logger.info("total rows generated: [{}]", programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate());
         logger.info("total data generation time: [{}] seconds", (end - start) / 1000);
     }
 
     private static void logProcessedRows(long counter)
     {
-        if(programConfiguration.getGeneral().getGeneratedRowsLogInterval() > 0
-                && programConfiguration.getGeneral().getNumberOfRowsToGenerate() > programConfiguration.getGeneral().getGeneratedRowsLogInterval()
-                && counter % programConfiguration.getGeneral().getGeneratedRowsLogInterval() == 0
+        if(programConfiguration.getGeneralConfiguration().getGeneratedRowsLogInterval() > 0
+                && programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate() > programConfiguration.getGeneralConfiguration().getGeneratedRowsLogInterval()
+                && counter % programConfiguration.getGeneralConfiguration().getGeneratedRowsLogInterval() == 0
                 && counter > 0)
         {
             logger.debug("rows generated: [{}]", counter);
@@ -186,6 +192,26 @@ public class DataGenerator
 
     private static void exportToFile() throws Exception
     {
-        dataStore.exportToFile(dataConfiguration.getTableName(), programConfiguration.getGeneral().getExportFilename());
+        dataStore.exportToFile(dataConfiguration.getTableName(), programConfiguration.getGeneralConfiguration().getExportFilename());
+    }
+
+    private static Level parseLoglevel(String[] args)
+    {
+        for(int i=0;i<args.length;i++)
+        {
+            if (args[i].startsWith(Argument.LOGLEVEL.getAbbreviation()))
+            {
+                String logLevel = args[i].substring(args[i].indexOf("=") + 1).trim();
+                try
+                {
+                    return Level.valueOf(logLevel.toUpperCase());
+                }
+                catch (Exception ex)
+                {
+                    return Level.INFO;
+                }
+            }
+        }
+        return Level.INFO;
     }
 }

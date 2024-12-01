@@ -4,7 +4,6 @@ import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldType;
 import com.datamelt.utilities.datagenerator.config.model.ProgramConfiguration;
-import com.datamelt.utilities.datagenerator.config.model.options.RandomDateOptions;
 import com.datamelt.utilities.datagenerator.utilities.type.DataTypeDuckDb;
 
 import java.util.*;
@@ -23,7 +22,7 @@ public class TableLayout
     {
         createStructs(dataConfiguration);
         inititalizeCreateTableStatement(dataConfiguration.getTableName());
-        buildRownumberField(programConfiguration.getGeneral().getRowNumberFieldName());
+        buildRownumberField(programConfiguration.getGeneralConfiguration().getRowNumberFieldName());
         buildStandardFieldsStatement();
         buildStructsStatement();
         finalizeCreateTableStatement();
