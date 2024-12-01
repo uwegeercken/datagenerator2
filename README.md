@@ -1,6 +1,6 @@
 # datagenerator2
 
-The datagenerator tool is currently (March '24) under development. Additional features and capabilities will be added over time.
+The datagenerator tool is currently (December '24) under development. Additional features and capabilities will be added over time.
 
 The datagenerator tool allows to generate random data. The aim is to have a tool that generates data in a way which is flexible enough to satisfy the needs of developers or analysts or anybody else who needs some sort
 of test data - possibly with dependencies between individual fields and variying/definable distribution of fieldConfiguration values. 
@@ -73,6 +73,11 @@ This generator (type=randomlong) allows to generate numbers. The options for thi
 |------------|----------------|--------------|-----------|
 | minValue   | minimum value  | long         | 0         |
 | maxValue   | maximum value  | long         | 1000000   |
+
+#### Available transformations:
+| Transformation | Description          | Parameters   |
+|----------------|----------------------|--------------|
+|                |                      |              |
 
 ### Random Floating Point Numbers
 This generator (type=randomdouble) allows to generate floating point numbers. The options for this type of generator allow to specify a lowerbound and upperbound for the generated value.
@@ -260,4 +265,4 @@ To build the jar file either download the release from https://github.com/uwegee
     mvn clean install
 
 
-last update: uwe geercken - uwe.geercken@web.de - 2024-03-12
+last update: uwe geercken - uwe.geercken@web.de - 2024-12-01

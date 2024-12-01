@@ -34,13 +34,6 @@ public class DataGenerator
     private static DataStore dataStore;
     private static ProgramArguments arguments;
 
-    private static void processDataConfiguration(String dataConfigurationFilename) throws IOException, InvalidConfigurationException
-    {
-        loadDataConfiguration(dataConfigurationFilename);
-        CategoryFileLoader.loadCategoryFiles(dataConfiguration);
-        DataFieldsProcessor.processAllFields(dataConfiguration);
-    }
-
     public static void main(String[] args)
     {
         CustomLog4jConfig.setupLog4j2Config(parseLoglevel(args));
@@ -93,6 +86,13 @@ public class DataGenerator
             logger.info("argument: {} -> {}. mandatory: {}", argument.getAbbreviation(), argument.getExplanation(), argument.isMandatory());
         }
         logger.info("contact: {}", contactEmail);
+    }
+
+    private static void processDataConfiguration(String dataConfigurationFilename) throws IOException, InvalidConfigurationException
+    {
+        loadDataConfiguration(dataConfigurationFilename);
+        CategoryFileLoader.loadCategoryFiles(dataConfiguration);
+        DataFieldsProcessor.processAllFields(dataConfiguration);
     }
 
     private static void loadDataConfiguration(String dataConfigurationFilename) throws IOException
