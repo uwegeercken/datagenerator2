@@ -24,7 +24,7 @@ import static java.lang.System.exit;
 
 public class DataGenerator
 {
-    private static Logger logger;;
+    private static Logger logger; // = LoggerFactory.getLogger(DataGenerator.class);
     private static final String applicationName = "datagenerator2";
     private static final String version = "0.2.9";
     private static final String versionDate = "2025-03-14";
@@ -36,9 +36,6 @@ public class DataGenerator
 
     public static void main(String[] args)
     {
-
-
-
         if(args.length == 0 || args[0].equals("-h") || args[0].equals("--help"))
         {
             help();
@@ -55,10 +52,15 @@ public class DataGenerator
             loadProgramConfiguration(arguments.getProgramConfigurationFilename());
             programConfiguration.mergeArguments(arguments);
 
-
+            logger.debug("processing data configuration file: [{}],", arguments.getDataConfigurationFilename());
             processDataConfiguration(arguments.getDataConfigurationFilename());
             setupDataStore();
-            generateRows();
+
+            logger.info("starting to generate total of [{}] rows", programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate());
+            long runtime = generateRows();
+            logger.info("total rows generated: [{}]", programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate());
+            logger.info("total data generation time: [{}] seconds", runtime / 1000d);
+
 
             if(programConfiguration.getGeneralConfiguration().getExportFilename() != null) {
                 exportToFile();
@@ -102,7 +104,6 @@ public class DataGenerator
 
     private static void loadDataConfiguration(String dataConfigurationFilename) throws IOException
     {
-        logger.debug("processing data configuration file: [{}],", dataConfigurationFilename);
         try(InputStream stream = new FileInputStream(dataConfigurationFilename))
         {
             dataConfiguration = ConfigurationLoader.load(stream.readAllBytes(), DataConfiguration.class);
@@ -129,9 +130,9 @@ public class DataGenerator
         dataStore = new DataStore(programConfiguration, dataConfiguration, fileExporter);
     }
 
-    private static void generateRows() throws NoSuchMethodException, InvalidConfigurationException, SQLException
+    private static long generateRows() throws NoSuchMethodException, InvalidConfigurationException, SQLException
     {
-        logger.info("starting to generate total of [{}] rows", programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate());
+
         long start = System.currentTimeMillis();
         RowBuilder rowBuilder = new RowBuilder(dataConfiguration);
 
@@ -142,9 +143,7 @@ public class DataGenerator
                 .forEach(rowTry -> dataStore.insert(rowTry.getResult()));
 
         dataStore.flush();
-        long end = System.currentTimeMillis();
-        logger.info("total rows generated: [{}]", programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate());
-        logger.info("total data generation time: [{}] seconds", (end - start) / 1000);
+        return System.currentTimeMillis() - start;
     }
 
     private static void logProcessedRows(long counter)

@@ -5,8 +5,6 @@ import org.apache.logging.log4j.core.config.Configurator;
 import org.apache.logging.log4j.core.config.builder.api.*;
 import org.apache.logging.log4j.core.config.builder.impl.BuiltConfiguration;
 
-import java.util.Optional;
-
 public class CustomLog4jConfig
 {
     public static void setupLog4j2Config(Level logLevel)
