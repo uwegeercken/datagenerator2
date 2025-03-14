@@ -12,7 +12,6 @@ import com.datamelt.utilities.datagenerator.utilities.ConfigurationLoader;
 import com.datamelt.utilities.datagenerator.utilities.duckdb.DataStore;
 import com.datamelt.utilities.datagenerator.utilities.duckdb.FieldStatistics;
 import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.core.config.Configurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,8 +26,8 @@ public class DataGenerator
 {
     private static Logger logger;;
     private static final String applicationName = "datagenerator2";
-    private static final String version = "0.2.8";
-    private static final String versionDate = "2024-12-01";
+    private static final String version = "0.2.9";
+    private static final String versionDate = "2025-03-14";
     private static final String contactEmail = "uwe.geercken@web.de";
     private static DataConfiguration dataConfiguration;
     private static ProgramConfiguration programConfiguration;
