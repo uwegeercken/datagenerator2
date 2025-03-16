@@ -9,7 +9,6 @@ import com.datamelt.utilities.datagenerator.utilities.type.DataTypeDuckDb;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -41,7 +40,7 @@ public class RandomDateAsLongGenerator implements RandomValueGenerator<Long>, Ra
         }
         if(fieldConfiguration.getOptions().get(RandomDateOptions.DATE_FORMAT.getKey()) instanceof String)
         {
-            dateTimeFormatter = DateTimeFormatter.ofPattern((String) fieldConfiguration.getOptions().get(RandomDateOptions.DATE_FORMAT.getKey())).withZone(ZoneId.of("UTC"));
+            dateTimeFormatter = DateTimeFormatter.ofPattern((String) fieldConfiguration.getOptions().get(RandomDateOptions.DATE_FORMAT.getKey()));
         }
         if(fieldConfiguration.getOptions().get(RandomDateOptions.OUTPUT_TYPE.getKey()) instanceof String)
         {

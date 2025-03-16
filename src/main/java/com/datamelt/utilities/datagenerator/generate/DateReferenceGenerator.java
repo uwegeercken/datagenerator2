@@ -38,7 +38,7 @@ public class DateReferenceGenerator implements RandomValueGenerator<String>
         }
         if(fieldConfiguration.getOptions().get(RandomDateOptions.DATE_FORMAT.getKey()) instanceof String)
         {
-            dateTimeFormatter = DateTimeFormatter.ofPattern((String) fieldConfiguration.getOptions().get(RandomDateOptions.DATE_FORMAT.getKey())).withZone(ZoneId.of("UTC"));
+            dateTimeFormatter = DateTimeFormatter.ofPattern((String) fieldConfiguration.getOptions().get(RandomDateOptions.DATE_FORMAT.getKey()));
         }
         transformationMethods = prepareMethods(BASE_DATATYPE, fieldConfiguration);
     }
@@ -53,7 +53,7 @@ public class DateReferenceGenerator implements RandomValueGenerator<String>
     {
         RandomValueProvider<Long> referenceDateGenerator = (RandomValueProvider<Long>) referenceRowField.getGenerator();
         LocalDateTime referencedDateTime = Instant.ofEpochMilli(referenceDateGenerator.getGeneratedRandomValue())
-                .atZone(ZoneId.of("UTC"))
+                .atZone(ZoneId.systemDefault())
                 .toLocalDateTime();
 
         return  dateTimeFormatter.format(referencedDateTime);

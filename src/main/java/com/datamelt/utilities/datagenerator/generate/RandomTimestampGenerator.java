@@ -52,9 +52,9 @@ public class RandomTimestampGenerator implements RandomValueGenerator<String>, R
     public String generateRandomValue()
     {
         LocalDateTime randomDateTime = DateUtility.getRandomDateTime(minYear, maxYear);
-        generatedRandomValue = randomDateTime.atZone(ZoneId.of("UTC")).toInstant().toEpochMilli();
+        generatedRandomValue = randomDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
 
-        String formattedDateTime = dateTimeFormatter.withZone(ZoneId.of("UTC")).format(randomDateTime);
+        String formattedDateTime = dateTimeFormatter.withZone(ZoneId.systemDefault()).format(randomDateTime);
         return formattedDateTime;
     }
 
