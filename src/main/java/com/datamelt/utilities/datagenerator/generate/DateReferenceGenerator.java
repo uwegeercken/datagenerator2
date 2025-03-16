@@ -52,16 +52,11 @@ public class DateReferenceGenerator implements RandomValueGenerator<String>
     public String generateRandomValue()
     {
         RandomValueProvider<Long> referenceDateGenerator = (RandomValueProvider<Long>) referenceRowField.getGenerator();
-        if(referenceDateGenerator.getGeneratedRandomValue()==1672527600000L)
-        {
-            System.out.println();
-        }
         LocalDateTime referencedDateTime = Instant.ofEpochMilli(referenceDateGenerator.getGeneratedRandomValue())
                 .atZone(ZoneId.of("UTC"))
                 .toLocalDateTime();
 
-        String test = dateTimeFormatter.format(referencedDateTime);
-        return  test;
+        return  dateTimeFormatter.format(referencedDateTime);
     }
 
     @Override

@@ -97,12 +97,12 @@ This generator (type=randomdouble) allows to generate floating point numbers. Th
 This generator (type=randomdate) allows to generate dates. The options for this type of generator allow to specify a minimum and maximun year, as well as the output format for the generated value.
 
 #### Available options:
-| Option     | Description                                                | Data Type | Default    |
-|------------|------------------------------------------------------------|-----------|------------|
-| minYear    | minimum value                                              | long      | 2020       |
-| maxYear    | maximum value                                              | long      | 2030       |
-| dateFormat | output format of the date (Java DateTimeFormatter)         | string    | yyyy-MM-dd |
-| outputType | how data should be output. possible values: string or long | string    | string     |
+| Option     | Description                                                 | Data Type | Default    |
+|------------|-------------------------------------------------------------|-----------|------------|
+| minYear    | minimum value                                               | long      | 2020       |
+| maxYear    | maximum value                                               | long      | 2030       |
+| dateFormat | output format of the date (Java DateTimeFormatter)          | string    | yyyy-MM-dd |
+| outputType | how data should be output. possible values: varchar or long | varchar    | varchar     |
 
 #### Available transformations:
 | Transformation | Description          | Parameters   |

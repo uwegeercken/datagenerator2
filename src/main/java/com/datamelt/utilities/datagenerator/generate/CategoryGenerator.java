@@ -42,7 +42,7 @@ public class CategoryGenerator implements RandomValueGenerator<String>
                 }
                 catch (Exception ex)
                 {
-                    System.out.println();
+                    logger.error("error generating random value: {}", ex.getMessage());
                 }
                 counter++;
             }

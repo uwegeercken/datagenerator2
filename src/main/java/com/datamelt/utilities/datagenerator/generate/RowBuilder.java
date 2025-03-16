@@ -105,14 +105,6 @@ public class RowBuilder
             try
             {
                 rowField.generateValue();
-                if(rowField.getName().equals("date.year"))
-                {
-                    if((rowField.getValue()).equals("2022"))
-                    {
-                        System.out.println();
-                    }
-                    System.out.println();
-                }
                 row.addField(rowField);
             }
             catch (InvalidConfigurationException | TransformationExecutionException ex)
