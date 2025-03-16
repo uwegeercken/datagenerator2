@@ -16,6 +16,8 @@ public class RowField<T> {
 
     public void generateValue() throws InvalidConfigurationException, TransformationExecutionException
     {
+        var xy = generator.generateRandomValue();
+        var val = transformValue(xy);
         this.value = transformValue(generator.generateRandomValue());
     }
 

@@ -2,7 +2,6 @@ package com.datamelt.utilities.datagenerator.generate;
 
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.options.RandomDateOptions;
-import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
 import com.datamelt.utilities.datagenerator.config.process.TransformationExecutionException;
 import com.datamelt.utilities.datagenerator.utilities.DateUtility;
 import com.datamelt.utilities.datagenerator.utilities.transformation.TransformationExecutor;
@@ -12,8 +11,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class RandomDateGenerator implements RandomValueGenerator<String>, RandomValueProvider<Long>
 {
@@ -25,7 +27,7 @@ public class RandomDateGenerator implements RandomValueGenerator<String>, Random
     private final List<TransformationMethod> transformationMethods;
     private int minYear;
     private int maxYear;
-    private SimpleDateFormat dateFormat;
+    private DateTimeFormatter dateTimeFormatter;
     private DataTypeDuckDb outputType;
     private Long generatedRandomValue;
 
@@ -43,7 +45,7 @@ public class RandomDateGenerator implements RandomValueGenerator<String>, Random
         }
         if(fieldConfiguration.getOptions().get(RandomDateOptions.DATE_FORMAT.getKey()) instanceof String)
         {
-            dateFormat = new SimpleDateFormat((String) fieldConfiguration.getOptions().get(RandomDateOptions.DATE_FORMAT.getKey()));
+            dateTimeFormatter = DateTimeFormatter.ofPattern((String) fieldConfiguration.getOptions().get(RandomDateOptions.DATE_FORMAT.getKey()));
         }
         if(fieldConfiguration.getOptions().get(RandomDateOptions.OUTPUT_TYPE.getKey()) instanceof String)
         {
@@ -55,11 +57,9 @@ public class RandomDateGenerator implements RandomValueGenerator<String>, Random
     @Override
     public String generateRandomValue()
     {
-        Random random = new Random();
-        Long minYearMilliseonds = DateUtility.getMinDate(minYear);
-        Long maxYearMilliseonds = DateUtility.getMaxDate(maxYear);
-        generatedRandomValue = random.nextLong(minYearMilliseonds, maxYearMilliseonds);
-        return dateFormat.format(generatedRandomValue) ;
+        LocalDate randomDate = DateUtility.getRandomDate(minYear, maxYear);
+        generatedRandomValue = DateUtility.getRandomDateMilliseconds(minYear,maxYear);
+        return randomDate.format(dateTimeFormatter);
     }
 
     @Override

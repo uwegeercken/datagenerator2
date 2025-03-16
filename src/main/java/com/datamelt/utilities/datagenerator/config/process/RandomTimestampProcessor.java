@@ -1,14 +1,13 @@
 package com.datamelt.utilities.datagenerator.config.process;
 
-import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
-import com.datamelt.utilities.datagenerator.config.model.TransformationConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.options.*;
 import com.datamelt.utilities.datagenerator.utilities.type.DataTypeDuckDb;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
@@ -69,7 +68,7 @@ public class RandomTimestampProcessor extends FieldProcessor
 
         try
         {
-            SimpleDateFormat sdf = new SimpleDateFormat((String)getFieldConfiguration().getOptions().get(RandomTimestampOptions.DATE_FORMAT.getKey()));
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern((String) getFieldConfiguration().getOptions().get(RandomTimestampOptions.DATE_FORMAT.getKey())).withZone(ZoneId.of("UTC")).withZone(ZoneId.of("UTC"));
         }
         catch(Exception ex)
         {

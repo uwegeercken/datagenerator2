@@ -101,7 +101,7 @@ This generator (type=randomdate) allows to generate dates. The options for this 
 |------------|------------------------------------------------------------|-----------|------------|
 | minYear    | minimum value                                              | long      | 2020       |
 | maxYear    | maximum value                                              | long      | 2030       |
-| dateFormat | output format of the date (Java SimpleDateFormat)          | string    | yyyy-MM-dd |
+| dateFormat | output format of the date (Java DateTimeFormatter)         | string    | yyyy-MM-dd |
 | outputType | how data should be output. possible values: string or long | string    | string     |
 
 #### Available transformations:
@@ -113,11 +113,11 @@ This generator (type=randomdate) allows to generate dates. The options for this 
 This generator (type=randomtimestamp) allows to generate timestamps. The options for this type of generator allow to specify a minimum and maximun year, as well as the output format for the generated value.
 
 #### Available options:
-| Option       | Description                                       | Data Type | Default             |
-|--------------|---------------------------------------------------|-----------|---------------------|
-| minYear      | minimum value                                     | long      | 2020                |
-| maxYear      | maximum value                                     | long      | 2030                |
-| dateFormat   | output format of the date (Java SimpleDateFormat) | string    | yyyy-MM-dd HH:mm:ss |
+| Option       | Description                                         | Data Type | Default             |
+|--------------|-----------------------------------------------------|-----------|---------------------|
+| minYear      | minimum value                                       | long      | 2020                |
+| maxYear      | maximum value                                       | long      | 2030                |
+| dateFormat   | output format of the date (Java DateTimeFormatter)  | string    | yyyy-MM-dd HH:mm:ss |
 
 #### Available transformations:
 | Transformation | Description          | Parameters   |
@@ -129,10 +129,10 @@ This generator (type=datereference) allows to generate a date string based on an
 The options for this type of generator allow to specify the date field that shall be referenced, as well as the output format for the generated value.
 
 #### Available options:
-| Option     | Description                                       | Data Type | Default    |
-|------------|---------------------------------------------------|-----------|------------|
-| reference  | name of the field which is the reference date     | string    |            |
-| dateFormat | output format of the date (Java SimpleDateFormat) | string    | yyyy-MM-dd |
+| Option     | Description                                         | Data Type | Default    |
+|------------|-----------------------------------------------------|-----------|------------|
+| reference  | name of the field which is the reference date       | string    |            |
+| dateFormat | output format of the date (Java DateTimeFormatter)  | string    | yyyy-MM-dd |
 
 #### Available transformations:
 | Transformation | Description                                                                                          | Parameters |

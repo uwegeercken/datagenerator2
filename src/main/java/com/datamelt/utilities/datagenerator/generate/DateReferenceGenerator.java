@@ -3,14 +3,20 @@ package com.datamelt.utilities.datagenerator.generate;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.options.DateReferenceOptions;
 import com.datamelt.utilities.datagenerator.config.model.options.RandomDateOptions;
+import com.datamelt.utilities.datagenerator.config.model.options.RandomTimestampOptions;
 import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
 import com.datamelt.utilities.datagenerator.config.process.TransformationExecutionException;
+import com.datamelt.utilities.datagenerator.utilities.DateUtility;
 import com.datamelt.utilities.datagenerator.utilities.transformation.TransformationExecutor;
 import com.datamelt.utilities.datagenerator.utilities.transformation.TransformationMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class DateReferenceGenerator implements RandomValueGenerator<String>
@@ -21,7 +27,7 @@ public class DateReferenceGenerator implements RandomValueGenerator<String>
     private List<TransformationMethod> transformationMethods;
     private String reference;
     private RowField<?> referenceRowField;
-    private SimpleDateFormat dateFormat;
+    private DateTimeFormatter dateTimeFormatter;
     public DateReferenceGenerator(FieldConfiguration fieldConfiguration) throws NoSuchMethodException
     {
         this.fieldConfiguration = fieldConfiguration;
@@ -32,7 +38,7 @@ public class DateReferenceGenerator implements RandomValueGenerator<String>
         }
         if(fieldConfiguration.getOptions().get(RandomDateOptions.DATE_FORMAT.getKey()) instanceof String)
         {
-            dateFormat = new SimpleDateFormat((String) fieldConfiguration.getOptions().get(RandomDateOptions.DATE_FORMAT.getKey()));
+            dateTimeFormatter = DateTimeFormatter.ofPattern((String) fieldConfiguration.getOptions().get(RandomDateOptions.DATE_FORMAT.getKey())).withZone(ZoneId.of("UTC"));
         }
         transformationMethods = prepareMethods(BASE_DATATYPE, fieldConfiguration);
     }
@@ -45,8 +51,17 @@ public class DateReferenceGenerator implements RandomValueGenerator<String>
     @Override
     public String generateRandomValue()
     {
-        RandomValueProvider<?> referenceDateGenerator = (RandomValueProvider<?>) referenceRowField.getGenerator();
-        return dateFormat.format(referenceDateGenerator.getGeneratedRandomValue()) ;
+        RandomValueProvider<Long> referenceDateGenerator = (RandomValueProvider<Long>) referenceRowField.getGenerator();
+        if(referenceDateGenerator.getGeneratedRandomValue()==1672527600000L)
+        {
+            System.out.println();
+        }
+        LocalDateTime referencedDateTime = Instant.ofEpochMilli(referenceDateGenerator.getGeneratedRandomValue())
+                .atZone(ZoneId.of("UTC"))
+                .toLocalDateTime();
+
+        String test = dateTimeFormatter.format(referencedDateTime);
+        return  test;
     }
 
     @Override

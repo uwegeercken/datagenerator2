@@ -1,6 +1,7 @@
 package com.datamelt.utilities.datagenerator.generate;
 
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
+import com.datamelt.utilities.datagenerator.config.model.options.RandomDateOptions;
 import com.datamelt.utilities.datagenerator.config.model.options.RandomTimestampOptions;
 import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
 import com.datamelt.utilities.datagenerator.config.process.TransformationExecutionException;
@@ -11,6 +12,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Random;
 
@@ -23,7 +28,7 @@ public class RandomTimestampGenerator implements RandomValueGenerator<String>, R
     private int minYear;
     private int maxYear;
     private long generatedRandomValue;
-    private SimpleDateFormat dateFormat;
+    private DateTimeFormatter dateTimeFormatter;
     public RandomTimestampGenerator(FieldConfiguration fieldConfiguration) throws NoSuchMethodException
     {
         this.fieldConfiguration = fieldConfiguration;
@@ -38,7 +43,7 @@ public class RandomTimestampGenerator implements RandomValueGenerator<String>, R
         }
         if(fieldConfiguration.getOptions().get(RandomTimestampOptions.DATE_FORMAT.getKey()) instanceof String)
         {
-            dateFormat = new SimpleDateFormat((String) fieldConfiguration.getOptions().get(RandomTimestampOptions.DATE_FORMAT.getKey()));
+            dateTimeFormatter = DateTimeFormatter.ofPattern((String) fieldConfiguration.getOptions().get(RandomTimestampOptions.DATE_FORMAT.getKey()));
         }
         transformationMethods = prepareMethods(BASE_DATATYPE, fieldConfiguration);
     }
@@ -46,11 +51,11 @@ public class RandomTimestampGenerator implements RandomValueGenerator<String>, R
     @Override
     public String generateRandomValue()
     {
-        Random random = new Random();
-        Long minYearMilliseonds = DateUtility.getMinDate(minYear);
-        Long maxYearMilliseonds = DateUtility.getMaxDate(maxYear);
-        generatedRandomValue = random.nextLong(minYearMilliseonds, maxYearMilliseonds);
-        return dateFormat.format(generatedRandomValue) ;
+        LocalDateTime randomDateTime = DateUtility.getRandomDateTime(minYear, maxYear);
+        generatedRandomValue = randomDateTime.atZone(ZoneId.of("UTC")).toInstant().toEpochMilli();
+
+        String formattedDateTime = dateTimeFormatter.withZone(ZoneId.of("UTC")).format(randomDateTime);
+        return formattedDateTime;
     }
 
     @Override

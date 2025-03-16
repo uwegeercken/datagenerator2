@@ -2,18 +2,18 @@ package com.datamelt.utilities.datagenerator.generate;
 
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.options.RandomDateOptions;
-import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
 import com.datamelt.utilities.datagenerator.config.process.TransformationExecutionException;
-import com.datamelt.utilities.datagenerator.utilities.DateUtility;
 import com.datamelt.utilities.datagenerator.utilities.transformation.TransformationExecutor;
 import com.datamelt.utilities.datagenerator.utilities.transformation.TransformationMethod;
 import com.datamelt.utilities.datagenerator.utilities.type.DataTypeDuckDb;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Random;
+
+import static com.datamelt.utilities.datagenerator.utilities.DateUtility.getRandomDateMilliseconds;
 
 public class RandomDateAsLongGenerator implements RandomValueGenerator<Long>, RandomValueProvider<Long>
 {
@@ -23,7 +23,7 @@ public class RandomDateAsLongGenerator implements RandomValueGenerator<Long>, Ra
     private final List<TransformationMethod> transformationMethods;
     private int minYear;
     private int maxYear;
-    private SimpleDateFormat dateFormat;
+    private DateTimeFormatter dateTimeFormatter;
     private DataTypeDuckDb outputType;
     private Long generatedRandomValue;
 
@@ -41,7 +41,7 @@ public class RandomDateAsLongGenerator implements RandomValueGenerator<Long>, Ra
         }
         if(fieldConfiguration.getOptions().get(RandomDateOptions.DATE_FORMAT.getKey()) instanceof String)
         {
-            dateFormat = new SimpleDateFormat((String) fieldConfiguration.getOptions().get(RandomDateOptions.DATE_FORMAT.getKey()));
+            dateTimeFormatter = DateTimeFormatter.ofPattern((String) fieldConfiguration.getOptions().get(RandomDateOptions.DATE_FORMAT.getKey())).withZone(ZoneId.of("UTC"));
         }
         if(fieldConfiguration.getOptions().get(RandomDateOptions.OUTPUT_TYPE.getKey()) instanceof String)
         {
@@ -53,12 +53,8 @@ public class RandomDateAsLongGenerator implements RandomValueGenerator<Long>, Ra
     @Override
     public Long generateRandomValue()
     {
-
-        Random random = new Random();
-        Long minYearMilliseonds = DateUtility.getMinDate(minYear);
-        Long maxYearMilliseonds = DateUtility.getMaxDate(maxYear);
-        generatedRandomValue = random.nextLong(minYearMilliseonds, maxYearMilliseonds);
-        return generatedRandomValue;
+        generatedRandomValue = getRandomDateMilliseconds(minYear, maxYear);
+        return  generatedRandomValue;
     }
 
     @Override
