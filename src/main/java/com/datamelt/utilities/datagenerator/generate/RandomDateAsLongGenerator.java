@@ -3,12 +3,15 @@ package com.datamelt.utilities.datagenerator.generate;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.options.RandomDateOptions;
 import com.datamelt.utilities.datagenerator.config.process.TransformationExecutionException;
+import com.datamelt.utilities.datagenerator.utilities.DateUtility;
 import com.datamelt.utilities.datagenerator.utilities.transformation.TransformationExecutor;
 import com.datamelt.utilities.datagenerator.utilities.transformation.TransformationMethod;
 import com.datamelt.utilities.datagenerator.utilities.type.DataTypeDuckDb;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -52,7 +55,8 @@ public class RandomDateAsLongGenerator implements RandomValueGenerator<Long>, Ra
     @Override
     public Long generateRandomValue()
     {
-        generatedRandomValue = getRandomDateMilliseconds(minYear, maxYear);
+        LocalDateTime randomDateTime = DateUtility.getRandomDateTime(minYear, maxYear);
+        generatedRandomValue = randomDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
         return  generatedRandomValue;
     }
 

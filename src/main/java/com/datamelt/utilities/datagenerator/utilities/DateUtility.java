@@ -59,18 +59,18 @@ public class DateUtility
         LocalDateTime startDateTime = LocalDateTime.of(minimumYear, DEFAULT_MINDATE_MONTH, DEFAULT_MINDATE_DAY, DEFAULT_MINDATE_HOUR, DEFAULT_MINDATE_MINUTE, DEFAULT_MINDATE_SECOND);
         LocalDateTime endDateTime = LocalDateTime.of(maximumYear, DEFAULT_MAXDATE_MONTH, DEFAULT_MAXDATE_DAY, DEFAULT_MAXDATE_HOUR, DEFAULT_MAXDATE_HOUR, DEFAULT_MAXDATE_SECOND);
 
-        long startEpoch = startDateTime.atZone(ZoneId.of("UTC")).toInstant().toEpochMilli();
-        long endEpoch = endDateTime.atZone(ZoneId.of("UTC")).toInstant().toEpochMilli();
+        long startEpoch = startDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        long endEpoch = endDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
 
         long randomEpochMillis = ThreadLocalRandom.current().nextLong(startEpoch, endEpoch + 1);
-        return Instant.ofEpochMilli(randomEpochMillis).atZone(ZoneId.of("UTC")).toLocalDateTime();
+        return Instant.ofEpochMilli(randomEpochMillis).atZone(ZoneId.systemDefault()).toLocalDateTime();
     }
 
     public static long getRandomDateMilliseconds(int minimumYear, int maximumYear)
     {
         LocalDate randomDate = getRandomDate(minimumYear, maximumYear);
         LocalDateTime dateTime = randomDate.atStartOfDay();
-        ZonedDateTime zonedDateTime = dateTime.atZone(ZoneId.of("UTC"));
+        ZonedDateTime zonedDateTime = dateTime.atZone(ZoneId.systemDefault());
 
         return zonedDateTime.toInstant().toEpochMilli();
     }

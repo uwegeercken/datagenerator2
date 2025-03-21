@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -57,9 +59,10 @@ public class RandomDateGenerator implements RandomValueGenerator<String>, Random
     @Override
     public String generateRandomValue()
     {
-        LocalDate randomDate = DateUtility.getRandomDate(minYear, maxYear);
-        generatedRandomValue = DateUtility.getRandomDateMilliseconds(minYear,maxYear);
-        return randomDate.format(dateTimeFormatter);
+        LocalDateTime randomDateTime = DateUtility.getRandomDateTime(minYear, maxYear);
+        generatedRandomValue = randomDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+
+        return dateTimeFormatter.withZone(ZoneId.systemDefault()).format(randomDateTime);
     }
 
     @Override
