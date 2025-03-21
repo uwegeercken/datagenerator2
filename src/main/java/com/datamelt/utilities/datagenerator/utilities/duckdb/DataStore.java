@@ -127,7 +127,7 @@ public class DataStore
 
     public FieldStatistics getValueCounts(FieldConfiguration fieldConfiguration)
     {
-        FieldStatistics statistics = new FieldStatistics(fieldConfiguration.getName());
+        FieldStatistics statistics = new FieldStatistics(fieldConfiguration.getName(), fieldConfiguration.getType());
         try
         {
             Statement stmt = connection.createStatement();

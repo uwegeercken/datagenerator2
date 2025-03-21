@@ -10,13 +10,13 @@ import com.datamelt.utilities.datagenerator.generate.Row;
 import com.datamelt.utilities.datagenerator.generate.RowBuilder;
 import com.datamelt.utilities.datagenerator.utilities.ConfigurationLoader;
 import com.datamelt.utilities.datagenerator.utilities.duckdb.DataStore;
-import com.datamelt.utilities.datagenerator.utilities.duckdb.FieldStatistics;
 import org.apache.logging.log4j.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.LongStream;
 
@@ -88,10 +88,9 @@ public class DataGenerator
     private static void help()
     {
         logger.info("program arguments:");
-        for(Argument argument : Argument.values())
-        {
-            logger.info("argument: {} -> {}. mandatory: {}", argument.getAbbreviation(), argument.getExplanation(), argument.isMandatory());
-        }
+        Arrays.stream(Argument.values())
+                .forEach(argument -> logger.info("argument: {} -> {}. mandatory: {}", argument.getAbbreviation(), argument.getExplanation(), argument.isMandatory()));
+
         logger.info("contact: {}", contactEmail);
     }
 
@@ -180,18 +179,9 @@ public class DataGenerator
     private static void outputStatistics()
     {
         logger.info("collecting statistics for generated field values...");
-        for(FieldConfiguration fieldConfiguration : dataConfiguration.getFields())
-        {
-            FieldStatistics fieldStatistics = dataStore.getValueCounts(fieldConfiguration);
-            if(fieldStatistics.getNumberOfDistinctValues()<= 50)
-            {
-                logger.info("field: [{}], type: [{}], distinct values: [{}], values and percentages: [{}]", fieldConfiguration.getName(), fieldConfiguration.getType(), fieldStatistics.getNumberOfDistinctValues(), fieldStatistics.getFieldStatistics());
-            }
-            else
-            {
-                logger.info("field: [{}], type: [{}], distinct values: [{}], values and percentages: [{}]", fieldConfiguration.getName(), fieldConfiguration.getType(), fieldStatistics.getNumberOfDistinctValues(), "no statistics generated - too many distinct values");
-            }
-        }
+        dataConfiguration.getFields().stream()
+                .map(fieldConfiguration -> dataStore.getValueCounts(fieldConfiguration))
+                .forEach(fieldStatistics -> logger.info("field: [{}], type: [{}], distinct values: [{}], values and percentages: [{}]", fieldStatistics.getFieldName(), fieldStatistics.getFieldType(), fieldStatistics.getNumberOfDistinctValues(), fieldStatistics.getNumberOfDistinctValues() <= 50 ? fieldStatistics.getFieldStatistics() : "no statistics generated - too many distinct values"));
     }
 
     private static void exportToFile() throws Exception
