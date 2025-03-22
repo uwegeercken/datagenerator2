@@ -4,8 +4,10 @@ and settings for the export of the data to different file formats.
 
 ### Configuration
 The "general" section is mainly used to steer where the data is exported to and in which format,
-how many rows to generate, how often a log message is output during data generation and the name of
+how many rows to generate, number of threads used, how often a log message is output during data generation and the name of
 the automatically generated row number.
+
+Note that the data is generated multithreaded. But appending the data to the duckdb database only works singlethreaded. 
 
 The other sections define various options for the different export file formats.
 

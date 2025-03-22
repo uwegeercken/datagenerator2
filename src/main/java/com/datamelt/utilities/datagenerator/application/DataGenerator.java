@@ -29,8 +29,8 @@ public class DataGenerator
 {
     private static Logger logger; // = LoggerFactory.getLogger(DataGenerator.class);
     private static final String applicationName = "datagenerator2";
-    private static final String version = "0.3.1";
-    private static final String versionDate = "2025-03-21";
+    private static final String version = "0.3.2";
+    private static final String versionDate = "2025-03-22";
     private static final String contactEmail = "uwe.geercken@web.de";
     private static DataConfiguration dataConfiguration;
     private static ProgramConfiguration programConfiguration;
@@ -154,7 +154,7 @@ public class DataGenerator
                 Future<List<Row>> futureRows = completionService.take();
                 futureRows.get().forEach(row -> dataStore.insert(row));
                 appendCounter += partitons.get(i);
-                logProcessedRows("rows generated: [{}]", appendCounter);
+                logOutput("rows generated: [{}]", appendCounter);
             }
             dataStore.flush();
             return System.currentTimeMillis() - start;
@@ -166,7 +166,7 @@ public class DataGenerator
         return IntStream.range(0, partitionBatchSize)
                 .mapToObj(rangeValue -> rowBuilder.generate())
                 .filter(Try::isSuccess)
-                .map(rowTry -> rowTry.getResult())
+                .map(Try::getResult)
                 .toList();
     }
 
@@ -184,7 +184,7 @@ public class DataGenerator
         return partitions;
     }
 
-    private static void logProcessedRows(String message, long counter)
+    private static void logOutput(String message, long counter)
     {
         if(programConfiguration.getGeneralConfiguration().getGeneratedRowsLogInterval() > 0
                 && programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate() > programConfiguration.getGeneralConfiguration().getGeneratedRowsLogInterval()
