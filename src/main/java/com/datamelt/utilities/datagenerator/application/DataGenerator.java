@@ -60,7 +60,9 @@ public class DataGenerator
             setupDataStore();
 
             logger.info("starting to generate total of [{}] rows, number of threads [{}], rows per thread [{}]", programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate(), programConfiguration.getGeneralConfiguration().getNumberOfThreads(), programConfiguration.getGeneralConfiguration().getNumberOfRowsPerThread());
+
             long runtime = generateRows();
+
             logger.info("total rows generated: [{}]", programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate());
             logger.info("total data generation time: [{}] seconds", runtime / 1000d);
 
