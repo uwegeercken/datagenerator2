@@ -132,51 +132,45 @@ public class DataGenerator
         dataStore = new DataStore(programConfiguration, dataConfiguration, fileExporter);
     }
 
-    private static long generateRows() throws NoSuchMethodException, InvalidConfigurationException, SQLException
+    private static long generateRows() throws NoSuchMethodException, InvalidConfigurationException, SQLException, ExecutionException, InterruptedException
     {
-        try(ExecutorService executorService = Executors.newVirtualThreadPerTaskExecutor())
+        try(ExecutorService executorService = Executors.newFixedThreadPool(programConfiguration.getGeneralConfiguration().getNumberOfThreads()))
         {
-            CompletionService<List<Try<Row>>> completionService = new ExecutorCompletionService<>(executorService);
+            CompletionService<List<Row>> completionService = new ExecutorCompletionService<>(executorService);
 
             long start = System.currentTimeMillis();
             RowBuilder rowBuilder = new RowBuilder(dataConfiguration);
 
             List<Integer> partitons = getPartitions(programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate(), programConfiguration.getGeneralConfiguration().getNumberOfRowsPerThread());
-            long counter = 0;
             for (int i = 0; i < partitons.size(); i++)
             {
                 int partitionBatchSize = partitons.get(i);
-                List<Try<Row>> rows = IntStream.range(0, partitionBatchSize)
-                        //.peek(DataGenerator::logProcessedRows)
-                        .mapToObj(rangeValue -> rowBuilder.generate())
-                        .filter(Try::isSuccess)
-                        .toList();
-
-                counter += partitons.get(i);
-                logProcessedRows(counter);
-                completionService.submit(() -> rows);
+                completionService.submit(() -> generateRowsBatch(rowBuilder, partitionBatchSize));
             }
 
-            long sentCounter = 0;
+            long appendCounter = 0;
             for (int i = 0; i < partitons.size(); i++)
             {
-                try
-                {
-                    Future<List<Try<Row>>> futureRows = completionService.take();
-                    futureRows.get().forEach(rowTry -> dataStore.insert(rowTry.getResult()));
-                    sentCounter += partitons.get(i);
-                    logger.debug("rows sent to database: [{}]", sentCounter);
-                } catch (Exception ex)
-                {
-                    ex.printStackTrace();
-                }
+                Future<List<Row>> futureRows = completionService.take();
+                futureRows.get().forEach(row -> dataStore.insert(row));
+                appendCounter += partitons.get(i);
+                logProcessedRows("rows generated: [{}]", appendCounter);
             }
             dataStore.flush();
             return System.currentTimeMillis() - start;
         }
     }
 
-    public static List<Integer> getPartitions(long numberOfRows, int batchSize)
+    private static List<Row> generateRowsBatch(RowBuilder rowBuilder, int partitionBatchSize)
+    {
+        return IntStream.range(0, partitionBatchSize)
+                .mapToObj(rangeValue -> rowBuilder.generate())
+                .filter(Try::isSuccess)
+                .map(rowTry -> rowTry.getResult())
+                .toList();
+    }
+
+    private static List<Integer> getPartitions(long numberOfRows, int batchSize)
     {
         int numberOfBatches = (int) (numberOfRows / batchSize);
         List<Integer> partitions = new ArrayList<>();
@@ -190,14 +184,14 @@ public class DataGenerator
         return partitions;
     }
 
-    private static void logProcessedRows(long counter)
+    private static void logProcessedRows(String message, long counter)
     {
         if(programConfiguration.getGeneralConfiguration().getGeneratedRowsLogInterval() > 0
                 && programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate() > programConfiguration.getGeneralConfiguration().getGeneratedRowsLogInterval()
                 && counter % programConfiguration.getGeneralConfiguration().getGeneratedRowsLogInterval() == 0
                 && counter > 0)
         {
-            logger.debug("rows generated: [{}]", counter);
+            logger.debug(message, counter);
         }
     }
 
@@ -207,7 +201,6 @@ public class DataGenerator
         RowBuilder rowBuilder = new RowBuilder(dataConfiguration);
 
         return LongStream.range(0, numberOfRows)
-                .parallel()
                 .mapToObj(rangeValue -> rowBuilder.generate())
                 .filter(Try::isSuccess)
                 .map(Try::getResult)
