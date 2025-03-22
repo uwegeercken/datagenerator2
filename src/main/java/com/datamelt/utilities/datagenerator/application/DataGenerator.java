@@ -16,8 +16,11 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.*;
+import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
 import static java.lang.System.exit;
@@ -131,18 +134,56 @@ public class DataGenerator
 
     private static long generateRows() throws NoSuchMethodException, InvalidConfigurationException, SQLException
     {
+        try(ExecutorService executorService = Executors.newFixedThreadPool(programConfiguration.getGeneralConfiguration().getNumberOfThreads());)
+        {
+            CompletionService<List<Try<Row>>> completionService = new ExecutorCompletionService<>(executorService);
 
-        long start = System.currentTimeMillis();
-        RowBuilder rowBuilder = new RowBuilder(dataConfiguration);
+            long start = System.currentTimeMillis();
+            RowBuilder rowBuilder = new RowBuilder(dataConfiguration);
 
-        LongStream.range(0, programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate())
-                .peek(DataGenerator::logProcessedRows)
-                .mapToObj(rangeValue -> rowBuilder.generate())
-                .filter(Try::isSuccess)
-                .forEach(rowTry -> dataStore.insert(rowTry.getResult()));
+            List<Integer> partitons = getPartitions(programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate(), programConfiguration.getGeneralConfiguration().getNumberOfRowsPerThread());
+            long counter = 0;
+            for (int i = 0; i < partitons.size(); i++)
+            {
+                int partitionBatchSize = partitons.get(i);
+                List<Try<Row>> rows = IntStream.range(0, partitionBatchSize)
+                        .peek(DataGenerator::logProcessedRows)
+                        .mapToObj(rangeValue -> rowBuilder.generate())
+                        .filter(Try::isSuccess)
+                        .toList();
 
-        dataStore.flush();
-        return System.currentTimeMillis() - start;
+                counter += rows.size();
+                logProcessedRows(counter);
+
+                completionService.submit(() -> rows);
+            }
+
+            for (int i = 0; i < partitons.size(); i++)
+            {
+                try
+                {
+                    Future<List<Try<Row>>> futureRows = completionService.take();
+                    futureRows.get().forEach(rowTry -> dataStore.insert(rowTry.getResult()));
+                } catch (Exception ex)
+                {
+                    ex.printStackTrace();
+                }
+            }
+            //executorService.shutdown();
+            //executorService.awaitTermination(1, TimeUnit.HOURS);
+
+            dataStore.flush();
+            return System.currentTimeMillis() - start;
+        }
+    }
+
+    public static List<Integer> getPartitions(long numberOfRows, int batchSize)
+    {
+        int numberOfBatches = (int) (numberOfRows / batchSize);
+        List<Integer> partitions = new ArrayList<>();
+        IntStream.range(0,numberOfBatches).forEach(i -> partitions.add(batchSize));
+        partitions.add((int) (programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate() - numberOfBatches * batchSize));
+        return partitions;
     }
 
     private static void logProcessedRows(long counter)

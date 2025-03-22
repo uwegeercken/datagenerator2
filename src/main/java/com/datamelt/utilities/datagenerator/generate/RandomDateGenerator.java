@@ -10,14 +10,10 @@ import com.datamelt.utilities.datagenerator.utilities.type.DataTypeDuckDb;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class RandomDateGenerator implements RandomValueGenerator<String>, RandomValueProvider<Long>
 {

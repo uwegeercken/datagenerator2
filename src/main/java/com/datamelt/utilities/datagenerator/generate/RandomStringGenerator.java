@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class RandomStringGenerator implements RandomValueGenerator<String>
 {
@@ -36,10 +36,9 @@ public class RandomStringGenerator implements RandomValueGenerator<String>
     @Override
     public String generateRandomValue()
     {
-        Random random = new Random();
         long randomLength;
         if(minLength != maxLength) {
-            randomLength = random.nextLong(minLength, maxLength);
+            randomLength = ThreadLocalRandom.current().nextLong(minLength, maxLength);
         }
         else
         {
@@ -48,7 +47,7 @@ public class RandomStringGenerator implements RandomValueGenerator<String>
         StringBuilder randomString = new StringBuilder();
         for(long i=0;i<randomLength;i++)
         {
-            int position = random.nextInt(randomCharacters.length());
+            int position = ThreadLocalRandom.current().nextInt(randomCharacters.length());
             randomString.append(randomCharacters.substring(position, position+1));
         }
         return randomString.toString();

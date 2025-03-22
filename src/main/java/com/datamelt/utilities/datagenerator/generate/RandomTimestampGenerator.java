@@ -11,13 +11,10 @@ import com.datamelt.utilities.datagenerator.utilities.transformation.Transformat
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Random;
 
 public class RandomTimestampGenerator implements RandomValueGenerator<String>, RandomValueProvider<Long>
 {

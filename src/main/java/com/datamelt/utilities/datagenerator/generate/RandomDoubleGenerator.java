@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class RandomDoubleGenerator implements RandomValueGenerator<Double>
 {
@@ -48,8 +48,7 @@ public class RandomDoubleGenerator implements RandomValueGenerator<Double>
     @Override
     public Double generateRandomValue()
     {
-        Random random = new Random();
-        Double value = random.nextDouble(minValue, maxValue);
+        Double value = ThreadLocalRandom.current().nextDouble(minValue, maxValue);
         return value ;
     }
 

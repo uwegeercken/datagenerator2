@@ -2,7 +2,6 @@ package com.datamelt.utilities.datagenerator.generate;
 
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 
-import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
 import com.datamelt.utilities.datagenerator.config.process.TransformationExecutionException;
 import com.datamelt.utilities.datagenerator.utilities.transformation.TransformationExecutor;
 import com.datamelt.utilities.datagenerator.utilities.transformation.TransformationMethod;
@@ -10,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class CategoryGenerator implements RandomValueGenerator<String>
 {
@@ -28,10 +27,9 @@ public class CategoryGenerator implements RandomValueGenerator<String>
     @Override
     public String generateRandomValue()
     {
-        Random random = new Random();
         if(fieldConfiguration.getNumberOfDefaultWeights()!=fieldConfiguration.getValues().size())
         {
-            int randomPercentValue = random.nextInt(1, 100);
+            int randomPercentValue = ThreadLocalRandom.current().nextInt(1, 100);
             long sum = 0;
             int counter = 0;
             while (sum <= randomPercentValue)
@@ -52,7 +50,7 @@ public class CategoryGenerator implements RandomValueGenerator<String>
         }
         else
         {
-            int randomValue = random.nextInt(1, fieldConfiguration.getValues().size()+1);
+            int randomValue = ThreadLocalRandom.current().nextInt(1, fieldConfiguration.getValues().size()+1);
             return fieldConfiguration.getValues().get(randomValue-1).getValue();
         }
     }

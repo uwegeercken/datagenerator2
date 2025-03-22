@@ -10,7 +10,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class EncryptionHelper
 {
@@ -40,12 +40,11 @@ public class EncryptionHelper
 
     private static String generateRandomPassword()
     {
-        Random random = new Random();
-        long randomLength = random.nextLong(0,40);
+        long randomLength = ThreadLocalRandom.current().nextLong(0,40);
         StringBuilder randomString = new StringBuilder();
         for(long i=0;i<randomLength;i++)
         {
-            int position = random.nextInt(AVAILABLE_CHARACTERS.length());
+            int position = ThreadLocalRandom.current().nextInt(AVAILABLE_CHARACTERS.length());
             randomString.append(AVAILABLE_CHARACTERS.substring(position, position+1));
         }
         return randomString.toString();
