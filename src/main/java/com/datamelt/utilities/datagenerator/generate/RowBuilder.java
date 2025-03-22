@@ -17,9 +17,18 @@ import java.util.List;
 public class RowBuilder
 {
     private final List<RowField<?>> rowFields = new ArrayList<>();
-    public RowBuilder(DataConfiguration dataConfiguration) throws NoSuchMethodException, InvalidConfigurationException
+    public RowBuilder(DataConfiguration dataConfiguration)
     {
-        createRowFields(dataConfiguration);
+        try
+        {
+            createRowFields(dataConfiguration);
+        } catch (NoSuchMethodException e)
+        {
+            throw new RuntimeException(e);
+        } catch (InvalidConfigurationException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     private void createRowFields(DataConfiguration dataConfiguration) throws NoSuchMethodException, InvalidConfigurationException
@@ -102,16 +111,18 @@ public class RowBuilder
         Row row = new Row();
         for (RowField<?> rowField : rowFields)
         {
+            RowField<?> rowFieldCopy = rowField.copy();
             try
             {
-                rowField.generateValue();
-                row.addField(rowField);
+                rowFieldCopy.generateValue();
+                row.addField(rowFieldCopy);
             }
             catch (InvalidConfigurationException | TransformationExecutionException ex)
             {
-                return new Failure<Row>(ex);
+                return new Failure<>(ex);
             }
         }
         return new Success<>(row);
     }
+
 }

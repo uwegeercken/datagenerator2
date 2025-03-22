@@ -21,6 +21,11 @@ public class RowField<T> {
         this.value = transformValue(generator.generateRandomValue());
     }
 
+    public RowField<T> copy()
+    {
+        return new RowField<>(generator, name);
+    }
+
     private T transformValue(T value) throws TransformationExecutionException
     {
         return generator.transformRandomValue(value);

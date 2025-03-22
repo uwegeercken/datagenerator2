@@ -12,7 +12,9 @@ The other sections define various options for the different export file formats.
     general:
         exportFilename: /home/uwe/development/datagenerator2/datagenerator_export.json
         exportType: json
-        numberOfRowsToGenerate: 5
+        numberOfRowsToGenerate: 1000
+        numberOfThreads: 10
+        numberOfRowsPerThread: 100
         generatedRowsLogInterval: 20
         rowNumberFieldName: autonumber
     csvExport:

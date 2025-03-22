@@ -10,7 +10,7 @@ public class ProgramGeneralConfiguration
     @JsonInclude(JsonInclude.Include.NON_ABSENT)
     private DataExportType exportType = DataExportType.CSV;
     private long numberOfRowsToGenerate = 10000;
-    private int numberOfThreads = 1;
+    private int numberOfThreads = 4;
     private int numberOfRowsPerThread = 1000;
     private long generatedRowsLogInterval = 1000;
     @JsonInclude(JsonInclude.Include.NON_ABSENT)
