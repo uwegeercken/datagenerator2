@@ -4,7 +4,9 @@ import org.apache.logging.log4j.Level;
 
 public enum Argument
 {
-    NUMBEROFROWSTOGENERATE("-n", false,"number of rows to generate"),
+    NUMBEROFROWSTOGENERATE("-n", false,"number of threads to use during data generation"),
+    NUMBEROFTHREADS("-t", false,"number of rows to generate per thread"),
+    NUMBEROFROWSPERTHREAD("-r", false,"number of rows to generate"),
     GENERATEDROWSLOGINTERVAL("-l", false,"interval for log messages during data generation"),
     LOGLEVEL("-g", false,"log level to be used for logging output. must be one out of [OFF, FATAL, ERROR, WARN, INFO, DEBUG, TRACE, ALL]"),
     EXPORTFILENAME("-xp", false, "path and filename of the export file"),

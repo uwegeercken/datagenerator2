@@ -25,6 +25,12 @@ public class ProgramConfiguration
         if(arguments.getNumberOfRowsToGenerate()!=null) {
             generalConfiguration.setNumberOfRowsToGenerate(Long.parseLong(arguments.getNumberOfRowsToGenerate()));
         }
+        if(arguments.getNumberOfThreads()!=null) {
+            generalConfiguration.setNumberOfThreads(Integer.parseInt(arguments.getNumberOfThreads()));
+        }
+        if(arguments.getNumberOfRowsPerThread()!=null) {
+            generalConfiguration.setNumberOfRowsPerThread(Integer.parseInt(arguments.getNumberOfRowsPerThread()));
+        }
         if(arguments.getGeneratedRowsLogInterval()!=null)
         {
             generalConfiguration.setGeneratedRowsLogInterval(Long.parseLong(arguments.getGeneratedRowsLogInterval()));
@@ -43,6 +49,14 @@ public class ProgramConfiguration
         if(generalConfiguration.getNumberOfRowsToGenerate() < 0)
         {
             throw new InvalidConfigurationException("invalid configuration. number of records to generate can not be smaller than zero");
+        }
+        if(generalConfiguration.getNumberOfThreads() < 0)
+        {
+            throw new InvalidConfigurationException("invalid configuration. number of threads can not be smaller than zero");
+        }
+        if(generalConfiguration.getNumberOfRowsPerThread() < 0)
+        {
+            throw new InvalidConfigurationException("invalid configuration. number of rows per thread can not be smaller than zero");
         }
         if(generalConfiguration.getGeneratedRowsLogInterval() < 0)
         {
