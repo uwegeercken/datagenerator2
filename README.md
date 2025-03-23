@@ -203,11 +203,16 @@ The configuration file contains various attributes to steer the behavior of the 
 - the name of the export file for the generated data
 - the type of the export file: csv, excel, parquet or json
 - the number of rows to generate
+- the number of threads to use when generating the data 
+- the number of rows to be generated per thread
 - after how many generated rows a log message will be output
 - details for the export to a csv file - delimiter and header settings
 - details for the export to a json file - output as separate lines or as array
 - details for the export to a parquet file or partitioned file
 - details for the export to an excel file
+
+Note that generating the data can be done using multithreading but loading data into duckdb is done
+in a single thread because duckdb is an in-process database and does not support multithreaded loading.
 
 See the sample yaml files in this repository under: samples/programconfiguration.
 
