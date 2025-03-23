@@ -1,8 +1,6 @@
 package com.datamelt.utilities.datagenerator.config.process;
 
-import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
-import com.datamelt.utilities.datagenerator.config.model.TransformationConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.options.*;
 import com.datamelt.utilities.datagenerator.utilities.type.DataTypeDuckDb;
 import org.slf4j.Logger;
