@@ -2,9 +2,7 @@ package com.datamelt.utilities.datagenerator.config.model.options;
 
 import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public enum Transformations
 {
@@ -24,10 +22,10 @@ public enum Transformations
     REPLACEALL("replaceAll", new Class[]{String.class}),
     MASKTRAILING("maskTrailing", new Class[]{String.class});
 
-    private String name;
-    private Class[] classes;
+    private final String name;
+    private final Class<?>[] classes;
 
-    Transformations(String name, Class[] classes)
+    Transformations(String name, Class<?>[] classes)
     {
         this.name = name;
         this.classes = classes;
@@ -38,14 +36,14 @@ public enum Transformations
         return name;
     }
 
-    public Class[] getClasses()
+    public Class<?>[] getClasses()
     {
         return classes;
     }
 
-    public Class getClass(Class clazz) throws InvalidConfigurationException
+    public Class<?> getClass(Class<?> clazz) throws InvalidConfigurationException
     {
-        for(Class c : classes)
+        for(Class<?> c : classes)
         {
             if(c.getName().equals(clazz.getName()))
             {
@@ -55,7 +53,7 @@ public enum Transformations
         throw new InvalidConfigurationException("the transformation [" + name + "] does not allow type [" + clazz.getName() + "] - possible types: " + Arrays.toString(classes));
     }
 
-    public boolean possibleClass(Class clazz)
+    public boolean possibleClass(Class<?> clazz)
     {
         return Arrays.asList(this.classes).contains(clazz);
     }
