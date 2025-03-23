@@ -8,7 +8,7 @@ of test data - possibly with dependencies between individual fields and variying
 The tool requires a yaml file which contains configuration details for the tool itself, including attributes for the
 export of the generated data to files. A second yaml file defines how the data is generated in terms of fields, field weight and
 other attributes.
-Some of the configuration attributes may also be passed as arguments when running the datagenerator tool. In this case these
+Some of the configuration attributes may also be passed as arguments when startingn the datagenerator tool. In this case these
 will override the same attributes from the configuration files.
 
 Samples, wordlists (category files) and details for the configuration can be found in the samples folder in this repository.
@@ -192,7 +192,7 @@ from the word list might get a slightly higher weight value. If weight definitio
 ## Processing steps
 First, the given program configuration and the data configuration yaml files are analyzed for their correctness. Any existing table definitions and data is removed from the DuckDb, if a file with the specified name of the database is found.
 
-After that the value for each field is generated and then transformed (if any transformation options are specified). The fields are processed sequentially and build a row of data.
+After that the value for each field is generated and then transformed (if any transformations are specified). The fields are processed sequentially and build a row of data.
 The tool generates the desired number of rows and stores it in a local DuckDb instance. Finally, the data is exported to the desired output format.
 
 The DuckDb database is not deleted after the process is completed. You can remove it manually or otherwise further use the generated data in the database.
