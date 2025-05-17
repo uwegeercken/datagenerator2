@@ -41,6 +41,7 @@ The type for each field can be one of following values:
 If no type is specified then type=category is assumed.
 
 Some of the generators allow to specify a transformation. It is applied after a value is generated. When one or more parameters are listed for a transformation, these need to be specified in the configuration. You may also specify multiple transformations. Find below a list of transformations for the individual generator types.
+If an error occurs during transformation, then the original value passed to the transformation will be returned instead of the transformed one.
 
 ### Random Strings
 This type of generator (type=randomstring) generates purely random text. The options in the yaml configuration file allow to specify the range of characters to be used for constructing the random text. Additional options allow to specify the minimum and maximum length.

@@ -19,8 +19,8 @@ public class DateReferenceGenerator implements RandomValueGenerator<String>
 {
     private final static Logger logger = LoggerFactory.getLogger(DateReferenceGenerator.class);
     private static final Class<String> BASE_DATATYPE = String.class;
-    private FieldConfiguration fieldConfiguration;
-    private List<TransformationMethod> transformationMethods;
+    private final FieldConfiguration fieldConfiguration;
+    private final List<TransformationMethod> transformationMethods;
     private String reference;
     private RowField<?> referenceRowField;
     private DateTimeFormatter dateTimeFormatter;

@@ -1,6 +1,6 @@
 --- # DataConfiguration - testfile_category.yml
 name: Test
-databaseName: /home/uwe/development/datagenerator2/generateddata.duckdb
+databaseName: ./samples/generateddata.duckdb
 tableName: generateddata
 fields:
   - name: gender
@@ -11,20 +11,20 @@ fields:
         weight: 40
       - value: d
         weight: 20
-    valuesFile: /home/uwe/development/datagenerator2/categories/gender.category
+    valuesFile: ./samples/categories/gender.category
   - name: weekday
     values:
       - value: Saturday
         weight: 5
       - value: Sunday
         weight: 5
-    valuesFile: /home/uwe/development/datagenerator2/categories/weekday.category
+    valuesFile: ./samples/categories/weekday.category
   - name: season
-    valuesFile: /home/uwe/development/datagenerator2/categories/season.category
+    valuesFile: ./samples/categories/season.category
     values:
       - value: Summer
         weight: 70
   - name: city
-    valuesFile: /home/uwe/development/datagenerator2/categories/city.category
+    valuesFile: ./samples/categories/city.category
   - name: number
-    valuesFile: /home/uwe/development/datagenerator2/categories/number.category
+    valuesFile: ./samples/categories/number.category
