@@ -39,6 +39,10 @@ public class DataGenerator
 
     public static void main(String[] args)
     {
+        CustomLog4jConfig.setupLog4j2Config(parseLoglevel(args));
+        logger = LoggerFactory.getLogger(DataGenerator.class);
+        logger.info(applicationName +  " application - version: " + version + " (" + versionDate + ")");
+
         if(args.length == 0 || args[0].equals("-h") || args[0].equals("--help"))
         {
             help();
@@ -46,10 +50,6 @@ public class DataGenerator
         }
         try
         {
-            CustomLog4jConfig.setupLog4j2Config(parseLoglevel(args));
-            logger = LoggerFactory.getLogger(DataGenerator.class);
-            logger.info(applicationName +  " application - version: " + version + " (" + versionDate + ")");
-
             arguments = new ProgramArguments(args);
             //logger.debug("processing program configuration file: [{}],", programConfigurationFilename);
             loadProgramConfiguration(arguments.getProgramConfigurationFilename());
@@ -110,8 +110,7 @@ public class DataGenerator
     {
         try(InputStream stream = new FileInputStream(dataConfigurationFilename))
         {
-            dataConfiguration = ConfigurationLoader.load(stream.readAllBytes(), DataConfiguration.class);
-        }
+            dataConfiguration = ConfigurationLoader.load(stream.readAllBytes(), DataConfiguration.class);        }
     }
 
     private static void loadProgramConfiguration(String programConfigurationFilename) throws IOException
