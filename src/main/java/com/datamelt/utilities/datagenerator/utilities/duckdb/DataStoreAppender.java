@@ -10,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import static com.datamelt.utilities.datagenerator.utilities.Constants.FIELD_DEVIDER_CHARACTER;
 
@@ -32,6 +34,23 @@ public class DataStoreAppender
             appender.beginRow();
             appendRownumberField(counter);
 
+            // [2025-03-16 01:29:30,2025,03,16,Sonntag,Ril###,Phillips,Tulsa]
+//            appender.beginStruct();
+//            appender.append("2025-03-16 01:29:30");
+//            appender.append("2025");
+//            appender.append("03");
+//            appender.append("16");
+//            appender.append("Sonntag");
+//            appender.endStruct();
+//            appender.beginStruct();
+//            appender.append("Ril###");
+//            appender.append("Phillips");
+//            appender.beginStruct();
+//            appender.beginStruct();
+//            appender.append("Tulsa");
+//            appender.endStruct();
+//            appender.endStruct();
+
             for(String fieldName : tableInsertLayout.getFieldNames())
             {
                 TreeNode node = getRootNode(fieldName);
@@ -41,8 +60,7 @@ public class DataStoreAppender
                 }
                 else
                 {
-                    String value = createStruct(node, row);
-                    appendString(value);
+                    createStruct(node, row);
                 }
             }
             appender.endRow();
@@ -65,82 +83,41 @@ public class DataStoreAppender
         return null;
     }
 
-    private String createStruct(TreeNode node, Row row)
+    private void createStruct(TreeNode node, Row row) throws SQLException
     {
-        StringBuilder buffer = new StringBuilder();
-        buffer.append("{");
-        int counter = 0;
-        for(TableField field : node.getFields())
+        appender.beginStruct();
+        for (TableField field : node.getFields())
         {
-            counter++;
             RowField<?> rowField = row.getField(node.getName() + FIELD_DEVIDER_CHARACTER + field.getName());
-            buffer.append("\"");
-            buffer.append(field.getName());
-            buffer.append("\": '");
-            buffer.append(rowField.getValue());
-            buffer.append("'");
-            if (counter < node.getFields().size())
-            {
-                buffer.append(", ");
-            }
+            appendField(rowField);
         }
-        if(node.getChildren().size()>0)
+        if (node.getChildren().size() > 0)
         {
-            if(node.getFields().size()>0)
+            for(TreeNode child : node.getChildren())
             {
-                buffer.append(",");
+                getChildren(node.getName() + FIELD_DEVIDER_CHARACTER + child.getName(), child, row);
             }
-            getChildren(node.getName(), node, row, buffer);
         }
-        buffer.append("}");
-        return buffer.toString();
+        appender.endStruct();
     }
 
-    private static void getChildren(String name, TreeNode node, Row row, StringBuilder buffer)
+    private void getChildren(String name, TreeNode node, Row row) throws SQLException
     {
-        for (int i=0;i<node.getChildren().size();i++)
+        appender.beginStruct();
+        for (TableField field : node.getFields())
         {
-            String fullName = name + FIELD_DEVIDER_CHARACTER + node.getChildren().get(i).getName();
-            buffer.append("\"");
-            buffer.append(node.getChildren().get(i).getName());
-            buffer.append("\":");
-            buffer.append(" {");
-            buildStructFieldsStatement(fullName, node.getChildren().get(i), row, buffer);
-            if(node.getChildren().get(i).getChildren().size()>0) {
-                getChildren(fullName, node.getChildren().get(i), row, buffer);
-            }
-            if(i<node.getChildren().size()-1)
+            RowField<?> rowField = row.getField(name + FIELD_DEVIDER_CHARACTER + field.getName());
+            appendField(rowField);
+        }
+        if (node.getChildren().size() > 0)
+        {
+            for(TreeNode child : node.getChildren())
             {
-                buffer.append("}");
-                buffer.append(",");
-            }
-            else {
-                buffer.append("}");
+                getChildren(name + FIELD_DEVIDER_CHARACTER + child.getName(), child, row);
             }
         }
+        appender.endStruct();
     }
-
-    private static void buildStructFieldsStatement(String name, TreeNode node, Row row, StringBuilder buffer)
-    {
-        for(int i=0;i < node.getFields().size();i++)
-        {
-            RowField<?> rowField = row.getField(name + FIELD_DEVIDER_CHARACTER + node.getFields().get(i).getName());
-            buffer.append("\"");
-            buffer.append(node.getFields().get(i).getName());
-            buffer.append("\": '");
-            buffer.append(rowField.getValue());
-            buffer.append("'");
-            if(i<node.getFields().size()-1)
-            {
-                buffer.append(",");
-            }
-        }
-        if(node.getFields().size()>0 && node.getChildren().size()>0)
-        {
-            buffer.append(",");
-        }
-    }
-
 
     public void beginRow() throws SQLException
     {
