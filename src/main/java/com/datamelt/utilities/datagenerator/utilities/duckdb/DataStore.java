@@ -20,11 +20,11 @@ public class DataStore
     private static Logger logger = LoggerFactory.getLogger(DataStore.class);
     private static final String SCHEMANAME = "main";
     private long numberOfRecordsInserted = 0;
-    private DuckDBConnection connection;
+    private final DuckDBConnection connection;
     private DataStoreAppender appender;
-    private ProgramConfiguration programConfiguration;
-    private DataConfiguration dataConfiguration;
-    private FileExporter fileExporter;
+    private final ProgramConfiguration programConfiguration;
+    private final DataConfiguration dataConfiguration;
+    private final FileExporter fileExporter;
 
     TableInsertLayout tableInsertLayout;
 
@@ -90,7 +90,7 @@ public class DataStore
         Statement stmt = connection.createStatement();
         String createTableStatement = TableLayout.getCreateTableStatement(programConfiguration, dataConfiguration);
         tableInsertLayout = new TableInsertLayout(TableLayout.getFields(), TableLayout.getRootNodes());
-        logger.debug("creating table  [{}]", dataConfiguration.getTableName());
+        logger.debug("creating table [{}]", dataConfiguration.getTableName());
         logger.trace("creating table statement [{}]", createTableStatement);
         stmt.execute(createTableStatement);
     }

@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.sql.SQLException;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.datamelt.utilities.datagenerator.utilities.Constants.FIELD_DEVIDER_CHARACTER;
 
@@ -34,33 +35,16 @@ public class DataStoreAppender
             appender.beginRow();
             appendRownumberField(counter);
 
-            // [2025-03-16 01:29:30,2025,03,16,Sonntag,Ril###,Phillips,Tulsa]
-//            appender.beginStruct();
-//            appender.append("2025-03-16 01:29:30");
-//            appender.append("2025");
-//            appender.append("03");
-//            appender.append("16");
-//            appender.append("Sonntag");
-//            appender.endStruct();
-//            appender.beginStruct();
-//            appender.append("Ril###");
-//            appender.append("Phillips");
-//            appender.beginStruct();
-//            appender.beginStruct();
-//            appender.append("Tulsa");
-//            appender.endStruct();
-//            appender.endStruct();
-
             for(String fieldName : tableInsertLayout.getFieldNames())
             {
-                TreeNode node = getRootNode(fieldName);
-                if(node==null)
+                Optional<TreeNode> rootNode = getRootNode(fieldName);
+                if(rootNode.isEmpty())
                 {
                     appendField(row.getField(fieldName));
                 }
                 else
                 {
-                    createStruct(node, row);
+                    createStruct(rootNode.get(), row);
                 }
             }
             appender.endRow();
@@ -71,16 +55,16 @@ public class DataStoreAppender
         }
     }
 
-    private TreeNode getRootNode(String name)
+    private Optional<TreeNode> getRootNode(String name)
     {
         for(TreeNode node : tableInsertLayout.getRootNodes())
         {
-            if(node.getName().equals(name))
+            if(node != null && node.getName().equals(name))
             {
-                return node;
+                return Optional.of(node);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     private void createStruct(TreeNode node, Row row) throws SQLException

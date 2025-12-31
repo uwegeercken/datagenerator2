@@ -1,6 +1,6 @@
 # datagenerator2
 
-The datagenerator tool is currently (Decmber '25) under development. Additional features and capabilities will be added over time.
+The datagenerator tool is currently (December '25) under development. Additional features and capabilities will be added over time.
 
 The datagenerator tool allows to generate random data. The aim is to have a tool that generates data in a way which is flexible enough to satisfy the needs of developers or analysts or anybody else who needs some sort
 of test data - possibly with dependencies between individual fields and variying/definable distribution of fieldConfiguration values. 
