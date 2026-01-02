@@ -10,8 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Optional;
 
 import static com.datamelt.utilities.datagenerator.utilities.Constants.FIELD_DEVIDER_CHARACTER;
@@ -44,7 +42,7 @@ public class DataStoreAppender
                 }
                 else
                 {
-                    createStruct(rootNode.get(), row);
+                    appendStruct(rootNode.get().getName(), rootNode.get(), row);
                 }
             }
             appender.endRow();
@@ -67,25 +65,7 @@ public class DataStoreAppender
         return Optional.empty();
     }
 
-    private void createStruct(TreeNode node, Row row) throws SQLException
-    {
-        appender.beginStruct();
-        for (TableField field : node.getFields())
-        {
-            RowField<?> rowField = row.getField(node.getName() + FIELD_DEVIDER_CHARACTER + field.getName());
-            appendField(rowField);
-        }
-        if (node.getChildren().size() > 0)
-        {
-            for(TreeNode child : node.getChildren())
-            {
-                getChildren(node.getName() + FIELD_DEVIDER_CHARACTER + child.getName(), child, row);
-            }
-        }
-        appender.endStruct();
-    }
-
-    private void getChildren(String name, TreeNode node, Row row) throws SQLException
+    private void appendStruct(String name, TreeNode node, Row row) throws SQLException
     {
         appender.beginStruct();
         for (TableField field : node.getFields())
@@ -97,20 +77,10 @@ public class DataStoreAppender
         {
             for(TreeNode child : node.getChildren())
             {
-                getChildren(name + FIELD_DEVIDER_CHARACTER + child.getName(), child, row);
+                appendStruct(name + FIELD_DEVIDER_CHARACTER + child.getName(), child, row);
             }
         }
         appender.endStruct();
-    }
-
-    public void beginRow() throws SQLException
-    {
-        appender.beginRow();
-    }
-
-    public void endRow() throws SQLException
-    {
-        appender.endRow();
     }
 
     public void flush()  throws SQLException
