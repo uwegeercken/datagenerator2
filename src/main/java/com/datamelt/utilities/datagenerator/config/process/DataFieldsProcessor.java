@@ -4,6 +4,8 @@ import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldType;
 
+import java.util.Arrays;
+
 public class DataFieldsProcessor
 {
     public static void processAllFields(DataConfiguration configuration) throws InvalidConfigurationException
@@ -33,7 +35,7 @@ public class DataFieldsProcessor
             }
             else if (fieldConfiguration.getType() == FieldType.REGULAREXPRESSION)
             {
-               //processor = new RegularExpressionProcessor(fieldConfiguration);
+               processor = new RegularExpressionProcessor(fieldConfiguration);
 
             }
             else if (fieldConfiguration.getType() == FieldType.RANDOMDATE)
@@ -47,6 +49,10 @@ public class DataFieldsProcessor
             else if (fieldConfiguration.getType() == FieldType.DATEREFERENCE)
             {
                 processor = new DateReferenceProcessor(fieldConfiguration);
+            }
+            else
+            {
+                throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "] has an invalid type [" + fieldConfiguration.getType() + "]  - must be one of: " + Arrays.toString(FieldType.values()));
             }
 
             processor.setDefaultOptions();

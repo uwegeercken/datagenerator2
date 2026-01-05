@@ -21,20 +21,19 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.*;
 import java.util.stream.IntStream;
-import java.util.stream.LongStream;
 
 import static java.lang.System.exit;
 
 public class DataGenerator
 {
-    private static Logger logger; // = LoggerFactory.getLogger(DataGenerator.class);
+    private static Logger logger;
     private static final String applicationName = "datagenerator2";
-    private static final String version = "0.3.5";
-    private static final String versionDate = "2026-01-02";
+    private static final String version = "0.4.0";
+    private static final String versionDate = "2026-01-03";
     private static final String contactEmail = "uwe.geercken@web.de";
-    private static DataConfiguration dataConfiguration;
-    private static ProgramConfiguration programConfiguration;
-    private static DataStore dataStore;
+    private DataConfiguration dataConfiguration;
+    private ProgramConfiguration programConfiguration;
+    private DataStore dataStore;
     private static ProgramArguments arguments;
 
     public static void main(String[] args)
@@ -50,29 +49,24 @@ public class DataGenerator
         }
         try
         {
-            arguments = new ProgramArguments(args);
-            //logger.debug("processing program configuration file: [{}],", programConfigurationFilename);
-            loadProgramConfiguration(arguments.getProgramConfigurationFilename());
-            programConfiguration.mergeArguments(arguments);
+            ProgramArguments arguments = new ProgramArguments(args);
 
-            logger.debug("processing data configuration file: [{}],", arguments.getDataConfigurationFilename());
-            processDataConfiguration(arguments.getDataConfigurationFilename());
-            setupDataStore();
+            DataGenerator dataGenerator = new DataGenerator(arguments.getProgramConfigurationFilename(), arguments.getDataConfigurationFilename());
+            dataGenerator.programConfiguration.mergeArguments(arguments);
 
-            logger.info("starting to generate total of [{}] rows, number of threads [{}], rows per thread [{}]", programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate(), programConfiguration.getGeneralConfiguration().getNumberOfThreads(), programConfiguration.getGeneralConfiguration().getNumberOfRowsPerThread());
+            logger.info("starting to generate total of [{}] rows, number of threads [{}], rows per thread [{}]", dataGenerator.programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate(), dataGenerator.programConfiguration.getGeneralConfiguration().getNumberOfThreads(), dataGenerator.programConfiguration.getGeneralConfiguration().getNumberOfRowsPerThread());
+            long runtime = dataGenerator.generateRows();
 
-            long runtime = generateRows();
-
-            logger.info("total rows generated: [{}]", programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate());
+            logger.info("total rows generated: [{}]", dataGenerator.programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate());
             logger.info("total data generation time: [{}] seconds", runtime / 1000d);
 
 
-            if(programConfiguration.getGeneralConfiguration().getExportFilename() != null) {
-                exportToFile();
+            if(dataGenerator.programConfiguration.getGeneralConfiguration().getExportFilename() != null) {
+                dataGenerator.exportToFile();
             }
             if(arguments.getGenerateStatistics())
             {
-                outputStatistics();
+                dataGenerator.outputStatistics();
             }
         }
         catch (InvalidConfigurationException ice)
@@ -90,6 +84,17 @@ public class DataGenerator
         logger.info("processing completed");
     }
 
+    public DataGenerator(String programConfigurationFilename, String dataConfigurationFilename) throws IOException, SQLException,InvalidConfigurationException
+    {
+        logger.debug("processing program configuration file: [{}],", dataConfigurationFilename);
+        loadProgramConfiguration(programConfigurationFilename);
+
+        logger.debug("processing data configuration file: [{}],", dataConfigurationFilename);
+        loadDataConfiguration(dataConfigurationFilename);
+
+        validateDataConfiguration();
+    }
+
     private static void help()
     {
         logger.info("program arguments:");
@@ -99,21 +104,20 @@ public class DataGenerator
         logger.info("contact: {}", contactEmail);
     }
 
-    private static void processDataConfiguration(String dataConfigurationFilename) throws IOException, InvalidConfigurationException
+    private void validateDataConfiguration() throws InvalidConfigurationException
     {
-        loadDataConfiguration(dataConfigurationFilename);
         CategoryFileLoader.loadCategoryFiles(dataConfiguration);
         DataFieldsProcessor.processAllFields(dataConfiguration);
     }
 
-    private static void loadDataConfiguration(String dataConfigurationFilename) throws IOException
+    private void loadDataConfiguration(String dataConfigurationFilename) throws IOException
     {
         try(InputStream stream = new FileInputStream(dataConfigurationFilename))
         {
             dataConfiguration = ConfigurationLoader.load(stream.readAllBytes(), DataConfiguration.class);        }
     }
 
-    private static void loadProgramConfiguration(String programConfigurationFilename) throws IOException
+    private void loadProgramConfiguration(String programConfigurationFilename) throws IOException
     {
         try(InputStream stream = new FileInputStream(programConfigurationFilename))
         {
@@ -121,7 +125,7 @@ public class DataGenerator
         }
     }
 
-    private static void setupDataStore() throws Exception
+    private void setupDataStore() throws SQLException
     {
         FileExporter fileExporter = switch (programConfiguration.getGeneralConfiguration().getExportType())
         {
@@ -133,8 +137,10 @@ public class DataGenerator
         dataStore = new DataStore(programConfiguration, dataConfiguration, fileExporter);
     }
 
-    private static long generateRows() throws NoSuchMethodException, InvalidConfigurationException, SQLException, ExecutionException, InterruptedException
+    private long generateRows() throws NoSuchMethodException, InvalidConfigurationException, SQLException, ExecutionException, InterruptedException
     {
+        setupDataStore();
+
         try(ExecutorService executorService = Executors.newFixedThreadPool(programConfiguration.getGeneralConfiguration().getNumberOfThreads()))
         {
             CompletionService<List<Row>> completionService = new ExecutorCompletionService<>(executorService);
@@ -142,19 +148,21 @@ public class DataGenerator
             long start = System.currentTimeMillis();
             RowBuilder rowBuilder = new RowBuilder(dataConfiguration);
 
-            List<Integer> partitons = getPartitions(programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate(), programConfiguration.getGeneralConfiguration().getNumberOfRowsPerThread());
-            for (int i = 0; i < partitons.size(); i++)
+            List<Integer> partitions = getPartitions(
+                    programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate(),
+                    programConfiguration.getGeneralConfiguration().getNumberOfRowsPerThread());
+
+            for (int partitionBatchSize : partitions)
             {
-                int partitionBatchSize = partitons.get(i);
                 completionService.submit(() -> generateRowsBatch(rowBuilder, partitionBatchSize));
             }
 
             long appendCounter = 0;
-            for (int i = 0; i < partitons.size(); i++)
+            for (Integer partition : partitions)
             {
                 Future<List<Row>> futureRows = completionService.take();
                 futureRows.get().forEach(row -> dataStore.insert(row));
-                appendCounter += partitons.get(i);
+                appendCounter += partition;
                 logOutput("rows generated: [{}]", appendCounter);
             }
             dataStore.flush();
@@ -162,7 +170,7 @@ public class DataGenerator
         }
     }
 
-    private static List<Row> generateRowsBatch(RowBuilder rowBuilder, int partitionBatchSize)
+    private List<Row> generateRowsBatch(RowBuilder rowBuilder, int partitionBatchSize)
     {
         return IntStream.range(0, partitionBatchSize)
                 .mapToObj(rangeValue -> rowBuilder.generate())
@@ -171,7 +179,7 @@ public class DataGenerator
                 .toList();
     }
 
-    private static List<Integer> getPartitions(long numberOfRows, int batchSize)
+    private List<Integer> getPartitions(long numberOfRows, int batchSize)
     {
         int numberOfBatches = (int) (numberOfRows / batchSize);
         List<Integer> partitions = new ArrayList<>();
@@ -185,7 +193,7 @@ public class DataGenerator
         return partitions;
     }
 
-    private static void logOutput(String message, long counter)
+    private void logOutput(String message, long counter)
     {
         if(programConfiguration.getGeneralConfiguration().getGeneratedRowsLogInterval() > 0
                 && programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate() > programConfiguration.getGeneralConfiguration().getGeneratedRowsLogInterval()
@@ -196,27 +204,7 @@ public class DataGenerator
         }
     }
 
-    public static List<Row> generateRows(String dataConfigurationFilename, long numberOfRows) throws IOException, InvalidConfigurationException, NoSuchMethodException
-    {
-        processDataConfiguration(dataConfigurationFilename);
-        RowBuilder rowBuilder = new RowBuilder(dataConfiguration);
-
-        return LongStream.range(0, numberOfRows)
-                .mapToObj(rangeValue -> rowBuilder.generate())
-                .filter(Try::isSuccess)
-                .map(Try::getResult)
-                .toList();
-    }
-
-    public static Try<Row> generateRow(String dataConfigurationFilename) throws IOException, InvalidConfigurationException, NoSuchMethodException
-    {
-        processDataConfiguration(dataConfigurationFilename);
-        RowBuilder rowBuilder = new RowBuilder(dataConfiguration);
-
-        return rowBuilder.generate();
-    }
-
-    private static void outputStatistics()
+    private void outputStatistics()
     {
         logger.info("collecting statistics for generated field values...");
         dataConfiguration.getFields().stream()
@@ -224,18 +212,18 @@ public class DataGenerator
                 .forEach(fieldStatistics -> logger.info("field: [{}], type: [{}], distinct values: [{}], values and percentages: [{}]", fieldStatistics.getFieldName(), fieldStatistics.getFieldType(), fieldStatistics.getNumberOfDistinctValues(), fieldStatistics.getNumberOfDistinctValues() <= 50 ? fieldStatistics.getFieldStatistics() : "no statistics generated - too many distinct values"));
     }
 
-    private static void exportToFile() throws Exception
+    private void exportToFile() throws Exception
     {
         dataStore.exportToFile(dataConfiguration.getTableName(), programConfiguration.getGeneralConfiguration().getExportFilename());
     }
 
     private static Level parseLoglevel(String[] args)
     {
-        for(int i=0;i<args.length;i++)
+        for (String arg : args)
         {
-            if (args[i].startsWith(Argument.LOGLEVEL.getAbbreviation()))
+            if (arg.startsWith(Argument.LOGLEVEL.getAbbreviation()))
             {
-                String logLevel = args[i].substring(args[i].indexOf("=") + 1).trim();
+                String logLevel = arg.substring(arg.indexOf("=") + 1).trim();
                 try
                 {
                     return Level.valueOf(logLevel.toUpperCase());

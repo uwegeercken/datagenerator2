@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class RegularExpressionTranslator
+public class RegularExpressionParser
 {
     private static final String OPEN_CURLY_BRACKET = "{";
     private static final String CLOSE_CURLY_BRACKET = "}";
@@ -93,10 +93,6 @@ public class RegularExpressionTranslator
             throw new InvalidConfigurationException("found open curly bracket at position [" + position + "] but no closing curly bracket in pattern [" + pattern + "]");
         }
         String multiplierValue = pattern.substring(position + 1, closingCurlyBracketPosition + 1);
-        if(multiplierValue.equals(OPEN_CURLY_BRACKET + CLOSE_CURLY_BRACKET))
-        {
-            throw new InvalidConfigurationException("no value specified between curly brackets at position [" + position + "] in pattern [" + pattern + "]");
-        }
         return new RegularExpressionMultiplier(multiplierValue);
     }
 }

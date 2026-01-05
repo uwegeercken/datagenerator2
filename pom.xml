@@ -6,7 +6,7 @@
 
     <groupId>groupId</groupId>
     <artifactId>datagenerator2</artifactId>
-    <version>0.3.5</version>
+    <version>0.4.0</version>
 
     <properties>
         <maven.compiler.release>21</maven.compiler.release>

@@ -1,4 +1,5 @@
-import com.datamelt.utilities.datagenerator.utilities.transformation.DataTransformer;
+package com.datamelt.utilities.datagenerator.utilities.transformation;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

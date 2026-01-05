@@ -1,11 +1,11 @@
+package com.datamelt.utilities.datagenerator.generate;
+
 import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldType;
 import com.datamelt.utilities.datagenerator.config.model.options.RandomDoubleOptions;
-import com.datamelt.utilities.datagenerator.config.model.options.RandomLongOptions;
 import com.datamelt.utilities.datagenerator.config.process.DataFieldsProcessor;
 import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
-import com.datamelt.utilities.datagenerator.generate.RowBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

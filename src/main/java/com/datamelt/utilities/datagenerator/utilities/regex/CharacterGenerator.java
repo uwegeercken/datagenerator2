@@ -1,4 +1,6 @@
 package com.datamelt.utilities.datagenerator.utilities.regex;
 
-public interface CharacterProcessing {
+public interface CharacterGenerator
+{
+    String generateValue();
 }

@@ -11,18 +11,21 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class YamlFileProcessorTest
 {
-    private static final String DATACONFIGURATION_TESTFILE_01 = "datagenerator-test-01.yml";
+    private static final String DATACONFIGURATION_TESTFILE_01 = "/datagenerator-test-01.yml";
 
     @Test
-    @DisplayName("test1")
+    @DisplayName("validate dataconfiguration")
     void validateConfiguration() throws Exception
     {
-        File dataConfigurationFile = new File("./src/test/java/" + DATACONFIGURATION_TESTFILE_01);
+        Path resourcePath = Path.of(getClass().getResource(DATACONFIGURATION_TESTFILE_01).toURI());
+        File dataConfigurationFile = new File(resourcePath.toString());
         DataConfiguration dataConfiguration;
         try (InputStream stream = new FileInputStream(dataConfigurationFile))
         {
@@ -33,6 +36,6 @@ class YamlFileProcessorTest
         RowBuilder rowBuilder = new RowBuilder(dataConfiguration);
         Try<Row> row = rowBuilder.generate();
 
-        assertEquals(true,true,"invalid configuration file");
+        assertTrue(row.isSuccess(), "invalid configuration file");
     }
 }

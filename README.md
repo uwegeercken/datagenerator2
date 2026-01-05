@@ -17,7 +17,7 @@ Samples, wordlists (category files) and details for the configuration can be fou
 - select random values from word lists
 - generate random strings, numbers or floating point numbers
 - generate random dates and timestamps. generate date fields referencing another date field
-- generate random data according to a given regular expression (to be implemented)
+- generate random data according to a given regular expression
 - transform the generated data values: uppercase, lowercase, base64 encode, negate, round, encrypt and more
 - export rows of generated data in CSV, Excel or Json
 - export rows of generated data in Parquet format - including partitioning
@@ -37,6 +37,7 @@ The type for each field can be one of following values:
 - randomdate
 - randomtimestamp
 - datereference
+- regularexpression
 
 If no type is specified then type=category is assumed.
 
@@ -140,6 +141,33 @@ The options for this type of generator allow to specify the date field that shal
 |----------------|------------------------------------------------------------------------------------------------------|------------|
 | toQuarter      | If the dateFormat of the field is "MM" it will be converted to the relevant quarter (Q1, Q2, Q3, Q4) | none       |
 | toHalfYear     | If a result of the field is "MM" it will be converted to the relevant half year (H1, H2)             | none       |
+
+
+### Regular Expressions
+This type of generator (type=regularexpression) generates random text based on a regular expression pattern. The pattern option in the yaml configuration file allows to specify characters, character ranges and multiplier which make up the pattern.
+
+Following features are available:
+- using standard characters like a, B, 9, -, etc.
+- using character groups like [A-Z], [F-L], [A-Za-z0-9], [A-Z0-9XYZ], [A-Cd-g0-4], etc.
+- using multipliers for characters like B{1,10}, C{21}, etc.
+- using multipliers for character groups like [A-zf-p4-9]{1,10}, [a-z]{7}, etc.
+- multipliers can specify a minimum and maximum number of repetitions like e.g. {1,8}. In this case the resulting random string has a length between 1 and 8
+- multipliers can specify a minimum number of repetitions only like e.g. {4}. In this case the resulting random string has a length of exactly 4
+
+The minimum and maximum value of a multiplier can not be smaller than 1. The maximum value must be greater than the minimum value.
+
+**NOTE**: Currently you can not use any other features of regular expression patterns than character groups and multipliers.
+
+#### Available options:
+| Option           | Description                                     | Data Type | Default                      |
+|------------------|-------------------------------------------------|-----------|------------------------------|
+| pattern          | pattern describing a regular expression         | String    | [A-Za-z0-9]{1,10}            |
+
+#### Available transformations:
+| Transformation | Description                                                                                                | Parameters                                                             |
+|----------------|------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------|
+| uppercase      | convert the value to uppercase                                                                             | none                                                                   |
+| lowercase      | convert the value to lowercase                                                                             | none                                                                   |
 
 ### Word lists
 Word lists allow to define values for certain categories such as "weekdays", "seasons", "car types",
@@ -257,11 +285,18 @@ You can get help about the available program arguments by running:
 
 See the sample yaml file for the program configuration in this repository under: samples/dataconfiguration
 
-You may also use the tool programmatically by calling the static method "generateRows". Pass the path and name of the dataconfiguration yaml file and the number of rows to be generated.
-The method returns a list of rows (com.datamelt.utilities.datagenerator.generate.Row).
+You may also use the tool programmatically by calling the static method "generateRows" with the number of rows to produce on the RowGenerator class. Pass the path and name of the dataconfiguration yaml file in the constructor.
+The method returns a Stream of rows (com.datamelt.utilities.datagenerator.generate.Row), wrapped in a Try. The result of the generation of a row is always a success or a failure. You may filter on th success or failure instances.
+Or you can e.g. map the Try object using a function.
 
-    List<Row> generateRows(String dataConfigurationFilename, long numberOfRows)
-
+Example:
+    
+    String dataConfigurationFile = "/path/to/file/filename.yaml;
+    RowGenerator rowGenerator = new RowGenerator(dataConfigurationFile);
+    List<Row> rows = rowGenerator.generateRows(10)
+        .filter(Try::isSuccess)
+        .map(Try::getResult)
+        .toList();
 
 ## Building the datagenerator jar file
 To build the jar file either download the release from https://github.com/uwegeercken/datagenerator2/tags or clone this repository and run:
@@ -269,4 +304,4 @@ To build the jar file either download the release from https://github.com/uwegee
     mvn clean install
 
 
-last update: uwe geercken - uwe.geercken@web.de - 2026-01-02
+last update: uwe geercken - uwe.geercken@web.de - 2026-01-06
