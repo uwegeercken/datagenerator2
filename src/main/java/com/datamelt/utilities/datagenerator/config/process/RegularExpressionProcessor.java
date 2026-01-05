@@ -43,35 +43,34 @@ public class RegularExpressionProcessor extends FieldProcessor
 
     private void checkOptions() throws InvalidConfigurationException
     {
-            String pattern = (String) getFieldConfiguration().getOptions().get(RegularExpressionOptions.PATTERN.getKey());
-            if(pattern.isEmpty())
+        String pattern = (String) getFieldConfiguration().getOptions().get(RegularExpressionOptions.PATTERN.getKey());
+        if(pattern.isEmpty())
+        {
+            throw new InvalidConfigurationException("the option pattern cannot be empty for a field of type regularexpression");
+        }
+
+        Pattern multiplierPattern = Pattern.compile("\\{[^}]*\\}");
+        Matcher matcher = multiplierPattern.matcher(pattern);
+
+        while (matcher.find())
+        {
+            if(matcher.group().length() <= 2)
             {
-                throw new InvalidConfigurationException("the option pattern cannot be empty for a field of type regularexpression");
+                throw new InvalidConfigurationException("no value specified for multiplier [" + matcher.group() + "] in pattern [" + pattern + "]");
             }
-
-            Pattern multiplierPattern = Pattern.compile("\\{[^}]*\\}");
-            Matcher matcher = multiplierPattern.matcher(pattern);
-
-            while (matcher.find())
+            else
             {
-                if(matcher.group().length() <= 2)
+                RegularExpressionMultiplier multiplier = new RegularExpressionMultiplier(matcher.group());
+                if (multiplier.getMinimalNumberOfCharacters() < 1 || multiplier.getMaximalNumberOfCharacters() < 1)
                 {
-                    throw new InvalidConfigurationException("no value specified for multiplier [" + matcher.group() + "] in pattern [" + pattern + "]");
+                    throw new InvalidConfigurationException("all multiplier values in pattern [" + pattern + "] must be greater than zero for multiplier [" + matcher.group() + "]");
                 }
-                else
+                if (multiplier.getMaximalNumberOfCharacters() <= multiplier.getMinimalNumberOfCharacters())
                 {
-                    RegularExpressionMultiplier multiplier = new RegularExpressionMultiplier(matcher.group());
-                    if (multiplier.getMinimalNumberOfCharacters() < 1 || multiplier.getMaximalNumberOfCharacters() < 1)
-                    {
-                        throw new InvalidConfigurationException("all multiplier values in pattern [" + pattern + "] must be greater than zero for multiplier [" + matcher.group() + "]");
-                    }
-                    if (multiplier.getMaximalNumberOfCharacters() <= multiplier.getMinimalNumberOfCharacters())
-                    {
-                        throw new InvalidConfigurationException("the multiplier value for the maximum must be greater than the minimum in pattern [" + pattern + "] for multiplier [" + matcher.group() + "]");
-                    }
+                    throw new InvalidConfigurationException("the multiplier value for the maximum must be greater than the minimum in pattern [" + pattern + "] for multiplier [" + matcher.group() + "]");
                 }
             }
-
+        }
     }
 
     @Override
