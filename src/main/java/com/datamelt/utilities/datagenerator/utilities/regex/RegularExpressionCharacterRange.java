@@ -40,6 +40,10 @@ public class RegularExpressionCharacterRange implements CharacterGenerator
         return Optional.ofNullable(multiplier);
     }
 
+    public String getAllInvolvedCharacters()
+    {
+        return allCharacters;
+    }
 
     @Override
     public String generateValue()
