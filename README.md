@@ -1,6 +1,6 @@
 # datagenerator2
 
-The datagenerator tool is currently (December '25) under development. Additional features and capabilities will be added over time.
+The datagenerator tool is currently (January '26) under development. Additional features and capabilities will be added over time.
 
 The datagenerator tool allows to generate random data. The aim is to have a tool that generates data in a way which is flexible enough to satisfy the needs of developers or analysts or anybody else who needs some sort
 of test data - possibly with dependencies between individual fields and variying/definable distribution of fieldConfiguration values. 
@@ -8,13 +8,13 @@ of test data - possibly with dependencies between individual fields and variying
 The tool requires a yaml file which contains configuration details for the tool itself, including attributes for the
 export of the generated data to files. A second yaml file defines how the data is generated in terms of fields, field weight and
 other attributes.
-Some of the configuration attributes may also be passed as arguments when startingn the datagenerator tool. In this case these
+Some of the configuration attributes may also be passed as arguments when starting the datagenerator tool. In this case these
 will override the same attributes from the configuration files.
 
-Samples, wordlists (category files) and details for the configuration can be found in the samples folder in this repository.
+Samples, word lists (category files) and details for the configuration can be found in the samples folder in this repository.
 
 ## Features
-- select random values from word lists
+- select random values from word lists (where values can have an assigned weight)
 - generate random strings, numbers or floating point numbers
 - generate random dates and timestamps. generate date fields referencing another date field
 - generate random data according to a given regular expression
@@ -41,7 +41,7 @@ The type for each field can be one of following values:
 
 If no type is specified then type=category is assumed.
 
-Some of the generators allow to specify a transformation. It is applied after a value is generated. When one or more parameters are listed for a transformation, these need to be specified in the configuration. You may also specify multiple transformations. Find below a list of transformations for the individual generator types.
+Some of the generators allow to specify one or multiple transformations. They are applied after a value is generated. When one or more parameters are listed for a transformation, these need to be specified in the data configuration yaml file. Find below a list of transformations for the individual generator types.
 If an error occurs during transformation, then the original value passed to the transformation will be returned instead of the transformed one.
 
 ### Random Strings
@@ -141,7 +141,7 @@ The options for this type of generator allow to specify the date field that shal
 | Transformation | Description                                                                                          | Parameters |
 |----------------|------------------------------------------------------------------------------------------------------|------------|
 | toQuarter      | If the dateFormat of the field is "MM" it will be converted to the relevant quarter (Q1, Q2, Q3, Q4) | none       |
-| toHalfYear     | If a result of the field is "MM" it will be converted to the relevant half year (H1, H2)             | none       |
+| toHalfYear     | If the dateFormat of the field is "MM" it will be converted to the relevant half year (H1, H2)             | none       |
 
 
 ### Regular Expressions
@@ -149,7 +149,7 @@ This type of generator (type=regularexpression) generates random text based on a
 
 Following features are available:
 - using standard characters like a, B, 9, -, etc.
-- using character groups like [A-Z], [F-L], [A-Za-z0-9], [A-Z0-9XYZ], [A-Cd-g0-4], etc.
+- using character groups like [A-Z], [F-L], [A-Za-z0-9], [A-Z0-9XYZ], [A-Cd-g0-4], [AbCdE-L123x-z] etc.
 - using multipliers for characters like B{1,10}, C{21}, etc.
 - using multipliers for character groups like [A-zf-p4-9]{1,10}, [a-z]{7}, etc.
 - multipliers can specify a minimum and maximum number of repetitions like e.g. {1,8}. In this case the resulting random string has a length between 1 and 8
@@ -185,8 +185,8 @@ Using word lists offers a few advantages:
 In the yaml configuration, additional values for a given word list (also values which are already defined in the word list file) may be defined, including a weight for individual values.
 This allows to specify a higher priority/weight for defined values. The weight of a value is always specified on the base of 100 percent. 
 
-E.g. one may define the days of the week in a word list file and in the configuration file "Saturday" with a weight of 10 percent and 
-"Sunday" with a weight of 10 percent. The other days "Monday" to "Friday" will then be assigned a weight of 16 percent so that the overall sum of percentages is 100 %.
+E.g. one may define the days of the week in a word list file and in the configuration file "Saturday" with a weight of 5 percent and 
+"Sunday" with a weight of 5 percent. The other days "Monday" to "Friday" will then be assigned a weight of 16 percent so that the overall sum of percentages is 100 %.
 
 If a value for a given word list appears both in the word list file and the yaml configuration file, the setting from the configuration will overrule the value from the word list file.
 
@@ -252,7 +252,7 @@ See the sample yaml files in this repository under: samples/programconfiguration
 The configuration file contains a list of fields/attributes to generate - see the sample yaml files in this repository under: samples/dataconfiguration. For each field, options and transformations may be defined depending on the type of generator used.
 
 There are three generic attributes defined in the configuration file: name, databaseName and tableName. The name attribute assign a name to the configuration but is otherwise not used. The databaseName attribute defines the path and name for the duckdb database that is used to collect the generated
-data. the tableName attribute defines the table of the duchdb database where the generated is stored. If you run a configuration multiple times but with different table names, the database will contain the data of both runs. If you run a configuration multiple times but do not change the tablename, the data of the second run will
+data. the tableName attribute defines the table of the duckdb database where the generated is stored. If you run a configuration multiple times but with different table names, the database will contain the data of both runs. If you run a configuration multiple times but do not change the table name, the data of the second run will
 overwrite all data of the first run (the data of the first run will be removed). 
 
 Fields is a list of fields for which data is to be generated. Each field has a unique name. A substructure can be created by dividing the structure and the field name with the dot separator - eg. address.street, address.city, person.country.name, etc.
@@ -288,7 +288,7 @@ You can get help about the available program arguments by running:
 
 See the sample yaml file for the program configuration in this repository under: samples/dataconfiguration
 
-You may also use the tool programmatically by calling the static method "generateRows" with the number of rows to produce on the RowGenerator class. Pass the path and name of the dataconfiguration yaml file in the constructor.
+You may also use the tool programmatically by calling the method "generateRows" with the number of rows to produce on the RowGenerator class. Pass the path and name of the dataconfiguration yaml file in the constructor.
 The method returns a Stream of rows (com.datamelt.utilities.datagenerator.generate.Row), wrapped in a Try. The result of the generation of a row is always a success or a failure. You may filter on th success or failure instances.
 Or you can e.g. map the Try object using a function.
 
