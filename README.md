@@ -56,16 +56,17 @@ Setting minLength=maxLength will create a constant length string.
 | randomCharacters | characters to be used when generating the value | String      | [a-z] + [A-Z] + [0-9] + [-_] |
 
 #### Available transformations:
-| Transformation | Description                                                                                                | Parameters                                                             |
-|----------------|------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------|
-| uppercase      | convert the value to uppercase                                                                             | none                                                                   |
-| lowercase      | convert the value to lowercase                                                                             | none                                                                   |
-| reverse        | reverse the characters of the value                                                                        | none                                                                   |
-| base64encode   | encode the value to base64 format                                                                          | none                                                                   |
-| trim           | remove leading and trailing spaces                                                                         | none                                                                   |
-| maskLeading    | mask leading characters of the value using a mask character                                                | number of characters to mask (long), mask character(s) to use (string) |
-| maskTrailing   | mask trailing characters of the value using a mask character                                               | number of characters to mask (long), mask character(s) to use (string) |
-| replaceAll     | replaces each substring of the value that matches the given regular expression with the given replacement  | regular expression (string), replacement (string)                      |
+| Transformation | Description                                                                                               | Parameters                                                             |
+|----------------|-----------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------|
+| uppercase      | convert the value to uppercase                                                                            | none                                                                   |
+| lowercase      | convert the value to lowercase                                                                            | none                                                                   |
+| reverse        | reverse the characters of the value                                                                       | none                                                                   |
+| base64encode   | encode the value to base64 format                                                                         | none                                                                   |
+| trim           | remove leading and trailing spaces                                                                        | none                                                                   |
+| maskLeading    | mask leading characters of the value using a mask character                                               | number of characters to mask (long), mask character(s) to use (string) |
+| maskTrailing   | mask trailing characters of the value using a mask character                                              | number of characters to mask (long), mask character(s) to use (string) |
+| replaceAll     | replaces each substring of the value that matches the given regular expression with the given replacement | regular expression (string), replacement (string)                      |
+| remove         | remove all specified characters from the value                                                            | a string containing all characters to remove                           |
 
 ### Random Numbers
 This generator (type=randomlong) allows to generate numbers. The options for this type of generator allow to specify a lowerbound and upperbound for the generated value.
@@ -168,6 +169,7 @@ The minimum and maximum value of a multiplier can not be smaller than 1. The max
 |----------------|------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------|
 | uppercase      | convert the value to uppercase                                                                             | none                                                                   |
 | lowercase      | convert the value to lowercase                                                                             | none                                                                   |
+| remove         | remove all characters from the value                                                                       | a string containing all characters to remove                           |
 
 ### Word lists
 Word lists allow to define values for certain categories such as "weekdays", "seasons", "car types",
@@ -217,6 +219,7 @@ from the word list might get a slightly higher weight value. If weight definitio
 | maskTrailing   | mask trailing characters of the value using a mask character                                              | number of characters to mask (long), mask character(s) to use (string) |
 | trim           | remove leading and trailing spaces                                                                        | none                                                                   |
 | replaceAll     | replaces each substring of the value that matches the given regular expression with the given replacement | regular expression (string), replacement (string)                      |
+| remove         | remove all characters from the value                                                                      | a string containing all characters to remove                           |
 
 ## Processing steps
 First, the given program configuration and the data configuration yaml files are analyzed for their correctness. Any existing table definitions and data is removed from the DuckDb, if a file with the specified name of the database is found.

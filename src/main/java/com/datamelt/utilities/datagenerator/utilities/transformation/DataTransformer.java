@@ -7,6 +7,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class DataTransformer
 {
@@ -34,6 +36,19 @@ public class DataTransformer
             buffer.append(value.substring(i, i+1));
         }
         return buffer.toString();
+    }
+
+    public static String remove(String value, String charactersToRemove)
+    {
+        Set<Character> removeSet = charactersToRemove.chars()
+                .mapToObj(ch -> (char) ch)
+                .collect(Collectors.toSet());
+
+        return value.chars()
+                .mapToObj(ch -> (char) ch)
+                .filter(ch -> !removeSet.contains(ch))
+                .map(String::valueOf)
+                .collect(Collectors.joining());
     }
 
     public static String prepend(String value, String prefix)
@@ -126,8 +141,6 @@ public class DataTransformer
             return value;
         }
     }
-
-
 
     public static String toQuarter(String value)
     {

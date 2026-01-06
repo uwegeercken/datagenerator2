@@ -18,7 +18,8 @@ public class RegularExpressionProcessor extends FieldProcessor
 
     private static final List<String> availableTransformations = Arrays.asList(
             Transformations.LOWERCASE.getName(),
-            Transformations.UPPERCASE.getName()
+            Transformations.UPPERCASE.getName(),
+            Transformations.REMOVE.getName()
     );
 
     private static final List<DataTypeDuckDb> availableOutputTypes = Arrays.asList(

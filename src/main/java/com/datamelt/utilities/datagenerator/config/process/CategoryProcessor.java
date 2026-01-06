@@ -25,7 +25,8 @@ public class CategoryProcessor extends FieldProcessor
             Transformations.TRIM.getName(),
             Transformations.MASKLEADING.getName(),
             Transformations.MASKTRAILING.getName(),
-            Transformations.REPLACEALL.getName()
+            Transformations.REPLACEALL.getName(),
+            Transformations.REMOVE.getName()
     );
 
     private static final List<DataTypeDuckDb> availableOutputTypes = Arrays.asList(

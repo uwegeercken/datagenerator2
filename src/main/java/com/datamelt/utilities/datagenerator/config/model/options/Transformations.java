@@ -20,7 +20,9 @@ public enum Transformations
     TOHALFYEAR("toHalfYear", new Class[]{String.class}),
     MASKLEADING("maskLeading", new Class[]{String.class}),
     REPLACEALL("replaceAll", new Class[]{String.class}),
-    MASKTRAILING("maskTrailing", new Class[]{String.class});
+    MASKTRAILING("maskTrailing", new Class[]{String.class}),
+    REMOVE("remove", new Class[]{String.class});
+
 
     private final String name;
     private final Class<?>[] classes;
