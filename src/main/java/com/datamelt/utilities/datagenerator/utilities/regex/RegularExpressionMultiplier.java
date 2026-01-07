@@ -5,6 +5,7 @@ public class RegularExpressionMultiplier
     private final String token;
     private int minimalNumberOfCharacters = 0;
     private int maximalNumberOfCharacters = 0;
+    private boolean maximalNumberProvided = false;
 
     public RegularExpressionMultiplier(String token)
     {
@@ -32,6 +33,11 @@ public class RegularExpressionMultiplier
         return token.length();
     }
 
+    public boolean isMaximalNumberProvided()
+    {
+        return maximalNumberProvided;
+    }
+
     private void parseToken()
     {
         String content = removeCurlyBrackets(token);
@@ -46,6 +52,7 @@ public class RegularExpressionMultiplier
             String[] values = content.split(",");
             minimalNumberOfCharacters = Integer.parseInt(values[0]);
             maximalNumberOfCharacters = Integer.parseInt(values[1]);
+            maximalNumberProvided = true;
         }
     }
 

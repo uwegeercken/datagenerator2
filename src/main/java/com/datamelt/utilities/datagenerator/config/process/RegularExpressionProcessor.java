@@ -62,11 +62,16 @@ public class RegularExpressionProcessor extends FieldProcessor
             else
             {
                 RegularExpressionMultiplier multiplier = new RegularExpressionMultiplier(matcher.group());
-                if (multiplier.getMinimalNumberOfCharacters() < 1 || multiplier.getMaximalNumberOfCharacters() < 1)
+                if (multiplier.getMinimalNumberOfCharacters() < 1)
                 {
-                    throw new InvalidConfigurationException("all multiplier values in pattern [" + pattern + "] must be greater than zero for multiplier [" + matcher.group() + "]");
+                    throw new InvalidConfigurationException("minimal number of characters in pattern [" + pattern + "] must be greater than zero for multiplier [" + matcher.group() + "]");
                 }
-                if (multiplier.getMaximalNumberOfCharacters() <= multiplier.getMinimalNumberOfCharacters())
+                if (multiplier.isMaximalNumberProvided() && multiplier.getMaximalNumberOfCharacters() < 1)
+                {
+                    throw new InvalidConfigurationException("maximal number of characters in pattern [" + pattern + "] must be greater than zero for multiplier [" + matcher.group() + "]");
+                }
+
+                if (multiplier.isMaximalNumberProvided() && multiplier.getMaximalNumberOfCharacters() <= multiplier.getMinimalNumberOfCharacters())
                 {
                     throw new InvalidConfigurationException("the multiplier value for the maximum must be greater than the minimum in pattern [" + pattern + "] for multiplier [" + matcher.group() + "]");
                 }

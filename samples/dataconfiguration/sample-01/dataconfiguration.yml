@@ -1,5 +1,7 @@
+# replace the path to the category files as appropriate
+#
 name: Test1
-databaseName: /home/uwe/development/datagenerator2/generateddata.duckdb
+databaseName: /Users/uwegeercken/development/datagenerator2/generateddata.duckdb
 tableName: generateddata
 fields:
   - name: date.fulldate
@@ -30,18 +32,18 @@ fields:
       dateFormat: EEEE
   - name: person.firstname
     type: category
-    valuesFile: /home/uwe/development/datagenerator2/categories/firstname.category
+    valuesFile: /Users/uwegeercken/development/datagenerator2/categories/firstname.category
   - name: person.lastname
     type: category
-    valuesFile: /home/uwe/development/datagenerator2/categories/lastname.category
+    valuesFile: /Users/uwegeercken/development/datagenerator2/categories/lastname.category
   - name: person.address.city.name
     type: category
-    valuesFile: /home/uwe/development/datagenerator2/categories/city.category
+    valuesFile: /Users/uwegeercken/development/datagenerator2/categories/city.category
     transformations:
       - name: uppercase
   - name: person.address.street.name
     type: category
-    valuesFile: /home/uwe/development/datagenerator2/categories/street.category
+    valuesFile: /Users/uwegeercken/development/datagenerator2/categories/street.category
   - name: person.address.street.number
     type: randomlong
     options:

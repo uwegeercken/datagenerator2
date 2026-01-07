@@ -1,0 +1,14 @@
+# replace the path to the category files as appropriate
+#
+name: Test
+databaseName: /Users/uwegeercken/development/datagenerator2/generateddata.duckdb
+tableName: generateddata
+fields:
+  - name: url
+    type: regularexpression
+    options:
+      pattern: "www.[A-Za-z]{10,16}.com"
+  - name: identifier
+    type: regularexpression
+    options:
+      pattern: "U[A-Za-z]{12}[0-9]{4}"

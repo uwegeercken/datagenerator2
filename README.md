@@ -289,7 +289,7 @@ You can get help about the available program arguments by running:
 See the sample yaml file for the program configuration in this repository under: samples/dataconfiguration
 
 You may also use the tool programmatically by calling the method "generateRows" with the number of rows to produce on the RowGenerator class. Pass the path and name of the dataconfiguration yaml file in the constructor.
-The method returns a Stream of rows (com.datamelt.utilities.datagenerator.generate.Row), wrapped in a Try. The result of the generation of a row is always a success or a failure. You may filter on th success or failure instances.
+The method returns a Stream of rows (com.datamelt.utilities.datagenerator.generate.Row), wrapped in a Try. The result of the generation of a row is always a success or a failure. You may filter on the success or failure instances.
 Or you can e.g. map the Try object using a function.
 
 Example:

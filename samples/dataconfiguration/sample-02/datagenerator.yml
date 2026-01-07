@@ -1,6 +1,7 @@
---- # DataConfiguration - testfile_category.yml
+# replace the path to the category files as appropriate
+#
 name: Test
-databaseName: ./samples/generateddata.duckdb
+databaseName: /Users/uwegeercken/development/datagenerator2/generateddata.duckdb
 tableName: generateddata
 fields:
   - name: gender
@@ -11,20 +12,13 @@ fields:
         weight: 40
       - value: d
         weight: 20
-    valuesFile: ./samples/categories/gender.category
+    valuesFile: /Users/uwegeercken/development/datagenerator2/categories/gender.category
   - name: weekday
     values:
       - value: Saturday
         weight: 5
       - value: Sunday
         weight: 5
-    valuesFile: ./samples/categories/weekday.category
-  - name: season
-    valuesFile: ./samples/categories/season.category
-    values:
-      - value: Summer
-        weight: 70
+    valuesFile: /Users/uwegeercken/development/datagenerator2/categories/weekday.category
   - name: city
-    valuesFile: ./samples/categories/city.category
-  - name: number
-    valuesFile: ./samples/categories/number.category
+    valuesFile: /Users/uwegeercken/development/datagenerator2/categories/city.category
