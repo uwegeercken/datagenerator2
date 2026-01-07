@@ -1,0 +1,30 @@
+--- # DataConfiguration - testfile_category.yml
+name: Test
+databaseName: ./samples/generateddata.duckdb
+tableName: generateddata
+fields:
+  - name: gender
+    values:
+      - value: m
+        weight: 40
+      - value: f
+        weight: 40
+      - value: d
+        weight: 20
+    valuesFile: ./samples/categories/gender.category
+  - name: weekday
+    values:
+      - value: Saturday
+        weight: 5
+      - value: Sunday
+        weight: 5
+    valuesFile: ./samples/categories/weekday.category
+  - name: season
+    valuesFile: ./samples/categories/season.category
+    values:
+      - value: Summer
+        weight: 70
+  - name: city
+    valuesFile: ./samples/categories/city.category
+  - name: number
+    valuesFile: ./samples/categories/number.category
