@@ -307,4 +307,4 @@ To build the jar file either download the release from https://github.com/uwegee
     mvn clean install
 
 
-last update: uwe geercken - uwe.geercken@web.de - 2026-01-06
+last update: uwe geercken - uwe.geercken@web.de - 2026-02-21
