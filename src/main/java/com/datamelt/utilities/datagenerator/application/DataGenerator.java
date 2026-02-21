@@ -140,33 +140,30 @@ public class DataGenerator
     private long generateRows() throws NoSuchMethodException, InvalidConfigurationException, SQLException, ExecutionException, InterruptedException
     {
         setupDataStore();
+        long start = System.currentTimeMillis();
 
-        try(ExecutorService executorService = Executors.newFixedThreadPool(programConfiguration.getGeneralConfiguration().getNumberOfThreads()))
+        try
         {
-            CompletionService<List<Row>> completionService = new ExecutorCompletionService<>(executorService);
-
-            long start = System.currentTimeMillis();
             RowBuilder rowBuilder = new RowBuilder(dataConfiguration);
-
             List<Integer> partitions = getPartitions(
                     programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate(),
                     programConfiguration.getGeneralConfiguration().getNumberOfRowsPerThread());
 
+            long appendCounter = 0;
             for (int partitionBatchSize : partitions)
             {
-                completionService.submit(() -> generateRowsBatch(rowBuilder, partitionBatchSize));
-            }
-
-            long appendCounter = 0;
-            for (Integer partition : partitions)
-            {
-                Future<List<Row>> futureRows = completionService.take();
-                futureRows.get().forEach(row -> dataStore.insert(row));
-                appendCounter += partition;
+                List<Row> rows = generateRowsBatch(rowBuilder, partitionBatchSize);
+                rows.forEach(row -> dataStore.insert(row));
+                appendCounter += partitionBatchSize;
                 logOutput("rows generated: [{}]", appendCounter);
             }
             dataStore.flush();
             return System.currentTimeMillis() - start;
+        }
+        catch (Exception e)
+        {
+            logger.error("error in generating data store: {}", e.getMessage());
+            return 0;
         }
     }
 

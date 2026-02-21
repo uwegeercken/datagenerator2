@@ -30,6 +30,14 @@ fields:
     options:
       reference: date.fulldate
       dateFormat: EEEE
+  - name: person.address.country
+    values:
+      - value: Germany
+        weight: 60
+      - value: Switzerland
+        weight: 20
+      - value: Austria
+        weight: 20
   - name: person.firstname
     type: category
     valuesFile: /Users/uwegeercken/development/datagenerator2/categories/firstname.category
