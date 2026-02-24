@@ -15,7 +15,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-public class RandomDateGenerator implements RandomValueGenerator<String>, RandomValueProvider<Long>
+public class RandomDateGenerator implements RandomValueGenerator, RandomValueProvider<Long>
 {
     private static final Logger logger = LoggerFactory.getLogger(RandomDateGenerator.class);
 
@@ -29,7 +29,7 @@ public class RandomDateGenerator implements RandomValueGenerator<String>, Random
     private DataTypeDuckDb outputType;
     private Long generatedRandomValue;
 
-    public RandomDateGenerator(FieldConfiguration fieldConfiguration) throws NoSuchMethodException
+    public RandomDateGenerator(FieldConfiguration fieldConfiguration)
     {
         this.fieldConfiguration = fieldConfiguration;
 
@@ -62,7 +62,7 @@ public class RandomDateGenerator implements RandomValueGenerator<String>, Random
     }
 
     @Override
-    public String transformRandomValue(String value) throws TransformationExecutionException
+    public Object transformRandomValue(Object value) throws TransformationExecutionException
     {
         return TransformationExecutor.executeAll(value, transformationMethods);
     }

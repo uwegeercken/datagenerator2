@@ -11,14 +11,14 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class CategoryGenerator implements RandomValueGenerator<String>
+public class CategoryGenerator implements RandomValueGenerator
 {
     private static Logger logger = LoggerFactory.getLogger(CategoryGenerator.class);
     private final FieldConfiguration fieldConfiguration;
     private static final Class<String> BASE_DATATYPE = String.class;
     private final List<TransformationMethod> transformationMethods;
 
-    public CategoryGenerator(FieldConfiguration fieldConfiguration) throws NoSuchMethodException
+    public CategoryGenerator(FieldConfiguration fieldConfiguration)
     {
         this.fieldConfiguration = fieldConfiguration;
         transformationMethods = prepareMethods(BASE_DATATYPE, fieldConfiguration);
@@ -56,7 +56,7 @@ public class CategoryGenerator implements RandomValueGenerator<String>
     }
 
     @Override
-    public String transformRandomValue(String value) throws TransformationExecutionException
+    public Object transformRandomValue(Object value) throws TransformationExecutionException
     {
         return TransformationExecutor.executeAll(value, transformationMethods);
     }

@@ -24,6 +24,7 @@ public enum Transformations
     REMOVE("remove", new Class[]{String.class});
 
 
+
     private final String name;
     private final Class<?>[] classes;
 

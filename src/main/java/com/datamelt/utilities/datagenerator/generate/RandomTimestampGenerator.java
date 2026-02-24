@@ -16,7 +16,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-public class RandomTimestampGenerator implements RandomValueGenerator<String>, RandomValueProvider<Long>
+public class RandomTimestampGenerator implements RandomValueGenerator, RandomValueProvider<Long>
 {
     private static final Logger logger = LoggerFactory.getLogger(RandomTimestampGenerator.class);
     private static final Class<Double> BASE_DATATYPE = Double.class;
@@ -26,7 +26,7 @@ public class RandomTimestampGenerator implements RandomValueGenerator<String>, R
     private int maxYear;
     private long generatedRandomValue;
     private DateTimeFormatter dateTimeFormatter;
-    public RandomTimestampGenerator(FieldConfiguration fieldConfiguration) throws NoSuchMethodException
+    public RandomTimestampGenerator(FieldConfiguration fieldConfiguration)
     {
         this.fieldConfiguration = fieldConfiguration;
 
@@ -56,7 +56,7 @@ public class RandomTimestampGenerator implements RandomValueGenerator<String>, R
     }
 
     @Override
-    public String transformRandomValue(String value) throws TransformationExecutionException
+    public Object transformRandomValue(Object value) throws TransformationExecutionException
     {
         return TransformationExecutor.executeAll(value, transformationMethods);
     }

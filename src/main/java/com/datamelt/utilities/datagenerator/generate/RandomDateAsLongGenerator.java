@@ -17,7 +17,7 @@ import java.util.List;
 
 import static com.datamelt.utilities.datagenerator.utilities.DateUtility.getRandomDateMilliseconds;
 
-public class RandomDateAsLongGenerator implements RandomValueGenerator<Long>, RandomValueProvider<Long>
+public class RandomDateAsLongGenerator implements RandomValueGenerator, RandomValueProvider<Long>
 {
     private static final Logger logger = LoggerFactory.getLogger(RandomDateAsLongGenerator.class);
     private static final Class<Double> BASE_DATATYPE = Double.class;
@@ -29,7 +29,7 @@ public class RandomDateAsLongGenerator implements RandomValueGenerator<Long>, Ra
     private DataTypeDuckDb outputType;
     private Long generatedRandomValue;
 
-    public RandomDateAsLongGenerator(FieldConfiguration fieldConfiguration) throws NoSuchMethodException
+    public RandomDateAsLongGenerator(FieldConfiguration fieldConfiguration)
     {
         this.fieldConfiguration = fieldConfiguration;
 
@@ -61,7 +61,7 @@ public class RandomDateAsLongGenerator implements RandomValueGenerator<Long>, Ra
     }
 
     @Override
-    public Long transformRandomValue(Long value) throws TransformationExecutionException
+    public Object transformRandomValue(Object value) throws TransformationExecutionException
     {
         return TransformationExecutor.executeAll(value, transformationMethods);
     }

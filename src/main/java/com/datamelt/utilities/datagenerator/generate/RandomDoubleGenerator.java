@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class RandomDoubleGenerator implements RandomValueGenerator<Double>
+public class RandomDoubleGenerator implements RandomValueGenerator
 {
     private static final Logger logger = LoggerFactory.getLogger(RandomDoubleGenerator.class);
     private static final Class<Double> BASE_DATATYPE = Double.class;
@@ -21,7 +21,7 @@ public class RandomDoubleGenerator implements RandomValueGenerator<Double>
     private final long minValue;
     private final long maxValue;
 
-    public RandomDoubleGenerator(FieldConfiguration fieldConfiguration) throws NoSuchMethodException
+    public RandomDoubleGenerator(FieldConfiguration fieldConfiguration)
     {
         this.fieldConfiguration = fieldConfiguration;
 
@@ -48,12 +48,12 @@ public class RandomDoubleGenerator implements RandomValueGenerator<Double>
     @Override
     public Double generateRandomValue()
     {
-        Double value = ThreadLocalRandom.current().nextDouble(minValue, maxValue);
+        Double value = ThreadLocalRandom.current().nextDouble(minValue, maxValue +1);
         return value ;
     }
 
     @Override
-    public Double transformRandomValue(Double value) throws TransformationExecutionException
+    public Object transformRandomValue(Object value) throws TransformationExecutionException
     {
         return TransformationExecutor.executeAll(value, transformationMethods);
     }

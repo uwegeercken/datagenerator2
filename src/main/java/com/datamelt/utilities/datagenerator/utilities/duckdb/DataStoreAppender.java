@@ -70,7 +70,7 @@ public class DataStoreAppender
         appender.beginStruct();
         for (TableField field : node.getFields())
         {
-            RowField<?> rowField = row.getField(name + FIELD_DEVIDER_CHARACTER + field.getName());
+            RowField rowField = row.getField(name + FIELD_DEVIDER_CHARACTER + field.getName());
             appendField(rowField);
         }
         if (node.getChildren().size() > 0)
@@ -93,7 +93,7 @@ public class DataStoreAppender
         appendLong(counter);
     }
 
-    private void appendField(RowField<?> field) throws SQLException
+    private void appendField(RowField field) throws SQLException
     {
         if(field.getValue() instanceof Integer)
         {

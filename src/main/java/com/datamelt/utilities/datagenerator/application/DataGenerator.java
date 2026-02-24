@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.*;
 import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
 import static java.lang.System.exit;
 
@@ -28,8 +29,8 @@ public class DataGenerator
 {
     private static Logger logger;
     private static final String applicationName = "datagenerator2";
-    private static final String version = "0.4.1";
-    private static final String versionDate = "2026-02-21";
+    private static final String version = "0.4.2";
+    private static final String versionDate = "2026-02-24";
     private static final String contactEmail = "uwe.geercken@web.de";
     private DataConfiguration dataConfiguration;
     private ProgramConfiguration programConfiguration;
@@ -54,7 +55,7 @@ public class DataGenerator
             DataGenerator dataGenerator = new DataGenerator(arguments.getProgramConfigurationFilename(), arguments.getDataConfigurationFilename());
             dataGenerator.programConfiguration.mergeArguments(arguments);
 
-            logger.info("starting to generate total of [{}] rows, number of threads [{}], rows per thread [{}]", dataGenerator.programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate(), dataGenerator.programConfiguration.getGeneralConfiguration().getNumberOfThreads(), dataGenerator.programConfiguration.getGeneralConfiguration().getNumberOfRowsPerThread());
+            logger.info("starting to generate total of [{}] rows", dataGenerator.programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate());
             long runtime = dataGenerator.generateRows();
 
             logger.info("total rows generated: [{}]", dataGenerator.programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate());
@@ -137,7 +138,7 @@ public class DataGenerator
         dataStore = new DataStore(programConfiguration, dataConfiguration, fileExporter);
     }
 
-    private long generateRows() throws NoSuchMethodException, InvalidConfigurationException, SQLException, ExecutionException, InterruptedException
+    private long generateRows() throws NoSuchMethodException, InvalidConfigurationException, SQLException
     {
         setupDataStore();
         long start = System.currentTimeMillis();
@@ -145,12 +146,9 @@ public class DataGenerator
         try
         {
             RowBuilder rowBuilder = new RowBuilder(dataConfiguration);
-            List<Integer> partitions = getPartitions(
-                    programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate(),
-                    programConfiguration.getGeneralConfiguration().getNumberOfRowsPerThread());
-
+            List<Long> partitions = getPartitions(programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate());
             long appendCounter = 0;
-            for (int partitionBatchSize : partitions)
+            for (long partitionBatchSize : partitions)
             {
                 List<Row> rows = generateRowsBatch(rowBuilder, partitionBatchSize);
                 rows.forEach(row -> dataStore.insert(row));
@@ -167,22 +165,31 @@ public class DataGenerator
         }
     }
 
-    private List<Row> generateRowsBatch(RowBuilder rowBuilder, int partitionBatchSize)
+    private List<Row> generateRowsBatch(RowBuilder rowBuilder, long partitionBatchSize)
     {
-        return IntStream.range(0, partitionBatchSize)
+        return LongStream.range(0, partitionBatchSize)
                 .mapToObj(rangeValue -> rowBuilder.generate())
                 .filter(Try::isSuccess)
                 .map(Try::getResult)
                 .toList();
     }
 
-    private List<Integer> getPartitions(long numberOfRows, int batchSize)
+    private List<Long> getPartitions(long numberOfRows)
     {
+        long batchSize;
+        if(numberOfRows >= 250000)
+        {
+            batchSize = 250000;
+        }
+        else
+        {
+            batchSize = numberOfRows;
+        }
         int numberOfBatches = (int) (numberOfRows / batchSize);
-        List<Integer> partitions = new ArrayList<>();
-        IntStream.range(0,numberOfBatches).forEach(i -> partitions.add(batchSize));
+        List<Long> partitions = new ArrayList<>();
+        LongStream.range(0,numberOfBatches).forEach(i -> partitions.add(batchSize));
 
-        int remainingNumberOfRows = (int) (programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate() - numberOfBatches * batchSize);
+        long remainingNumberOfRows = (int) (programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate() - numberOfBatches * batchSize);
         if(remainingNumberOfRows>0)
         {
             partitions.add(remainingNumberOfRows);

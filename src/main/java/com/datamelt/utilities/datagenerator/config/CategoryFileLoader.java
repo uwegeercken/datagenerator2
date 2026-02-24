@@ -26,7 +26,7 @@ public class CategoryFileLoader
                 checkOptions(fieldConfiguration);
                 if(fieldConfiguration.getSumOfWeights()<100)
                 {
-                    logger.debug("field [{}] - processing values from the category file [{}]", fieldConfiguration.getName(), fieldConfiguration.getValuesFile());
+                    logger.debug("field [{}] - processing category file [{}]", fieldConfiguration.getName(), fieldConfiguration.getValuesFile());
                     loadCategoryFile(fieldConfiguration);
                 }
                 else
@@ -90,7 +90,7 @@ public class CategoryFileLoader
                     }
                 }
             }
-            logger.debug("field [{}] - number of values added from category file: [{}]", fieldConfiguration.getName(), counter);
+            logger.debug("field [{}] - values added from category file: [{}]", fieldConfiguration.getName(), counter);
         }
         catch(Exception ex)
         {

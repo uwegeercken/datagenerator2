@@ -2,8 +2,6 @@ general:
   exportFilename: /home/user1/datagenerator2/datagenerator_export.json
   exportType: json
   numberOfRowsToGenerate: 1000
-  numberOfThreads: 10
-  numberOfRowsPerThread: 100
   generatedRowsLogInterval: 100
   rowNumberFieldName: autonumber
 csvExport:

@@ -9,8 +9,6 @@ import java.util.Optional;
 public class ProgramArguments
 {
     private String numberOfRowsToGenerate;
-    private String numberOfThreads;
-    private String numberOfRowsPerThread;
     private String exportFilename;
     private String exportType;
     private String dataConfigurationFilename;
@@ -31,14 +29,6 @@ public class ProgramArguments
             if(args[i].startsWith(Argument.NUMBEROFROWSTOGENERATE.getAbbreviation()))
             {
                 numberOfRowsToGenerate = args[i].substring(args[i].indexOf("=")+1).trim();
-            }
-            else if(args[i].startsWith(Argument.NUMBEROFTHREADS.getAbbreviation()))
-            {
-                numberOfThreads = args[i].substring(args[i].indexOf("=")+1).trim();
-            }
-            else if(args[i].startsWith(Argument.NUMBEROFROWSPERTHREAD.getAbbreviation()))
-            {
-                numberOfRowsPerThread = args[i].substring(args[i].indexOf("=")+1).trim();
             }
             else if(args[i].startsWith(Argument.GENERATEDROWSLOGINTERVAL.getAbbreviation()))
             {
@@ -121,13 +111,4 @@ public class ProgramArguments
         return generateStatistics;
     }
 
-    public String getNumberOfThreads()
-    {
-        return numberOfThreads;
-    }
-
-    public String getNumberOfRowsPerThread()
-    {
-        return numberOfRowsPerThread;
-    }
 }

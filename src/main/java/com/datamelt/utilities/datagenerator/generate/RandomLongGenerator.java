@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class RandomLongGenerator implements RandomValueGenerator<Long>
+public class RandomLongGenerator implements RandomValueGenerator
 {
     private static final Logger logger = LoggerFactory.getLogger(RandomLongGenerator.class);
     private static final Class<Long> BASE_DATATYPE = Long.class;
@@ -21,7 +21,7 @@ public class RandomLongGenerator implements RandomValueGenerator<Long>
     private final long minValue;
     private final long maxValue;
 
-    public RandomLongGenerator(FieldConfiguration fieldConfiguration) throws NoSuchMethodException
+    public RandomLongGenerator(FieldConfiguration fieldConfiguration)
     {
         this.fieldConfiguration = fieldConfiguration;
 
@@ -48,12 +48,12 @@ public class RandomLongGenerator implements RandomValueGenerator<Long>
     @Override
     public Long generateRandomValue()
     {
-        Long value = ThreadLocalRandom.current().nextLong(minValue, maxValue);
+        Long value = ThreadLocalRandom.current().nextLong(minValue, maxValue +1);
         return value ;
     }
 
     @Override
-    public Long transformRandomValue(Long value) throws TransformationExecutionException
+    public Object transformRandomValue(Object value) throws TransformationExecutionException
     {
         return TransformationExecutor.executeAll(value, transformationMethods);
     }

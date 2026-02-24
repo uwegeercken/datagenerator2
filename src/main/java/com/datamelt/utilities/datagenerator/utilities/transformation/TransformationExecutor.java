@@ -22,14 +22,23 @@ public class TransformationExecutor
     private static <T> T execute(TransformationMethod transformationMethod, T value) throws TransformationExecutionException
     {
         Object[] parameterValues = null;
-        try
+        if(transformationMethod.getMethod().isSuccess())
         {
-            return (T) transformationMethod.getMethod().invoke(null, getMethodParameterValues(value, transformationMethod.getParameters()));
+            try
+            {
+                return (T) transformationMethod.getMethod().getResult().invoke(null, getMethodParameterValues(value, transformationMethod.getParameters()));
+            }
+            catch(Exception ex)
+            {
+                throw new TransformationExecutionException("error invoking the transformation [" + transformationMethod.getMethod().getResult().getName() + "] with the configured parameters: " + Arrays.toString(parameterValues) + ", types: " + Arrays.toString(transformationMethod.getMethod().getResult().getParameterTypes()),ex);
+            }
         }
-        catch(Exception ex)
+        else
         {
-            throw new TransformationExecutionException("the transformation [" + transformationMethod.getMethod().getName() + "] with the configured parameters: " + Arrays.toString(parameterValues) + ", types: " + Arrays.toString(transformationMethod.getMethod().getParameterTypes()) + " does not exist");
+            // TODO: check return value if try was failure
+            return value;
         }
+
     }
 
     private static Object[] getMethodParameterValues(Object value, List<Object> parameters)

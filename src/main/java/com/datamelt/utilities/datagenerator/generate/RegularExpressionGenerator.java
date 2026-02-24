@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class RegularExpressionGenerator implements RandomValueGenerator<String>
+public class RegularExpressionGenerator implements RandomValueGenerator
 {
     private static final Logger logger = LoggerFactory.getLogger(RegularExpressionGenerator.class);
     private static final Class<String> BASE_DATATYPE = String.class;
@@ -24,7 +24,7 @@ public class RegularExpressionGenerator implements RandomValueGenerator<String>
     private final List<CharacterGenerator> regularExpressionGenerators;
     private final List<TransformationMethod> transformationMethods;
 
-    public RegularExpressionGenerator(FieldConfiguration fieldConfiguration) throws NoSuchMethodException, InvalidConfigurationException
+    public RegularExpressionGenerator(FieldConfiguration fieldConfiguration)
     {
         this.fieldConfiguration = fieldConfiguration;
 
@@ -43,7 +43,7 @@ public class RegularExpressionGenerator implements RandomValueGenerator<String>
     }
 
     @Override
-    public String transformRandomValue(String value) throws TransformationExecutionException
+    public Object transformRandomValue(Object value) throws TransformationExecutionException
     {
         return TransformationExecutor.executeAll(value, transformationMethods);
     }

@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class RandomStringGenerator implements RandomValueGenerator<String>
+public class RandomStringGenerator implements RandomValueGenerator
 {
     private final static Logger logger = LoggerFactory.getLogger(RandomStringGenerator.class);
     private static final Class<String> BASE_DATATYPE = String.class;
@@ -22,7 +22,7 @@ public class RandomStringGenerator implements RandomValueGenerator<String>
     private final List<TransformationMethod> transformationMethods;
     private final String randomCharacters;
 
-    public RandomStringGenerator(FieldConfiguration fieldConfiguration) throws NoSuchMethodException
+    public RandomStringGenerator(FieldConfiguration fieldConfiguration)
     {
         this.fieldConfiguration = fieldConfiguration;
 
@@ -54,7 +54,7 @@ public class RandomStringGenerator implements RandomValueGenerator<String>
     }
 
     @Override
-    public String transformRandomValue(String value) throws TransformationExecutionException
+    public Object transformRandomValue(Object value) throws TransformationExecutionException
     {
         return TransformationExecutor.executeAll(value, transformationMethods);
     }

@@ -47,7 +47,7 @@ public class RegularExpressionProcessor extends FieldProcessor
         String pattern = (String) getFieldConfiguration().getOptions().get(RegularExpressionOptions.PATTERN.getKey());
         if(pattern.isEmpty())
         {
-            throw new InvalidConfigurationException("the option pattern cannot be empty for a field of type regularexpression");
+            throw new InvalidConfigurationException("the option [pattern] cannot be empty for a field of type regularexpression");
         }
 
         Pattern multiplierPattern = Pattern.compile("\\{[^}]*\\}");

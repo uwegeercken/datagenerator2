@@ -15,16 +15,16 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-public class DateReferenceGenerator implements RandomValueGenerator<String>
+public class DateReferenceGenerator implements RandomValueGenerator
 {
     private final static Logger logger = LoggerFactory.getLogger(DateReferenceGenerator.class);
     private static final Class<String> BASE_DATATYPE = String.class;
     private final FieldConfiguration fieldConfiguration;
     private final List<TransformationMethod> transformationMethods;
     private String reference;
-    private RowField<?> referenceRowField;
+    private RowField referenceRowField;
     private DateTimeFormatter dateTimeFormatter;
-    public DateReferenceGenerator(FieldConfiguration fieldConfiguration) throws NoSuchMethodException
+    public DateReferenceGenerator(FieldConfiguration fieldConfiguration)
     {
         this.fieldConfiguration = fieldConfiguration;
 
@@ -39,7 +39,7 @@ public class DateReferenceGenerator implements RandomValueGenerator<String>
         transformationMethods = prepareMethods(BASE_DATATYPE, fieldConfiguration);
     }
 
-    public void addReferenceRowField(RowField<?> referenceRowField)
+    public void addReferenceRowField(RowField referenceRowField)
     {
         this.referenceRowField = referenceRowField;
     }
@@ -56,7 +56,7 @@ public class DateReferenceGenerator implements RandomValueGenerator<String>
     }
 
     @Override
-    public String transformRandomValue(String value) throws TransformationExecutionException
+    public Object transformRandomValue(Object value) throws TransformationExecutionException
     {
         return TransformationExecutor.executeAll(value, transformationMethods);
     }

@@ -36,6 +36,18 @@ class RegularExpressionCharacterRangeTest
     }
 
     @Test
+    public void parsedCharacterRangeWithInvalidMultiplier() throws InvalidConfigurationException
+    {
+        String characterRange = "[A-C]";
+        String multiplierValue = "{10";
+        RegularExpressionMultiplier multiplier = new RegularExpressionMultiplier(multiplierValue);
+        RegularExpressionCharacterRange range = new RegularExpressionCharacterRange(characterRange, multiplier);
+
+        String result = range.generateValue();
+        assertEquals(1, result.length());
+    }
+
+    @Test
     public void parsedCharacterRangeRemovesDuplicates() throws InvalidConfigurationException
     {
         RegularExpressionCharacterRange range = new RegularExpressionCharacterRange("[A-C]ABC");

@@ -13,7 +13,7 @@ public class RegularExpressionParser
     private static final String OPEN_SQUARE_BRACKET = "[";
     private static final String CLOSE_SQUARE_BRACKET = "]";
 
-    public List<CharacterGenerator> translate(String pattern) throws InvalidConfigurationException
+    public List<CharacterGenerator> translate(String pattern)
     {
         List<CharacterGenerator> characterGenerators = new ArrayList<CharacterGenerator>();
         for(int i=0;i<pattern.length();i++)
@@ -72,12 +72,12 @@ public class RegularExpressionParser
         return result;
     }
 
-    private Optional<RegularExpressionMultiplier> getMultiplier(String pattern, int position) throws InvalidConfigurationException
+    private Optional<RegularExpressionMultiplier> getMultiplier(String pattern, int position)
     {
         Optional<String> nextCharacter = getNextCharacter(pattern, position);
         if(nextCharacter.isPresent() && nextCharacter.get().equals(OPEN_CURLY_BRACKET))
         {
-            return Optional.of(constructMultiplier(pattern, position));
+            return constructMultiplier(pattern, position);
         }
         else
         {
@@ -85,14 +85,15 @@ public class RegularExpressionParser
         }
     }
 
-    private RegularExpressionMultiplier constructMultiplier(String pattern, int position) throws InvalidConfigurationException
+    private Optional<RegularExpressionMultiplier> constructMultiplier(String pattern, int position)
     {
+        // TODO check if logic is still correct after changing to optional
         int closingCurlyBracketPosition = findNextClosingBracket(pattern, CLOSE_CURLY_BRACKET, position);
         if(closingCurlyBracketPosition == -1)
         {
-            throw new InvalidConfigurationException("found open curly bracket at position [" + position + "] but no closing curly bracket in pattern [" + pattern + "]");
+            return Optional.empty();
         }
         String multiplierValue = pattern.substring(position + 1, closingCurlyBracketPosition + 1);
-        return new RegularExpressionMultiplier(multiplierValue);
+        return Optional.of(new RegularExpressionMultiplier(multiplierValue));
     }
 }

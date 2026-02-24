@@ -15,7 +15,7 @@ Samples, word lists (category files) and details for the configuration can be fo
 
 ## Features
 - select random values from word lists (where values can have an assigned weight)
-- generate random strings, numbers or floating point numbers
+- generate uuid's, random strings, numbers or floating point numbers
 - generate random dates and timestamps. generate date fields referencing another date field
 - generate random data according to a given regular expression
 - transform the generated data values: uppercase, lowercase, base64 encode, negate, round, encrypt and more
@@ -38,6 +38,7 @@ The type for each field can be one of following values:
 - randomtimestamp
 - datereference
 - regularexpression
+- randomuuid
 
 If no type is specified then type=category is assumed.
 
@@ -98,6 +99,7 @@ This generator (type=randomdouble) allows to generate floating point numbers. Th
 
 ### Random Dates
 This generator (type=randomdate) allows to generate dates. The options for this type of generator allow to specify a minimum and maximun year, as well as the output format for the generated value.
+If the outputType=long then the date is output as the equivalent long value in milliseconds.
 
 #### Available options:
 | Option     | Description                                                 | Data Type | Default    |
@@ -143,6 +145,19 @@ The options for this type of generator allow to specify the date field that shal
 | toQuarter      | If the dateFormat of the field is "MM" it will be converted to the relevant quarter (Q1, Q2, Q3, Q4) | none       |
 | toHalfYear     | If the dateFormat of the field is "MM" it will be converted to the relevant half year (H1, H2)             | none       |
 
+### UUID
+This generator (type=randomuuid) allows to generate a uuid.
+
+#### Available options:
+| Option | Description | Data Type | Default |
+|--------|-------------|-----------|---------|
+|        |             |           |         |
+
+
+#### Available transformations:
+| Transformation | Description          | Parameters   |
+|----------------|----------------------|--------------|
+|                |                      |              |
 
 ### Regular Expressions
 This type of generator (type=regularexpression) generates random text based on a regular expression pattern. The pattern option in the yaml configuration file allows to specify characters, character ranges and multiplier which make up the pattern.

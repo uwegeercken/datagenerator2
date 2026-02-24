@@ -51,6 +51,11 @@ public class DataTransformer
                 .collect(Collectors.joining());
     }
 
+    public static long toLong(String value)
+    {
+        return Long.parseLong(value);
+    }
+
     public static String prepend(String value, String prefix)
     {
         return prefix + value;
