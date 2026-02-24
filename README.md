@@ -1,6 +1,6 @@
 # datagenerator2
 
-The datagenerator tool is currently (January '26) under development. Additional features and capabilities will be added over time.
+The datagenerator tool is currently (February '26) under development. Additional features and capabilities will be added over time.
 
 The datagenerator tool allows to generate random data. The aim is to have a tool that generates data in a way which is flexible enough to satisfy the needs of developers or analysts or anybody else who needs some sort
 of test data - possibly with dependencies between individual fields and variying/definable distribution of fieldConfiguration values. 
@@ -29,7 +29,7 @@ Different types of generators are available to generate different type of data s
 For each field specified in the yaml configuration file one of the generators has to be defined by specifying a field type in the
 data configuration file.
 
-The type for each field can be one of following values:
+The type attribute for each field can be one of following values:
 - category
 - randomstring
 - randomlong
@@ -180,11 +180,11 @@ The minimum and maximum value of a multiplier can not be smaller than 1. The max
 | pattern          | pattern describing a regular expression         | String    | [A-Za-z0-9]{1,10}            |
 
 #### Available transformations:
-| Transformation | Description                                                                                                | Parameters                                                             |
-|----------------|------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------|
-| uppercase      | convert the value to uppercase                                                                             | none                                                                   |
-| lowercase      | convert the value to lowercase                                                                             | none                                                                   |
-| remove         | remove all characters from the value                                                                       | a string containing all characters to remove                           |
+| Transformation | Description                                    | Parameters                                                             |
+|----------------|------------------------------------------------|------------------------------------------------------------------------|
+| uppercase      | convert the value to uppercase                 | none                                                                   |
+| lowercase      | convert the value to lowercase                 | none                                                                   |
+| remove         | remove all specified characters from the value | a string containing all characters to remove                           |
 
 ### Word lists
 Word lists allow to define values for certain categories such as "weekdays", "seasons", "car types",
@@ -234,7 +234,7 @@ from the word list might get a slightly higher weight value. If weight definitio
 | maskTrailing   | mask trailing characters of the value using a mask character                                              | number of characters to mask (long), mask character(s) to use (string) |
 | trim           | remove leading and trailing spaces                                                                        | none                                                                   |
 | replaceAll     | replaces each substring of the value that matches the given regular expression with the given replacement | regular expression (string), replacement (string)                      |
-| remove         | remove all characters from the value                                                                      | a string containing all characters to remove                           |
+| remove         | remove all specified characters from the value                                                            | a string containing all characters to remove                           |
 
 ## Processing steps
 First, the given program configuration and the data configuration yaml files are analyzed for their correctness. Any existing table definitions and data is removed from the DuckDb, if a file with the specified name of the database is found.
