@@ -29,8 +29,8 @@ public class DataGenerator
 {
     private static Logger logger;
     private static final String applicationName = "datagenerator2";
-    private static final String version = "0.4.2";
-    private static final String versionDate = "2026-02-24";
+    private static final String version = "0.4.3";
+    private static final String versionDate = "2026-02-28";
     private static final String contactEmail = "uwe.geercken@web.de";
     private DataConfiguration dataConfiguration;
     private ProgramConfiguration programConfiguration;
