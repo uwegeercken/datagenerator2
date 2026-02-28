@@ -7,8 +7,6 @@ The "general" section is mainly used to steer where the data is exported to and 
 how many rows to generate, number of threads used, how often a log message is output during data generation and the name of
 the automatically generated row number.
 
-Note that the data is generated multithreaded. But appending the data to the duckdb database only works singlethreaded. 
-
 The other sections define various options for the different export file formats.
 
     general:

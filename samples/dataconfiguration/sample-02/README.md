@@ -8,12 +8,14 @@ Following data is generated:
 - a gender column from the gender.category file assigning individual weights
 - a weekday column from the weekday.category file assigning weights just for two weekdays
 - a city column from the city.category file
+- a country column from specifying weights without using a category file
 
 ### Sample Output in Json Format
 
     {
-      "autonumber":0,
-      "gender":"m",
-      "weekday":"Wednesday",
-      "city":"Minneapolis"
+      "autonumber": 0,
+      "gender": "m",
+      "weekday": "Wednesday",
+      "city": "Minneapolis",
+      "country: "Germany"
     }

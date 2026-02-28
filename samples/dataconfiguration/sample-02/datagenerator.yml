@@ -22,3 +22,11 @@ fields:
     valuesFile: /Users/uwegeercken/development/datagenerator2/categories/weekday.category
   - name: city
     valuesFile: /Users/uwegeercken/development/datagenerator2/categories/city.category
+  - name: country
+    values:
+      - value: Germany
+        weight: 50
+      - value: Austria
+        weight: 25
+      - value: Denmark
+        weight: 25

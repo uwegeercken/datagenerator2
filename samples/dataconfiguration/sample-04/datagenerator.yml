@@ -1,0 +1,26 @@
+
+name: Test
+databaseName: /Users/uwegeercken/development/datagenerator2/generateddata.duckdb
+tableName: generateddata
+fields:
+  - name: testboolean
+    values:
+      - value: true
+        weight: 60
+      - value: false
+        weight: 40
+    transformations:
+      - name: toBoolean
+  - name: testboolean2
+    type: randomlong
+    options:
+      minValue: -100
+      maxValue: 100
+    transformations:
+      - name: toBoolean
+  - name: testdouble
+    type: regularexpression
+    options:
+      pattern: "[0-9]{4}.[0-9]{2}"
+    transformations:
+      - name: toDouble
