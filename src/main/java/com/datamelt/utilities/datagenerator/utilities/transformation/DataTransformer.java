@@ -23,6 +23,7 @@ public class DataTransformer
     {
         return value.trim();
     }
+
     public static String base64encode(String value)
     {
         return Base64.getEncoder().encodeToString(value.getBytes(StandardCharsets.UTF_8));
@@ -54,6 +55,28 @@ public class DataTransformer
     public static long toLong(String value)
     {
         return Long.parseLong(value);
+    }
+
+    public static double toDouble(String value)
+    {
+        return Double.parseDouble(value);
+    }
+
+    public static boolean toBoolean(String value)
+    {
+        return Boolean.parseBoolean(value);
+    }
+
+    public static boolean toBoolean(Long value)
+    {
+        if(value > 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public static String prepend(String value, String prefix)

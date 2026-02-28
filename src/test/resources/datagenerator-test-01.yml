@@ -27,4 +27,11 @@ fields:
   - name: city
     valuesFile: ./samples/categories/city.category
   - name: number
-    valuesFile: ./samples/categories/number.category
+    values:
+      - value: 0
+        weight: 80
+      - value: 1
+        weight: 20
+    transformations:
+      - name: toLong
+

@@ -45,6 +45,8 @@ If no type is specified then type=category is assumed.
 Some of the generators allow to specify one or multiple transformations. They are applied after a value is generated. When one or more parameters are listed for a transformation, these need to be specified in the data configuration yaml file. Find below a list of transformations for the individual generator types.
 If an error occurs during transformation, then the original value passed to the transformation will be returned instead of the transformed one.
 
+The transformations toLong, toBoolean and toDouble allow to convert a value to a different type. These transformations need to be defined as the last transformation for a given field in the configuration.
+
 ### Random Strings
 This type of generator (type=randomstring) generates purely random text. The options in the yaml configuration file allow to specify the range of characters to be used for constructing the random text. Additional options allow to specify the minimum and maximum length.
 Setting minLength=maxLength will create a constant length string.
@@ -79,9 +81,9 @@ This generator (type=randomlong) allows to generate numbers. The options for thi
 | maxValue   | maximum value  | long         | 1000000   |
 
 #### Available transformations:
-| Transformation | Description          | Parameters   |
-|----------------|----------------------|--------------|
-|                |                      |              |
+| Transformation | Description                                                                                            | Parameters |
+|----------------|--------------------------------------------------------------------------------------------------------|------------|
+| toBoolean      | convert the value to a boolean value. values greater 0 are converted to "true", all others to "false"  | none       |
 
 ### Random Floating Point Numbers
 This generator (type=randomdouble) allows to generate floating point numbers. The options for this type of generator allow to specify a lowerbound and upperbound for the generated value.
@@ -146,7 +148,7 @@ The options for this type of generator allow to specify the date field that shal
 | toHalfYear     | If the dateFormat of the field is "MM" it will be converted to the relevant half year (H1, H2)             | none       |
 
 ### UUID
-This generator (type=randomuuid) allows to generate a uuid.
+This generator (type=randomuuid) allows to generate a random uuid.
 
 #### Available options:
 | Option | Description | Data Type | Default |
@@ -180,11 +182,15 @@ The minimum and maximum value of a multiplier can not be smaller than 1. The max
 | pattern          | pattern describing a regular expression         | String    | [A-Za-z0-9]{1,10}            |
 
 #### Available transformations:
-| Transformation | Description                                    | Parameters                                                             |
-|----------------|------------------------------------------------|------------------------------------------------------------------------|
-| uppercase      | convert the value to uppercase                 | none                                                                   |
-| lowercase      | convert the value to lowercase                 | none                                                                   |
-| remove         | remove all specified characters from the value | a string containing all characters to remove                           |
+| Transformation | Description                                    | Parameters                                   |
+|----------------|------------------------------------------------|----------------------------------------------|
+| uppercase      | convert the value to uppercase                 | none                                         |
+| lowercase      | convert the value to lowercase                 | none                                         |
+| remove         | remove all specified characters from the value | a string containing all characters to remove |
+| toLong         | convert the value to a long value              | none                                         |
+| toBoolean      | convert the value to a boolean value.          | none                                         |
+| toDouble       | convert the value to a double value.           | none                                         |
+
 
 ### Word lists
 Word lists allow to define values for certain categories such as "weekdays", "seasons", "car types",
@@ -235,6 +241,8 @@ from the word list might get a slightly higher weight value. If weight definitio
 | trim           | remove leading and trailing spaces                                                                        | none                                                                   |
 | replaceAll     | replaces each substring of the value that matches the given regular expression with the given replacement | regular expression (string), replacement (string)                      |
 | remove         | remove all specified characters from the value                                                            | a string containing all characters to remove                           |
+| toLong         | convert the value to a long value                                                                         | none                                         |
+| toBoolean      | convert the value to a boolean value                                                                      | none                                         |
 
 ## Processing steps
 First, the given program configuration and the data configuration yaml files are analyzed for their correctness. Any existing table definitions and data is removed from the DuckDb, if a file with the specified name of the database is found.

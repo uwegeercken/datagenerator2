@@ -122,6 +122,55 @@ class DataTransformerTest
     }
 
     @Test
+    @DisplayName("testing String to Long conversion")
+    void validateStringToLongConversion() throws Exception
+    {
+        String input = "12345";
+        assertEquals(12345, DataTransformer.toLong(input));
+    }
+
+    @Test
+    @DisplayName("testing Regex to Double conversion")
+    void validateRegularExpressionToLongConversion() throws Exception
+    {
+        String input = "6789.34";
+        assertEquals(6789.34, DataTransformer.toDouble(input));
+    }
+
+    @Test
+    @DisplayName("testing String to Boolean conversion")
+    void validateStringToBooleanConversion() throws Exception
+    {
+        String input1 = "true";
+        String input2 = "false";
+        assertEquals(true, DataTransformer.toBoolean(input1));
+        assertEquals(false, DataTransformer.toBoolean(input2));
+    }
+
+    @Test
+    @DisplayName("testing Long to Boolean conversion")
+    void validateLongToBooleanConversion() throws Exception
+    {
+        long input1 = 1;
+        long input2 = 0;
+        assertEquals(true, DataTransformer.toBoolean(input1));
+        assertEquals(false, DataTransformer.toBoolean(input2));
+    }
+
+    @Test
+    @DisplayName("testing Long to Boolean conversion 2")
+    void validateLongToBooleanConversion2() throws Exception
+    {
+        long input1 = 167;
+        long input2 = -125;
+        assertEquals(true, DataTransformer.toBoolean(input1));
+        assertEquals(false, DataTransformer.toBoolean(input2));
+    }
+
+
+
+
+    @Test
     @DisplayName("testing maskTrailing")
     void validateMaskTrailing() throws Exception
     {

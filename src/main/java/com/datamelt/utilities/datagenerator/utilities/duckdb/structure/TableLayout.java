@@ -4,6 +4,7 @@ import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldType;
 import com.datamelt.utilities.datagenerator.config.model.ProgramConfiguration;
+import com.datamelt.utilities.datagenerator.config.model.options.Transformations;
 import com.datamelt.utilities.datagenerator.utilities.type.DataTypeDuckDb;
 
 import java.util.*;
@@ -84,18 +85,40 @@ public class TableLayout
                 }
                 if(currentNode==null)
                 {
-                    rootNode.addField(new TableField(fieldParts[fieldParts.length-1], fieldConfiguration.getOutputType()));
+                    rootNode.addField(new TableField(fieldParts[fieldParts.length-1], getOutPutTypeOrLastTransformationType(fieldConfiguration)));
                 }
                 else
                 {
-                    currentNode.addField(new TableField(fieldParts[fieldParts.length-1], fieldConfiguration.getOutputType()));
+                    currentNode.addField(new TableField(fieldParts[fieldParts.length-1], getOutPutTypeOrLastTransformationType(fieldConfiguration)));
                 }
             }
             else
             {
-                fields.add(new TableField(fieldParts[0], fieldConfiguration.getOutputType()));
+                fields.add(new TableField(fieldParts[0], getOutPutTypeOrLastTransformationType(fieldConfiguration)));
             }
         }
+    }
+
+    private static DataTypeDuckDb getOutPutTypeOrLastTransformationType(FieldConfiguration fieldConfiguration)
+    {
+        DataTypeDuckDb type = fieldConfiguration.getOutputType();
+
+        if(fieldConfiguration.getTransformations().size()>0)
+        {
+            if(fieldConfiguration.getTransformations().getLast().getName().equals(Transformations.TOLONG.getName()))
+            {
+                return DataTypeDuckDb.LONG;
+            }
+            else if(fieldConfiguration.getTransformations().getLast().getName().equals(Transformations.TOBOOLEAN.getName()))
+            {
+                return DataTypeDuckDb.BOOLEAN;
+            }
+            else if(fieldConfiguration.getTransformations().getLast().getName().equals(Transformations.TODOUBLE.getName()))
+            {
+                return DataTypeDuckDb.DOUBLE;
+            }
+        }
+        return type;
     }
 
     public static List<TreeNode> getRootNodes()

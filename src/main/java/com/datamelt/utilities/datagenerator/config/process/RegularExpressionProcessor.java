@@ -19,11 +19,17 @@ public class RegularExpressionProcessor extends FieldProcessor
     private static final List<String> availableTransformations = Arrays.asList(
             Transformations.LOWERCASE.getName(),
             Transformations.UPPERCASE.getName(),
-            Transformations.REMOVE.getName()
+            Transformations.REMOVE.getName(),
+            Transformations.TOLONG.getName(),
+            Transformations.TOBOOLEAN.getName(),
+            Transformations.TODOUBLE.getName()
     );
 
     private static final List<DataTypeDuckDb> availableOutputTypes = Arrays.asList(
-            DataTypeDuckDb.VARCHAR
+            DataTypeDuckDb.VARCHAR,
+            DataTypeDuckDb.LONG,
+            DataTypeDuckDb.BOOLEAN,
+            DataTypeDuckDb.DOUBLE
     );
 
     private static final List<FieldOption> availableOptions = Arrays.asList(

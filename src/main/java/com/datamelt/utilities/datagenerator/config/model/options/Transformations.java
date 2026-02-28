@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 public enum Transformations
 {
-    LOWERCASE ("lowercase", new Class[]{String.class}),
+    LOWERCASE("lowercase", new Class[]{String.class}),
     UPPERCASE("uppercase", new Class[]{String.class}),
     TRIM("trim", new Class[]{String.class}),
     NEGATE("negate", new Class[]{Long.class, Double.class}),
@@ -21,8 +21,10 @@ public enum Transformations
     MASKLEADING("maskLeading", new Class[]{String.class}),
     REPLACEALL("replaceAll", new Class[]{String.class}),
     MASKTRAILING("maskTrailing", new Class[]{String.class}),
-    REMOVE("remove", new Class[]{String.class});
-
+    REMOVE("remove", new Class[]{String.class}),
+    TOLONG("toLong", new Class[]{String.class}),
+    TODOUBLE("toDouble", new Class[]{String.class}),
+    TOBOOLEAN("toBoolean", new Class[]{String.class, Long.class});
 
 
     private final String name;
@@ -46,9 +48,9 @@ public enum Transformations
 
     public Class<?> getClass(Class<?> clazz) throws InvalidConfigurationException
     {
-        for(Class<?> c : classes)
+        for (Class<?> c : classes)
         {
-            if(c.getName().equals(clazz.getName()))
+            if (c.getName().equals(clazz.getName()))
             {
                 return c;
             }
@@ -60,4 +62,4 @@ public enum Transformations
     {
         return Arrays.asList(this.classes).contains(clazz);
     }
-}
+    }

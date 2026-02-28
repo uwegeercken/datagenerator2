@@ -17,11 +17,13 @@ public class RandomLongProcessor extends FieldProcessor
     private static Logger logger = LoggerFactory.getLogger(RandomLongProcessor.class);
 
     private static List<String> availableTransformations = Arrays.asList(
-            Transformations.NEGATE.getName()
+            Transformations.NEGATE.getName(),
+            Transformations.TOBOOLEAN.getName()
     );
 
     private static final List<DataTypeDuckDb> availableOutputTypes = Arrays.asList(
-            DataTypeDuckDb.LONG
+            DataTypeDuckDb.LONG,
+            DataTypeDuckDb.BOOLEAN
     );
 
     private static final List<FieldOption> availableOptions = Arrays.asList(

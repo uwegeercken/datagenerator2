@@ -26,11 +26,15 @@ public class CategoryProcessor extends FieldProcessor
             Transformations.MASKLEADING.getName(),
             Transformations.MASKTRAILING.getName(),
             Transformations.REPLACEALL.getName(),
-            Transformations.REMOVE.getName()
+            Transformations.REMOVE.getName(),
+            Transformations.TOLONG.getName(),
+            Transformations.TOBOOLEAN.getName()
     );
 
     private static final List<DataTypeDuckDb> availableOutputTypes = Arrays.asList(
-            DataTypeDuckDb.VARCHAR
+            DataTypeDuckDb.VARCHAR,
+            DataTypeDuckDb.LONG,
+            DataTypeDuckDb.BOOLEAN
     );
 
     private static final List<FieldOption> availableOptions = Arrays.asList(

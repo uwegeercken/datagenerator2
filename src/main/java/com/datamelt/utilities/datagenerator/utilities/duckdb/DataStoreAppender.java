@@ -50,6 +50,14 @@ public class DataStoreAppender
         catch(SQLException ex)
         {
             logger.error("error appending row [{}]. error {}", row.toString(), ex.getMessage());
+            try
+            {
+                appender.endRow();
+            }
+            catch(Exception ex2)
+            {
+                ex.printStackTrace();
+            }
         }
     }
 
@@ -115,6 +123,14 @@ public class DataStoreAppender
         {
             appendString((String) field.getValue());
         }
+        else if(field.getValue() instanceof Boolean)
+        {
+            appendBoolean((Boolean) field.getValue());
+        }
+        else
+        {
+            throw new SQLException("Unsupported field type: " + field.getValue().toString());
+        }
     }
 
     private void appendInt(int value) throws SQLException
@@ -138,6 +154,11 @@ public class DataStoreAppender
     }
 
     private void appendFloat(float value) throws SQLException
+    {
+        appender.append(value);
+    }
+
+    private void appendBoolean(boolean value) throws SQLException
     {
         appender.append(value);
     }
