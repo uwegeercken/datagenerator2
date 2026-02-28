@@ -1,6 +1,5 @@
 package com.datamelt.utilities.datagenerator.export;
 
-import com.datamelt.utilities.datagenerator.config.model.DataExportType;
 import org.duckdb.DuckDBConnection;
 
 import java.sql.SQLException;

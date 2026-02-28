@@ -1,8 +1,6 @@
 package com.datamelt.utilities.datagenerator.utilities.duckdb;
 
 import com.datamelt.utilities.datagenerator.config.model.*;
-import com.datamelt.utilities.datagenerator.error.Success;
-import com.datamelt.utilities.datagenerator.error.Try;
 import com.datamelt.utilities.datagenerator.export.FileExporter;
 import com.datamelt.utilities.datagenerator.generate.Row;
 import com.datamelt.utilities.datagenerator.utilities.duckdb.structure.TableInsertLayout;

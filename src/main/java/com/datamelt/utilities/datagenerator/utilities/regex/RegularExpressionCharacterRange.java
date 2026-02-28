@@ -1,9 +1,7 @@
 package com.datamelt.utilities.datagenerator.utilities.regex;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;

@@ -1,7 +1,5 @@
 package com.datamelt.utilities.datagenerator.utilities.regex;
 
-import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

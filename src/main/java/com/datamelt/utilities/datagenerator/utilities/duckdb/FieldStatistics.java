@@ -1,6 +1,5 @@
 package com.datamelt.utilities.datagenerator.utilities.duckdb;
 
-import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldType;
 
 import java.util.HashMap;

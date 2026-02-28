@@ -55,51 +55,6 @@ public class RowBuilder
                     rowFields.add(new RowField(new RandomDateGenerator(fieldConfiguration), fieldConfiguration.getName()));
                 }
             }
-
-
-//            if (fieldConfiguration.getType() == FieldType.CATEGORY)
-//            {
-//                rowFields.add(new RowField(new CategoryGenerator(fieldConfiguration), fieldConfiguration.getName()));
-//            }
-//            else if (fieldConfiguration.getType() == FieldType.RANDOMSTRING)
-//            {
-//                rowFields.add(new RowField(new RandomStringGenerator(fieldConfiguration), fieldConfiguration.getName()));
-//            }
-//            else if (fieldConfiguration.getType() == FieldType.RANDOMLONG)
-//            {
-//                rowFields.add(new RowField(new RandomLongGenerator(fieldConfiguration), fieldConfiguration.getName()));
-//            }
-//            else if (fieldConfiguration.getType() == FieldType.RANDOMDOUBLE)
-//            {
-//                rowFields.add(new RowField(new RandomDoubleGenerator(fieldConfiguration), fieldConfiguration.getName()));
-//            }
-//            else if (fieldConfiguration.getType() == FieldType.REGULAREXPRESSION)
-//            {
-//                rowFields.add(new RowField(new RegularExpressionGenerator(fieldConfiguration), fieldConfiguration.getName()));
-//            }
-//            else if (fieldConfiguration.getType() == FieldType.RANDOMDATE)
-//            {
-//                if(fieldConfiguration.getOutputType() == DataTypeDuckDb.LONG)
-//                {
-//                    rowFields.add(new RowField(new RandomDateAsLongGenerator(fieldConfiguration), fieldConfiguration.getName()));
-//                }
-//                else
-//                {
-//                    rowFields.add(new RowField(new RandomDateGenerator(fieldConfiguration), fieldConfiguration.getName()));
-//                }
-//            }
-//            else if (fieldConfiguration.getType() == FieldType.RANDOMTIMESTAMP)
-//            {
-//                rowFields.add(new RowField(new RandomTimestampGenerator(fieldConfiguration), fieldConfiguration.getName()));
-//            }
-//            else if (fieldConfiguration.getType() == FieldType.DATEREFERENCE)
-//            {
-//                rowFields.add(new RowField(new DateReferenceGenerator(fieldConfiguration), fieldConfiguration.getName()));
-//            }
-//            else if (fieldConfiguration.getType() == FieldType.RANDOMUUID)
-//            {
-//                rowFields.add(new RowField(new RandomUuidGenerator(fieldConfiguration), fieldConfiguration.getName()));
-//            }
         }
 
         for (FieldConfiguration fieldConfiguration : dataConfiguration.getFields())

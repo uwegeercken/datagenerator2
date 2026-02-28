@@ -2,7 +2,6 @@ package com.datamelt.utilities.datagenerator.generate;
 
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.options.RegularExpressionOptions;
-import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
 import com.datamelt.utilities.datagenerator.config.process.TransformationExecutionException;
 import com.datamelt.utilities.datagenerator.utilities.regex.CharacterGenerator;
 import com.datamelt.utilities.datagenerator.utilities.regex.RegularExpressionParser;

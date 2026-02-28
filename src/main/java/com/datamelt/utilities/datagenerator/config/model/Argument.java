@@ -1,7 +1,5 @@
 package com.datamelt.utilities.datagenerator.config.model;
 
-import org.apache.logging.log4j.Level;
-
 public enum Argument
 {
     NUMBEROFROWSTOGENERATE("-n", false,"number of threads to use during data generation"),
