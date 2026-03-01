@@ -12,14 +12,14 @@ import java.util.List;
 
 public class DateReferenceProcessor extends FieldProcessor
 {
-    private static Logger logger = LoggerFactory.getLogger(DateReferenceProcessor.class);
+    private static final Logger logger = LoggerFactory.getLogger(DateReferenceProcessor.class);
 
-    private static List<String> availableTransformations = Arrays.asList(
+    private static final List<String> availableTransformations = Arrays.asList(
             Transformations.TOQUARTER.getName(),
             Transformations.TOHALFYEAR.getName()
     );
 
-    private static List<DataTypeDuckDb> availableOutputTypes = Arrays.asList(
+    private static final List<DataTypeDuckDb> availableOutputTypes = Arrays.asList(
             DataTypeDuckDb.VARCHAR,
             DataTypeDuckDb.LONG
     );

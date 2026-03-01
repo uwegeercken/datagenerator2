@@ -13,7 +13,7 @@ public class RandomLongProcessor extends FieldProcessor
 {
     private static Logger logger = LoggerFactory.getLogger(RandomLongProcessor.class);
 
-    private static List<String> availableTransformations = Arrays.asList(
+    private static final List<String> availableTransformations = Arrays.asList(
             Transformations.NEGATE.getName(),
             Transformations.TOBOOLEAN.getName()
     );

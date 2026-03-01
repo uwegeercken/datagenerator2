@@ -14,7 +14,7 @@ public class TransformationExecutor
         T transformedValue = value;
         for(TransformationMethod method : methods)
         {
-            transformedValue = (T) execute(method, value);
+            transformedValue = (T) execute(method, transformedValue);
         }
         return transformedValue;
     }

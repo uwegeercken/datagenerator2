@@ -2,6 +2,7 @@ package com.datamelt.utilities.datagenerator.generate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Row {
     private static final String DELIMITER = ",";
@@ -13,18 +14,9 @@ public class Row {
 
     public String getRowHeader()
     {
-        StringBuilder buffer = new StringBuilder();
-        int counter = 0;
-        for(RowField field : fields)
-        {
-            counter++;
-            buffer.append(field.getName());
-            if(counter < fields.size())
-            {
-                buffer.append(DELIMITER);
-            }
-        }
-        return buffer.toString();
+        return fields.stream()
+                .map(RowField::getName)
+                .collect(Collectors.joining(DELIMITER));
     }
 
     public List<RowField> getFields()
@@ -46,18 +38,8 @@ public class Row {
     @Override
     public String toString()
     {
-        StringBuilder buffer = new StringBuilder();
-        int counter = 0;
-        for(RowField field : fields)
-        {
-            counter++;
-            buffer.append(field.getValue());
-            if(counter < fields.size())
-            {
-                buffer.append(DELIMITER);
-            }
-        }
-        return buffer.toString();
+        return fields.stream()
+                .map(rowField -> rowField.getValue().toString())
+                .collect(Collectors.joining(DELIMITER));
     }
-
 }

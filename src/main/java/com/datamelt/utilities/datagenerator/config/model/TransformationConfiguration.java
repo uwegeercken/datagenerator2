@@ -6,11 +6,16 @@ import java.util.List;
 public class TransformationConfiguration
 {
     private String name;
-    private List<Object> parameters = new ArrayList<>();
+    private final List<Object> parameters = new ArrayList<>();
 
     public String getName()
     {
         return name;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
     }
 
     public List<Object> getParameters()

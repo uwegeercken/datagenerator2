@@ -15,7 +15,7 @@ public class RandomTimestampProcessor extends FieldProcessor
 {
     private static Logger logger = LoggerFactory.getLogger(RandomTimestampProcessor.class);
 
-    private static List<String> availableTransformations = Arrays.asList(
+    private static final List<String> availableTransformations = Arrays.asList(
     );
 
     private static final List<DataTypeDuckDb> availableOutputTypes = Arrays.asList(

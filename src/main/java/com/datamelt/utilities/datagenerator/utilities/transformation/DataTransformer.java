@@ -31,12 +31,7 @@ public class DataTransformer
 
     public static String reverse(String value)
     {
-        StringBuilder buffer = new StringBuilder();
-        for(int i=value.length()-1;i>=0;i--)
-        {
-            buffer.append(value.substring(i, i+1));
-        }
-        return buffer.toString();
+        return new StringBuilder(value).reverse().toString();
     }
 
     public static String remove(String value, String charactersToRemove)
@@ -69,14 +64,7 @@ public class DataTransformer
 
     public static boolean toBoolean(Long value)
     {
-        if(value > 0)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return value > 0;
     }
 
     public static String prepend(String value, String prefix)

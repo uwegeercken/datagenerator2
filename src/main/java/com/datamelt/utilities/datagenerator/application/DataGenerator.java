@@ -189,7 +189,7 @@ public class DataGenerator
         List<Long> partitions = new ArrayList<>();
         LongStream.range(0,numberOfBatches).forEach(i -> partitions.add(batchSize));
 
-        long remainingNumberOfRows = (int) (programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate() - numberOfBatches * batchSize);
+        long remainingNumberOfRows = programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate() - numberOfBatches * batchSize;
         if(remainingNumberOfRows>0)
         {
             partitions.add(remainingNumberOfRows);

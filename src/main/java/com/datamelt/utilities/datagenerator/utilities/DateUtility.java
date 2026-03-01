@@ -57,7 +57,7 @@ public class DateUtility
     public static LocalDateTime getRandomDateTime(int minimumYear, int maximumYear)
     {
         LocalDateTime startDateTime = LocalDateTime.of(minimumYear, DEFAULT_MINDATE_MONTH, DEFAULT_MINDATE_DAY, DEFAULT_MINDATE_HOUR, DEFAULT_MINDATE_MINUTE, DEFAULT_MINDATE_SECOND);
-        LocalDateTime endDateTime = LocalDateTime.of(maximumYear, DEFAULT_MAXDATE_MONTH, DEFAULT_MAXDATE_DAY, DEFAULT_MAXDATE_HOUR, DEFAULT_MAXDATE_HOUR, DEFAULT_MAXDATE_SECOND);
+        LocalDateTime endDateTime = LocalDateTime.of(maximumYear, DEFAULT_MAXDATE_MONTH, DEFAULT_MAXDATE_DAY, DEFAULT_MAXDATE_HOUR, DEFAULT_MAXDATE_MINUTE, DEFAULT_MAXDATE_SECOND);
 
         long startEpoch = startDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
         long endEpoch = endDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();

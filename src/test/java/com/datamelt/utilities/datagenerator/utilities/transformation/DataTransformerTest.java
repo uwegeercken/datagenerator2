@@ -2,6 +2,8 @@ package com.datamelt.utilities.datagenerator.utilities.transformation;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -208,5 +210,112 @@ class DataTransformerTest
     {
         String input = "This is my world for my children";
         assertEquals("This is your world for your children", DataTransformer.replaceAll(input, "my", "your"));
+    }
+
+    @Test
+    @DisplayName("remove specified characters from string")
+    void removeSpecifiedCharacters()
+    {
+        assertEquals("Hll Wrld", DataTransformer.remove("Hello World", "eo"));
+    }
+
+    @Test
+    @DisplayName("remove returns original string when no characters match")
+    void removeNoMatchingCharacters()
+    {
+        assertEquals("Hello World", DataTransformer.remove("Hello World", "xyz"));
+    }
+
+    @Test
+    @DisplayName("remove all characters returns empty string")
+    void removeAllCharacters()
+    {
+        assertEquals("", DataTransformer.remove("abc", "abc"));
+    }
+
+    @Test
+    @DisplayName("remove handles empty removal set")
+    void removeEmptyRemovalSet()
+    {
+        assertEquals("Hello", DataTransformer.remove("Hello", ""));
+    }
+
+    @Test
+    @DisplayName("remove handles special characters")
+    void removeSpecialCharacters()
+    {
+        assertEquals("HelloWorld", DataTransformer.remove("Hello-World!", "-!"));
+    }
+
+    @ParameterizedTest(name = "month {0} maps to {1}")
+    @CsvSource({
+            "01, Q1",
+            "02, Q1",
+            "03, Q1",
+            "04, Q2",
+            "05, Q2",
+            "06, Q2",
+            "07, Q3",
+            "08, Q3",
+            "09, Q3",
+            "10, Q4",
+            "11, Q4",
+            "12, Q4"
+    })
+    @DisplayName("toQuarter maps all months correctly")
+    void toQuarterMapsAllMonths(String month, String expectedQuarter)
+    {
+        assertEquals(expectedQuarter, DataTransformer.toQuarter(month));
+    }
+
+    @Test
+    @DisplayName("toQuarter returns original value for invalid month below range")
+    void toQuarterInvalidMonthBelowRange()
+    {
+        assertEquals("0", DataTransformer.toQuarter("0"));
+    }
+
+    @Test
+    @DisplayName("toQuarter returns original value for invalid month above range")
+    void toQuarterInvalidMonthAboveRange()
+    {
+        assertEquals("13", DataTransformer.toQuarter("13"));
+    }
+
+    // --- toHalfYear ---
+
+    @ParameterizedTest(name = "month {0} maps to {1}")
+    @CsvSource({
+            "01, H1",
+            "02, H1",
+            "03, H1",
+            "04, H1",
+            "05, H1",
+            "06, H1",
+            "07, H2",
+            "08, H2",
+            "09, H2",
+            "10, H2",
+            "11, H2",
+            "12, H2"
+    })
+    @DisplayName("toHalfYear maps all months correctly")
+    void toHalfYearMapsAllMonths(String month, String expectedHalfYear)
+    {
+        assertEquals(expectedHalfYear, DataTransformer.toHalfYear(month));
+    }
+
+    @Test
+    @DisplayName("toHalfYear returns original value for invalid month below range")
+    void toHalfYearInvalidMonthBelowRange()
+    {
+        assertEquals("0", DataTransformer.toHalfYear("0"));
+    }
+
+    @Test
+    @DisplayName("toHalfYear returns original value for invalid month above range")
+    void toHalfYearInvalidMonthAboveRange()
+    {
+        assertEquals("13", DataTransformer.toHalfYear("13"));
     }
 }

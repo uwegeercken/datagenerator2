@@ -12,7 +12,7 @@ import java.io.IOException;
 public class ConfigurationLoader
 {
     private static Logger logger = LoggerFactory.getLogger(ConfigurationLoader.class);
-    public static <T> T load(byte[] configuration, Class clazz) throws IOException
+    public static <T> T load(byte[] configuration, Class<T> clazz) throws IOException
     {
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         mapper.enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS);

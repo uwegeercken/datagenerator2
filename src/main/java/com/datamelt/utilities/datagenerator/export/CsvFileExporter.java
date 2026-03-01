@@ -27,7 +27,7 @@ public class CsvFileExporter implements FileExporter
         Statement stmt = connection.createStatement();
         StringBuilder options = new StringBuilder()
             .append("(");
-        if (includeHeader == true) {
+        if (includeHeader) {
             options.append("HEADER, ");
         }
         options.append("DELIMITER '").append(delimiter.getValue()).append("', FORMAT CSV)");

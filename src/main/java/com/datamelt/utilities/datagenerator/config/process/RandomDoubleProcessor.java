@@ -11,7 +11,7 @@ import java.util.List;
 
 public class RandomDoubleProcessor extends FieldProcessor
 {
-    private static Logger logger = LoggerFactory.getLogger(RandomDoubleProcessor.class);
+    private static final Logger logger = LoggerFactory.getLogger(RandomDoubleProcessor.class);
 
     private static final List<String> availableTransformations = Arrays.asList(
             Transformations.NEGATE.getName(),

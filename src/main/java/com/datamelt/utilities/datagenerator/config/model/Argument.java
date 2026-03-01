@@ -2,7 +2,7 @@ package com.datamelt.utilities.datagenerator.config.model;
 
 public enum Argument
 {
-    NUMBEROFROWSTOGENERATE("-n", false,"number of threads to use during data generation"),
+    NUMBEROFROWSTOGENERATE("-n", false,"total number of to generate"),
     GENERATEDROWSLOGINTERVAL("-l", false,"interval for log messages during data generation"),
     LOGLEVEL("-g", false,"log level to be used for logging output. must be one out of [OFF, FATAL, ERROR, WARN, INFO, DEBUG, TRACE, ALL]"),
     EXPORTFILENAME("-xp", false, "path and filename of the export file"),
