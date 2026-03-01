@@ -3,10 +3,10 @@
 The datagenerator tool is currently (February '26) under development. Additional features and capabilities will be added over time.
 
 The datagenerator tool allows to generate random data. The aim is to have a tool that generates data in a way which is flexible enough to satisfy the needs of developers or analysts or anybody else who needs some sort
-of test data - possibly with dependencies between individual fields and variying/definable distribution of fieldConfiguration values. 
+of test data - possibly with dependencies between individual fields and varying/definable distribution of fieldConfiguration values. 
 
 The tool requires a yaml file which contains configuration details for the tool itself, including attributes for the
-export of the generated data to files. A second yaml file defines how the data is generated in terms of fields, field weight and
+export of the generated data to files. A second yaml file defines how the data is generated in terms of fields, field value weight and
 other attributes.
 Some of the configuration attributes may also be passed as arguments when starting the datagenerator tool. In this case these
 will override the same attributes from the configuration files.
@@ -258,8 +258,6 @@ The configuration file contains various attributes to steer the behavior of the 
 - the name of the export file for the generated data
 - the type of the export file: csv, excel, parquet or json
 - the number of rows to generate
-- the number of threads to use when generating the data 
-- the number of rows to be generated per thread
 - after how many generated rows a log message will be output
 - details for the export to a csv file - delimiter and header settings
 - details for the export to a json file - output as separate lines or as array
@@ -287,7 +285,7 @@ Fields of type=category may either specify valid values in the configuration fil
 ## Running the datagenerator tool
 To run the tool you must pass at least the mandatory arguments to the program as shown below. These point to the program configuration file
 and the data configuration file. You may pass the other arguments, which will override the relevant default value as well as the value from
-the programm configuration file.
+the program configuration file.
 
 #### Program arguments:
 | Argument              | Type      | Default                    | Description                                                                                                    | 
@@ -309,7 +307,8 @@ You can get help about the available program arguments by running:
 
     java -cp . com.datamelt.utilities.datagenerator.application.DataGenerator --help
 
-See the sample yaml file for the program configuration in this repository under: samples/dataconfiguration
+
+See the sample yaml file for the program configuration in this repository under: samples/programconfiguration
 
 You may also use the tool programmatically by calling the method "generateRows" with the number of rows to produce on the RowGenerator class. Pass the path and name of the dataconfiguration yaml file in the constructor.
 The method returns a Stream of rows (com.datamelt.utilities.datagenerator.generate.Row), wrapped in a Try. The result of the generation of a row is always a success or a failure. You may filter on the success or failure instances.
@@ -317,7 +316,7 @@ Or you can e.g. map the Try object using a function.
 
 Example:
     
-    String dataConfigurationFile = "/path/to/file/filename.yaml;
+    String dataConfigurationFile = "/path/to/file/filename.yaml";
     RowGenerator rowGenerator = new RowGenerator(dataConfigurationFile);
     List<Row> rows = rowGenerator.generateRows(10)
         .filter(Try::isSuccess)
