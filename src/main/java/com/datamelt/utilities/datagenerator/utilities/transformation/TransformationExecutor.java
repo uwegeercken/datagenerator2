@@ -1,6 +1,5 @@
 package com.datamelt.utilities.datagenerator.utilities.transformation;
 
-import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
 import com.datamelt.utilities.datagenerator.config.process.TransformationExecutionException;
 
 import java.util.Arrays;
@@ -8,13 +7,13 @@ import java.util.List;
 
 public class TransformationExecutor
 {
-    private static Class<DataTransformer> dataTransformer = DataTransformer.class;
+    private static final Class<DataTransformer> dataTransformer = DataTransformer.class;
     public static <T> T executeAll(T value, List<TransformationMethod> methods) throws TransformationExecutionException
     {
         T transformedValue = value;
         for(TransformationMethod method : methods)
         {
-            transformedValue = (T) execute(method, transformedValue);
+            transformedValue = execute(method, transformedValue);
         }
         return transformedValue;
     }

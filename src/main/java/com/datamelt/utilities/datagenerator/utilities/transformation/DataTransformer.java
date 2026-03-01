@@ -1,8 +1,6 @@
 package com.datamelt.utilities.datagenerator.utilities.transformation;
 
 import com.datamelt.utilities.datagenerator.utilities.encrypt.EncryptionHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
