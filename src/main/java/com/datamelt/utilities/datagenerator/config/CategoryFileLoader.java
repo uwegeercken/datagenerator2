@@ -39,6 +39,7 @@ public class CategoryFileLoader
 
     private static void checkOptions(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
     {
+        // TODO: refactor method
         try
         {
             String separator = (String)fieldConfiguration.getOptions().get(OptionKey.CATEGORY_FILE_SEPARATOR.getKey());
@@ -51,7 +52,7 @@ public class CategoryFileLoader
     private static void loadCategoryFile(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException {
         File file = new File(fieldConfiguration.getValuesFile());
         String valueWeightSeparator;
-        if((String)fieldConfiguration.getOptions().get(OptionKey.CATEGORY_FILE_SEPARATOR.getKey())!=null)
+        if(fieldConfiguration.getOptions().get(OptionKey.CATEGORY_FILE_SEPARATOR.getKey())!=null)
         {
             valueWeightSeparator = (String)fieldConfiguration.getOptions().get(OptionKey.CATEGORY_FILE_SEPARATOR.getKey());
         }

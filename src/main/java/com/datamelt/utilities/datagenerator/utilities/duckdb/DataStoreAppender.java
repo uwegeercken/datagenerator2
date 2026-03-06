@@ -38,7 +38,9 @@ public class DataStoreAppender
                 Optional<TreeNode> rootNode = getRootNode(fieldName);
                 if(rootNode.isEmpty())
                 {
-                    appendField(row.getField(fieldName));
+                    RowField field = row.getField(fieldName)
+                            .orElseThrow(() -> new SQLException("field not found: " + fieldName));
+                    appendField(field);
                 }
                 else
                 {
@@ -56,21 +58,16 @@ public class DataStoreAppender
             }
             catch(Exception ex2)
             {
-                ex.printStackTrace();
+                logger.error("error calling endRow after failed append: {}", ex2.getMessage());
             }
         }
     }
 
     private Optional<TreeNode> getRootNode(String name)
     {
-        for(TreeNode node : tableInsertLayout.getRootNodes())
-        {
-            if(node != null && node.getName().equals(name))
-            {
-                return Optional.of(node);
-            }
-        }
-        return Optional.empty();
+        return tableInsertLayout.getRootNodes().stream()
+                .filter(node -> node != null && node.getName().equals(name))
+                .findFirst();
     }
 
     private void appendStruct(String name, TreeNode node, Row row) throws SQLException
@@ -78,7 +75,8 @@ public class DataStoreAppender
         appender.beginStruct();
         for (TableField field : node.getFields())
         {
-            RowField rowField = row.getField(name + FIELD_DEVIDER_CHARACTER + field.getName());
+            RowField rowField = row.getField(name + FIELD_DEVIDER_CHARACTER + field.getName())
+                    .orElseThrow(() -> new SQLException("field not found: " + name + FIELD_DEVIDER_CHARACTER + field.getName()));
             appendField(rowField);
         }
         if (node.getChildren().size() > 0)
@@ -98,68 +96,19 @@ public class DataStoreAppender
 
     private void appendRownumberField(long counter) throws SQLException
     {
-        appendLong(counter);
+        appender.append(counter);
     }
 
     private void appendField(RowField field) throws SQLException
     {
-        if(field.getValue() instanceof Integer)
-        {
-            appendInt((Integer) field.getValue());
+        switch (field.getValue()) {
+            case Integer i -> appender.append(i);
+            case Long l    -> appender.append(l);
+            case Double d  -> appender.append(d);
+            case Float f   -> appender.append(f);
+            case Boolean b -> appender.append(b);
+            case String  s -> appender.append(s);
+            default -> throw new SQLException("Unsupported field type: " + field.getValue().toString());
         }
-        else if(field.getValue() instanceof Long)
-        {
-            appendLong((Long) field.getValue());
-        }
-        else if(field.getValue() instanceof Float)
-        {
-            appendFloat((Float) field.getValue());
-        }
-        else if(field.getValue() instanceof Double)
-        {
-            appendDouble((Double) field.getValue());
-        }
-        else if(field.getValue() instanceof String)
-        {
-            appendString((String) field.getValue());
-        }
-        else if(field.getValue() instanceof Boolean)
-        {
-            appendBoolean((Boolean) field.getValue());
-        }
-        else
-        {
-            throw new SQLException("Unsupported field type: " + field.getValue().toString());
-        }
-    }
-
-    private void appendInt(int value) throws SQLException
-    {
-        appender.append(value);
-    }
-
-    private void appendLong(long value) throws SQLException
-    {
-        appender.append(value);
-    }
-
-    private void appendString(String value) throws SQLException
-    {
-        appender.append(value);
-    }
-
-    private void appendDouble(double value) throws SQLException
-    {
-        appender.append(value);
-    }
-
-    private void appendFloat(float value) throws SQLException
-    {
-        appender.append(value);
-    }
-
-    private void appendBoolean(boolean value) throws SQLException
-    {
-        appender.append(value);
     }
 }

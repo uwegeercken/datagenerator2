@@ -2,6 +2,7 @@ package com.datamelt.utilities.datagenerator.generate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Row {
@@ -24,16 +25,11 @@ public class Row {
         return fields;
     }
 
-    public RowField getField(String name)
+    public Optional<RowField> getField(String name)
     {
-        for(RowField field : fields)
-        {
-            if(field.getName().equals(name))
-            {
-                return field;
-            }
-        }
-        return null;
+        return fields.stream()
+                .filter(field -> field.getName().equals(name))
+                .findFirst();
     }
     @Override
     public String toString()

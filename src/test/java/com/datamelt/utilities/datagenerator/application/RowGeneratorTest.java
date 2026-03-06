@@ -39,7 +39,7 @@ class RowGeneratorTest
     @DisplayName("test generate single row is successful")
     void generateSingleRow() throws Exception
     {
-        Try<Row> row = getRowGenerator().generateRow(null);
+        Try<Row> row = getRowGenerator().generateRow();
         assertTrue(row.isSuccess());  // fixed: was assertTrue(row::isSuccess) which is always true
     }
 
@@ -47,7 +47,7 @@ class RowGeneratorTest
     @DisplayName("test generated row has fields")
     void generatedRowHasFields() throws Exception
     {
-        Try<Row> row = getRowGenerator().generateRow(null);
+        Try<Row> row = getRowGenerator().generateRow();
         assertTrue(row.isSuccess());
         assertFalse(row.getResult().getFields().isEmpty());
     }

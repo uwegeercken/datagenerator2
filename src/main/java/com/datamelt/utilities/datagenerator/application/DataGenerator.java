@@ -35,7 +35,6 @@ public class DataGenerator
     private DataConfiguration dataConfiguration;
     private ProgramConfiguration programConfiguration;
     private DataStore dataStore;
-    private static ProgramArguments arguments;
 
     public static void main(String[] args)
     {

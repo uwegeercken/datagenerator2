@@ -48,7 +48,7 @@ public class RowGenerator
                 .mapToObj(rangeValue -> rowBuilder.generate());
     }
 
-    public Try<Row> generateRow(String dataConfigurationFilename)
+    public Try<Row> generateRow()
     {
         RowBuilder rowBuilder = new RowBuilder(dataConfiguration);
         return rowBuilder.generate();

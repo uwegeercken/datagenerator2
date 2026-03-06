@@ -45,41 +45,11 @@ public class DataStore
     private void cleanupDatabase() throws SQLException
     {
         dropTable();
-        //dropEnums();
     }
 
     private void createDatabaseStructure() throws SQLException
     {
-        //createEnums();
         createTable();
-    }
-
-    private void createEnums() throws Exception
-    {
-        for(FieldConfiguration fieldConfiguration : dataConfiguration.getFields())
-        {
-            Statement stmt = connection.createStatement();
-            if(fieldConfiguration.getType().equals("category"))
-            {
-                String sqlCreateTpye = "create type " + fieldConfiguration.getName() + " AS ENUM (" + fieldConfiguration.getValuesAsString() + ")";
-                logger.trace("creating type [{}]", sqlCreateTpye);
-                stmt.execute(sqlCreateTpye);
-            }
-        }
-    }
-
-    private void dropEnums() throws Exception
-    {
-        for(FieldConfiguration fieldConfiguration : dataConfiguration.getFields())
-        {
-            if(fieldConfiguration.getType().equals("category"))
-            {
-                Statement stmt = connection.createStatement();
-                String sqlDropType = "drop type if exists " + fieldConfiguration.getName();
-                logger.trace("dropping type [{}]", sqlDropType);
-                stmt.execute(sqlDropType);
-            }
-        }
     }
 
     private void createTable() throws SQLException
