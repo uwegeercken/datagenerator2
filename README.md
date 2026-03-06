@@ -310,18 +310,27 @@ You can get help about the available program arguments by running:
 
 See the sample yaml file for the program configuration in this repository under: samples/programconfiguration
 
-You may also use the tool programmatically by calling the method "generateRows" with the number of rows to produce on the RowGenerator class. Pass the path and name of the dataconfiguration yaml file in the constructor.
-The method returns a Stream of rows (com.datamelt.utilities.datagenerator.generate.Row), wrapped in a Try. The result of the generation of a row is always a success or a failure. You may filter on the success or failure instances.
-Or you can e.g. map the Try object using a function.
+You may also use the tool programmatically by calling the method "generateRows". Itreturns a lazy infinite stream of rows. The caller controls termination via limit(), takeWhile(), or any other stream operation.
+Each element is wrapped in a Try — filter on Try::isSuccess to get successful rows only. You may also use the convenience method returning a bounded stream of exactly numberOfRows rows
 
 Example:
-    
-    String dataConfigurationFile = "/path/to/file/filename.yaml";
-    RowGenerator rowGenerator = new RowGenerator(dataConfigurationFile);
-    List<Row> rows = rowGenerator.generateRows(10)
+
+    // generate a fixed number of rows  
+    List<Row> rows = rowGenerator.generateRows(100)
         .filter(Try::isSuccess)
         .map(Try::getResult)
         .toList();
+
+    // generate rows lazily until a condition is met
+    rowGenerator.generateRows()
+        .filter(Try::isSuccess)
+        .map(Try::getResult)
+        .takeWhile(row -> someCondition(row))
+        .forEach(row -> process(row));
+
+    // generate a single row
+    Try<Row> row = rowGenerator.generateRow();
+
 
 ## Building the datagenerator jar file
 To build the jar file either download the release from https://github.com/uwegeercken/datagenerator2/tags or clone this repository and run:
