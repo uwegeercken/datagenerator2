@@ -73,16 +73,31 @@ class RandomStringGeneratorTest
 
     }
     @Test
-    @DisplayName("testing exception when min length <= 0")
-    void validateErrorMinLengthSmallerEqualZero()
+    @DisplayName("testing exception when min length < 0")
+    void validateErrorMinLengthSmallerZero()
     {
         Map<String, Object> options = new HashMap<>();
-        options.put(RandomStringOptions.MIN_LENGTH.getKey(), 0L);
+        options.put(RandomStringOptions.MIN_LENGTH.getKey(), -1L);
         options.put(RandomStringOptions.MAX_LENGTH.getKey(), 10L);
 
         assertThrows(InvalidConfigurationException.class,()->{
             RowBuilder rowBuilder = getRowBuilder("testfield", options);
         });
+    }
+
+    @Test
+    @DisplayName("testing that min length of 1 is valid")
+    void validateMinLengthOneIsValid() throws Exception
+    {
+        Map<String, Object> options = new HashMap<>();
+        options.put(RandomStringOptions.MIN_LENGTH.getKey(), 1L);
+        options.put(RandomStringOptions.MAX_LENGTH.getKey(), 10L);
+
+        RowBuilder rowBuilder = getRowBuilder("testfield", options);
+        Try<Row> row = rowBuilder.generate();
+        assertTrue(row.isSuccess());
+        String value = (String) row.getResult().getFields().get(0).getValue();
+        assertTrue(value.length() >= 1 && value.length() <= 10);
     }
 
 

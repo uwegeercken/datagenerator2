@@ -7,7 +7,7 @@ import java.util.List;
 
 public enum RandomStringOptions
 {
-    MIN_LENGTH("minLength",0),
+    MIN_LENGTH("minLength",1),
     MAX_LENGTH("maxLength", 40),
     RANDOM_CHARACTERS("randomCharacters", "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_"),
     OUTPUT_TYPE("outputType", DataTypeDuckDb.VARCHAR.name());

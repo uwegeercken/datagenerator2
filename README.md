@@ -1,15 +1,9 @@
 # datagenerator2
 
-The datagenerator tool is currently (February '26) under development. Additional features and capabilities will be added over time.
+The datagenerator tool allows to generate random data. The aim is to have a tool that generates data in a way which is flexible enough to satisfy the needs of developers or analysts or anybody else who needs some sort of test data - possibly with dependencies between individual fields and varying/definable distribution of field values.
 
-The datagenerator tool allows to generate random data. The aim is to have a tool that generates data in a way which is flexible enough to satisfy the needs of developers or analysts or anybody else who needs some sort
-of test data - possibly with dependencies between individual fields and varying/definable distribution of fieldConfiguration values. 
-
-The tool requires a yaml file which contains configuration details for the tool itself, including attributes for the
-export of the generated data to files. A second yaml file defines how the data is generated in terms of fields, field value weight and
-other attributes.
-Some of the configuration attributes may also be passed as arguments when starting the datagenerator tool. In this case these
-will override the same attributes from the configuration files.
+The tool requires a yaml file which contains configuration details for the tool itself, including attributes for the export of the generated data to files. A second yaml file defines how the data is generated in terms of fields, field value weight and other attributes.
+Some of the configuration attributes may also be passed as arguments when starting the datagenerator tool. In this case these will override the same attributes from the configuration files.
 
 Samples, word lists (category files) and details for the configuration can be found in the samples folder in this repository.
 
@@ -24,12 +18,11 @@ Samples, word lists (category files) and details for the configuration can be fo
 - define nested structures for the data output
 
 ## Types of generators
-Different types of generators are available to generate different type of data such as strings, numbers, dates, etc.
+Different types of generators are available to generate different types of data such as strings, numbers, dates, etc.
 
-For each field specified in the yaml configuration file one of the generators has to be defined by specifying a field type in the
-data configuration file.
+For each field specified in the yaml configuration file one of the generators has to be defined by specifying a field type in the data configuration file.
 
-The type attribute for each field can be one of following values:
+The type attribute for each field can be one of the following values:
 - category
 - randomstring
 - randomlong
@@ -54,7 +47,7 @@ Setting minLength=maxLength will create a constant length string.
 #### Available options:
 | Option           | Description                                     | Data Type   | Default                      |
 |------------------|-------------------------------------------------|-------------|------------------------------|
-| minLength        | minimum length of the value                     | long        | 0                            |
+| minLength        | minimum length of the value                     | long        | 1                            |
 | maxLength        | maximum length of the value                     | long        | 40                           |
 | randomCharacters | characters to be used when generating the value | String      | [a-z] + [A-Z] + [0-9] + [-_] |
 
@@ -72,7 +65,7 @@ Setting minLength=maxLength will create a constant length string.
 | remove         | remove all specified characters from the value                                                            | a string containing all characters to remove                           |
 
 ### Random Numbers
-This generator (type=randomlong) allows to generate numbers. The options for this type of generator allow to specify a lowerbound and upperbound for the generated value.
+This generator (type=randomlong) allows to generate numbers. The options for this type of generator allow to specify a lower bound and upper bound for the generated value.
 
 #### Available options:
 | Option     | Description    | Data Type    | Default   |
@@ -86,7 +79,7 @@ This generator (type=randomlong) allows to generate numbers. The options for thi
 | toBoolean      | convert the value to a boolean value. values greater 0 are converted to "true", all others to "false"  | none       |
 
 ### Random Floating Point Numbers
-This generator (type=randomdouble) allows to generate floating point numbers. The options for this type of generator allow to specify a lowerbound and upperbound for the generated value.
+This generator (type=randomdouble) allows to generate floating point numbers. The options for this type of generator allow to specify a lower bound and upper bound for the generated value.
 
 #### Available options:
 | Option     | Description    | Data Type | Default  |
@@ -100,7 +93,7 @@ This generator (type=randomdouble) allows to generate floating point numbers. Th
 | round          | round the value using rounding mode HALF_UP | number of decimal places (integer) |
 
 ### Random Dates
-This generator (type=randomdate) allows to generate dates. The options for this type of generator allow to specify a minimum and maximun year, as well as the output format for the generated value.
+This generator (type=randomdate) allows to generate dates. The options for this type of generator allow to specify a minimum and maximum year, as well as the output format for the generated value.
 If the outputType=long then the date is output as the equivalent long value in milliseconds.
 
 #### Available options:
@@ -109,15 +102,10 @@ If the outputType=long then the date is output as the equivalent long value in m
 | minYear    | minimum value                                               | long      | 2020       |
 | maxYear    | maximum value                                               | long      | 2030       |
 | dateFormat | output format of the date (Java DateTimeFormatter)          | string    | yyyy-MM-dd |
-| outputType | how data should be output. possible values: varchar or long | varchar    | varchar     |
-
-#### Available transformations:
-| Transformation | Description          | Parameters   |
-|----------------|----------------------|--------------|
-|                |                      |              |
+| outputType | how data should be output. possible values: varchar or long | varchar   | varchar    |
 
 ### Random Timestamps
-This generator (type=randomtimestamp) allows to generate timestamps. The options for this type of generator allow to specify a minimum and maximun year, as well as the output format for the generated value.
+This generator (type=randomtimestamp) allows to generate timestamps. The options for this type of generator allow to specify a minimum and maximum year, as well as the output format for the generated value.
 
 #### Available options:
 | Option       | Description                                         | Data Type | Default             |
@@ -125,11 +113,6 @@ This generator (type=randomtimestamp) allows to generate timestamps. The options
 | minYear      | minimum value                                       | long      | 2020                |
 | maxYear      | maximum value                                       | long      | 2030                |
 | dateFormat   | output format of the date (Java DateTimeFormatter)  | string    | yyyy-MM-dd HH:mm:ss |
-
-#### Available transformations:
-| Transformation | Description          | Parameters   |
-|----------------|----------------------|--------------|
-|                |                      |              |
 
 ### Date Reference
 This generator (type=datereference) allows to generate a date string based on another date. This means that the values of this date and the referenced date correspond to each other.
@@ -144,25 +127,14 @@ The options for this type of generator allow to specify the date field that shal
 #### Available transformations:
 | Transformation | Description                                                                                          | Parameters |
 |----------------|------------------------------------------------------------------------------------------------------|------------|
-| toQuarter      | If the dateFormat of the field is "MM" it will be converted to the relevant quarter (Q1, Q2, Q3, Q4) | none       |
-| toHalfYear     | If the dateFormat of the field is "MM" it will be converted to the relevant half year (H1, H2)             | none       |
+| toQuarter      | if the dateFormat of the field is "MM" it will be converted to the relevant quarter (Q1, Q2, Q3, Q4) | none       |
+| toHalfYear     | if the dateFormat of the field is "MM" it will be converted to the relevant half year (H1, H2)       | none       |
 
 ### UUID
 This generator (type=randomuuid) allows to generate a random uuid.
 
-#### Available options:
-| Option | Description | Data Type | Default |
-|--------|-------------|-----------|---------|
-|        |             |           |         |
-
-
-#### Available transformations:
-| Transformation | Description          | Parameters   |
-|----------------|----------------------|--------------|
-|                |                      |              |
-
 ### Regular Expressions
-This type of generator (type=regularexpression) generates random text based on a regular expression pattern. The pattern option in the yaml configuration file allows to specify characters, character ranges and multiplier which make up the pattern.
+This type of generator (type=regularexpression) generates random text based on a regular expression pattern. The pattern option in the yaml configuration file allows to specify characters, character ranges and multipliers which make up the pattern.
 
 Following features are available:
 - using standard characters like a, B, 9, -, etc.
@@ -188,8 +160,8 @@ The minimum and maximum value of a multiplier can not be smaller than 1. The max
 | lowercase      | convert the value to lowercase                 | none                                         |
 | remove         | remove all specified characters from the value | a string containing all characters to remove |
 | toLong         | convert the value to a long value              | none                                         |
-| toBoolean      | convert the value to a boolean value.          | none                                         |
-| toDouble       | convert the value to a double value.           | none                                         |
+| toBoolean      | convert the value to a boolean value           | none                                         |
+| toDouble       | convert the value to a double value            | none                                         |
 
 
 ### Word lists
@@ -204,22 +176,21 @@ Using word lists offers a few advantages:
 - word lists can be constructed or changed easily using a simple text editor
 
 In the yaml configuration, additional values for a given word list (also values which are already defined in the word list file) may be defined, including a weight for individual values.
-This allows to specify a higher priority/weight for defined values. The weight of a value is always specified on the base of 100 percent. 
+This allows to specify a higher priority/weight for defined values. The weight of a value is always specified on the base of 100 percent.
 
-E.g. one may define the days of the week in a word list file and in the configuration file "Saturday" with a weight of 5 percent and 
+E.g. one may define the days of the week in a word list file and in the configuration file "Saturday" with a weight of 5 percent and
 "Sunday" with a weight of 5 percent. The other days "Monday" to "Friday" will then be assigned a weight of 16 percent so that the overall sum of percentages is 100 %.
 
 If a value for a given word list appears both in the word list file and the yaml configuration file, the setting from the configuration will overrule the value from the word list file.
 
 The datagenerator will then produce random data (pick random values from the word list) according to the weights assigned. In the example above "saturday" and "sunday" will occur
-less often in the generated number of rows then the other days, because these values have a lower weight.
+less often in the generated number of rows than the other days, because these values have a lower weight.
 
-A word list is optional. All values to be used for randomly generating data can also be defined solely in the yaml configuration file. Anyway, the sum of the weight definition
-must be 100 percent (and can not exceed 100 percent). Individual values can not be negative percentage values.
+A word list is optional. All values to be used for randomly generating data can also be defined solely in the yaml configuration file. The sum of the weight definitions must be 100 percent (and can not exceed 100 percent). Individual values can not have negative percentage values.
 
-**NOTE**: If values and their weight are specified in a word lists but for some values no weight is defined, the datagenerator will calculate the weight for those fields that have no weight definition
+**NOTE**: If values and their weight are specified in a word list but for some values no weight is defined, the datagenerator will calculate the weight for those fields that have no weight definition
 and equally distribute the weight value. But, depending on the number of values without a weight definition, it might not be possible to exactly evenly distribute the value. In this case some values
-from the word list might get a slightly higher weight value. If weight definitions are assigned in a way that the remaining percentage for the other values is less than 1 percent an error occurs. 
+from the word list might get a slightly higher weight value. If weight definitions are assigned in a way that the remaining percentage for the other values is less than 1 percent an error occurs.
 
 #### Available options:
 | Option                  | Description                                         | Data Type | Default |
@@ -231,26 +202,26 @@ from the word list might get a slightly higher weight value. If weight definitio
 |----------------|-----------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------|
 | uppercase      | convert the value to uppercase                                                                            | none                                                                   |
 | lowercase      | convert the value to lowercase                                                                            | none                                                                   |
-| reverse        | reverse the characters of the value                                                                       | none                                                                   |            
-| prepend        | add a prefix to the value                                                                                 | prefix to add (string)                                                 | 
+| reverse        | reverse the characters of the value                                                                       | none                                                                   |
+| prepend        | add a prefix to the value                                                                                 | prefix to add (string)                                                 |
 | append         | add a suffix to the value                                                                                 | suffix to add (string)                                                 |
-| base64encode   | encode the value to base64 format                                                                         | none                                                                   | 
+| base64encode   | encode the value to base64 format                                                                         | none                                                                   |
 | encrypt        | encrypt the value using AES/CBC/PKCS5Padding algorithm                                                    | none                                                                   |
 | maskLeading    | mask leading characters of the value using a mask character                                               | number of characters to mask (long), mask character(s) to use (string) |
 | maskTrailing   | mask trailing characters of the value using a mask character                                              | number of characters to mask (long), mask character(s) to use (string) |
 | trim           | remove leading and trailing spaces                                                                        | none                                                                   |
 | replaceAll     | replaces each substring of the value that matches the given regular expression with the given replacement | regular expression (string), replacement (string)                      |
 | remove         | remove all specified characters from the value                                                            | a string containing all characters to remove                           |
-| toLong         | convert the value to a long value                                                                         | none                                         |
-| toBoolean      | convert the value to a boolean value                                                                      | none                                         |
+| toLong         | convert the value to a long value                                                                         | none                                                                   |
+| toBoolean      | convert the value to a boolean value                                                                      | none                                                                   |
 
 ## Processing steps
-First, the given program configuration and the data configuration yaml files are analyzed for their correctness. Any existing table definitions and data is removed from the DuckDb, if a file with the specified name of the database is found.
+First, the given program configuration and the data configuration yaml files are analyzed for their correctness. Any existing table definitions and data is removed from DuckDB, if a file with the specified name of the database is found.
 
 After that the value for each field is generated and then transformed (if any transformations are specified). The fields are processed sequentially and build a row of data.
-The tool generates the desired number of rows and stores it in a local DuckDb instance. Finally, the data is exported to the desired output format.
+The tool generates the desired number of rows and stores them in a local DuckDB instance. Finally, the data is exported to the desired output format.
 
-The DuckDb database is not deleted after the process is completed. You can remove it manually or otherwise further use the generated data in the database.
+The DuckDB database is not deleted after the process is completed. You can remove it manually or otherwise further use the generated data in the database.
 
 ## Yaml configuration for the datagenerator2 tool
 The configuration file contains various attributes to steer the behavior of the datagenerator tool.
@@ -259,88 +230,86 @@ The configuration file contains various attributes to steer the behavior of the 
 - the type of the export file: csv, excel, parquet or json
 - the number of rows to generate
 - after how many generated rows a log message will be output
+- the name of the auto-generated row number field (default: `rownumber`). This field is always added to every generated table as a `LONG` column and contains a unique sequential number for each row. It can be used as a primary key or for joins between tables generated in separate runs.
 - details for the export to a csv file - delimiter and header settings
 - details for the export to a json file - output as separate lines or as array
 - details for the export to a parquet file or partitioned file
 - details for the export to an excel file
-
-Note that generating the data can be done using multithreading but loading data into duckdb is done
-in a single thread because duckdb is an in-process database and does not support multithreaded loading.
 
 See the sample yaml files in this repository under: samples/programconfiguration.
 
 ## Yaml configuration for the definition of fields to generate
 The configuration file contains a list of fields/attributes to generate - see the sample yaml files in this repository under: samples/dataconfiguration. For each field, options and transformations may be defined depending on the type of generator used.
 
-There are three generic attributes defined in the configuration file: name, databaseName and tableName. The name attribute assign a name to the configuration but is otherwise not used. The databaseName attribute defines the path and name for the duckdb database that is used to collect the generated
-data. the tableName attribute defines the table of the duckdb database where the generated is stored. If you run a configuration multiple times but with different table names, the database will contain the data of both runs. If you run a configuration multiple times but do not change the table name, the data of the second run will
-overwrite all data of the first run (the data of the first run will be removed). 
+There are three generic attributes defined in the configuration file: name, databaseName and tableName. The name attribute assigns a name to the configuration but is otherwise not used. The databaseName attribute defines the path and name for the DuckDB database that is used to collect the generated data. The tableName attribute defines the table of the DuckDB database where the generated data is stored. If you run a configuration multiple times but with different table names, the database will contain the data of both runs. If you run a configuration multiple times but do not change the table name, the data of the second run will overwrite all data of the first run (the data of the first run will be removed).
 
-Fields is a list of fields for which data is to be generated. Each field has a unique name. A substructure can be created by dividing the structure and the field name with the dot separator - eg. address.street, address.city, person.country.name, etc.
-This will e.g. create a substructure named "address" with the fields street and city. Multiple levels/substructures may be defined. Each field is assigned a type. Fields may have additional (optional) options. Fields may have one or more transformations assigned and the transformations may require
-additional parameters to be executed. Be aware to not create duplicate structures. Like e.g. when you create a structure person.city.name.firstname then you can not also have a structure person.city or person.city.name. But you can of course have a structure person.city.location
+Fields is a list of fields for which data is to be generated. Each field has a unique name. A substructure can be created by dividing the structure and the field name with the dot separator - e.g. address.street, address.city, person.country.name, etc.
+This will create a substructure named "address" with the fields street and city. Multiple levels/substructures may be defined. Each field is assigned a type. Fields may have additional (optional) options. Fields may have one or more transformations assigned and the transformations may require additional parameters to be executed. Be aware not to create duplicate structures. For example, if you create a structure person.city.name.firstname then you can not also have a structure person.city or person.city.name. But you can have a structure person.city.location.
 
 Fields of type=category may either specify valid values in the configuration file or in a category file or both, but one of them must be present. The definition for values contains the value itself and optionally a weight for the value.
 
 ## Running the datagenerator tool
-To run the tool you must pass at least the mandatory arguments to the program as shown below. These point to the program configuration file
-and the data configuration file. You may pass the other arguments, which will override the relevant default value as well as the value from
-the program configuration file.
+To run the tool you must pass at least the mandatory arguments to the program as shown below. These point to the program configuration file and the data configuration file. You may pass the other arguments, which will override the relevant default value as well as the value from the program configuration file.
 
 #### Program arguments:
-| Argument              | Type      | Default                    | Description                                                                                                    | 
+| Argument              | Type      | Default                    | Description                                                                                                    |
 |-----------------------|-----------|----------------------------|----------------------------------------------------------------------------------------------------------------|
-| -n=<number>           | optional  | 10000                      | number of rows to generate                                                                                     |
-| -l=<number>           | optional  | 1000                       | interval for log messages during data generation                                                               |
-| -g=<loglevel>         | optional  | INFO                       | log level to be used for logging output. must be one out of: OFF, FATAL, ERROR, WARN, INFO, DEBUG, TRACE, ALL  |
-| -xp=<path + filename> | optional  | datagenerator_export.csv   | path and filename of the export file                                                                           |            
-| -xt=<type>            | optional  | csv                        | type of the export to generate. possible values: csv, excel, json, parquet                                     | 
-| -dc=<path + filename> | mandatory | -none-                     | path and filename of tha data configuration yaml file                                                          |
-| -pc=<path + filename> | mandatory | -none-                     | path and filename of tha program configuration yaml file                                                       | 
+| -n=\<number\>         | optional  | 10000                      | number of rows to generate                                                                                     |
+| -l=\<number\>         | optional  | 1000                       | interval for log messages during data generation                                                               |
+| -g=\<loglevel\>       | optional  | INFO                       | log level to be used for logging output. must be one out of: OFF, FATAL, ERROR, WARN, INFO, DEBUG, TRACE, ALL  |
+| -xp=\<path+filename\> | optional  | datagenerator_export.csv   | path and filename of the export file                                                                           |
+| -xt=\<type\>          | optional  | csv                        | type of the export to generate. possible values: csv, excel, json, parquet                                     |
+| -cd=\<delimiter\>     | optional  |                            | delimiter to be used for export files of type CSV                                                              |
+| -ch                   | optional  |                            | indicator if a header row should be output for export files of type CSV                                        |
+| -dc=\<path+filename\> | mandatory | -none-                     | path and filename of the data configuration yaml file                                                          |
+| -pc=\<path+filename\> | mandatory | -none-                     | path and filename of the program configuration yaml file                                                       |
 | -s                    | optional  | false                      | output statistics for the generated field values                                                               |
+| -h / --help           | optional  |                            | display help about the available program arguments                                                             |
 
 Run the datagenerator tool:
 
-    java -cp . com.datamelt.utilities.datagenerator.application.DataGenerator -pc=<program configuration file> -dc=<data configuration file>
+    java -jar datagenerator2-<version>-jar-with-dependencies.jar -pc=<program configuration file> -dc=<data configuration file>
 
 You can get help about the available program arguments by running:
 
-    java -cp . com.datamelt.utilities.datagenerator.application.DataGenerator --help
-
+    java -jar datagenerator2-<version>-jar-with-dependencies.jar --help
 
 See the sample yaml file for the program configuration in this repository under: samples/programconfiguration
 
-You may also use the tool programmatically by calling the method "generateRows". Itreturns a lazy infinite stream of rows. The caller controls termination via limit(), takeWhile(), or any other stream operation.
-Each element is wrapped in a Try — filter on Try::isSuccess to get successful rows only. You may also use the convenience method returning a bounded stream of exactly numberOfRows rows
+## Using datagenerator2 programmatically
+You may also use the tool programmatically by adding it as a dependency to your project. The `RowGenerator` class provides a lazy infinite stream of rows. The caller controls termination via `limit()`, `takeWhile()`, or any other stream operation. Each element is wrapped in a `Try` — filter on `Try::isSuccess` to get successful rows only.
 
-You can use this tool from Maven Central: https://central.sonatype.com/artifact/io.github.uwegeercken/datagenerator2
+Add the following dependency to your Maven pom.xml:
 
-Here is the dependency to add to your maven pom.xml file:
+```xml
+<dependency>
+    <groupId>io.github.uwegeercken</groupId>
+    <artifactId>datagenerator2</artifactId>
+    <version>0.4.5</version>
+</dependency>
+```
 
-    <dependency>
-        <groupId>io.github.uwegeercken</groupId>
-        <artifactId>datagenerator2</artifactId>
-        <version>0.4.5</version>
-    </dependency>
+The artifact is available on Maven Central: https://central.sonatype.com/artifact/io.github.uwegeercken/datagenerator2
 
-Example usage of the datagenerator2:
+Example usage:
 
-    // generate a fixed number of rows  
-    List<Row> rows = rowGenerator.generateRows(100)
-        .filter(Try::isSuccess)
-        .map(Try::getResult)
-        .toList();
+```java
+// generate a fixed number of rows
+List<Row> rows = rowGenerator.generateRows(100)
+    .filter(Try::isSuccess)
+    .map(Try::getResult)
+    .toList();
 
-    // generate rows lazily until a condition is met ( using e.g. limit or takeWhile on the stream)
-    rowGenerator.generateRows()
-        .filter(Try::isSuccess)
-        .map(Try::getResult)
-        .takeWhile(row -> someCondition(row))
-        .forEach(row -> process(row));
+// generate rows lazily until a condition is met
+rowGenerator.generateRows()
+    .filter(Try::isSuccess)
+    .map(Try::getResult)
+    .takeWhile(row -> someCondition(row))
+    .forEach(row -> process(row));
 
-    // generate a single row
-    Try<Row> row = rowGenerator.generateRow();
-
+// generate a single row
+Try<Row> row = rowGenerator.generateRow();
+```
 
 ## Building the datagenerator jar file
 To build the jar file either download the release from https://github.com/uwegeercken/datagenerator2/tags or clone this repository and run:
