@@ -14,27 +14,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.stream.Stream;
 
-/**
- * Provides programmatic access to the data generator for embedding in other projects.
- *
- * Usage examples:
- *
- * // generate a fixed number of rows
- * List<Row> rows = rowGenerator.generateRows(100)
- *     .filter(Try::isSuccess)
- *     .map(Try::getResult)
- *     .toList();
- *
- * // generate rows lazily until a condition is met
- * rowGenerator.generateRows()
- *     .filter(Try::isSuccess)
- *     .map(Try::getResult)
- *     .takeWhile(row -> someCondition(row))
- *     .forEach(row -> process(row));
- *
- * // generate a single row
- * Try<Row> row = rowGenerator.generateRow();
- */
 public class RowGenerator
 {
     private final DataConfiguration dataConfiguration;

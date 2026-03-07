@@ -313,7 +313,17 @@ See the sample yaml file for the program configuration in this repository under:
 You may also use the tool programmatically by calling the method "generateRows". Itreturns a lazy infinite stream of rows. The caller controls termination via limit(), takeWhile(), or any other stream operation.
 Each element is wrapped in a Try — filter on Try::isSuccess to get successful rows only. You may also use the convenience method returning a bounded stream of exactly numberOfRows rows
 
-Example:
+You can use this tool from Maven Central: https://central.sonatype.com/artifact/io.github.uwegeercken/datagenerator2
+
+Here is the dependency to add to your maven pom.xml file:
+
+    <dependency>
+        <groupId>io.github.uwegeercken</groupId>
+        <artifactId>datagenerator2</artifactId>
+        <version>0.4.5</version>
+    </dependency>
+
+Example usage of the datagenerator2:
 
     // generate a fixed number of rows  
     List<Row> rows = rowGenerator.generateRows(100)
@@ -321,7 +331,7 @@ Example:
         .map(Try::getResult)
         .toList();
 
-    // generate rows lazily until a condition is met
+    // generate rows lazily until a condition is met ( using e.g. limit or takeWhile on the stream)
     rowGenerator.generateRows()
         .filter(Try::isSuccess)
         .map(Try::getResult)
@@ -337,4 +347,4 @@ To build the jar file either download the release from https://github.com/uwegee
 
     mvn clean install
 
-last update: uwe geercken - uwe.geercken@web.de - 2026-02-28
+last update: uwe geercken - uwe.geercken@web.de - 2026-03-07
