@@ -142,6 +142,9 @@
                 <configuration>
                     <publishingServerId>central</publishingServerId>
                     <autoPublish>true</autoPublish>
+                    <excludeArtifacts>
+                        <excludeArtifact>datagenerator2-${project.version}-jar-with-dependencies.jar</excludeArtifact>
+                    </excludeArtifacts>
                 </configuration>
             </plugin>
             <plugin>
@@ -168,5 +171,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
