@@ -20,24 +20,23 @@ public class TransformationExecutor
 
     private static <T> T execute(TransformationMethod transformationMethod, T value) throws TransformationExecutionException
     {
-        Object[] parameterValues = null;
         if(transformationMethod.getMethod().isSuccess())
         {
+            Object[] parameterValues = getMethodParameterValues(value, transformationMethod.getParameters());
             try
             {
-                return (T) transformationMethod.getMethod().getResult().invoke(null, getMethodParameterValues(value, transformationMethod.getParameters()));
+                return (T) transformationMethod.getMethod().getResult().invoke(null, parameterValues);
             }
             catch(Exception ex)
             {
-                throw new TransformationExecutionException("error invoking the transformation [" + transformationMethod.getMethod().getResult().getName() + "] with the configured parameters: " + Arrays.toString(parameterValues) + ", types: " + Arrays.toString(transformationMethod.getMethod().getResult().getParameterTypes()),ex);
+                throw new TransformationExecutionException("error invoking transformation [" + transformationMethod.getMethod().getResult().getName() + "] with parameters: " + Arrays.toString(parameterValues) + ", types: " + Arrays.toString(transformationMethod.getMethod().getResult().getParameterTypes()), ex);
             }
         }
         else
         {
-            // TODO: check return value if try was failure
-            return value;
+            throw new TransformationExecutionException(
+            "transformation [" + transformationMethod.getMethod().getError().getMessage() + "] could not be resolved. check the transformation name in your data configuration");
         }
-
     }
 
     private static Object[] getMethodParameterValues(Object value, List<Object> parameters)

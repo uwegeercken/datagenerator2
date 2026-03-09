@@ -42,6 +42,11 @@ public class DataStore
         createAppender();
     }
 
+    public long getAppendFailureCount()
+    {
+        return appender.getAppendFailureCount();
+    }
+
     private void cleanupDatabase() throws SQLException
     {
         dropTable();
@@ -80,7 +85,10 @@ public class DataStore
     public void insert(Row row)
     {
         appender.append(row, numberOfRecordsInserted);
-        numberOfRecordsInserted++;
+        if (appender.getLastAppendSucceeded())
+        {
+            numberOfRecordsInserted++;
+        }
     }
 
     public void flush() throws SQLException

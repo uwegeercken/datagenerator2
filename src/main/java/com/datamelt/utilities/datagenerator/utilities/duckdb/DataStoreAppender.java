@@ -19,6 +19,8 @@ public class DataStoreAppender
     private static final Logger logger = LoggerFactory.getLogger(DataStoreAppender.class);
     private final DuckDBAppender appender;
     private final TableInsertLayout tableInsertLayout;
+    private long appendFailureCount = 0;
+    private boolean lastAppendSucceeded = true;
 
     public DataStoreAppender(DuckDBAppender appender, TableInsertLayout tableInsertLayout)
     {
@@ -48,10 +50,13 @@ public class DataStoreAppender
                 }
             }
             appender.endRow();
+            lastAppendSucceeded = true;
         }
         catch(SQLException ex)
         {
-            logger.error("error appending row [{}]. error {}", row.toString(), ex.getMessage());
+            appendFailureCount++;
+            lastAppendSucceeded = false;
+            logger.warn("error appending row [{}], skipping. error: {}", row.toString(), ex.getMessage());
             try
             {
                 appender.endRow();
@@ -87,6 +92,16 @@ public class DataStoreAppender
             }
         }
         appender.endStruct();
+    }
+
+    public long getAppendFailureCount()
+    {
+        return appendFailureCount;
+    }
+
+    public boolean getLastAppendSucceeded()
+    {
+        return lastAppendSucceeded;
     }
 
     public void flush()  throws SQLException

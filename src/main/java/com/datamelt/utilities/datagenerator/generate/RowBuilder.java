@@ -1,11 +1,9 @@
 package com.datamelt.utilities.datagenerator.generate;
 
-import com.datamelt.utilities.datagenerator.application.DataGenerator;
 import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldType;
 import com.datamelt.utilities.datagenerator.config.model.options.DateReferenceOptions;
-import com.datamelt.utilities.datagenerator.config.process.FieldProcessor;
 import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
 import com.datamelt.utilities.datagenerator.config.process.TransformationExecutionException;
 import com.datamelt.utilities.datagenerator.error.Failure;
@@ -15,21 +13,14 @@ import com.datamelt.utilities.datagenerator.utilities.type.DataTypeDuckDb;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class RowBuilder
 {
     private final List<RowField> rowFields = new ArrayList<>();
-    public RowBuilder(DataConfiguration dataConfiguration)
+    public RowBuilder(DataConfiguration dataConfiguration) throws InvalidConfigurationException
     {
-        // TODO: rethink runtimeexception
-        try
-        {
             createRowFields(dataConfiguration);
-        }
-        catch (InvalidConfigurationException e)
-        {
-            throw new RuntimeException(e);
-        }
     }
 
     private void createRowFields(DataConfiguration dataConfiguration) throws  InvalidConfigurationException
@@ -62,12 +53,11 @@ public class RowBuilder
             if (fieldConfiguration.getType() == FieldType.DATEREFERENCE)
             {
                 String referenceFieldName = (String)fieldConfiguration.getOptions().get(DateReferenceOptions.REFERENCE.getKey());
-                RowField referenceRowField = getRowfield(referenceFieldName);
-                if(referenceRowField==null)
-                {
-                    throw new InvalidConfigurationException("field [" +fieldConfiguration.getName() + "] references field [" + referenceFieldName + "] but this field does not exist");
-                }
-                RowField rowField = getRowfield(fieldConfiguration.getName());
+                RowField referenceRowField = getRowfield(referenceFieldName)
+                        .orElseThrow(() -> new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "] references field [" + referenceFieldName + "] but this field does not exist"));
+
+                RowField rowField = getRowfield(fieldConfiguration.getName())
+                        .orElseThrow(() -> new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "] does not exist"));
 
                 DateReferenceGenerator generator = (DateReferenceGenerator) rowField.getGenerator();
                 generator.addReferenceRowField(referenceRowField);
@@ -75,16 +65,11 @@ public class RowBuilder
         }
     }
 
-    public RowField getRowfield(String name)
+    public Optional<RowField> getRowfield(String name)
     {
-        for(RowField rowField : rowFields)
-        {
-            if(rowField.getName().equals(name))
-            {
-                return rowField;
-            }
-        }
-        return null;
+        return rowFields.stream()
+                .filter(rowField -> rowField.getName().equals(name))
+                .findFirst();
     }
 
     public Try<Row> generate()

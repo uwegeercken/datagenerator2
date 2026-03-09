@@ -46,7 +46,7 @@ public class RowGenerator
     /**
      * Generates a single row.
      */
-    public Try<Row> generateRow()
+    public Try<Row> generateRow() throws InvalidConfigurationException
     {
         return new RowBuilder(dataConfiguration).generate();
     }

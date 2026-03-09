@@ -29,8 +29,8 @@ public class DataGenerator
 {
     private static Logger logger;
     private static final String applicationName = "datagenerator2";
-    private static final String version = "0.4.6";
-    private static final String versionDate = "2026-03-07";
+    private static final String version = "0.4.7";
+    private static final String versionDate = "2026-03-09";
     private static final String contactEmail = "uwe.geercken@web.de";
     private DataConfiguration dataConfiguration;
     private ProgramConfiguration programConfiguration;
@@ -57,8 +57,10 @@ public class DataGenerator
             logger.info("starting to generate total of [{}] rows", dataGenerator.programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate());
             long runtime = dataGenerator.generateRows();
 
-            logger.info("total rows generated: [{}]", dataGenerator.programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate());
-            logger.info("total data generation time: [{}] seconds", runtime / 1000d);
+            long totalRequested = dataGenerator.programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate();
+            long totalFailed = dataGenerator.getAppendFailureCount();
+
+            logger.info("total rows generated: [{}], failed: [{}]", totalRequested - totalFailed, totalFailed);            logger.info("total data generation time: [{}] seconds", runtime / 1000d);
 
 
             if(dataGenerator.programConfiguration.getGeneralConfiguration().getExportFilename() != null) {
@@ -72,10 +74,6 @@ public class DataGenerator
         catch (InvalidConfigurationException ice)
         {
             logger.error("error in configuration: {}", ice.getMessage());
-        }
-        catch (NoSuchMethodException nsm)
-        {
-            logger.error("error in transformation: {}", nsm.getMessage());
         }
         catch (Exception ex)
         {
@@ -93,6 +91,11 @@ public class DataGenerator
         loadDataConfiguration(dataConfigurationFilename);
 
         validateDataConfiguration();
+    }
+
+    public long getAppendFailureCount()
+    {
+        return dataStore.getAppendFailureCount();
     }
 
     private static void help()
@@ -142,32 +145,38 @@ public class DataGenerator
         setupDataStore();
         long start = System.currentTimeMillis();
 
-        try
+        RowBuilder rowBuilder = new RowBuilder(dataConfiguration);
+        List<Long> partitions = getPartitions(programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate());
+        long appendCounter = 0;
+        for (long partitionBatchSize : partitions)
         {
-            RowBuilder rowBuilder = new RowBuilder(dataConfiguration);
-            List<Long> partitions = getPartitions(programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate());
-            long appendCounter = 0;
-            for (long partitionBatchSize : partitions)
-            {
-                List<Row> rows = generateRowsBatch(rowBuilder, partitionBatchSize);
-                rows.forEach(row -> dataStore.insert(row));
-                appendCounter += partitionBatchSize;
-                logOutput("rows generated: [{}]", appendCounter);
-            }
-            dataStore.flush();
-            return System.currentTimeMillis() - start;
+            List<Row> rows = generateRowsBatch(rowBuilder, partitionBatchSize);
+            rows.forEach(row -> dataStore.insert(row));
+            appendCounter += partitionBatchSize;
+            logOutput("rows generated: [{}]", appendCounter);
         }
-        catch (Exception e)
+        dataStore.flush();
+        long appendFailures = dataStore.getAppendFailureCount();
+        if (appendFailures > 0)
         {
-            logger.error("error in generating data store: {}", e.getMessage());
-            return 0;
+            logger.warn("total rows skipped due to append errors: [{}]", appendFailures);
         }
+        return System.currentTimeMillis() - start;
     }
 
     private List<Row> generateRowsBatch(RowBuilder rowBuilder, long partitionBatchSize)
     {
-        return LongStream.range(0, partitionBatchSize)
-                .mapToObj(rangeValue -> rowBuilder.generate())
+        List<Try<Row>> results = LongStream.range(0, partitionBatchSize)
+                .mapToObj(i -> rowBuilder.generate())
+                .toList();
+
+        long failureCount = results.stream().filter(Try::isFailure).count();
+        if (failureCount > 0)
+        {
+            logger.warn("failed to generate [{}] rows in batch", failureCount);
+        }
+
+        return results.stream()
                 .filter(Try::isSuccess)
                 .map(Try::getResult)
                 .toList();

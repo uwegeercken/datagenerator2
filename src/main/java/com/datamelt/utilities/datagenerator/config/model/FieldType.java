@@ -2,9 +2,17 @@ package com.datamelt.utilities.datagenerator.config.model;
 
 import com.datamelt.utilities.datagenerator.config.process.*;
 import com.datamelt.utilities.datagenerator.generate.*;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
+@JsonDeserialize(using = FieldType.FieldTypeDeserializer.class)
 public enum FieldType
 {
     RANDOMUUID(RandomUuidProcessor::new, RandomUuidGenerator::new),
@@ -18,7 +26,7 @@ public enum FieldType
     RANDOMDOUBLE(RandomDoubleProcessor::new, RandomDoubleGenerator::new),
     REGULAREXPRESSION(RegularExpressionProcessor::new, RegularExpressionGenerator::new);
 
-    private final Function<FieldConfiguration,FieldProcessor> fieldProcessorFunction;
+    private final Function<FieldConfiguration, FieldProcessor> fieldProcessorFunction;
     private final Function<FieldConfiguration, RandomValueGenerator> randomValueGeneratorFunction;
 
     FieldType(Function<FieldConfiguration, FieldProcessor> fieldProcessorFunction, Function<FieldConfiguration, RandomValueGenerator> randomValueGeneratorFunction)
@@ -35,5 +43,31 @@ public enum FieldType
     public Function<FieldConfiguration, RandomValueGenerator> getRandomValueGeneratorFunction()
     {
         return randomValueGeneratorFunction;
+    }
+
+    static class FieldTypeDeserializer extends StdDeserializer<FieldType>
+    {
+        private static final String VALID_VALUES = Arrays.stream(FieldType.values())
+                .map(ft -> ft.name().toLowerCase())
+                .collect(Collectors.joining(", "));
+
+        FieldTypeDeserializer()
+        {
+            super(FieldType.class);
+        }
+
+        @Override
+        public FieldType deserialize(JsonParser parser, DeserializationContext context) throws IOException
+        {
+            String value = parser.getText();
+            try
+            {
+                return FieldType.valueOf(value.toUpperCase());
+            }
+            catch (IllegalArgumentException e)
+            {
+                throw new IOException("invalid field type [" + value + "]. valid values are: " + VALID_VALUES);
+            }
+        }
     }
 }

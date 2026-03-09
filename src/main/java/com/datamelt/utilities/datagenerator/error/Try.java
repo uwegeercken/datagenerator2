@@ -1,7 +1,10 @@
 package com.datamelt.utilities.datagenerator.error;
 
+import java.util.NoSuchElementException;
 import java.util.concurrent.Callable;
+import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 public sealed interface Try<T> permits Success, Failure
 {
@@ -28,12 +31,17 @@ public sealed interface Try<T> permits Success, Failure
         }
         else
         {
-            return new Failure<R>(getError());
+            return new Failure<>(getError());
         }
     }
 
     default boolean isSuccess()
     {
         return this instanceof Success<T>;
+    }
+
+    default boolean isFailure()
+    {
+        return this instanceof Failure<T>;
     }
 }
