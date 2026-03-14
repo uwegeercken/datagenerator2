@@ -1,7 +1,7 @@
 package com.datamelt.utilities.datagenerator.generate;
 
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
-import com.datamelt.utilities.datagenerator.config.model.options.RandomDateOptions;
+import com.datamelt.utilities.datagenerator.config.model.options.OptionKey;
 import com.datamelt.utilities.datagenerator.config.process.TransformationExecutionException;
 import com.datamelt.utilities.datagenerator.utilities.DateUtility;
 import com.datamelt.utilities.datagenerator.utilities.transformation.TransformationExecutor;
@@ -33,19 +33,19 @@ public class RandomDateGenerator implements RandomValueGenerator, RandomValuePro
     {
         this.fieldConfiguration = fieldConfiguration;
 
-        if(fieldConfiguration.getOptions().get(RandomDateOptions.MIN_YEAR.getKey()) instanceof Long)
+        if(fieldConfiguration.getOptions().get(OptionKey.MIN_YEAR.getKey()) instanceof Long)
         {
-            minYear = ((Long) fieldConfiguration.getOptions().get(RandomDateOptions.MIN_YEAR.getKey())).intValue();
+            minYear = ((Long) fieldConfiguration.getOptions().get(OptionKey.MIN_YEAR.getKey())).intValue();
         }
-        if(fieldConfiguration.getOptions().get(RandomDateOptions.MAX_YEAR.getKey()) instanceof Long)
+        if(fieldConfiguration.getOptions().get(OptionKey.MAX_YEAR.getKey()) instanceof Long)
         {
-            maxYear = ((Long) fieldConfiguration.getOptions().get(RandomDateOptions.MAX_YEAR.getKey())).intValue();
+            maxYear = ((Long) fieldConfiguration.getOptions().get(OptionKey.MAX_YEAR.getKey())).intValue();
         }
-        if(fieldConfiguration.getOptions().get(RandomDateOptions.DATE_FORMAT.getKey()) instanceof String)
+        if(fieldConfiguration.getOptions().get(OptionKey.DATE_FORMAT.getKey()) instanceof String)
         {
-            dateTimeFormatter = DateTimeFormatter.ofPattern((String) fieldConfiguration.getOptions().get(RandomDateOptions.DATE_FORMAT.getKey()));
+            dateTimeFormatter = DateTimeFormatter.ofPattern((String) fieldConfiguration.getOptions().get(OptionKey.DATE_FORMAT.getKey()));
         }
-        if(fieldConfiguration.getOptions().get(RandomDateOptions.OUTPUT_TYPE.getKey()) instanceof String)
+        if(fieldConfiguration.getOptions().get(OptionKey.OUTPUT_TYPE.getKey()) instanceof String)
         {
             outputType = fieldConfiguration.getOutputType();
         }

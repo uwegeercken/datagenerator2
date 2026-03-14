@@ -3,7 +3,7 @@ package com.datamelt.utilities.datagenerator.generate;
 import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldType;
-import com.datamelt.utilities.datagenerator.config.model.options.RandomDoubleOptions;
+import com.datamelt.utilities.datagenerator.config.model.options.OptionKey;
 import com.datamelt.utilities.datagenerator.config.process.DataFieldsProcessor;
 import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
 import com.datamelt.utilities.datagenerator.error.Try;
@@ -38,8 +38,8 @@ class RandomDoubleGeneratorTest
     void validateErrorMaxValueSmallerMinValue()
     {
         Map<String, Object> options = new HashMap<>();
-        options.put(RandomDoubleOptions.MIN_VALUE.getKey(), 50L);
-        options.put(RandomDoubleOptions.MAX_VALUE.getKey(), 10L);
+        options.put(OptionKey.MIN_VALUE.getKey(), 50L);
+        options.put(OptionKey.MAX_VALUE.getKey(), 10L);
 
         assertThrows(InvalidConfigurationException.class,()->{
             RowBuilder rowBuilder = getRowBuilder("testfield", options);
@@ -54,8 +54,8 @@ class RandomDoubleGeneratorTest
             long maxValue = 20L;
 
             Map<String, Object> options = new HashMap<>();
-            options.put(RandomDoubleOptions.MIN_VALUE.getKey(), minValue);
-            options.put(RandomDoubleOptions.MAX_VALUE.getKey(), maxValue);
+            options.put(OptionKey.MIN_VALUE.getKey(), minValue);
+            options.put(OptionKey.MAX_VALUE.getKey(), maxValue);
 
             RowBuilder rowBuilder = getRowBuilder("testfield", options);
             for (int i = 0; i < 1000; i++)
@@ -76,8 +76,8 @@ class RandomDoubleGeneratorTest
             long maxValue = 5L;
 
             Map<String, Object> options = new HashMap<>();
-            options.put(RandomDoubleOptions.MIN_VALUE.getKey(), minValue);
-            options.put(RandomDoubleOptions.MAX_VALUE.getKey(), maxValue);
+            options.put(OptionKey.MIN_VALUE.getKey(), minValue);
+            options.put(OptionKey.MAX_VALUE.getKey(), maxValue);
 
             RowBuilder rowBuilder = getRowBuilder("testfield", options);
             Try<Row> row = rowBuilder.generate();

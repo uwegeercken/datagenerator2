@@ -1,7 +1,7 @@
 package com.datamelt.utilities.datagenerator.generate;
 
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
-import com.datamelt.utilities.datagenerator.config.model.options.RandomLongOptions;
+import com.datamelt.utilities.datagenerator.config.model.options.OptionKey;
 import com.datamelt.utilities.datagenerator.config.process.TransformationExecutionException;
 import com.datamelt.utilities.datagenerator.utilities.transformation.TransformationExecutor;
 import com.datamelt.utilities.datagenerator.utilities.transformation.TransformationMethod;
@@ -25,21 +25,21 @@ public class RandomLongGenerator implements RandomValueGenerator
     {
         this.fieldConfiguration = fieldConfiguration;
 
-        if(fieldConfiguration.getOptions().get(RandomLongOptions.MIN_VALUE.getKey()) instanceof Integer)
+        if(fieldConfiguration.getOptions().get(OptionKey.MIN_VALUE.getKey()) instanceof Integer)
         {
-            minValue = ((Integer) fieldConfiguration.getOptions().get(RandomLongOptions.MIN_VALUE.getKey())).longValue();
+            minValue = ((Integer) fieldConfiguration.getOptions().get(OptionKey.MIN_VALUE.getKey())).longValue();
         }
         else
         {
-            minValue = (Long) fieldConfiguration.getOptions().get(RandomLongOptions.MIN_VALUE.getKey());
+            minValue = (Long) fieldConfiguration.getOptions().get(OptionKey.MIN_VALUE.getKey());
         }
-        if(fieldConfiguration.getOptions().get(RandomLongOptions.MAX_VALUE.getKey()) instanceof Integer)
+        if(fieldConfiguration.getOptions().get(OptionKey.MAX_VALUE.getKey()) instanceof Integer)
         {
-            maxValue = ((Integer) fieldConfiguration.getOptions().get(RandomLongOptions.MAX_VALUE.getKey())).longValue();
+            maxValue = ((Integer) fieldConfiguration.getOptions().get(OptionKey.MAX_VALUE.getKey())).longValue();
         }
         else
         {
-            maxValue = (Long) fieldConfiguration.getOptions().get(RandomLongOptions.MAX_VALUE.getKey());
+            maxValue = (Long) fieldConfiguration.getOptions().get(OptionKey.MAX_VALUE.getKey());
         }
 
         transformationMethods = prepareMethods(BASE_DATATYPE, fieldConfiguration);

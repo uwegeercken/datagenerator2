@@ -3,7 +3,6 @@ package com.datamelt.utilities.datagenerator.config;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfigurationValue;
 import com.datamelt.utilities.datagenerator.config.model.options.OptionKey;
-import com.datamelt.utilities.datagenerator.config.process.CategoryProcessor;
 import com.datamelt.utilities.datagenerator.config.process.FieldProcessor;
 import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
 import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
@@ -58,7 +57,7 @@ public class CategoryFileLoader
         }
         else
         {
-            FieldProcessor processor = new CategoryProcessor(fieldConfiguration);
+            FieldProcessor processor = new FieldProcessor(fieldConfiguration);
             String defaultValue = (String) processor.getFieldOption(OptionKey.CATEGORY_FILE_SEPARATOR).getDefaultValue();
             valueWeightSeparator =  defaultValue;
         }

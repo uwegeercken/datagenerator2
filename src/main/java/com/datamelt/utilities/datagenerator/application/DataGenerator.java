@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
@@ -29,8 +30,8 @@ public class DataGenerator
 {
     private static Logger logger;
     private static final String applicationName = "datagenerator2";
-    private static final String version = "0.4.7";
-    private static final String versionDate = "2026-03-09";
+    private static final String version = "0.5.0";
+    private static final String versionDate = "2026-03-14";
     private static final String contactEmail = "uwe.geercken@web.de";
     private DataConfiguration dataConfiguration;
     private ProgramConfiguration programConfiguration;
@@ -61,7 +62,6 @@ public class DataGenerator
             long totalFailed = dataGenerator.getAppendFailureCount();
 
             logger.info("total rows generated: [{}], failed: [{}]", totalRequested - totalFailed, totalFailed);            logger.info("total data generation time: [{}] seconds", runtime / 1000d);
-
 
             if(dataGenerator.programConfiguration.getGeneralConfiguration().getExportFilename() != null) {
                 dataGenerator.exportToFile();
@@ -146,15 +146,17 @@ public class DataGenerator
         long start = System.currentTimeMillis();
 
         RowBuilder rowBuilder = new RowBuilder(dataConfiguration);
-        List<Long> partitions = getPartitions(programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate());
-        long appendCounter = 0;
-        for (long partitionBatchSize : partitions)
-        {
-            List<Row> rows = generateRowsBatch(rowBuilder, partitionBatchSize);
-            rows.forEach(row -> dataStore.insert(row));
-            appendCounter += partitionBatchSize;
-            logOutput("rows generated: [{}]", appendCounter);
-        }
+
+        AtomicLong appendCounter = new AtomicLong(0);
+        LongStream.range(0, programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate())
+                .mapToObj(value -> rowBuilder.generate())
+                .filter(Try::isSuccess)
+                .map(Try::getResult)
+                .forEach(row -> {
+                    dataStore.insert(row);
+                    logOutput("rows generated: [{}]", appendCounter.incrementAndGet());
+                });
+
         dataStore.flush();
         long appendFailures = dataStore.getAppendFailureCount();
         if (appendFailures > 0)
@@ -164,47 +166,6 @@ public class DataGenerator
         return System.currentTimeMillis() - start;
     }
 
-    private List<Row> generateRowsBatch(RowBuilder rowBuilder, long partitionBatchSize)
-    {
-        List<Try<Row>> results = LongStream.range(0, partitionBatchSize)
-                .mapToObj(i -> rowBuilder.generate())
-                .toList();
-
-        long failureCount = results.stream().filter(Try::isFailure).count();
-        if (failureCount > 0)
-        {
-            logger.warn("failed to generate [{}] rows in batch", failureCount);
-        }
-
-        return results.stream()
-                .filter(Try::isSuccess)
-                .map(Try::getResult)
-                .toList();
-    }
-
-    private List<Long> getPartitions(long numberOfRows)
-    {
-        long batchSize;
-        if(numberOfRows >= 250000)
-        {
-            batchSize = 250000;
-        }
-        else
-        {
-            batchSize = numberOfRows;
-        }
-        int numberOfBatches = (int) (numberOfRows / batchSize);
-        List<Long> partitions = new ArrayList<>();
-        LongStream.range(0,numberOfBatches).forEach(i -> partitions.add(batchSize));
-
-        long remainingNumberOfRows = programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate() - numberOfBatches * batchSize;
-        if(remainingNumberOfRows>0)
-        {
-            partitions.add(remainingNumberOfRows);
-        }
-        return partitions;
-    }
-
     private void logOutput(String message, long counter)
     {
         if(programConfiguration.getGeneralConfiguration().getGeneratedRowsLogInterval() > 0
@@ -212,7 +173,7 @@ public class DataGenerator
                 && counter % programConfiguration.getGeneralConfiguration().getGeneratedRowsLogInterval() == 0
                 && counter > 0)
         {
-            logger.debug(message, counter);
+            logger.info(message, counter);
         }
     }
 

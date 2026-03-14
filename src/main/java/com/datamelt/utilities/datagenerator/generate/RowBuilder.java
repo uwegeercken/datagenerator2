@@ -3,7 +3,7 @@ package com.datamelt.utilities.datagenerator.generate;
 import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldType;
-import com.datamelt.utilities.datagenerator.config.model.options.DateReferenceOptions;
+import com.datamelt.utilities.datagenerator.config.model.options.OptionKey;
 import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
 import com.datamelt.utilities.datagenerator.config.process.TransformationExecutionException;
 import com.datamelt.utilities.datagenerator.error.Failure;
@@ -52,7 +52,7 @@ public class RowBuilder
         {
             if (fieldConfiguration.getType() == FieldType.DATEREFERENCE)
             {
-                String referenceFieldName = (String)fieldConfiguration.getOptions().get(DateReferenceOptions.REFERENCE.getKey());
+                String referenceFieldName = (String)fieldConfiguration.getOptions().get(OptionKey.REFERENCE.getKey());
                 RowField referenceRowField = getRowfield(referenceFieldName)
                         .orElseThrow(() -> new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "] references field [" + referenceFieldName + "] but this field does not exist"));
 
