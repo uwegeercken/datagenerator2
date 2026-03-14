@@ -1,14 +1,7 @@
 package com.datamelt.utilities.datagenerator.config.process;
 
-import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
-import com.datamelt.utilities.datagenerator.config.model.FieldType;
-
-import java.util.Arrays;
-import java.util.Map;
-import java.util.UUID;
-import java.util.function.Function;
-import java.util.function.Supplier;
+import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 
 public class DataFieldsProcessor
 {
@@ -16,12 +9,17 @@ public class DataFieldsProcessor
     {
         for (FieldConfiguration fieldConfiguration : configuration.getFields())
         {
-            FieldProcessor processor = fieldConfiguration.getType().getFieldProcessorFunction().apply(fieldConfiguration);
-            processor.setDefaultOptions();
-            processor.validateTransformations();
-            processor.validateOutputType();
-            processor.validateConfiguration();
-            processor.processConfiguration();
+            processField(fieldConfiguration);
         }
+    }
+
+    private static void processField(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException
+    {
+        FieldProcessor processor = new FieldProcessor(fieldConfiguration);
+        processor.setDefaultOptions();
+        processor.validateTransformations();
+        processor.validateOutputType();
+        processor.validateConfiguration();
+        processor.processConfiguration();
     }
 }

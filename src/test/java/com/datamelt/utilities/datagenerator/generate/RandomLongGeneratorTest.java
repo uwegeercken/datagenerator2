@@ -3,7 +3,7 @@ package com.datamelt.utilities.datagenerator.generate;
 import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldType;
-import com.datamelt.utilities.datagenerator.config.model.options.RandomLongOptions;
+import com.datamelt.utilities.datagenerator.config.model.options.OptionKey;
 import com.datamelt.utilities.datagenerator.config.process.DataFieldsProcessor;
 import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
 import org.junit.jupiter.api.DisplayName;
@@ -36,8 +36,8 @@ class RandomLongGeneratorTest
     void validateErrorMaxValueSmallerMinValue()
     {
         Map<String, Object> options = new HashMap<>();
-        options.put(RandomLongOptions.MIN_VALUE.getKey(), 15L);
-        options.put(RandomLongOptions.MAX_VALUE.getKey(), 10L);
+        options.put(OptionKey.MIN_VALUE.getKey(), 15L);
+        options.put(OptionKey.MAX_VALUE.getKey(), 10L);
 
         assertThrows(InvalidConfigurationException.class,()->{
             RowBuilder rowBuilder = getRowBuilder("testfield", options);

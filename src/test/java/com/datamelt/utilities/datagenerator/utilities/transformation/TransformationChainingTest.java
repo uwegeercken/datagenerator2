@@ -4,7 +4,7 @@ import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldType;
 import com.datamelt.utilities.datagenerator.config.model.TransformationConfiguration;
-import com.datamelt.utilities.datagenerator.config.model.options.RandomStringOptions;
+import com.datamelt.utilities.datagenerator.config.model.options.OptionKey;
 import com.datamelt.utilities.datagenerator.config.process.DataFieldsProcessor;
 import com.datamelt.utilities.datagenerator.error.Try;
 import com.datamelt.utilities.datagenerator.generate.Row;
@@ -47,9 +47,9 @@ class TransformationChainingTest
     void singleTransformationUppercase() throws Exception
     {
         Map<String, Object> options = new HashMap<>();
-        options.put(RandomStringOptions.MIN_LENGTH.getKey(), 5L);
-        options.put(RandomStringOptions.MAX_LENGTH.getKey(), 5L);
-        options.put(RandomStringOptions.RANDOM_CHARACTERS.getKey(), "abcde");
+        options.put(OptionKey.MIN_LENGTH.getKey(), 5L);
+        options.put(OptionKey.MAX_LENGTH.getKey(), 5L);
+        options.put(OptionKey.RANDOM_CHARACTERS.getKey(), "abcde");
 
         RowBuilder rowBuilder = getRowBuilderWithTransformations("testfield", options,
                 List.of(transformation("uppercase")));
@@ -68,9 +68,9 @@ class TransformationChainingTest
     {
         Map<String, Object> options = new HashMap<>();
         // use fixed characters so we can predict the transformation result
-        options.put(RandomStringOptions.MIN_LENGTH.getKey(), 5L);
-        options.put(RandomStringOptions.MAX_LENGTH.getKey(), 5L);
-        options.put(RandomStringOptions.RANDOM_CHARACTERS.getKey(), "abcde");
+        options.put(OptionKey.MIN_LENGTH.getKey(), 5L);
+        options.put(OptionKey.MAX_LENGTH.getKey(), 5L);
+        options.put(OptionKey.RANDOM_CHARACTERS.getKey(), "abcde");
 
         RowBuilder rowBuilder = getRowBuilderWithTransformations("testfield", options,
                 List.of(transformation("uppercase"), transformation("reverse")));
@@ -101,9 +101,9 @@ class TransformationChainingTest
         fieldConfiguration.setType(FieldType.RANDOMSTRING);
 
         Map<String, Object> options = new HashMap<>();
-        options.put(RandomStringOptions.MIN_LENGTH.getKey(), 3L);
-        options.put(RandomStringOptions.MAX_LENGTH.getKey(), 3L);
-        options.put(RandomStringOptions.RANDOM_CHARACTERS.getKey(), "abc");
+        options.put(OptionKey.MIN_LENGTH.getKey(), 3L);
+        options.put(OptionKey.MAX_LENGTH.getKey(), 3L);
+        options.put(OptionKey.RANDOM_CHARACTERS.getKey(), "abc");
 
         fieldConfiguration.setOptions(options);
         // uppercase then reverse: "abc" -> "ABC" -> "CBA"

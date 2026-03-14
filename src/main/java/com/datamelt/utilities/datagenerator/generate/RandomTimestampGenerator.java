@@ -1,7 +1,7 @@
 package com.datamelt.utilities.datagenerator.generate;
 
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
-import com.datamelt.utilities.datagenerator.config.model.options.RandomTimestampOptions;
+import com.datamelt.utilities.datagenerator.config.model.options.OptionKey;
 import com.datamelt.utilities.datagenerator.config.process.TransformationExecutionException;
 import com.datamelt.utilities.datagenerator.utilities.DateUtility;
 import com.datamelt.utilities.datagenerator.utilities.transformation.TransformationExecutor;
@@ -28,17 +28,17 @@ public class RandomTimestampGenerator implements RandomValueGenerator, RandomVal
     {
         this.fieldConfiguration = fieldConfiguration;
 
-        if(fieldConfiguration.getOptions().get(RandomTimestampOptions.MIN_YEAR.getKey()) instanceof Long)
+        if(fieldConfiguration.getOptions().get(OptionKey.MIN_YEAR.getKey()) instanceof Long)
         {
-            minYear = ((Long) fieldConfiguration.getOptions().get(RandomTimestampOptions.MIN_YEAR.getKey())).intValue();
+            minYear = ((Long) fieldConfiguration.getOptions().get(OptionKey.MIN_YEAR.getKey())).intValue();
         }
-        if(fieldConfiguration.getOptions().get(RandomTimestampOptions.MAX_YEAR.getKey()) instanceof Long)
+        if(fieldConfiguration.getOptions().get(OptionKey.MAX_YEAR.getKey()) instanceof Long)
         {
-            maxYear = ((Long) fieldConfiguration.getOptions().get(RandomTimestampOptions.MAX_YEAR.getKey())).intValue();
+            maxYear = ((Long) fieldConfiguration.getOptions().get(OptionKey.MAX_YEAR.getKey())).intValue();
         }
-        if(fieldConfiguration.getOptions().get(RandomTimestampOptions.DATE_FORMAT.getKey()) instanceof String)
+        if(fieldConfiguration.getOptions().get(OptionKey.DATE_FORMAT.getKey()) instanceof String)
         {
-            dateTimeFormatter = DateTimeFormatter.ofPattern((String) fieldConfiguration.getOptions().get(RandomTimestampOptions.DATE_FORMAT.getKey()));
+            dateTimeFormatter = DateTimeFormatter.ofPattern((String) fieldConfiguration.getOptions().get(OptionKey.DATE_FORMAT.getKey()));
         }
         transformationMethods = prepareMethods(BASE_DATATYPE, fieldConfiguration);
     }

@@ -252,19 +252,19 @@ Fields of type=category may either specify valid values in the configuration fil
 To run the tool you must pass at least the mandatory arguments to the program as shown below. These point to the program configuration file and the data configuration file. You may pass the other arguments, which will override the relevant default value as well as the value from the program configuration file.
 
 #### Program arguments:
-| Argument              | Type      | Default                    | Description                                                                                                    |
-|-----------------------|-----------|----------------------------|----------------------------------------------------------------------------------------------------------------|
-| -n=\<number\>         | optional  | 10000                      | number of rows to generate                                                                                     |
-| -l=\<number\>         | optional  | 1000                       | interval for log messages during data generation                                                               |
-| -g=\<loglevel\>       | optional  | INFO                       | log level to be used for logging output. must be one out of: OFF, FATAL, ERROR, WARN, INFO, DEBUG, TRACE, ALL  |
-| -xp=\<path+filename\> | optional  | datagenerator_export.csv   | path and filename of the export file                                                                           |
-| -xt=\<type\>          | optional  | csv                        | type of the export to generate. possible values: csv, excel, json, parquet                                     |
-| -cd=\<delimiter\>     | optional  |                            | delimiter to be used for export files of type CSV                                                              |
-| -ch                   | optional  |                            | indicator if a header row should be output for export files of type CSV                                        |
-| -dc=\<path+filename\> | mandatory | -none-                     | path and filename of the data configuration yaml file                                                          |
-| -pc=\<path+filename\> | mandatory | -none-                     | path and filename of the program configuration yaml file                                                       |
-| -s                    | optional  | false                      | output statistics for the generated field values                                                               |
-| -h / --help           | optional  |                            | display help about the available program arguments                                                             |
+| Argument              | Type      | Default                    | Description                                                                                                   |
+|-----------------------|-----------|----------------------------|---------------------------------------------------------------------------------------------------------------|
+| -n=\<number\>         | optional  | 10000                      | number of rows to generate                                                                                    |
+| -l=\<number\>         | optional  | 1000                       | interval for log messages during data generation. set to zero for no output during data generation.           |
+| -g=\<loglevel\>       | optional  | INFO                       | log level to be used for logging output. must be one out of: OFF, FATAL, ERROR, WARN, INFO, DEBUG, TRACE, ALL |
+| -xp=\<path+filename\> | optional  | datagenerator_export.csv   | path and filename of the export file                                                                          |
+| -xt=\<type\>          | optional  | csv                        | type of the export to generate. possible values: csv, excel, json, parquet                                    |
+| -cd=\<delimiter\>     | optional  |                            | delimiter to be used for export files of type CSV                                                             |
+| -ch                   | optional  |                            | indicator if a header row should be output for export files of type CSV                                       |
+| -dc=\<path+filename\> | mandatory | -none-                     | path and filename of the data configuration yaml file                                                         |
+| -pc=\<path+filename\> | mandatory | -none-                     | path and filename of the program configuration yaml file                                                      |
+| -s                    | optional  | false                      | output statistics for the generated field values                                                              |
+| -h / --help           | optional  |                            | display help about the available program arguments                                                            |
 
 Run the datagenerator tool:
 
@@ -285,7 +285,7 @@ Add the following dependency to your Maven pom.xml:
 <dependency>
     <groupId>io.github.uwegeercken</groupId>
     <artifactId>datagenerator2</artifactId>
-    <version>0.4.5</version>
+    <version>0.5.0</version>
 </dependency>
 ```
 
@@ -316,4 +316,4 @@ To build the jar file either download the release from https://github.com/uwegee
 
     mvn clean install
 
-last update: uwe geercken - uwe.geercken@web.de - 2026-03-07
+last update: uwe geercken - uwe.geercken@web.de - 2026-03-14

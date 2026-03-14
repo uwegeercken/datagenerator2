@@ -1,7 +1,7 @@
 package com.datamelt.utilities.datagenerator.generate;
 
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
-import com.datamelt.utilities.datagenerator.config.model.options.RandomStringOptions;
+import com.datamelt.utilities.datagenerator.config.model.options.OptionKey;
 import com.datamelt.utilities.datagenerator.config.process.TransformationExecutionException;
 import com.datamelt.utilities.datagenerator.utilities.transformation.TransformationExecutor;
 import com.datamelt.utilities.datagenerator.utilities.transformation.TransformationMethod;
@@ -25,9 +25,9 @@ public class RandomStringGenerator implements RandomValueGenerator
     {
         this.fieldConfiguration = fieldConfiguration;
 
-        minLength = (Long) fieldConfiguration.getOptions().get(RandomStringOptions.MIN_LENGTH.getKey());
-        maxLength = (Long) fieldConfiguration.getOptions().get(RandomStringOptions.MAX_LENGTH.getKey());
-        randomCharacters = (String) fieldConfiguration.getOptions().get(RandomStringOptions.RANDOM_CHARACTERS.getKey());
+        minLength = (Long) fieldConfiguration.getOptions().get(OptionKey.MIN_LENGTH.getKey());
+        maxLength = (Long) fieldConfiguration.getOptions().get(OptionKey.MAX_LENGTH.getKey());
+        randomCharacters = (String) fieldConfiguration.getOptions().get(OptionKey.RANDOM_CHARACTERS.getKey());
 
         transformationMethods = prepareMethods(BASE_DATATYPE, fieldConfiguration);
     }

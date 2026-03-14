@@ -3,7 +3,7 @@ package com.datamelt.utilities.datagenerator.generate;
 import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldType;
-import com.datamelt.utilities.datagenerator.config.model.options.RandomStringOptions;
+import com.datamelt.utilities.datagenerator.config.model.options.OptionKey;
 import com.datamelt.utilities.datagenerator.config.process.DataFieldsProcessor;
 import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
 import com.datamelt.utilities.datagenerator.error.Try;
@@ -37,8 +37,8 @@ class RandomStringGeneratorTest
     void validateErrorMaxLengthSmallerMinLength()
     {
         Map<String, Object> options = new HashMap<>();
-        options.put(RandomStringOptions.MIN_LENGTH.getKey(), 50L);
-        options.put(RandomStringOptions.MAX_LENGTH.getKey(), 10L);
+        options.put(OptionKey.MIN_LENGTH.getKey(), 50L);
+        options.put(OptionKey.MAX_LENGTH.getKey(), 10L);
 
         assertThrows(InvalidConfigurationException.class,()->{
             RowBuilder rowBuilder = getRowBuilder("testfield", options);
@@ -52,9 +52,9 @@ class RandomStringGeneratorTest
         String allowedCharacters = "nopqrstuvwxyz";
 
         Map<String, Object> options = new HashMap<>();
-        options.put(RandomStringOptions.MIN_LENGTH.getKey(), 150L);
-        options.put(RandomStringOptions.MAX_LENGTH.getKey(), 150L);
-        options.put(RandomStringOptions.RANDOM_CHARACTERS.getKey(), allowedCharacters);
+        options.put(OptionKey.MIN_LENGTH.getKey(), 150L);
+        options.put(OptionKey.MAX_LENGTH.getKey(), 150L);
+        options.put(OptionKey.RANDOM_CHARACTERS.getKey(), allowedCharacters);
 
         RowBuilder rowBuilder = getRowBuilder("testfield", options);
         Try<Row> row = rowBuilder.generate();
@@ -77,8 +77,8 @@ class RandomStringGeneratorTest
     void validateErrorMinLengthSmallerZero()
     {
         Map<String, Object> options = new HashMap<>();
-        options.put(RandomStringOptions.MIN_LENGTH.getKey(), -1L);
-        options.put(RandomStringOptions.MAX_LENGTH.getKey(), 10L);
+        options.put(OptionKey.MIN_LENGTH.getKey(), -1L);
+        options.put(OptionKey.MAX_LENGTH.getKey(), 10L);
 
         assertThrows(InvalidConfigurationException.class,()->{
             RowBuilder rowBuilder = getRowBuilder("testfield", options);
@@ -90,8 +90,8 @@ class RandomStringGeneratorTest
     void validateMinLengthOneIsValid() throws Exception
     {
         Map<String, Object> options = new HashMap<>();
-        options.put(RandomStringOptions.MIN_LENGTH.getKey(), 1L);
-        options.put(RandomStringOptions.MAX_LENGTH.getKey(), 10L);
+        options.put(OptionKey.MIN_LENGTH.getKey(), 1L);
+        options.put(OptionKey.MAX_LENGTH.getKey(), 10L);
 
         RowBuilder rowBuilder = getRowBuilder("testfield", options);
         Try<Row> row = rowBuilder.generate();
@@ -106,8 +106,8 @@ class RandomStringGeneratorTest
     void validateFixedLengthString() throws Exception
     {
         Map<String, Object> options = new HashMap<>();
-        options.put(RandomStringOptions.MIN_LENGTH.getKey(), 10L);
-        options.put(RandomStringOptions.MAX_LENGTH.getKey(), 10L);
+        options.put(OptionKey.MIN_LENGTH.getKey(), 10L);
+        options.put(OptionKey.MAX_LENGTH.getKey(), 10L);
 
         RowBuilder rowBuilder = getRowBuilder("testfield", options);
         Try<Row> row = rowBuilder.generate();
@@ -123,8 +123,8 @@ class RandomStringGeneratorTest
         Long maxValue = 20L;
 
         Map<String, Object> options = new HashMap<>();
-        options.put(RandomStringOptions.MIN_LENGTH.getKey(), minValue);
-        options.put(RandomStringOptions.MAX_LENGTH.getKey(), maxValue);
+        options.put(OptionKey.MIN_LENGTH.getKey(), minValue);
+        options.put(OptionKey.MAX_LENGTH.getKey(), maxValue);
 
         RowBuilder rowBuilder = getRowBuilder("testfield", options);
         for(int i=0;i<1000;i++)

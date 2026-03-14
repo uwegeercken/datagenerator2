@@ -1,8 +1,7 @@
 package com.datamelt.utilities.datagenerator.generate;
 
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
-import com.datamelt.utilities.datagenerator.config.model.options.DateReferenceOptions;
-import com.datamelt.utilities.datagenerator.config.model.options.RandomDateOptions;
+import com.datamelt.utilities.datagenerator.config.model.options.OptionKey;
 import com.datamelt.utilities.datagenerator.config.process.TransformationExecutionException;
 import com.datamelt.utilities.datagenerator.utilities.transformation.TransformationExecutor;
 import com.datamelt.utilities.datagenerator.utilities.transformation.TransformationMethod;
@@ -28,13 +27,13 @@ public class DateReferenceGenerator implements RandomValueGenerator
     {
         this.fieldConfiguration = fieldConfiguration;
 
-        if(fieldConfiguration.getOptions().get(DateReferenceOptions.REFERENCE.getKey()) instanceof String)
+        if(fieldConfiguration.getOptions().get(OptionKey.REFERENCE.getKey()) instanceof String)
         {
-            reference = ((String) fieldConfiguration.getOptions().get(DateReferenceOptions.REFERENCE.getKey()));
+            reference = ((String) fieldConfiguration.getOptions().get(OptionKey.REFERENCE.getKey()));
         }
-        if(fieldConfiguration.getOptions().get(RandomDateOptions.DATE_FORMAT.getKey()) instanceof String)
+        if(fieldConfiguration.getOptions().get(OptionKey.DATE_FORMAT.getKey()) instanceof String)
         {
-            dateTimeFormatter = DateTimeFormatter.ofPattern((String) fieldConfiguration.getOptions().get(RandomDateOptions.DATE_FORMAT.getKey()));
+            dateTimeFormatter = DateTimeFormatter.ofPattern((String) fieldConfiguration.getOptions().get(OptionKey.DATE_FORMAT.getKey()));
         }
         transformationMethods = prepareMethods(BASE_DATATYPE, fieldConfiguration);
     }

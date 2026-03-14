@@ -1,7 +1,7 @@
 package com.datamelt.utilities.datagenerator.generate;
 
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
-import com.datamelt.utilities.datagenerator.config.model.options.RegularExpressionOptions;
+import com.datamelt.utilities.datagenerator.config.model.options.OptionKey;
 import com.datamelt.utilities.datagenerator.config.process.TransformationExecutionException;
 import com.datamelt.utilities.datagenerator.utilities.regex.CharacterGenerator;
 import com.datamelt.utilities.datagenerator.utilities.regex.RegularExpressionParser;
@@ -27,7 +27,7 @@ public class RegularExpressionGenerator implements RandomValueGenerator
     {
         this.fieldConfiguration = fieldConfiguration;
 
-        pattern = (String) fieldConfiguration.getOptions().get(RegularExpressionOptions.PATTERN.getKey());
+        pattern = (String) fieldConfiguration.getOptions().get(OptionKey.PATTERN.getKey());
         regularExpressionParser = new RegularExpressionParser();
         regularExpressionGenerators = regularExpressionParser.translate(pattern);
         transformationMethods = prepareMethods(BASE_DATATYPE, fieldConfiguration);
