@@ -38,7 +38,10 @@ public final class RandomStringDefinition
                     "the value must be greater than 0"),
             new FieldOption(OptionKey.RANDOM_CHARACTERS,
                     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_"),
-            new FieldOption(OptionKey.OUTPUT_TYPE, DataTypeDuckDb.VARCHAR.name())
+            new FieldOption(OptionKey.OUTPUT_TYPE, DataTypeDuckDb.VARCHAR.name()),
+            new FieldOption(OptionKey.NULL_PROBABILITY, 0L,
+                    OptionValidations.IS_PERCENTAGE,
+                    "the value must be between 0 and 100")
     );
 
     public static void validate(FieldConfiguration config) throws InvalidConfigurationException

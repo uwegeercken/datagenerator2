@@ -28,7 +28,10 @@ public final class RandomTimestampDefinition
             new FieldOption(OptionKey.DATE_FORMAT, "yyyy-MM-dd HH:mm:ss",
                     OptionValidations.IS_VALID_DATETIME_FORMAT,
                     "the value can not be parsed as a date/time format"),
-            new FieldOption(OptionKey.OUTPUT_TYPE, DataTypeDuckDb.VARCHAR.name())
+            new FieldOption(OptionKey.OUTPUT_TYPE, DataTypeDuckDb.VARCHAR.name()),
+            new FieldOption(OptionKey.NULL_PROBABILITY, 0L,
+                    OptionValidations.IS_PERCENTAGE,
+                    "the value must be between 0 and 100")
     );
 
     public static void validate(FieldConfiguration config) throws InvalidConfigurationException

@@ -2,6 +2,7 @@ package com.datamelt.utilities.datagenerator.config.process;
 
 import com.datamelt.utilities.datagenerator.config.model.DataConfiguration;
 import com.datamelt.utilities.datagenerator.config.model.FieldConfiguration;
+import com.datamelt.utilities.datagenerator.config.model.options.OptionKey;
 
 public class DataFieldsProcessor
 {
@@ -21,5 +22,15 @@ public class DataFieldsProcessor
         processor.validateOutputType();
         processor.validateConfiguration();
         processor.processConfiguration();
+        syncNullProbability(fieldConfiguration);
+    }
+
+    private static void syncNullProbability(FieldConfiguration fieldConfiguration)
+    {
+        Object nullProbabilityValue = fieldConfiguration.getOptions().get(OptionKey.NULL_PROBABILITY.getKey());
+        if (nullProbabilityValue != null && ((Long) nullProbabilityValue) > 0)
+        {
+            fieldConfiguration.setNullProbability(((Long) nullProbabilityValue).intValue());
+        }
     }
 }

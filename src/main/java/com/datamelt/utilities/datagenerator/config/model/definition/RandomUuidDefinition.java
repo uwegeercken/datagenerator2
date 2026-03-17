@@ -2,6 +2,7 @@ package com.datamelt.utilities.datagenerator.config.model.definition;
 
 import com.datamelt.utilities.datagenerator.config.model.options.FieldOption;
 import com.datamelt.utilities.datagenerator.config.model.options.OptionKey;
+import com.datamelt.utilities.datagenerator.config.model.options.OptionValidations;
 import com.datamelt.utilities.datagenerator.utilities.type.DataTypeDuckDb;
 
 import java.util.List;
@@ -17,6 +18,9 @@ public final class RandomUuidDefinition
     );
 
     public static final List<FieldOption> OPTIONS = List.of(
-            new FieldOption(OptionKey.OUTPUT_TYPE, DataTypeDuckDb.VARCHAR.name())
+            new FieldOption(OptionKey.OUTPUT_TYPE, DataTypeDuckDb.VARCHAR.name()),
+            new FieldOption(OptionKey.NULL_PROBABILITY, 0L,
+                    OptionValidations.IS_PERCENTAGE,
+                    "the value must be between 0 and 100")
     );
 }

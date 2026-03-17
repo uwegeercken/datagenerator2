@@ -30,8 +30,8 @@ public class DataGenerator
 {
     private static Logger logger;
     private static final String applicationName = "datagenerator2";
-    private static final String version = "0.5.0";
-    private static final String versionDate = "2026-03-14";
+    private static final String version = "0.5.1";
+    private static final String versionDate = "2026-03-17";
     private static final String contactEmail = "uwe.geercken@web.de";
     private DataConfiguration dataConfiguration;
     private ProgramConfiguration programConfiguration;
@@ -140,16 +140,18 @@ public class DataGenerator
         dataStore = new DataStore(programConfiguration, dataConfiguration, fileExporter);
     }
 
-    private long generateRows() throws NoSuchMethodException, InvalidConfigurationException, SQLException
+    private long generateRows() throws InvalidConfigurationException, SQLException
     {
         setupDataStore();
         long start = System.currentTimeMillis();
 
         RowBuilder rowBuilder = new RowBuilder(dataConfiguration);
-
         AtomicLong appendCounter = new AtomicLong(0);
+        AtomicLong generateFailureCount = new AtomicLong(0);
+
         LongStream.range(0, programConfiguration.getGeneralConfiguration().getNumberOfRowsToGenerate())
                 .mapToObj(value -> rowBuilder.generate())
+                .peek(result -> { if (result.isFailure()) generateFailureCount.incrementAndGet(); })
                 .filter(Try::isSuccess)
                 .map(Try::getResult)
                 .forEach(row -> {
@@ -158,6 +160,11 @@ public class DataGenerator
                 });
 
         dataStore.flush();
+
+        if (generateFailureCount.get() > 0)
+        {
+            logger.warn("total rows failed to generate: [{}]", generateFailureCount.get());
+        }
         long appendFailures = dataStore.getAppendFailureCount();
         if (appendFailures > 0)
         {

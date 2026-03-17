@@ -28,7 +28,10 @@ public final class RandomDateDefinition
             new FieldOption(OptionKey.DATE_FORMAT, "yyyy-MM-dd",
                     OptionValidations.IS_VALID_SIMPLE_DATE_FORMAT,
                     "the value can not be parsed as a date format"),
-            new FieldOption(OptionKey.OUTPUT_TYPE, DataTypeDuckDb.VARCHAR.name())
+            new FieldOption(OptionKey.OUTPUT_TYPE, DataTypeDuckDb.VARCHAR.name()),
+            new FieldOption(OptionKey.NULL_PROBABILITY, 0L,
+                    OptionValidations.IS_PERCENTAGE,
+                    "the value must be between 0 and 100")
     );
 
     public static void validate(FieldConfiguration config) throws InvalidConfigurationException

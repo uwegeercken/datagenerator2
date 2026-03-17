@@ -13,17 +13,20 @@ public final class OptionValidations
 {
     private OptionValidations() {}
 
-    public static final Predicate<Object> IS_LONG =
-            v -> v instanceof Long;
-
     public static final Predicate<Object> IS_POSITIVE_LONG =
             v -> (Long) v > 0;
 
     public static final Predicate<Object> IS_NON_NEGATIVE_LONG =
             v -> (Long) v >= 0;
 
+    public static final Predicate<Object> IS_LONG =
+            v -> v instanceof Long;
+
     public static final Predicate<Object> IS_NOT_EMPTY_STRING =
             v -> v != null && !((String) v).isBlank();
+
+    public static final Predicate<Object> IS_PERCENTAGE =
+            v -> (Long) v >= 0 && (Long) v <= 100;
 
     public static final Predicate<Object> IS_VALID_SIMPLE_DATE_FORMAT =
             v -> {

@@ -3,7 +3,10 @@ package com.datamelt.utilities.datagenerator.generate;
 import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationException;
 import com.datamelt.utilities.datagenerator.config.process.TransformationExecutionException;
 
-public class RowField {
+import java.util.concurrent.ThreadLocalRandom;
+
+public class RowField
+{
     private final String name;
     private Object value;
     private final RandomValueGenerator generator;
@@ -14,8 +17,13 @@ public class RowField {
         this.name = name;
     }
 
-    public void generateValue() throws InvalidConfigurationException, TransformationExecutionException
+    public void generateValue(int nullProbability) throws InvalidConfigurationException, TransformationExecutionException
     {
+        if (nullProbability > 0 && ThreadLocalRandom.current().nextInt(1, 101) <= nullProbability)
+        {
+            this.value = null;
+            return;
+        }
         this.value = transformValue(generator.generateRandomValue());
     }
 
@@ -29,11 +37,13 @@ public class RowField {
         return generator.transformRandomValue(value);
     }
 
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 
-    public Object getValue() {
+    public Object getValue()
+    {
         return value;
     }
 
