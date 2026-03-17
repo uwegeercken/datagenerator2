@@ -12,6 +12,7 @@ Samples, word lists (category files) and details for the configuration can be fo
 - generate uuid's, random strings, numbers or floating point numbers
 - generate random dates and timestamps. generate date fields referencing another date field
 - generate random data according to a given regular expression
+- define a probability for generating null values per field
 - transform the generated data values: uppercase, lowercase, base64 encode, negate, round, encrypt and more
 - export rows of generated data in CSV, Excel or Json
 - export rows of generated data in Parquet format - including partitioning
@@ -45,11 +46,13 @@ This type of generator (type=randomstring) generates purely random text. The opt
 Setting minLength=maxLength will create a constant length string.
 
 #### Available options:
-| Option           | Description                                     | Data Type   | Default                      |
-|------------------|-------------------------------------------------|-------------|------------------------------|
-| minLength        | minimum length of the value                     | long        | 1                            |
-| maxLength        | maximum length of the value                     | long        | 40                           |
-| randomCharacters | characters to be used when generating the value | String      | [a-z] + [A-Z] + [0-9] + [-_] |
+| Option           | Description                                                   | Data Type | Default                       |
+|------------------|---------------------------------------------------------------|-----------|-------------------------------|
+| minLength        | minimum length of the value                                   | long      | 1                             |
+| maxLength        | maximum length of the value                                   | long      | 40                            |
+| randomCharacters | characters to be used when generating the value               | string    | [a-z] + [A-Z] + [0-9] + [-_] |
+| outputType       | how data should be output. possible values: varchar           | string    | varchar                       |
+| nullProbability  | probability of generating a null value (0=never, 100=always) | long      | 0                             |
 
 #### Available transformations:
 | Transformation | Description                                                                                               | Parameters                                                             |
@@ -68,28 +71,32 @@ Setting minLength=maxLength will create a constant length string.
 This generator (type=randomlong) allows to generate numbers. The options for this type of generator allow to specify a lower bound and upper bound for the generated value.
 
 #### Available options:
-| Option     | Description    | Data Type    | Default   |
-|------------|----------------|--------------|-----------|
-| minValue   | minimum value  | long         | 0         |
-| maxValue   | maximum value  | long         | 1000000   |
+| Option     | Description                                                       | Data Type | Default   |
+|------------|-------------------------------------------------------------------|-----------|-----------|
+| minValue   | minimum value                                                     | long      | 0         |
+| maxValue   | maximum value                                                     | long      | 1000000   |
+| outputType | how data should be output. possible values: long, boolean         | string    | long      |
 
 #### Available transformations:
 | Transformation | Description                                                                                            | Parameters |
 |----------------|--------------------------------------------------------------------------------------------------------|------------|
+| negate         | negate the value                                                                                       | none       |
 | toBoolean      | convert the value to a boolean value. values greater 0 are converted to "true", all others to "false"  | none       |
 
 ### Random Floating Point Numbers
 This generator (type=randomdouble) allows to generate floating point numbers. The options for this type of generator allow to specify a lower bound and upper bound for the generated value.
 
 #### Available options:
-| Option     | Description    | Data Type | Default  |
-|------------|----------------|-----------|----------|
-| minValue   | minimum value  | long      | 0        |
-| maxValue   | maximum value  | long      | 1000000  |
+| Option     | Description                                                       | Data Type | Default  |
+|------------|-------------------------------------------------------------------|-----------|----------|
+| minValue   | minimum value                                                     | double    | 0        |
+| maxValue   | maximum value                                                     | double    | 1000000  |
+| outputType | how data should be output. possible values: double                | string    | double   |
 
 #### Available transformations:
 | Transformation | Description                                 | Parameters                         |
 |----------------|---------------------------------------------|------------------------------------|
+| negate         | negate the value                            | none                               |
 | round          | round the value using rounding mode HALF_UP | number of decimal places (integer) |
 
 ### Random Dates
@@ -97,32 +104,37 @@ This generator (type=randomdate) allows to generate dates. The options for this 
 If the outputType=long then the date is output as the equivalent long value in milliseconds.
 
 #### Available options:
-| Option     | Description                                                 | Data Type | Default    |
-|------------|-------------------------------------------------------------|-----------|------------|
-| minYear    | minimum value                                               | long      | 2020       |
-| maxYear    | maximum value                                               | long      | 2030       |
-| dateFormat | output format of the date (Java DateTimeFormatter)          | string    | yyyy-MM-dd |
-| outputType | how data should be output. possible values: varchar or long | varchar   | varchar    |
+| Option          | Description                                                   | Data Type | Default    |
+|-----------------|---------------------------------------------------------------|-----------|------------|
+| minYear         | minimum year                                                  | long      | 2020       |
+| maxYear         | maximum year                                                  | long      | 2030       |
+| dateFormat      | output format of the date (Java DateTimeFormatter)            | string    | yyyy-MM-dd |
+| outputType      | how data should be output. possible values: varchar or long   | string    | varchar    |
+| nullProbability | probability of generating a null value (0=never, 100=always) | long      | 0          |
 
 ### Random Timestamps
 This generator (type=randomtimestamp) allows to generate timestamps. The options for this type of generator allow to specify a minimum and maximum year, as well as the output format for the generated value.
 
 #### Available options:
-| Option       | Description                                         | Data Type | Default             |
-|--------------|-----------------------------------------------------|-----------|---------------------|
-| minYear      | minimum value                                       | long      | 2020                |
-| maxYear      | maximum value                                       | long      | 2030                |
-| dateFormat   | output format of the date (Java DateTimeFormatter)  | string    | yyyy-MM-dd HH:mm:ss |
+| Option          | Description                                                   | Data Type | Default             |
+|-----------------|---------------------------------------------------------------|-----------|---------------------|
+| minYear         | minimum year                                                  | long      | 2020                |
+| maxYear         | maximum year                                                  | long      | 2030                |
+| dateFormat      | output format of the date (Java DateTimeFormatter)            | string    | yyyy-MM-dd HH:mm:ss |
+| outputType      | how data should be output. possible values: varchar or long   | string    | varchar             |
+| nullProbability | probability of generating a null value (0=never, 100=always) | long      | 0                   |
 
 ### Date Reference
 This generator (type=datereference) allows to generate a date string based on another date. This means that the values of this date and the referenced date correspond to each other.
 The options for this type of generator allow to specify the date field that shall be referenced, as well as the output format for the generated value.
 
 #### Available options:
-| Option     | Description                                         | Data Type | Default    |
-|------------|-----------------------------------------------------|-----------|------------|
-| reference  | name of the field which is the reference date       | string    |            |
-| dateFormat | output format of the date (Java DateTimeFormatter)  | string    | yyyy-MM-dd |
+| Option          | Description                                                   | Data Type | Default    |
+|-----------------|---------------------------------------------------------------|-----------|------------|
+| reference       | name of the field which is the reference date                 | string    |            |
+| dateFormat      | output format of the date (Java DateTimeFormatter)            | string    | yyyy-MM-dd |
+| outputType      | how data should be output. possible values: varchar or long   | string    | varchar    |
+| nullProbability | probability of generating a null value (0=never, 100=always) | long      | 0          |
 
 #### Available transformations:
 | Transformation | Description                                                                                          | Parameters |
@@ -132,6 +144,12 @@ The options for this type of generator allow to specify the date field that shal
 
 ### UUID
 This generator (type=randomuuid) allows to generate a random uuid.
+
+#### Available options:
+| Option          | Description                                                   | Data Type | Default |
+|-----------------|---------------------------------------------------------------|-----------|---------|
+| outputType      | how data should be output. possible values: varchar           | string    | varchar |
+| nullProbability | probability of generating a null value (0=never, 100=always) | long      | 0       |
 
 ### Regular Expressions
 This type of generator (type=regularexpression) generates random text based on a regular expression pattern. The pattern option in the yaml configuration file allows to specify characters, character ranges and multipliers which make up the pattern.
@@ -149,9 +167,11 @@ The minimum and maximum value of a multiplier can not be smaller than 1. The max
 **NOTE**: Currently you can not use any other features of regular expression patterns than character groups and multipliers.
 
 #### Available options:
-| Option           | Description                                     | Data Type | Default                      |
-|------------------|-------------------------------------------------|-----------|------------------------------|
-| pattern          | pattern describing a regular expression         | String    | [A-Za-z0-9]{1,10}            |
+| Option          | Description                                                                         | Data Type | Default            |
+|-----------------|-------------------------------------------------------------------------------------|-----------|--------------------|
+| pattern         | pattern describing a regular expression                                             | string    | [A-Za-z0-9]{1,10}  |
+| outputType      | how data should be output. possible values: varchar, long, boolean, double          | string    | varchar            |
+| nullProbability | probability of generating a null value (0=never, 100=always)                       | long      | 0                  |
 
 #### Available transformations:
 | Transformation | Description                                    | Parameters                                   |
@@ -162,7 +182,6 @@ The minimum and maximum value of a multiplier can not be smaller than 1. The max
 | toLong         | convert the value to a long value              | none                                         |
 | toBoolean      | convert the value to a boolean value           | none                                         |
 | toDouble       | convert the value to a double value            | none                                         |
-
 
 ### Word lists
 Word lists allow to define values for certain categories such as "weekdays", "seasons", "car types",
@@ -193,9 +212,10 @@ and equally distribute the weight value. But, depending on the number of values 
 from the word list might get a slightly higher weight value. If weight definitions are assigned in a way that the remaining percentage for the other values is less than 1 percent an error occurs.
 
 #### Available options:
-| Option                  | Description                                         | Data Type | Default |
-|-------------------------|-----------------------------------------------------|-----------|---------|
-| categoryFileSeparator   | separator between value and weight in category file | string    | ,       |
+| Option                | Description                                                                | Data Type | Default |
+|-----------------------|----------------------------------------------------------------------------|-----------|---------|
+| categoryFileSeparator | separator between value and weight in category file                        | string    | ,       |
+| outputType            | how data should be output. possible values: varchar, long, boolean         | string    | varchar |
 
 #### Available transformations:
 | Transformation | Description                                                                                               | Parameters                                                             |
@@ -285,7 +305,7 @@ Add the following dependency to your Maven pom.xml:
 <dependency>
     <groupId>io.github.uwegeercken</groupId>
     <artifactId>datagenerator2</artifactId>
-    <version>0.5.0</version>
+    <version>0.5.1</version>
 </dependency>
 ```
 
@@ -316,4 +336,4 @@ To build the jar file either download the release from https://github.com/uwegee
 
     mvn clean install
 
-last update: uwe geercken - uwe.geercken@web.de - 2026-03-14
+last update: uwe geercken - uwe.geercken@web.de - 2026-03-17

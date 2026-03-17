@@ -18,12 +18,14 @@ import java.util.Optional;
 public class RowBuilder
 {
     private final List<RowField> rowFields = new ArrayList<>();
+    private final List<Integer> nullProbabilities = new ArrayList<>();
+
     public RowBuilder(DataConfiguration dataConfiguration) throws InvalidConfigurationException
     {
-            createRowFields(dataConfiguration);
+        createRowFields(dataConfiguration);
     }
 
-    private void createRowFields(DataConfiguration dataConfiguration) throws  InvalidConfigurationException
+    private void createRowFields(DataConfiguration dataConfiguration) throws InvalidConfigurationException
     {
         for (FieldConfiguration fieldConfiguration : dataConfiguration.getFields())
         {
@@ -36,7 +38,7 @@ public class RowBuilder
             }
             else
             {
-                // TODO: refactor to use a transformation instead of two seperate classes
+                // TODO: refactor to use a transformation instead of two separate classes
                 if (fieldConfiguration.getOutputType() == DataTypeDuckDb.LONG)
                 {
                     rowFields.add(new RowField(new RandomDateAsLongGenerator(fieldConfiguration), fieldConfiguration.getName()));
@@ -46,14 +48,14 @@ public class RowBuilder
                     rowFields.add(new RowField(new RandomDateGenerator(fieldConfiguration), fieldConfiguration.getName()));
                 }
             }
+            nullProbabilities.add(fieldConfiguration.getNullProbability());
         }
 
         for (FieldConfiguration fieldConfiguration : dataConfiguration.getFields())
         {
             if (fieldConfiguration.getType() == FieldType.DATEREFERENCE)
             {
-                String referenceFieldName = (String)fieldConfiguration.getOptions().get(OptionKey.REFERENCE.getKey());
-                RowField referenceRowField = getRowfield(referenceFieldName)
+                String referenceFieldName = (String) fieldConfiguration.getOptions().get(OptionKey.REFERENCE.getKey());                RowField referenceRowField = getRowfield(referenceFieldName)
                         .orElseThrow(() -> new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "] references field [" + referenceFieldName + "] but this field does not exist"));
 
                 RowField rowField = getRowfield(fieldConfiguration.getName())
@@ -75,12 +77,12 @@ public class RowBuilder
     public Try<Row> generate()
     {
         Row row = new Row();
-        for (RowField rowField : rowFields)
+        for (int i = 0; i < rowFields.size(); i++)
         {
-            RowField rowFieldCopy = rowField.copy();
+            RowField rowFieldCopy = rowFields.get(i).copy();
             try
             {
-                rowFieldCopy.generateValue();
+                rowFieldCopy.generateValue(nullProbabilities.get(i));
                 row.addField(rowFieldCopy);
             }
             catch (InvalidConfigurationException | TransformationExecutionException ex)
@@ -90,5 +92,4 @@ public class RowBuilder
         }
         return new Success<>(row);
     }
-
 }

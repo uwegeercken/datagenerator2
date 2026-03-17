@@ -13,7 +13,8 @@ public enum OptionKey
     MAX_LENGTH("maxLength"),
     RANDOM_CHARACTERS("randomCharacters"),
     PATTERN("pattern"),
-    OUTPUT_TYPE("outputType");
+    OUTPUT_TYPE("outputType"),
+    NULL_PROBABILITY("nullProbability");
 
     private final String key;
 

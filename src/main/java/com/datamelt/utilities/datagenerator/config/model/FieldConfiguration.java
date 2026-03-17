@@ -27,6 +27,8 @@ public class FieldConfiguration
 
     int numberOfDefaultWeights = 0;
 
+    private int nullProbability = 0;
+
     public FieldConfiguration(@JsonProperty("name") String name)
     {
         this.name = name;
@@ -154,6 +156,16 @@ public class FieldConfiguration
 
     public void setOptions(Map<String, Object> options) {
         this.options = options;
+    }
+
+    public int getNullProbability()
+    {
+        return nullProbability;
+    }
+
+    public void setNullProbability(int nullProbability)
+    {
+        this.nullProbability = nullProbability;
     }
 
     public void setTransformations(List<TransformationConfiguration> transformations) {

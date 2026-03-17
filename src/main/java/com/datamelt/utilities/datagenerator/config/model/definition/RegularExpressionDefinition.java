@@ -29,6 +29,9 @@ public final class RegularExpressionDefinition
             new FieldOption(OptionKey.PATTERN, "[A-Za-z0-9]{1,10}",
                     OptionValidations.IS_VALID_REGEX_PATTERN,
                     "the pattern is invalid - check character groups and multipliers"),
-            new FieldOption(OptionKey.OUTPUT_TYPE, DataTypeDuckDb.VARCHAR.name())
+            new FieldOption(OptionKey.OUTPUT_TYPE, DataTypeDuckDb.VARCHAR.name()),
+            new FieldOption(OptionKey.NULL_PROBABILITY, 0L,
+                    OptionValidations.IS_PERCENTAGE,
+                    "the value must be between 0 and 100")
     );
 }

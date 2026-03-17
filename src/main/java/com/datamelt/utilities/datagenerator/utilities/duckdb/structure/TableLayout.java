@@ -13,14 +13,14 @@ import static com.datamelt.utilities.datagenerator.utilities.Constants.FIELD_SPL
 
 public class TableLayout
 {
-
     private static final String COLUMN_ROWNUMBER_DATATYPE = "long";
-    private static final List<TreeNode> rootNodes = new ArrayList<>();
-    private static final List<TableField> fields= new ArrayList<>();
-    private static final StringBuilder createTableStatementBuilder = new StringBuilder();
+    private static List<TreeNode> rootNodes = new ArrayList<>();
+    private static List<TableField> fields = new ArrayList<>();
+    private static StringBuilder createTableStatementBuilder = new StringBuilder();
 
     public static String getCreateTableStatement(ProgramConfiguration programConfiguration, DataConfiguration dataConfiguration)
     {
+        reset();
         createStructs(dataConfiguration);
         inititalizeCreateTableStatement(dataConfiguration.getTableName());
         buildRownumberField(programConfiguration.getGeneralConfiguration().getRowNumberFieldName());
@@ -30,9 +30,16 @@ public class TableLayout
         return createTableStatementBuilder.toString();
     }
 
+    private static void reset()
+    {
+        rootNodes = new ArrayList<>();
+        fields = new ArrayList<>();
+        createTableStatementBuilder = new StringBuilder();
+    }
+
     private static void inititalizeCreateTableStatement(String tableName)
     {
-        createTableStatementBuilder.append("create table " + tableName +"(");
+        createTableStatementBuilder.append("create table " + tableName + "(");
     }
 
     private static void buildRownumberField(String rownumberFieldName)
@@ -43,6 +50,7 @@ public class TableLayout
                 .append(" ").append(COLUMN_ROWNUMBER_DATATYPE)
                 .append(",");
     }
+
     private static void finalizeCreateTableStatement()
     {
         createTableStatementBuilder.append(")");
@@ -50,31 +58,31 @@ public class TableLayout
 
     private static void createStructs(DataConfiguration dataConfiguration)
     {
-        for(FieldConfiguration fieldConfiguration : dataConfiguration.getFields())
+        for (FieldConfiguration fieldConfiguration : dataConfiguration.getFields())
         {
             String[] fieldParts = fieldConfiguration.getName().split(FIELD_SPLIT_REGEX_CHARACTER);
 
-            if(fieldParts.length>1)
+            if (fieldParts.length > 1)
             {
                 TreeNode rootNode = null;
-                for (TreeNode node: rootNodes )
+                for (TreeNode node : rootNodes)
                 {
-                    if(node.getName().equals(fieldParts[0]))
+                    if (node.getName().equals(fieldParts[0]))
                     {
                         rootNode = node;
                         break;
                     }
                 }
-                if(rootNode==null)
+                if (rootNode == null)
                 {
                     rootNode = new TreeNode(fieldParts[0]);
                     rootNodes.add(rootNode);
                 }
 
                 TreeNode currentNode = null;
-                for(int i=1; i<fieldParts.length-1;i++)
+                for (int i = 1; i < fieldParts.length - 1; i++)
                 {
-                    if(currentNode==null)
+                    if (currentNode == null)
                     {
                         currentNode = rootNode.addChild(fieldParts[i]);
                     }
@@ -83,13 +91,13 @@ public class TableLayout
                         currentNode = currentNode.addChild(fieldParts[i]);
                     }
                 }
-                if(currentNode==null)
+                if (currentNode == null)
                 {
-                    rootNode.addField(new TableField(fieldParts[fieldParts.length-1], getOutPutTypeOrLastTransformationType(fieldConfiguration)));
+                    rootNode.addField(new TableField(fieldParts[fieldParts.length - 1], getOutPutTypeOrLastTransformationType(fieldConfiguration)));
                 }
                 else
                 {
-                    currentNode.addField(new TableField(fieldParts[fieldParts.length-1], getOutPutTypeOrLastTransformationType(fieldConfiguration)));
+                    currentNode.addField(new TableField(fieldParts[fieldParts.length - 1], getOutPutTypeOrLastTransformationType(fieldConfiguration)));
                 }
             }
             else
@@ -103,17 +111,17 @@ public class TableLayout
     {
         DataTypeDuckDb type = fieldConfiguration.getOutputType();
 
-        if(fieldConfiguration.getTransformations().size()>0)
+        if (fieldConfiguration.getTransformations().size() > 0)
         {
-            if(fieldConfiguration.getTransformations().getLast().getName().equals(Transformations.TOLONG.getName()))
+            if (fieldConfiguration.getTransformations().getLast().getName().equals(Transformations.TOLONG.getName()))
             {
                 return DataTypeDuckDb.LONG;
             }
-            else if(fieldConfiguration.getTransformations().getLast().getName().equals(Transformations.TOBOOLEAN.getName()))
+            else if (fieldConfiguration.getTransformations().getLast().getName().equals(Transformations.TOBOOLEAN.getName()))
             {
                 return DataTypeDuckDb.BOOLEAN;
             }
-            else if(fieldConfiguration.getTransformations().getLast().getName().equals(Transformations.TODOUBLE.getName()))
+            else if (fieldConfiguration.getTransformations().getLast().getName().equals(Transformations.TODOUBLE.getName()))
             {
                 return DataTypeDuckDb.DOUBLE;
             }
@@ -126,20 +134,20 @@ public class TableLayout
         return rootNodes;
     }
 
-    public static List<TableField> getFields() { return fields;}
+    public static List<TableField> getFields() { return fields; }
 
     private static void buildStructsStatement()
     {
-        for (int i=0;i< rootNodes.size();i++ )
+        for (int i = 0; i < rootNodes.size(); i++)
         {
             createTableStatementBuilder.append(rootNodes.get(i).getName()).append(" struct(");
             buildStructFieldsStatement(rootNodes.get(i));
-            if(rootNodes.get(i).getChildren().size()>0)
+            if (rootNodes.get(i).getChildren().size() > 0)
             {
                 getChildren(rootNodes.get(i));
             }
             createTableStatementBuilder.append(")");
-            if(i < rootNodes.size()-1)
+            if (i < rootNodes.size() - 1)
             {
                 createTableStatementBuilder.append(",");
             }
@@ -148,19 +156,21 @@ public class TableLayout
 
     private static void getChildren(TreeNode node)
     {
-        for (int i=0;i<node.getChildren().size();i++)
+        for (int i = 0; i < node.getChildren().size(); i++)
         {
             createTableStatementBuilder.append(node.getChildren().get(i).getName()).append(" struct(");
             buildStructFieldsStatement(node.getChildren().get(i));
-            if(node.getChildren().get(i).getChildren().size()>0) {
+            if (node.getChildren().get(i).getChildren().size() > 0)
+            {
                 getChildren(node.getChildren().get(i));
             }
-            if(i<node.getChildren().size()-1)
+            if (i < node.getChildren().size() - 1)
             {
                 createTableStatementBuilder.append(")");
                 createTableStatementBuilder.append(",");
             }
-            else {
+            else
+            {
                 createTableStatementBuilder.append(")");
             }
         }
@@ -168,19 +178,19 @@ public class TableLayout
 
     private static void buildStructFieldsStatement(TreeNode node)
     {
-        for(int i=0;i < node.getFields().size();i++)
+        for (int i = 0; i < node.getFields().size(); i++)
         {
             createTableStatementBuilder.append("\"");
             createTableStatementBuilder.append(node.getFields().get(i).getName());
             createTableStatementBuilder.append("\"");
             createTableStatementBuilder.append(" ");
             createTableStatementBuilder.append(node.getFields().get(i).getDataTypeDuckDb().name());
-            if(i<node.getFields().size()-1)
+            if (i < node.getFields().size() - 1)
             {
                 createTableStatementBuilder.append(",");
             }
         }
-        if(node.getFields().size()>0 && node.getChildren().size()>0)
+        if (node.getFields().size() > 0 && node.getChildren().size() > 0)
         {
             createTableStatementBuilder.append(",");
         }
@@ -188,26 +198,27 @@ public class TableLayout
 
     private static void buildStandardFieldsStatement()
     {
-        for(int i=0;i < fields.size();i++)
+        for (int i = 0; i < fields.size(); i++)
         {
             createTableStatementBuilder.append("\"");
             createTableStatementBuilder.append(fields.get(i).getName());
             createTableStatementBuilder.append("\"");
             createTableStatementBuilder.append(" ");
             createTableStatementBuilder.append(fields.get(i).getDataTypeDuckDb().name());
-            if(i<fields.size()-1)
+            if (i < fields.size() - 1)
             {
                 createTableStatementBuilder.append(",");
             }
         }
-        if(rootNodes.size()>0 && fields.size()>0) {
+        if (rootNodes.size() > 0 && fields.size() > 0)
+        {
             createTableStatementBuilder.append(",");
         }
     }
 
     private static String getDuckDbType(FieldType type)
     {
-        switch(type)
+        switch (type)
         {
             case CATEGORY:
                 return DataTypeDuckDb.VARCHAR.toString();

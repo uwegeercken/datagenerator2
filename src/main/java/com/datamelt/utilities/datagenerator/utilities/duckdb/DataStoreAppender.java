@@ -35,14 +35,21 @@ public class DataStoreAppender
             appender.beginRow();
             appendRownumberField(counter);
 
-            for(String fieldName : tableInsertLayout.getFieldNames())
+            for (String fieldName : tableInsertLayout.getFieldNames())
             {
                 Optional<TreeNode> rootNode = getRootNode(fieldName);
-                if(rootNode.isEmpty())
+                if (rootNode.isEmpty())
                 {
                     RowField field = row.getField(fieldName)
                             .orElseThrow(() -> new SQLException("field not found: " + fieldName));
-                    appendField(field);
+                    if (field.getValue() == null)
+                    {
+                        appender.appendNull();
+                    }
+                    else
+                    {
+                        appendField(field);
+                    }
                 }
                 else
                 {
@@ -52,7 +59,7 @@ public class DataStoreAppender
             appender.endRow();
             lastAppendSucceeded = true;
         }
-        catch(SQLException ex)
+        catch (SQLException ex)
         {
             appendFailureCount++;
             lastAppendSucceeded = false;
@@ -61,7 +68,7 @@ public class DataStoreAppender
             {
                 appender.endRow();
             }
-            catch(Exception ex2)
+            catch (Exception ex2)
             {
                 logger.error("error calling endRow after failed append: {}", ex2.getMessage());
             }
@@ -82,11 +89,18 @@ public class DataStoreAppender
         {
             RowField rowField = row.getField(name + FIELD_DEVIDER_CHARACTER + field.getName())
                     .orElseThrow(() -> new SQLException("field not found: " + name + FIELD_DEVIDER_CHARACTER + field.getName()));
-            appendField(rowField);
+            if (rowField.getValue() == null)
+            {
+                appender.appendNull();
+            }
+            else
+            {
+                appendField(rowField);
+            }
         }
-        if (node.getChildren().size() > 0)
+        if (!node.getChildren().isEmpty())
         {
-            for(TreeNode child : node.getChildren())
+            for (TreeNode child : node.getChildren())
             {
                 appendStruct(name + FIELD_DEVIDER_CHARACTER + child.getName(), child, row);
             }
@@ -104,7 +118,7 @@ public class DataStoreAppender
         return lastAppendSucceeded;
     }
 
-    public void flush()  throws SQLException
+    public void flush() throws SQLException
     {
         appender.flush();
     }
@@ -116,14 +130,15 @@ public class DataStoreAppender
 
     private void appendField(RowField field) throws SQLException
     {
-        switch (field.getValue()) {
+        switch (field.getValue())
+        {
             case Integer i -> appender.append(i);
             case Long l    -> appender.append(l);
             case Double d  -> appender.append(d);
             case Float f   -> appender.append(f);
             case Boolean b -> appender.append(b);
-            case String  s -> appender.append(s);
-            default -> throw new SQLException("Unsupported field type: " + field.getValue().toString());
+            case String s  -> appender.append(s);
+            default -> throw new SQLException("Unsupported field type: " + field.getValue().getClass().getSimpleName());
         }
     }
 }
