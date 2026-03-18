@@ -48,6 +48,7 @@ public class CategoryFileLoader
             throw new InvalidConfigurationException("field [" + fieldConfiguration.getName() + "], option [" + OptionKey.CATEGORY_FILE_SEPARATOR.getKey() + "] - the value must be a string");
         }
     }
+
     private static void loadCategoryFile(FieldConfiguration fieldConfiguration) throws InvalidConfigurationException {
         File file = new File(fieldConfiguration.getValuesFile());
         String valueWeightSeparator;

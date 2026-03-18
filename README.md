@@ -5,8 +5,6 @@ The datagenerator tool allows to generate random data. The aim is to have a tool
 The tool requires a yaml file which contains configuration details for the tool itself, including attributes for the export of the generated data to files. A second yaml file defines how the data is generated in terms of fields, field value weight and other attributes.
 Some of the configuration attributes may also be passed as arguments when starting the datagenerator tool. In this case these will override the same attributes from the configuration files.
 
-Samples, word lists (category files) and details for the configuration can be found in the samples folder in this repository.
-
 ## Features
 - select random values from word lists (where values can have an assigned weight)
 - generate uuid's, random strings, numbers or floating point numbers
@@ -331,9 +329,21 @@ rowGenerator.generateRows()
 Try<Row> row = rowGenerator.generateRow();
 ```
 
+## Samples and examples
+
+Ready-to-use sample configurations for common use cases are available in the project Wiki:
+
+- [Getting Started](https://github.com/uwegeercken/datagenerator2/wiki/Getting-Started) — a simple first example to get up and running quickly
+- [Customer Data](https://github.com/uwegeercken/datagenerator2/wiki/Customer-Data) — customer master data with nested address structures
+- [Transaction Data](https://github.com/uwegeercken/datagenerator2/wiki/Transaction-Data) — order and transaction data with date dependencies
+- [Time Series Data](https://github.com/uwegeercken/datagenerator2/wiki/Time-Series-Data) — event data with derived quarter and half-year fields
+- [Nullable Fields](https://github.com/uwegeercken/datagenerator2/wiki/Nullable-Fields) — using null probability to generate realistic sparse data
+- [Regular Expressions](https://github.com/uwegeercken/datagenerator2/wiki/Regular-Expressions) — pattern-based generation for codes, identifiers and phone numbers
+- [Word Lists](https://github.com/uwegeercken/datagenerator2/wiki/Word-Lists) — using category files to generate domain-specific values
+
 ## Building the datagenerator jar file
 To build the jar file either download the release from https://github.com/uwegeercken/datagenerator2/tags or clone this repository and run:
 
     mvn clean install
 
-last update: uwe geercken - uwe.geercken@web.de - 2026-03-17
+last update: uwe geercken - uwe.geercken@web.de - 2026-03-18
