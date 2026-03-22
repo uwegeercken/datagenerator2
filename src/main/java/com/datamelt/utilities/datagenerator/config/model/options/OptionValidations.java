@@ -5,6 +5,7 @@ import com.datamelt.utilities.datagenerator.utilities.regex.RegularExpressionMul
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -12,6 +13,10 @@ import java.util.regex.Pattern;
 public final class OptionValidations
 {
     private OptionValidations() {}
+
+    public static final List<String> VALID_ADJUST_TO_VALUES = List.of(
+            "startOfMonth", "endOfMonth", "startOfYear", "endOfYear"
+    );
 
     public static final Predicate<Object> IS_POSITIVE_LONG =
             v -> (Long) v > 0;
@@ -27,6 +32,9 @@ public final class OptionValidations
 
     public static final Predicate<Object> IS_PERCENTAGE =
             v -> (Long) v >= 0 && (Long) v <= 100;
+
+    public static final Predicate<Object> IS_VALID_ADJUST_TO =
+            v -> VALID_ADJUST_TO_VALUES.contains((String) v);
 
     public static final Predicate<Object> IS_VALID_SIMPLE_DATE_FORMAT =
             v -> {

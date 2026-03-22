@@ -14,7 +14,10 @@ public enum OptionKey
     RANDOM_CHARACTERS("randomCharacters"),
     PATTERN("pattern"),
     OUTPUT_TYPE("outputType"),
-    NULL_PROBABILITY("nullProbability");
+    NULL_PROBABILITY("nullProbability"),
+    MIN_DAYS_OFFSET("minDaysOffset"),
+    MAX_DAYS_OFFSET("maxDaysOffset"),
+    ADJUST_TO("adjustTo");
 
     private final String key;
 

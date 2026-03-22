@@ -8,7 +8,7 @@ Some of the configuration attributes may also be passed as arguments when starti
 ## Features
 - select random values from word lists (where values can have an assigned weight)
 - generate uuid's, random strings, numbers or floating point numbers
-- generate random dates and timestamps. generate date fields referencing another date field
+- generate random dates and timestamps. generate date fields referencing another date field with an optional days offset or date boundary adjustment
 - generate random data according to a given regular expression
 - define a probability for generating null values per field
 - transform the generated data values: uppercase, lowercase, base64 encode, negate, round, encrypt and more
@@ -127,12 +127,15 @@ This generator (type=datereference) allows to generate a date string based on an
 The options for this type of generator allow to specify the date field that shall be referenced, as well as the output format for the generated value.
 
 #### Available options:
-| Option          | Description                                                   | Data Type | Default    |
-|-----------------|---------------------------------------------------------------|-----------|------------|
-| reference       | name of the field which is the reference date                 | string    |            |
-| dateFormat      | output format of the date (Java DateTimeFormatter)            | string    | yyyy-MM-dd |
-| outputType      | how data should be output. possible values: varchar or long   | string    | varchar    |
-| nullProbability | probability of generating a null value (0=never, 100=always) | long      | 0          |
+| Option          | Description                                                    | Data Type | Default    |
+|-----------------|----------------------------------------------------------------|-----------|------------|
+| reference       | name of the field which is the reference date                                                              | string    |            |
+| dateFormat      | output format of the date (Java DateTimeFormatter)                                                         | string    | yyyy-MM-dd |
+| outputType      | how data should be output. possible values: varchar or long                                                 | string    | varchar    |
+| nullProbability | probability of generating a null value (0=never, 100=always)                                               | long      | 0          |
+| minDaysOffset   | minimum number of days to add to the reference date (can be negative). mutually exclusive with adjustTo    | long      | 0          |
+| maxDaysOffset   | maximum number of days to add to the reference date (can be negative). mutually exclusive with adjustTo    | long      | 0          |
+| adjustTo        | adjust the date to a boundary. possible values: startOfMonth, endOfMonth, startOfYear, endOfYear. mutually exclusive with minDaysOffset/maxDaysOffset | string | |
 
 #### Available transformations:
 | Transformation | Description                                                                                          | Parameters |
@@ -346,4 +349,4 @@ To build the jar file either download the release from https://github.com/uwegee
 
     mvn clean install
 
-last update: uwe geercken - uwe.geercken@web.de - 2026-03-18
+last update: uwe geercken - uwe.geercken@web.de - 2026-03-22

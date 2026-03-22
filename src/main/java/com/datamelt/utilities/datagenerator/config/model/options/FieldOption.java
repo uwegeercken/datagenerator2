@@ -27,6 +27,10 @@ public class FieldOption
 
     public void validate(String fieldName, Object value) throws InvalidConfigurationException
     {
+        if (value == null)
+        {
+            return;
+        }
         try
         {
             if (!validator.test(value))
@@ -36,7 +40,10 @@ public class FieldOption
         }
         catch (ClassCastException cce)
         {
-            throw new InvalidConfigurationException("field [" + fieldName + "], option [" + key.getKey() + "] - the value must be of type " + defaultValue.getClass().getSimpleName().toLowerCase());
+            String expectedType = defaultValue != null
+                    ? defaultValue.getClass().getSimpleName().toLowerCase()
+                    : "string";
+            throw new InvalidConfigurationException("field [" + fieldName + "], option [" + key.getKey() + "] - the value must be of type " + expectedType);
         }
     }
 
