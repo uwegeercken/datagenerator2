@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.2] - 2026-03-22
+
+### Added
+- `minDaysOffset` and `maxDaysOffset` options for `datereference` fields — add a fixed or random number of days to the referenced date. Negative values subtract days. Both default to `0` (no offset).
+- `adjustTo` option for `datereference` fields — snap the referenced date to a boundary: `startOfMonth`, `endOfMonth`, `startOfYear`, `endOfYear`. Mutually exclusive with `minDaysOffset`/`maxDaysOffset`.
+- `ADJUST_TO` added to `OptionKey`.
+- `VALID_ADJUST_TO_VALUES` and `IS_VALID_ADJUST_TO` added to `OptionValidations`.
+- Wiki pages: Nested Structures, Word Lists, updated Regular Expressions with pattern support warning.
+
+### Changed
+- `DateReferenceDefinition` — null-default options (`reference`, `dateFormat`, `adjustTo`) are now validated in the cross-option validator rather than via predicates, establishing the pattern that predicates only apply to options with non-null defaults.
+- `FieldOption.validate()` — null guard re-added to skip validation when value is null.
+- `DateReferenceGenerator` — applies days offset and `adjustTo` adjustment before formatting.
+
+### Fixed
+- `FieldOption.validate()` threw `NullPointerException` when `defaultValue` was null and a `ClassCastException` occurred during predicate evaluation.
+
+---
+
 ## [0.5.1] - 2026-03-17
 
 ### Added
