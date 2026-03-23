@@ -5,6 +5,8 @@ The datagenerator tool allows to generate random data. The aim is to have a tool
 The tool requires a yaml file which contains configuration details for the tool itself, including attributes for the export of the generated data to files. A second yaml file defines how the data is generated in terms of fields, field value weight and other attributes.
 Some of the configuration attributes may also be passed as arguments when starting the datagenerator tool. In this case these will override the same attributes from the configuration files.
 
+For sample configurations look at the wiki pages: https://github.com/uwegeercken/datagenerator2/wiki
+
 ## Features
 - select random values from word lists (where values can have an assigned weight)
 - generate uuid's, random strings, numbers or floating point numbers
