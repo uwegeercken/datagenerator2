@@ -308,7 +308,7 @@ Add the following dependency to your Maven pom.xml:
 <dependency>
     <groupId>io.github.uwegeercken</groupId>
     <artifactId>datagenerator2</artifactId>
-    <version>0.5.1</version>
+    <version>0.5.2</version>
 </dependency>
 ```
 
