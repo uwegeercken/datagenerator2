@@ -6,7 +6,6 @@ import com.datamelt.utilities.datagenerator.config.process.InvalidConfigurationE
 import com.datamelt.utilities.datagenerator.config.process.DataFieldsProcessor;
 import com.datamelt.utilities.datagenerator.error.Try;
 import com.datamelt.utilities.datagenerator.export.*;
-import com.datamelt.utilities.datagenerator.generate.Row;
 import com.datamelt.utilities.datagenerator.generate.RowBuilder;
 import com.datamelt.utilities.datagenerator.utilities.ConfigurationLoader;
 import com.datamelt.utilities.datagenerator.utilities.duckdb.DataStore;
@@ -16,12 +15,9 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
 import static java.lang.System.exit;
@@ -30,8 +26,8 @@ public class DataGenerator
 {
     private static Logger logger;
     private static final String applicationName = "datagenerator2";
-    private static final String version = "0.5.2";
-    private static final String versionDate = "2026-03-22";
+    private static final String version = "0.5.3";
+    private static final String versionDate = "2026-05-01";
     private static final String contactEmail = "uwe.geercken@web.de";
     private DataConfiguration dataConfiguration;
     private ProgramConfiguration programConfiguration;
@@ -82,7 +78,7 @@ public class DataGenerator
         logger.info("processing completed");
     }
 
-    public DataGenerator(String programConfigurationFilename, String dataConfigurationFilename) throws IOException, SQLException,InvalidConfigurationException
+    public DataGenerator(String programConfigurationFilename, String dataConfigurationFilename) throws IOException, InvalidConfigurationException
     {
         logger.debug("processing program configuration file: [{}],", dataConfigurationFilename);
         loadProgramConfiguration(programConfigurationFilename);

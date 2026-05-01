@@ -1,0 +1,18 @@
+name: single_level_nesting
+databaseName: /tmp/nested.duckdb
+tableName: person
+
+fields:
+  - name: address.street
+    type: category
+    values:
+      - value: Main Street
+      - value: Oak Avenue
+      - value: Park Road
+      - value: Church Lane
+
+  - name: address.housenumber
+    type: randomlong
+    options:
+      minValue: 1
+      maxValue: 200

@@ -1,0 +1,25 @@
+name: two_level_nesting
+databaseName: /tmp/nested.duckdb
+tableName: customer
+
+fields:
+  - name: person.first_name
+    type: category
+    values:
+      - value: Anna
+      - value: Thomas
+      - value: Maria
+      - value: Peter
+
+  - name: person.address.street
+    type: category
+    values:
+      - value: Main Street
+      - value: Oak Avenue
+      - value: Park Road
+
+  - name: person.address.housenumber
+    type: randomlong
+    options:
+      minValue: 1
+      maxValue: 200

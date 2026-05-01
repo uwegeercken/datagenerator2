@@ -332,6 +332,14 @@ rowGenerator.generateRows()
 
 // generate a single row
 Try<Row> row = rowGenerator.generateRow();
+
+// format a row to a JsonNode
+Try<Row> row = rowGenerator.generateRow();
+JsonNode node = JsonFormatter.convertToJsonNode(row.getResult());
+
+// format a row to a Json String
+Try<Row> row = rowGenerator.generateRow();
+String json = JsonFormatter.convertToJsonString(row.getResult());
 ```
 
 ## Samples and examples
@@ -351,4 +359,4 @@ To build the jar file either download the release from https://github.com/uwegee
 
     mvn clean install
 
-last update: uwe geercken - uwe.geercken@web.de - 2026-03-22
+last update: uwe geercken - uwe.geercken@web.de - 2026-05-01
